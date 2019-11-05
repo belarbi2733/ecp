@@ -1,1 +1,12 @@
-<p>contact works!</p>
+<h3>Prendre contact</h3>
+
+<div class="form-group">
+  <label for="sujet">Sujet : </label>
+  <input type="text" class="form-control">
+  <label for="description">Description : </label>
+  <textarea class="form-control" id="description" rows="3"></textarea>
+</div>
+
+<button class="btn btn-success" (click)="send()">
+  Envoyer
+</button>

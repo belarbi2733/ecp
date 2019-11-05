@@ -1,11 +1,13 @@
-<h2>Ajouter un trajet : </h2>
+<h3>Ajouter un trajet : </h3>
 
-<h4>Départ : </h4>
-<input type="text" class="form-control">
-<h4>Destination : </h4>
-<input type="text" class="form-control">
-<h4>Heure et date : </h4>
-<input type="date" class="form-control">
+<div class="form-group">
+  <label for="depart">Départ : </label>
+  <input type="text" class="form-control">
+  <label for="destination">Destination : </label>
+  <input type="text" class="form-control">
+  <label for="heure">Heure et date : </label>
+  <input type="date" class="form-control">
+</div>
 
 <button class="btn btn-success" (click)="addTraj()">
   Ajouter
