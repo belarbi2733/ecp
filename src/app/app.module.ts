@@ -19,6 +19,8 @@ import { AuthComponent } from './auth/auth.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/auth.service';
+import { SearchTrajConductComponent } from './search-traj-conduct/search-traj-conduct.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 import { AddTrajetComponent } from './add-trajet/add-trajet.component';
 import { AddColisComponent } from './add-colis/add-colis.component';
 import { FooterComponent } from './footer/footer.component';
@@ -28,8 +30,9 @@ import { DescriptionComponent } from './description/description.component';
 
 
 const appRoutes: Routes = [
-  { path: 'profile', canActivate: [AuthGuard], component: ProfileTabsComponent , data: {title:'page title1'} }, // :id is a route parameter and data is to parse static data
-  { path: 'accueil', component: AccueilComponent , data: {title:'page title2'} },
+
+  { path: 'profile', canActivate: [AuthGuard],component: ProfileTabsComponent }, // :id is a route parameter and data is to parse static data
+  { path: 'accueil', component: AccueilComponent },
   { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
   { path: 'add-colis', canActivate: [AuthGuard], component: AddColisComponent },
   { path: 'aide', component: AideComponent },
@@ -37,9 +40,12 @@ const appRoutes: Routes = [
   { path: 'description', component: DescriptionComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
+  { path: 'searchTrajConduct', component: SearchTrajConductComponent},
   { path: '', component: AccueilComponent },
   { path: '**', component: FourOhFourComponent }
 
+
+  
 
    //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
    //                                      configuration. This is useful for displaying a "404 - Not Found" page or redirecting to another route. It MUST BE THE LAST ROUTE
@@ -58,6 +64,8 @@ const appRoutes: Routes = [
     FourOhFourComponent,
     InscrComponent,
     AuthComponent,
+    SearchTrajConductComponent,
+    SidebarComponent
     AddTrajetComponent,
     AddColisComponent,
     FooterComponent,
@@ -68,7 +76,7 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     NgbModule,
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, { enableTracing: true }),
     HttpClientModule
   ],
   providers: [
