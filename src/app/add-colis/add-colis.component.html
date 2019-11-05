@@ -1,19 +1,21 @@
-<h2>Ajouter un colis : </h2>
+<h3>Ajouter un colis : </h3>
 
-<h4>Nom : </h4>
-<input type="text" class="form-control">
-<h4>Départ : </h4>
-<input type="text" class="form-control">
-<h4>Destination : </h4>
-<input type="text" class="form-control">
-<h4>Heure et date : </h4>
-<input type="date" class="form-control">
-<h4>Poids : </h4>
-<input type="number" class="form-control">
-<h4>Volume : </h4>
-<input type="number" class="form-control">
-<h4>Description : </h4>
-<input type="text" class="form-control">
+<div class="form-group">
+  <label for="nom">Nom : </label>
+  <input type="text" class="form-control">
+  <label for="depart">Départ : </label>
+  <input type="text" class="form-control">
+  <label for="destination">Destination : </label>
+  <input type="text" class="form-control">
+  <label for="heure">Heure et date : </label>
+  <input type="date" class="form-control">
+  <label for="poids">Poids : </label>
+  <input type="number" class="form-control">
+  <label for="volume">Volume : </label>
+  <input type="number" class="form-control">
+  <label for="descritpion">Description : </label>
+  <textarea class="form-control" id="description" rows="3"></textarea>
+</div>
 
 <button class="btn btn-success" (click)="addCol()">
   Ajouter
