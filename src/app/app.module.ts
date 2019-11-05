@@ -27,6 +27,7 @@ import { FooterComponent } from './footer/footer.component';
 import { AideComponent } from './aide/aide.component';
 import { ContactComponent } from './contact/contact.component';
 import { DescriptionComponent } from './description/description.component';
+import { MapComponent } from './map/map.component';
 
 
 const appRoutes: Routes = [
@@ -70,7 +71,8 @@ const appRoutes: Routes = [
     FooterComponent,
     AideComponent,
     ContactComponent,
-    DescriptionComponent
+    DescriptionComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
