@@ -17,8 +17,4 @@ export class AddColisComponent implements OnInit {
     this.router.navigate(['accueil']);
   }
 
-  toAccueil(){
-    this.router.navigate(['accueil']);
-  }
-
 }
