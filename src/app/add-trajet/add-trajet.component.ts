@@ -16,9 +16,5 @@ export class AddTrajetComponent implements OnInit {
   addTraj(){
     this.router.navigate(['accueil']);
   }
-  
-  toAccueil(){
-    this.router.navigate(['accueil']);
-  }
 
 }
