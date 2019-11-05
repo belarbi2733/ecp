@@ -35,17 +35,17 @@ const appRoutes: Routes = [
   { path: 'accueil', component: AccueilComponent },
   { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
   { path: 'add-colis', canActivate: [AuthGuard], component: AddColisComponent },
+  { path: 'searchTrajConduct', canActivate: [AuthGuard], component: SearchTrajConductComponent},
   { path: 'aide', component: AideComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'description', component: DescriptionComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
-  { path: 'searchTrajConduct', component: SearchTrajConductComponent},
   { path: '', component: AccueilComponent },
   { path: '**', component: FourOhFourComponent }
 
 
-  
+
 
    //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
    //                                      configuration. This is useful for displaying a "404 - Not Found" page or redirecting to another route. It MUST BE THE LAST ROUTE
@@ -60,12 +60,11 @@ const appRoutes: Routes = [
     ColisComponent,
     ConducteurComponent,
     TrajetComponent,
-
     FourOhFourComponent,
     InscrComponent,
     AuthComponent,
     SearchTrajConductComponent,
-    SidebarComponent
+    SidebarComponent,
     AddTrajetComponent,
     AddColisComponent,
     FooterComponent,
