@@ -11,7 +11,16 @@
 <button class="btn btn-danger" *ngIf="authStatus" (click)="onSignOut()">
   Se déconnecter
 </button>
+
+<br>
+
 <h5>Si vous n'êtes pas encore inscrit :</h5>
 <button (click)="toInscr()">
   S'inscrire
+</button>
+
+<br>
+
+<button  (click)="toAccueil()">
+  Retourner à l'accueil
 </button>

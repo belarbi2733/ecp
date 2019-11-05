@@ -35,4 +35,8 @@ export class AuthComponent implements OnInit {
     this.router.navigate(['inscrire']);
   }
 
+  toAccueil(){
+    this.router.navigate(['accueil']);
+  }
+
 }
