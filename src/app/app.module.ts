@@ -23,9 +23,10 @@ import { SearchTrajConductComponent } from './search-traj-conduct/search-traj-co
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { AddTrajetComponent } from './add-trajet/add-trajet.component';
 import { AddColisComponent } from './add-colis/add-colis.component';
-
-
-
+import { FooterComponent } from './footer/footer.component';
+import { AideComponent } from './aide/aide.component';
+import { ContactComponent } from './contact/contact.component';
+import { DescriptionComponent } from './description/description.component';
 
 
 const appRoutes: Routes = [
@@ -34,11 +35,15 @@ const appRoutes: Routes = [
   { path: 'accueil', component: AccueilComponent },
   { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
   { path: 'add-colis', canActivate: [AuthGuard], component: AddColisComponent },
-  { path: 'auth',component: AuthComponent },
-  { path: 'inscrire', component: InscrComponent},
+  { path: 'aide', component: AideComponent },
+  { path: 'contact', component: ContactComponent },
+  { path: 'description', component: DescriptionComponent },
+  { path: 'auth', component: AuthComponent },
+  { path: 'inscrire', component: InscrComponent },
   { path: 'searchTrajConduct', component: SearchTrajConductComponent},
-  { path: '', component: AccueilComponent},
-  { path: '**', component: FourOhFourComponent}
+  { path: '', component: AccueilComponent },
+  { path: '**', component: FourOhFourComponent }
+
 
   
 
@@ -62,7 +67,11 @@ const appRoutes: Routes = [
     SearchTrajConductComponent,
     SidebarComponent
     AddTrajetComponent,
-    AddColisComponent
+    AddColisComponent,
+    FooterComponent,
+    AideComponent,
+    ContactComponent,
+    DescriptionComponent
   ],
   imports: [
     BrowserModule,

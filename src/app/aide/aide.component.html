@@ -1,0 +1,50 @@
+<h2>Besoin d'aide ?</h2>
+<div class="container">
+    <div class="row">
+
+      <div class="col-sm-3">
+        <ul class="nav nav-tabs flex-column" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="passager-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Pour les passagers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="colis-tab" data-toggle="tab" href="#photo" role="tab" aria-controls="photo" aria-selected="false">Pour les colis</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="conducteur-tab" data-toggle="tab" href="#preferences" role="tab" aria-controls="preferences" aria-selected="false">Pour les conducteurs</a>
+            </li>
+        </ul>
+      </div>
+
+      <div class="col-sm-9 tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="passager-tab">
+          <h5>2 étapes :</h5>
+          <h6>1. <a routerLink="/add-trajet" routerLinkActive="active">Proposer un trajet</a> </h6>
+          <p>Vous devez d'abord proposer le trajet que vous souhaitez faire et attendre qu'un conducteur sélectionne votre trajet.</p>
+          <h6>2. Valider et payer</h6>
+          <p>Lorsqu'un conducteur aura sélectionné votre trajet, vous serez notifié et pourrez voir les informations de ce conducteur. Vous pourrez ensuite choisir d'accepter ou non de faire la route avec ce conducteur. Puis, vous devrez payer votre voyage. Un code vous sera envoyé. Vous devrez donner ce code au conducteur à la fin de votre voyage.</p>
+          <h6>En route !</h6>
+        </div>
+
+        <div class="tab-pane fade show" id="photo" role="tabpanel" aria-labelledby="colis-tab">
+          <h5>2 étapes :</h5>
+          <h6>1. <a routerLink="/add-colis" routerLinkActive="active">Proposer un colis</a> </h6>
+          <p>Vous devez d'abord proposer le colis que vous souhaitez envoyé et attendre qu'un conducteur sélectionne votre colis.</p>
+          <h6>2. Valider et payer</h6>
+          <p>Lorsqu'un conducteur aura sélectionné votre colis, vous serez notifié et pourrez voir les informations de ce conducteur. Vous pourrez ensuite choisir d'accepter ou non que ce conducteur prenne votre colis. Puis, vous devrez payer le voyage de votre colis. Un code vous sera envoyé. Vous devrez donner ce code au conducteur à la fin du voyage de votre colis.</p>
+          <h6>En route !</h6>
+        </div>
+
+        <div class="tab-pane fade show" id="preferences" role="tabpanel" aria-labelledby="conducteur-tab">
+          <h5>2 étapes :</h5>
+          <h6>1. <a routerLink="/add-trajet" routerLinkActive="active">Rechercher un trajet</a> </h6>
+          <p>Vous devez d'abord rechercher le trajet que vous souhaitez faire et sélectionner le trajet qui vous intéresse parmis les propositions.</p>
+          <h6>2. Voyager et recevoir votre argent</h6>
+          <p>Vous allez ensuite devoir chercher vos passagers et colis que vous avez sélectionnés. A la fin du trajet, vous devrez recupérer les codes après de vos passagers et des personnes qui ont envoyés les colis que vous avez véhiculés. En introduisant ces codes dans l'application, vous serez payé.</p>
+          <h6>En route !</h6>
+        </div>
+
+    </div>
+
+    </div>
+  </div>
