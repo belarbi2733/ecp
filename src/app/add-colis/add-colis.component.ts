@@ -2,18 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-inscr',
-  templateUrl: './inscr.component.html',
-  styleUrls: ['./inscr.component.css']
+  selector: 'app-add-colis',
+  templateUrl: './add-colis.component.html',
+  styleUrls: ['./add-colis.component.css']
 })
-export class InscrComponent implements OnInit {
+export class AddColisComponent implements OnInit {
 
   constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
-  inscrire(){
+  addCol(){
     this.router.navigate(['accueil']);
   }
 

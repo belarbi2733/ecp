@@ -2,21 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-inscr',
-  templateUrl: './inscr.component.html',
-  styleUrls: ['./inscr.component.css']
+  selector: 'app-add-trajet',
+  templateUrl: './add-trajet.component.html',
+  styleUrls: ['./add-trajet.component.css']
 })
-export class InscrComponent implements OnInit {
+export class AddTrajetComponent implements OnInit {
 
   constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
-  inscrire(){
+  addTraj(){
     this.router.navigate(['accueil']);
   }
-
+  
   toAccueil(){
     this.router.navigate(['accueil']);
   }

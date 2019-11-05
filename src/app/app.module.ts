@@ -21,20 +21,26 @@ import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/auth.service';
 import { SearchTrajConductComponent } from './search-traj-conduct/search-traj-conduct.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { AddTrajetComponent } from './add-trajet/add-trajet.component';
+import { AddColisComponent } from './add-colis/add-colis.component';
 
 
 
 
 
 const appRoutes: Routes = [
+
   { path: 'profile', canActivate: [AuthGuard],component: ProfileTabsComponent }, // :id is a route parameter and data is to parse static data
   { path: 'accueil', component: AccueilComponent },
+  { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
+  { path: 'add-colis', canActivate: [AuthGuard], component: AddColisComponent },
   { path: 'auth',component: AuthComponent },
   { path: 'inscrire', component: InscrComponent},
   { path: 'searchTrajConduct', component: SearchTrajConductComponent},
   { path: '', component: AccueilComponent},
   { path: '**', component: FourOhFourComponent}
 
+  
 
    //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
    //                                      configuration. This is useful for displaying a "404 - Not Found" page or redirecting to another route. It MUST BE THE LAST ROUTE
@@ -55,6 +61,8 @@ const appRoutes: Routes = [
     AuthComponent,
     SearchTrajConductComponent,
     SidebarComponent
+    AddTrajetComponent,
+    AddColisComponent
   ],
   imports: [
     BrowserModule,
