@@ -1,0 +1,27 @@
+<h3>Gestion des remboursements</h3>
+
+<table class = "table col-12">
+  <thead>
+    <tr>
+      <th scope="col">Passager</th>
+      <th scope="col">Conducteur</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Aurélien</td>
+      <td>Thomas</td>
+      <td>
+        <div *ngIf="!trajetStatus"><p>&#10060;</p></div>
+        <div *ngIf="trajetStatus"><p>&#9989;</p></div>
+      </td>
+      <td>
+        <a routerLink="/messagerie" routerLinkActive="active"> <input type="button" value="Ouvrir la messagerie" /></a>
+        <button (click)="rembours()">Rembourser le passager</button>
+        <button (click)="payer()">Payer le chauffeur</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
