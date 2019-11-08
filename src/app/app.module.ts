@@ -28,6 +28,10 @@ import { AideComponent } from './aide/aide.component';
 import { ContactComponent } from './contact/contact.component';
 import { DescriptionComponent } from './description/description.component';
 import { MapComponent } from './map/map.component';
+import { AdminListUtComponent } from './admin-list-ut/admin-list-ut.component';
+import { AdminListTrajComponent } from './admin-list-traj/admin-list-traj.component';
+import { MessagerieComponent } from './messagerie/messagerie.component';
+import { InfoTrajComponent } from './info-traj/info-traj.component';
 
 
 const appRoutes: Routes = [
@@ -40,6 +44,10 @@ const appRoutes: Routes = [
   { path: 'aide', component: AideComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'description', component: DescriptionComponent },
+  { path: 'messagerie', component: MessagerieComponent },
+  { path: 'admin-list-ut', component: AdminListUtComponent },
+  { path: 'admin-list-traj', component: AdminListTrajComponent },
+  { path: 'info-traj', component: InfoTrajComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
   { path: '', component: AccueilComponent },
@@ -72,7 +80,11 @@ const appRoutes: Routes = [
     AideComponent,
     ContactComponent,
     DescriptionComponent,
-    MapComponent
+    MapComponent,
+    AdminListUtComponent,
+    AdminListTrajComponent,
+    MessagerieComponent,
+    InfoTrajComponent
   ],
   imports: [
     BrowserModule,

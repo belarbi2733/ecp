@@ -1,0 +1,26 @@
+<h3>Gestion des utilisateurs</h3>
+
+<table class = "table col-12">
+  <thead>
+    <tr>
+      <th scope="col">Nom</th>
+      <th scope="col">Prénom</th>
+      <th scope="col">Photo</th>
+      <th scope="col">Nombre de réservation</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Thomas</td>
+      <td>Carlier</td>
+      <td>Picture</td>
+      <td>12</td>
+      <td>
+        <a routerLink="/profile" routerLinkActive="active"><input type="button" value="Voir le profil" /></a>
+        <a routerLink="/messagerie" routerLinkActive="active"><input type="button" value="Ouvrir une messagerie" /></a>
+        <input type="button" (click)="suspendre()" value="Suspendre" />
+      </td>
+    </tr>
+  </tbody>
+</table>
