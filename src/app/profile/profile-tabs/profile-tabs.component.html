@@ -30,110 +30,31 @@
   
       <div class="col-sm-9 tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="home-tab"> 
-            <form>
-                <div class="form-group">
-
-                    <label>Nom</label>
-                    <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter your name">
-
-                    <label>Prénom</label>
-                    <input type="text" class="form-control" id="firstname" aria-describedby="firstname" placeholder="Enter your first name">
-
-                    <label>Sexe</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sexe" id="homme" value="homme">
-                        <label class="form-check-label" for="homme" style="margin-right:3rem;">
-                            Homme
-                        </label>
-                        <input class="form-check-input" type="radio" name="sexe" id="femme" value="femme">
-                        <label class="form-check-label" for="femme">
-                            Femme
-                        </label>
-                    </div>
-
-                    <label>Email address</label>
-                    <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="Enter email">
-
-                    <label>Numéro de téléphone</label>
-                    <input type="tel" class="form-control" id="phone" aria-describedby="phone" name="phone" placeholder="Format: 0492456789" pattern="[0-9]{10}">
-                    <small class="form-text text-muted">Format: 0123456789</small>
-                    <label>Date de naissance</label> 
-                    <input type="text" class="form-control" id="firstname" aria-describedby="firstname" placeholder="Enter your first name">
-
-                </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+          <app-personal-data></app-personal-data>
         </div>
 
         <div class="tab-pane fade show" id="photo" role="tabpanel" aria-labelledby="photo-tab">
-            <div class="col-md-6 offset-md-3">
-                <h3>Choose File</h3>            
-                <div class="form-group">
-                    <input type="file" name="image" (change)="fileProgress($event)" />
-                </div>
-                <div *ngIf="fileUploadProgress">
-                    Upload progress: {{ fileUploadProgress }}
-                </div>
-                <div class="image-preview mb-3" *ngIf="previewUrl">
-                    <img [src]="previewUrl" height="300" />                 
-                </div>
-        
-                <div class="mb-3" *ngIf="uploadedFilePath">
-                    {{uploadedFilePath}}
-                </div>
-                    
-                <div class="form-group">
-                    <button class="btn btn-primary"  (click)="onSubmit()">Submit</button>
-                </div>
-            </div>
+            <app-photo></app-photo> 
         </div>
 
         <div class="tab-pane fade show" id="preferences" role="tabpanel" aria-labelledby="preferences-tab">
-
-            <label>les animaux sont autorisés</label>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="animaux" id="animauxOui" value="1">
-                <label class="form-check-label" for="animauxOui" style="margin-right:3rem;">
-                    oui
-                </label>
-                <input class="form-check-input" type="radio" name="animaux" id="animauxNon" value="0">
-                <label class="form-check-label" for="animauxNon" style="margin-right:3rem;">
-                    non
-                </label>
-                <input class="form-check-input" type="radio" name="animaux" id="animauxParfois" value="2">
-                <label class="form-check-label" for="animauxParfois" >
-                    En fonction de l'animal
-                </label>
-            </div>
-
-            <label>J'accepte que l'on fume dans ma voiture:</label>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="fumeur" id="fumeurOui" value="oui">
-                <label class="form-check-label" for="fumeurOui" style="margin-right:3rem;">
-                    oui
-                </label>
-                <input class="form-check-input" type="radio" name="fumeur" id="fumeurNon" value="non">
-                <label class="form-check-label" for="fumeurNon">
-                    non
-                </label>
-            </div>
-
+            <app-preferences></app-preferences> 
         </div>
 
         <div class="tab-pane fade show " id="vehicule" role="tabpanel" aria-labelledby="vehicule-tab">
-            vehicule-tab
+            <app-vehicle></app-vehicle> 
         </div>
 
         <div class="tab-pane fade show " id="rating" role="tabpanel" aria-labelledby="rating-tab">
-            rating-tab
+            <app-rating></app-rating> 
         </div>
 
         <div class="tab-pane fade show " id="paiements" role="tabpanel" aria-labelledby="paiements-tab">
-            paiements-tab
+            <app-payments></app-payments> 
         </div>
 
         <div class="tab-pane fade show " id="compte" role="tabpanel" aria-labelledby="compte-tab">
-            compte-tab
+            <app-account></app-account> 
         </div>
 
     </div>

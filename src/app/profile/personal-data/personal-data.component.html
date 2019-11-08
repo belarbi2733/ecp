@@ -1,0 +1,33 @@
+<form>
+    <div class="form-group">
+
+        <label>Nom</label>
+        <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter your name">
+
+        <label>Prénom</label>
+        <input type="text" class="form-control" id="firstname" aria-describedby="firstname" placeholder="Enter your first name">
+
+        <label>Sexe</label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="sexe" id="homme" value="homme">
+            <label class="form-check-label" for="homme" style="margin-right:3rem;">
+                Homme
+            </label>
+            <input class="form-check-input" type="radio" name="sexe" id="femme" value="femme">
+            <label class="form-check-label" for="femme">
+                Femme
+            </label>
+        </div>
+
+        <label>Email address</label>
+        <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="Enter email">
+
+        <label>Numéro de téléphone</label>
+        <input type="tel" class="form-control" id="phone" aria-describedby="phone" name="phone" placeholder="Format: 0492456789" pattern="[0-9]{10}">
+        <small class="form-text text-muted">Format: 0123456789</small>
+        <label>Date de naissance</label> 
+        <input type="text" class="form-control" id="firstname" aria-describedby="firstname" placeholder="Enter your first name">
+
+    </div>
+<button type="submit" class="btn btn-primary">Submit</button>
+</form>

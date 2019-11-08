@@ -1,0 +1,10 @@
+
+
+<ng-template #popContent>
+    <button class='btn btn-success' (click)='toAccueil()'>Confirmer </button>
+</ng-template>
+
+<button type="button" class="btn btn-outline-secondary mr-2" placement="right"
+[ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="false">
+Désactiver mon compte
+</button>
