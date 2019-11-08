@@ -32,6 +32,7 @@ import { AdminListUtComponent } from './admin-list-ut/admin-list-ut.component';
 import { AdminListTrajComponent } from './admin-list-traj/admin-list-traj.component';
 import { MessagerieComponent } from './messagerie/messagerie.component';
 import { InfoTrajComponent } from './info-traj/info-traj.component';
+import { AdminRemboursComponent } from './admin-rembours/admin-rembours.component';
 
 
 const appRoutes: Routes = [
@@ -48,6 +49,7 @@ const appRoutes: Routes = [
   { path: 'admin-list-ut', component: AdminListUtComponent },
   { path: 'admin-list-traj', component: AdminListTrajComponent },
   { path: 'info-traj', component: InfoTrajComponent },
+  { path: 'admin-rembours', component: AdminRemboursComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
   { path: '', component: AccueilComponent },
@@ -84,7 +86,8 @@ const appRoutes: Routes = [
     AdminListUtComponent,
     AdminListTrajComponent,
     MessagerieComponent,
-    InfoTrajComponent
+    InfoTrajComponent,
+    AdminRemboursComponent
   ],
   imports: [
     BrowserModule,
