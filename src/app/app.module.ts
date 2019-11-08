@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -33,6 +34,11 @@ import { AdminListTrajComponent } from './admin-list-traj/admin-list-traj.compon
 import { MessagerieComponent } from './messagerie/messagerie.component';
 import { InfoTrajComponent } from './info-traj/info-traj.component';
 import { AdminRemboursComponent } from './admin-rembours/admin-rembours.component';
+import { AdminComponent } from './admin/admin.component';
+import { LoginstatComponent } from './loginstat/loginstat.component';
+import { ParcelstatComponent } from './parcelstat/parcelstat.component';
+import { TripstatComponent } from './tripstat/tripstat.component';
+import { UserstatComponent } from './userstat/userstat.component';
 
 
 const appRoutes: Routes = [
@@ -46,6 +52,7 @@ const appRoutes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'description', component: DescriptionComponent },
   { path: 'messagerie', component: MessagerieComponent },
+  { path: 'admin', component: AdminComponent },
   { path: 'admin-list-ut', component: AdminListUtComponent },
   { path: 'admin-list-traj', component: AdminListTrajComponent },
   { path: 'info-traj', component: InfoTrajComponent },
@@ -87,12 +94,18 @@ const appRoutes: Routes = [
     AdminListTrajComponent,
     MessagerieComponent,
     InfoTrajComponent,
-    AdminRemboursComponent
+    AdminRemboursComponent,
+    AdminComponent,
+    LoginstatComponent,
+    ParcelstatComponent,
+    TripstatComponent,
+    UserstatComponent
   ],
   imports: [
     BrowserModule,
     NgbModule,
     RouterModule.forRoot(appRoutes, { enableTracing: true }),
+    ChartsModule,
     HttpClientModule
   ],
   providers: [
