@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <div class="card text-white bg-primary mb-3">
+        <div class="card-header">Nombre d'utilisateurs</div>
+        <div class="card-body">
+          <h4 class="card-title">Statistiques sur le nombres d'utilisateurs</h4>
+          <app-userstat></app-userstat>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="card text-white bg-secondary mb-3">
+        <div class="card-header">Nombre de colis</div>
+        <div class="card-body">
+          <h4 class="card-title">Statistiques sur le nombre de colis</h4>
+          <app-parcelstat></app-parcelstat>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <div class="card text-white bg-success mb-3">
+        <div class="card-header">Nombre de trajet</div>
+        <div class="card-body">
+          <h4 class="card-title">Statistiques sur le nombre de trajet</h4>
+          <app-tripstat></app-tripstat>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="card text-white bg-danger mb-3">
+        <div class="card-header">Nombre d'utilisateurs inscrits</div>
+        <div class="card-body">
+          <h4 class="card-title">Statistiques sur le nombre d'inscrit</h4>
+          <app-loginstat></app-loginstat>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<button class="btn btn-success" routerLink="/admin-list-ut" routerLinkActive="active">Gestion des utilisateurs
+</button>
+<button class="btn btn-success" routerLink="/admin-list-traj" routerLinkActive="active">Gestion des tournées
+</button>
+<button class="btn btn-success" routerLink="/admin-rembours" routerLinkActive="active">Gestion des remboursements
+</button>

@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -35,6 +36,16 @@ import { PreferencesComponent } from './profile/preferences/preferences.componen
 import { RatingComponent } from './profile/rating/rating.component';
 import { PaymentsComponent } from './profile/payments/payments.component';
 import { AccountComponent } from './profile/account/account.component';
+import { AdminListUtComponent } from './admin-list-ut/admin-list-ut.component';
+import { AdminListTrajComponent } from './admin-list-traj/admin-list-traj.component';
+import { MessagerieComponent } from './messagerie/messagerie.component';
+import { InfoTrajComponent } from './info-traj/info-traj.component';
+import { AdminRemboursComponent } from './admin-rembours/admin-rembours.component';
+import { AdminComponent } from './admin/admin.component';
+import { LoginstatComponent } from './loginstat/loginstat.component';
+import { ParcelstatComponent } from './parcelstat/parcelstat.component';
+import { TripstatComponent } from './tripstat/tripstat.component';
+import { UserstatComponent } from './userstat/userstat.component';
 
 
 const appRoutes: Routes = [
@@ -47,6 +58,12 @@ const appRoutes: Routes = [
   { path: 'aide', component: AideComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'description', component: DescriptionComponent },
+  { path: 'messagerie', component: MessagerieComponent },
+  { path: 'admin', component: AdminComponent },
+  { path: 'admin-list-ut', component: AdminListUtComponent },
+  { path: 'admin-list-traj', component: AdminListTrajComponent },
+  { path: 'info-traj', component: InfoTrajComponent },
+  { path: 'admin-rembours', component: AdminRemboursComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
   { path: '', component: AccueilComponent },
@@ -87,11 +104,22 @@ const appRoutes: Routes = [
     RatingComponent,
     PaymentsComponent,
     AccountComponent
+    AdminListUtComponent,
+    AdminListTrajComponent,
+    MessagerieComponent,
+    InfoTrajComponent,
+    AdminRemboursComponent,
+    AdminComponent,
+    LoginstatComponent,
+    ParcelstatComponent,
+    TripstatComponent,
+    UserstatComponent
   ],
   imports: [
     BrowserModule,
     NgbModule,
     RouterModule.forRoot(appRoutes, { enableTracing: true }),
+    ChartsModule,
     HttpClientModule
   ],
   providers: [
