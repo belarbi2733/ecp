@@ -26,6 +26,11 @@ export class AuthComponent implements OnInit {
     );
   }
 
+  onSignInAdmin(){
+    this.authService.signIn();
+    this.router.navigate(['admin']);
+  }
+
   onSignOut(){
     this.authService.signOut();
     this.authStatus = this.authService.isAuth;
