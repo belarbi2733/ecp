@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { ProfileTabsComponent } from './profile-tabs/profile-tabs.component';
+import { ProfileTabsComponent } from './profile/profile-tabs/profile-tabs.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -28,6 +28,13 @@ import { AideComponent } from './aide/aide.component';
 import { ContactComponent } from './contact/contact.component';
 import { DescriptionComponent } from './description/description.component';
 import { MapComponent } from './map/map.component';
+import { PersonalDataComponent } from './profile/personal-data/personal-data.component';
+import { PhotoComponent } from './profile/photo/photo.component';
+import { VehicleComponent } from './profile/vehicle/vehicle.component';
+import { PreferencesComponent } from './profile/preferences/preferences.component';
+import { RatingComponent } from './profile/rating/rating.component';
+import { PaymentsComponent } from './profile/payments/payments.component';
+import { AccountComponent } from './profile/account/account.component';
 
 
 const appRoutes: Routes = [
@@ -72,7 +79,14 @@ const appRoutes: Routes = [
     AideComponent,
     ContactComponent,
     DescriptionComponent,
-    MapComponent
+    MapComponent,
+    PersonalDataComponent,
+    PhotoComponent,
+    VehicleComponent,
+    PreferencesComponent,
+    RatingComponent,
+    PaymentsComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
