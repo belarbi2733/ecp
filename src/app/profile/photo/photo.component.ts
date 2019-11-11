@@ -36,15 +36,15 @@ export class PhotoComponent implements OnInit {
       }
   }
   
-  onSubmit() {
-    const formData = new FormData();
-    formData.append('file', this.fileData);
-    this.http.post('url/to/your/api', formData)
-      .subscribe(res => {
-        console.log(res);
-        this.uploadedFilePath = res.data.filePath;
-        alert('SUCCESS !!');
-      })
-  }
+  // onSubmit() {
+  //   const formData = new FormData();
+  //   formData.append('file', this.fileData);
+  //   this.http.post('url/to/your/api', formData)
+  //     .subscribe(res => {
+  //       console.log(res);
+  //       this.uploadedFilePath = res.data.filePath;
+  //       alert('SUCCESS !!');
+  //     })
+  // }
 
 }
