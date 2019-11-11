@@ -4,48 +4,49 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-
-import { AppComponent } from './app.component';
-import { ProfileTabsComponent } from './profile/profile-tabs/profile-tabs.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { AccueilComponent } from './accueil/accueil.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { ColisComponent } from './colis/colis.component';
-import { ConducteurComponent } from './conducteur/conducteur.component';
-import { TrajetComponent } from './trajet/trajet.component';
-import { FourOhFourComponent } from './four-oh-four/four-oh-four.component';
-import { InscrComponent } from './inscr/inscr.component';
-import { AuthComponent } from './auth/auth.component';
-
+//services
 import { AuthGuard } from './services/auth-guard.service';
 import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/auth.service';
-import { SearchTrajConductComponent } from './search-traj-conduct/search-traj-conduct.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { AddTrajetComponent } from './add-trajet/add-trajet.component';
-import { AddColisComponent } from './add-colis/add-colis.component';
-import { FooterComponent } from './footer/footer.component';
-import { AideComponent } from './aide/aide.component';
-import { ContactComponent } from './contact/contact.component';
-import { DescriptionComponent } from './description/description.component';
-import { MapComponent } from './map/map.component';
-import { PersonalDataComponent } from './profile/personal-data/personal-data.component';
-import { PhotoComponent } from './profile/photo/photo.component';
-import { VehicleComponent } from './profile/vehicle/vehicle.component';
-import { PreferencesComponent } from './profile/preferences/preferences.component';
-import { RatingComponent } from './profile/rating/rating.component';
-import { PaymentsComponent } from './profile/payments/payments.component';
-import { AccountComponent } from './profile/account/account.component';
-import { AdminListUtComponent } from './admin-list-ut/admin-list-ut.component';
-import { AdminListTrajComponent } from './admin-list-traj/admin-list-traj.component';
-import { MessagerieComponent } from './messagerie/messagerie.component';
-import { InfoTrajComponent } from './info-traj/info-traj.component';
-import { AdminRemboursComponent } from './admin-rembours/admin-rembours.component';
-import { AdminComponent } from './admin/admin.component';
-import { LoginstatComponent } from './loginstat/loginstat.component';
-import { ParcelstatComponent } from './parcelstat/parcelstat.component';
-import { TripstatComponent } from './tripstat/tripstat.component';
-import { UserstatComponent } from './userstat/userstat.component';
+
+//components
+import { AppComponent } from './app.component';
+import { ProfileTabsComponent } from './profileFolder/profile-tabs/profile-tabs.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AccueilComponent } from './accueilFolder/accueil/accueil.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { ColisComponent } from './accueilFolder/colis/colis.component';
+import { ConducteurComponent } from './accueilFolder/conducteur/conducteur.component';
+import { TrajetComponent } from './accueilFolder/trajet/trajet.component';
+import { FourOhFourComponent } from './four-oh-four/four-oh-four.component';
+import { InscrComponent } from './singleComponentFolder/inscr/inscr.component';
+import { AuthComponent } from './singleComponentFolder/auth/auth.component';
+import { SearchTrajConductComponent } from './searchFolder/search-traj-conduct/search-traj-conduct.component';
+import { SidebarComponent } from './searchFolder/sidebar/sidebar.component';
+import { AddTrajetComponent } from './singleComponentFolder/add-trajet/add-trajet.component';
+import { AddColisComponent } from './singleComponentFolder/add-colis/add-colis.component';
+import { FooterComponent } from './footerFolder/footer/footer.component';
+import { AideComponent } from './footerFolder/aide/aide.component';
+import { ContactComponent } from './footerFolder/contact/contact.component';
+import { DescriptionComponent } from './footerFolder/description/description.component';
+import { MapComponent } from './searchFolder/map/map.component';
+import { PersonalDataComponent } from './profileFolder/personal-data/personal-data.component';
+import { PhotoComponent } from './profileFolder/photo/photo.component';
+import { VehicleComponent } from './profileFolder/vehicle/vehicle.component';
+import { PreferencesComponent } from './profileFolder/preferences/preferences.component';
+import { RatingComponent } from './profileFolder/rating/rating.component';
+import { PaymentsComponent } from './profileFolder/payments/payments.component';
+import { AccountComponent } from './profileFolder/account/account.component';
+import { AdminListUtComponent } from './adminFolder/admin-list-ut/admin-list-ut.component';
+import { AdminListTrajComponent } from './adminFolder/admin-list-traj/admin-list-traj.component';
+import { MessagerieComponent } from './messagerieFolder/messagerie/messagerie.component';
+import { InfoTrajComponent } from './adminFolder/info-traj/info-traj.component';
+import { AdminRemboursComponent } from './adminFolder/admin-rembours/admin-rembours.component';
+import { AdminComponent } from './adminFolder/admin/admin.component';
+import { LoginstatComponent } from './adminFolder/loginstat/loginstat.component';
+import { ParcelstatComponent } from './adminFolder/parcelstat/parcelstat.component';
+import { TripstatComponent } from './adminFolder/tripstat/tripstat.component';
+import { UserstatComponent } from './adminFolder/userstat/userstat.component';
 
 
 const appRoutes: Routes = [
