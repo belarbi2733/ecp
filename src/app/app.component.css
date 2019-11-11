@@ -1,0 +1,28 @@
+/* overwrite some boostrap here to get relative values everywhere */
+
+/* button , .btn {font: 50% Arial;} */
+.btn {
+
+    border: white solid 1.5px;
+    background-color: rgb(20, 20, 20);
+    opacity: 0.8;
+    color:white;
+    height: auto;
+}
+
+.btn:visited{
+    opacity:1;
+}
+
+.btn:hover{
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+/* For mobile phones: */
+.btn{
+    font-size: 12px;
+    min-width: 80px;
+    width:auto;
+}
+}
