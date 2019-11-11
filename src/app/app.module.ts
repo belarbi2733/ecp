@@ -103,7 +103,7 @@ const appRoutes: Routes = [
     PreferencesComponent,
     RatingComponent,
     PaymentsComponent,
-    AccountComponent
+    AccountComponent,
     AdminListUtComponent,
     AdminListTrajComponent,
     MessagerieComponent,
