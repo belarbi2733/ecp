@@ -23,7 +23,13 @@
       <td>
         <a routerLink="/profile" routerLinkActive="active"><input type="button" value="Voir le profil" /></a>
         <a routerLink="/messagerie" routerLinkActive="active"><input type="button" value="Ouvrir une messagerie" /></a>
-        <input type="button" (click)="suspendre()" value="Suspendre" />
+        <ng-template #popContent>
+            <button class='btn btn-success' (click)='suspendre()'>Confirmer </button>
+        </ng-template>
+        <button type="button" placement="right"
+        [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="false">
+        Suspendre
+        </button>
       </td>
     </tr>
   </tbody>

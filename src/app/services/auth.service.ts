@@ -9,7 +9,7 @@ signIn() {
         () => {
           this.isAuth = true;
           resolve(true);
-        }, 2000
+        }, 0
       );
     }
   );

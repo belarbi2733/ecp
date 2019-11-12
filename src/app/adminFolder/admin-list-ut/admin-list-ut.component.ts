@@ -14,11 +14,7 @@ export class AdminListUtComponent implements OnInit {
   }
 
   suspendre(){
-    var msg = "Êtes-vous sur de vouloir suspendre cet utilisateur ?";
-    if (confirm(msg)){
-
-      this.router.navigate(['admin-list-ut']);
-    }
+    this.router.navigate(['admin-list-ut']);
   }
 
 }
