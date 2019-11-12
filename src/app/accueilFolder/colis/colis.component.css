@@ -1,8 +1,30 @@
-.vignette{
-  position : relative;
+
+.colis {
+  background-image: url("../../../assets/colis.jpg");
+  height: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  margin:0px;
 }
-.btn{
+
+.colis-text {
+  text-align: center;
   position: absolute;
-  bottom: 50%;
-  right: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .btn{
+      background-color:transparent;
+      font-size: 20px;
+      width: 100px;
+      border: none;
+      right: 20px;
+  }
 }

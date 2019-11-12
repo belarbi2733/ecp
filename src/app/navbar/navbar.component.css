@@ -1,0 +1,35 @@
+.navbar {
+    padding: 0vw;
+    margin : 0vw;
+    height: 7vh;
+}
+
+.logo, img {
+    padding: 0vw;
+    margin: 0vw;
+    max-height: 7vh;
+}
+
+
+.right {
+    float: right;
+}
+
+.nav-link{
+    font-size: 20px;
+    padding-right: 1vw !important;
+    padding-left: 0vw !important;
+    margin: 0vw;
+    
+}
+
+.navbar-brand {
+
+    padding:0vw !important;
+    margin:0vw !important;
+
+}
+
+.navbar-nav{
+    margin-left: 2vw;
+}
