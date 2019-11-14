@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 //services
 import { AuthGuard } from './services/auth-guard.service';
+import { AdminGuard } from './services/admin-guard.service';
 import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/auth.service';
 
@@ -47,11 +48,14 @@ import { LoginstatComponent } from './adminFolder/loginstat/loginstat.component'
 import { ParcelstatComponent } from './adminFolder/parcelstat/parcelstat.component';
 import { TripstatComponent } from './adminFolder/tripstat/tripstat.component';
 import { UserstatComponent } from './adminFolder/userstat/userstat.component';
+import { NavbarAdminComponent } from './adminFolder/navbar-admin/navbar-admin.component';
+import { ReservationComponent } from './profileFolder/reservation/reservation.component';
+import { NavbarReservationComponent } from './profileFolder/navbar-reservation/navbar-reservation.component';
 
 
 const appRoutes: Routes = [
 
-  { path: 'profile', canActivate: [AuthGuard],component: ProfileTabsComponent }, // :id is a route parameter and data is to parse static data
+  { path: 'profile', canActivate: [AuthGuard], component: ProfileTabsComponent }, // :id is a route parameter and data is to parse static data
   { path: 'accueil', component: AccueilComponent },
   { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
   { path: 'add-colis', canActivate: [AuthGuard], component: AddColisComponent },
@@ -59,18 +63,18 @@ const appRoutes: Routes = [
   { path: 'aide', component: AideComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'description', component: DescriptionComponent },
-  { path: 'messagerie', component: MessagerieComponent },
-  { path: 'admin', component: AdminComponent },
-  { path: 'admin-list-ut', component: AdminListUtComponent },
-  { path: 'admin-list-traj', component: AdminListTrajComponent },
-  { path: 'info-traj', component: InfoTrajComponent },
-  { path: 'admin-rembours', component: AdminRemboursComponent },
+  { path: 'reservation', canActivate: [AuthGuard], component: ReservationComponent },
+  { path: 'messagerie', canActivate: [AuthGuard], component: MessagerieComponent },
+  { path: 'payements', canActivate: [AuthGuard], component: PaymentsComponent },
+  { path: 'admin', canActivate: [AdminGuard], component: AdminComponent },
+  { path: 'admin-list-ut', canActivate: [AdminGuard], component: AdminListUtComponent },
+  { path: 'admin-list-traj', canActivate: [AdminGuard], component: AdminListTrajComponent },
+  { path: 'info-traj', canActivate: [AdminGuard], component: InfoTrajComponent },
+  { path: 'admin-rembours', canActivate: [AdminGuard], component: AdminRemboursComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
   { path: '', component: AccueilComponent },
   { path: '**', component: FourOhFourComponent }
-
-
 
 
    //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
@@ -114,7 +118,10 @@ const appRoutes: Routes = [
     LoginstatComponent,
     ParcelstatComponent,
     TripstatComponent,
-    UserstatComponent
+    UserstatComponent,
+    NavbarAdminComponent,
+    ReservationComponent,
+    NavbarReservationComponent
   ],
   imports: [
     BrowserModule,
@@ -126,7 +133,8 @@ const appRoutes: Routes = [
   providers: [
     AccueilService,
     AuthService,
-    AuthGuard
+    AuthGuard,
+    AdminGuard
   ],
   bootstrap: [AppComponent]
 })
