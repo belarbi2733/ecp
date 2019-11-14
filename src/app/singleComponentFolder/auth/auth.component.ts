@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class AuthComponent implements OnInit {
 
   authStatus: boolean;
+  adminStatus:boolean
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -21,14 +22,20 @@ export class AuthComponent implements OnInit {
     this.authService.signIn().then(
       () => {
         this.authStatus = this.authService.isAuth;
+        this.adminStatus = this.authService.isAdmin;
         this.router.navigate(['accueil']);
       }
     );
   }
 
   onSignInAdmin(){
-    this.authService.signIn();
-    this.router.navigate(['admin']);
+    this.authService.signInAdmin().then(
+      () => {
+        this.authStatus = this.authService.isAuth;
+        this.adminStatus = this.authService.isAdmin;
+        this.router.navigate(['admin']);
+      }
+    );
   }
 
   onSignOut(){
@@ -38,6 +45,10 @@ export class AuthComponent implements OnInit {
 
   toInscr(){
     this.router.navigate(['inscrire']);
+  }
+
+  getAdminStatus(){
+    return this.adminStatus;
   }
 
 }
