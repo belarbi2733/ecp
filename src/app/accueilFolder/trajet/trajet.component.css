@@ -1,7 +1,8 @@
 
+
 .trajet {
   background-image: url("../../../assets/trajet.jpg");
-  height: 500px;
+  height: 60vh;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -19,8 +20,16 @@
 }
 
 
+@media only screen and (max-width: 900px) {
+  /* for medium device style tablet */
+  
 
-@media only screen and (max-width: 768px) {
+  .trajet {
+    height: 45vh;
+  }
+}
+
+@media only screen and (max-width: 576px) {
   /* For mobile phones: */
   .btn{
       background-color:transparent;
@@ -29,7 +38,14 @@
       border: none;
       left: 20px;
   }
+
+  .trajet {
+    height: 30vh;
+  }
 }
+
+
+
 
 
 
