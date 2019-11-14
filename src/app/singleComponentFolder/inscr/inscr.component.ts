@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -7,6 +7,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./inscr.component.css']
 })
 export class InscrComponent implements OnInit {
+
+  @Input() inscrMail: string;
+  @Input() inscrMdp: string;
+  @Input() inscrVerifMdp: string;
 
   constructor(private router: Router) { }
 

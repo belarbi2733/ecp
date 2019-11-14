@@ -1,12 +1,12 @@
 <h3>Inscription</h3>
 
 <div class="form-group">
-  <label for="mail">Adresse mail : </label>
-  <input type="text" class="form-control">
-  <label for="mdp">Mot de passe : </label>
-  <input type="text" class="form-control">
-  <label for="verifmdp">Vérification du mot de passe : </label>
-  <input type="text" class="form-control">
+  <label for="inscrMail">Adresse mail : {{ inscrMail }} </label>
+  <input type="text" class="form-control" placeholder="Adresse mail" [(ngModel)]="inscrMail">
+  <label for="inscrMdp">Mot de passe : {{ inscrMdp }} </label>
+  <input type="text" class="form-control" placeholder="Mot de passe" [(ngModel)]="inscrMdp">
+  <label for="inscrVerifMdp">Vérification du mot de passe : {{ inscrVerifMdp }} </label>
+  <input type="text" class="form-control" placeholder="Vérification du mot de passe" [(ngModel)]="inscrVerifMdp">
 </div>
 
 <button class="btn btn-success" (click)="inscrire()">
