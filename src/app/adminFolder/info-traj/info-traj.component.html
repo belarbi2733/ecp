@@ -33,3 +33,10 @@
     </tr>
   </tbody>
 </table>
+
+<button class="btn btn-success" *ngIf=!seeAdmin() routerLink="/mes-tourn" routerLinkActive="active">
+  Retourner à la page Mes tournées
+</button>
+<button class="btn btn-success" *ngIf=seeAdmin() routerLink="/admin-list-traj" routerLinkActive="active">
+  Retourner à la page Gestion des trajets
+</button>

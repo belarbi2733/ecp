@@ -49,8 +49,10 @@ import { ParcelstatComponent } from './adminFolder/parcelstat/parcelstat.compone
 import { TripstatComponent } from './adminFolder/tripstat/tripstat.component';
 import { UserstatComponent } from './adminFolder/userstat/userstat.component';
 import { NavbarAdminComponent } from './adminFolder/navbar-admin/navbar-admin.component';
-import { ReservationComponent } from './profileFolder/reservation/reservation.component';
 import { NavbarReservationComponent } from './profileFolder/navbar-reservation/navbar-reservation.component';
+import { MesTrajComponent } from './profileFolder/mes-traj/mes-traj.component';
+import { MesColisComponent } from './profileFolder/mes-colis/mes-colis.component';
+import { MesTournComponent } from './profileFolder/mes-tourn/mes-tourn.component';
 
 
 const appRoutes: Routes = [
@@ -63,13 +65,15 @@ const appRoutes: Routes = [
   { path: 'aide', component: AideComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'description', component: DescriptionComponent },
-  { path: 'reservation', canActivate: [AuthGuard], component: ReservationComponent },
+  { path: 'mes-traj', canActivate: [AuthGuard], component: MesTrajComponent },
+  { path: 'mes-colis', canActivate: [AuthGuard], component: MesColisComponent },
+  { path: 'mes-tourn', canActivate: [AuthGuard], component: MesTournComponent },
   { path: 'messagerie', canActivate: [AuthGuard], component: MessagerieComponent },
   { path: 'payements', canActivate: [AuthGuard], component: PaymentsComponent },
   { path: 'admin', canActivate: [AdminGuard], component: AdminComponent },
   { path: 'admin-list-ut', canActivate: [AdminGuard], component: AdminListUtComponent },
   { path: 'admin-list-traj', canActivate: [AdminGuard], component: AdminListTrajComponent },
-  { path: 'info-traj', canActivate: [AdminGuard], component: InfoTrajComponent },
+  { path: 'info-traj', canActivate: [AuthGuard], component: InfoTrajComponent },
   { path: 'admin-rembours', canActivate: [AdminGuard], component: AdminRemboursComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
@@ -120,8 +124,10 @@ const appRoutes: Routes = [
     TripstatComponent,
     UserstatComponent,
     NavbarAdminComponent,
-    ReservationComponent,
-    NavbarReservationComponent
+    NavbarReservationComponent,
+    MesTrajComponent,
+    MesColisComponent,
+    MesTournComponent
   ],
   imports: [
     BrowserModule,
