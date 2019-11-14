@@ -33,5 +33,6 @@ signInAdmin() {
 
 signOut(){
   this.isAuth = false;
+  this.isAdmin = false;
 }
 }

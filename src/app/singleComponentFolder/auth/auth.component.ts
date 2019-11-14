@@ -41,6 +41,7 @@ export class AuthComponent implements OnInit {
   onSignOut(){
     this.authService.signOut();
     this.authStatus = this.authService.isAuth;
+    this.adminStatus = this.authService.isAdmin;
   }
 
   toInscr(){
