@@ -1,14 +1,14 @@
-<form>
+
     <div class="form-group">
 
-        <label>Marque</label>
-        <input type="text" class="form-control" id="marque" aria-describedby="marque" placeholder="Marque de votre véhicule">
+        <label for="carMarque">Marque : {{ carMarque }}</label>
+        <input type="text" class="form-control" id="marque" aria-describedby="marque" [(ngModel)]="carMarque">
 
-        <label>Modèle</label>
-        <input type="text" class="form-control" id="model" aria-describedby="model" placeholder="Modèle du véhicule">
+        <label for="carModele">Modèle</label>
+        <input type="text" class="form-control" id="model" aria-describedby="model" [(ngModel)]="carModele">
 
-        <label for="sel1">Nombre de sièges</label>
-        <select class="form-control" id="places">
+        <label for="carSieges">Nombre de sièges</label>
+        <select class="form-control" id="places" [(ngModel)]="carSieges">>
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -20,8 +20,10 @@
         </select>
 
         <label>Volume approximatif du coffre en litres</label>
-        <input type="number" class="form-control" id="volume" aria-describedby="volume" placeholder="entrez le volume en litres">
-        
+        <input type="number" class="form-control" id="volume" aria-describedby="volume" [(ngModel)]="carVolume">
+
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    <button (click)="modifierInfo()">
+      Modifier vos informations
+    </button>

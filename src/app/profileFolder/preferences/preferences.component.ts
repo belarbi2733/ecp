@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-preferences',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./preferences.component.css']
 })
 export class PreferencesComponent implements OnInit {
+
+  @Input() prefAnimal: string = "2";
+  @Input() prefFumer: string = "true";
 
   constructor() { }
 

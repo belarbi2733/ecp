@@ -1,33 +1,36 @@
-<form>
+
     <div class="form-group">
 
-        <label>Nom</label>
-        <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter your name">
+        <label for="userNom">Nom : {{ userNom }}</label>
+        <input type="text" class="form-control" id="name" aria-describedby="name" [(ngModel)]="userNom">
 
-        <label>Prénom</label>
-        <input type="text" class="form-control" id="firstname" aria-describedby="firstname" placeholder="Enter your first name">
+        <label for="userPrenom">Prénom : {{ userPrenom }}</label>
+        <input type="text" class="form-control" id="firstname" aria-describedby="firstname" [(ngModel)]="userPrenom">
 
-        <label>Sexe</label>
+        <label for="userSexe">Sexe : {{ userSexe }}</label>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="sexe" id="homme" value="homme">
+            <input class="form-check-input" type="radio" name="sexe" id="homme" [(ngModel)]="userSexe" value="homme">
             <label class="form-check-label" for="homme" style="margin-right:3rem;">
                 Homme
             </label>
-            <input class="form-check-input" type="radio" name="sexe" id="femme" value="femme">
+            <input class="form-check-input" type="radio" name="sexe" id="femme" [(ngModel)]="userSexe" value="femme">
             <label class="form-check-label" for="femme">
                 Femme
             </label>
         </div>
 
-        <label>Email address</label>
-        <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="Enter email">
+        <label for="userMail">Email address : {{ userMail }}</label>
+        <input type="email" class="form-control" id="email" aria-describedby="email" [(ngModel)]="userMail">
 
-        <label>Numéro de téléphone</label>
-        <input type="tel" class="form-control" id="phone" aria-describedby="phone" name="phone" placeholder="Format: 0492456789" pattern="[0-9]{10}">
+        <label for="userTel">Numéro de téléphone : {{ userTel }}</label>
+        <input type="tel" class="form-control" id="phone" aria-describedby="phone" name="phone" pattern="[0-9]{10}" [(ngModel)]="userTel">
         <small class="form-text text-muted">Format: 0123456789</small>
-        <label>Date de naissance</label> 
-        <input type="text" class="form-control" id="firstname" aria-describedby="firstname" placeholder="Enter your first name">
+
+        <label for="userDate">Date de naissance : {{ userDate }}</label>
+        <input type="date" class="form-control" id="date" aria-describedby="date" [(ngModel)]="userDate">
 
     </div>
-<button type="submit" class="btn btn-primary">Submit</button>
-</form>
+
+<button (click)="modifierInfo()">
+  Modifier vos informations
+</button>
