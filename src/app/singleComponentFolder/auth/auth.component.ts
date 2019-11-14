@@ -48,8 +48,4 @@ export class AuthComponent implements OnInit {
     this.router.navigate(['inscrire']);
   }
 
-  getAdminStatus(){
-    return this.adminStatus;
-  }
-
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'C:/Users/margo/OneDrive/Documents/Documents/2019-2020/Q1/Projet/ecp/src/app/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-info-traj',
