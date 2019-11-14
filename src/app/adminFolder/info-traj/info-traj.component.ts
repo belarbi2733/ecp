@@ -13,10 +13,6 @@ export class InfoTrajComponent implements OnInit {
   ngOnInit() {
   }
 
-  seeNotAdmin(){
-    return !this.authService.isAdmin;
-  }
-
   seeAdmin(){
     return this.authService.isAdmin;
   }
