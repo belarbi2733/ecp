@@ -1,10 +1,10 @@
 <h3>Prendre contact</h3>
 
 <div class="form-group">
-  <label for="sujet">Sujet : </label>
-  <input type="text" class="form-control">
-  <label for="description">Description : </label>
-  <textarea class="form-control" id="description" rows="3"></textarea>
+  <label for="contactSujet">Sujet : {{ contactSujet }} </label>
+  <input type="text" class="form-control" placeholder="Sujet" [(ngModel)]="contactSujet">
+  <label for="contactDescription">Description : {{ contactDescription }} </label>
+  <textarea class="form-control" id="description" rows="3" placeholder="Description" [(ngModel)]="contactDescription"></textarea>
 </div>
 
 <button class="btn btn-success" (click)="send()">

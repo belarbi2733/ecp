@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -9,8 +9,10 @@ import { Router } from '@angular/router';
 })
 export class AuthComponent implements OnInit {
 
+  @Input() connectMail: string;
+  @Input() connectMdp: string;
   authStatus: boolean;
-  adminStatus:boolean
+  adminStatus:boolean;
 
   constructor(private authService: AuthService, private router: Router) { }
 

@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
@@ -132,6 +133,7 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     NgbModule,
+    FormsModule,
     RouterModule.forRoot(appRoutes, { enableTracing: true }),
     ChartsModule,
     HttpClientModule

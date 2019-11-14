@@ -1,20 +1,20 @@
 <h3>Ajouter un colis : </h3>
 
 <div class="form-group">
-  <label for="nom">Nom : </label>
-  <input type="text" class="form-control">
-  <label for="depart">Départ : </label>
-  <input type="text" class="form-control">
-  <label for="destination">Destination : </label>
-  <input type="text" class="form-control">
-  <label for="heure">Heure et date : </label>
-  <input type="date" class="form-control">
-  <label for="poids">Poids : </label>
-  <input type="number" class="form-control">
-  <label for="volume">Volume : </label>
-  <input type="number" class="form-control">
-  <label for="descritpion">Description : </label>
-  <textarea class="form-control" id="description" rows="3"></textarea>
+  <label for="colisNom">Nom : {{ colisNom }} </label>
+  <input type="text" class="form-control" placeholder="Nom" [(ngModel)]="colisNom">
+  <label for="colisDepart">Départ : {{ colisDepart }} </label>
+  <input type="text" class="form-control" placeholder="Départ" [(ngModel)]="colisDepart">
+  <label for="colisDestination">Destination : {{ colisDestination }} </label>
+  <input type="text" class="form-control" placeholder="Destination" [(ngModel)]="colisDestination">
+  <label for="colisDate">Heure et date : {{ colisDate }} </label>
+  <input type="date" class="form-control" placeholder="Heure et date" [(ngModel)]="colisDate">
+  <label for="colisPoids">Poids : {{ colisPoids }} </label>
+  <input type="number" class="form-control" placeholder="Poids" [(ngModel)]="colisPoids">
+  <label for="colisVolume">Volume : {{ colisVolume }} </label>
+  <input type="number" class="form-control" placeholder="Volume" [(ngModel)]="colisVolume">
+  <label for="colisDescription">Description : {{ colisDescription }} </label>
+  <textarea class="form-control" id="description" rows="3" placeholder="Description" [(ngModel)]="colisDescription"></textarea>
 </div>
 
 <button class="btn btn-success" (click)="addCol()">
