@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv='X-UA-Compatible' content='IE=Edge' />
+    <meta charset='UTF-8'>
+    <title>TomTom JavaScript SDK - Map</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+    <link rel='stylesheet' type='text/css' href='elements.css'/>
+    <link rel='stylesheet' type='text/css' href='assets/css/tomtom2.css' />
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.13/css/all.css' integrity='sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp' crossorigin='anonymous'>
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+<style>
+
+    #map {
+        font-family: 'TomTom ssm book', Helvetica, Arial, sans-serif;
+    }
+
+    .tomtom-foldable { width: 310px }
+    .tomtom-control-panel { border-radius: 2px }
+    .tomtom-foldable__header { display: none }
+    input { width: 100% }
+
+    .longitude input, .latitude input { width: 100% }
+    .tt-checkboxes .text { text-transform: none }
+    label.tt-select ul.options { left: 10px }
+
+    ul.options {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .hidden {
+        display: none;
+    }
+    .loader {
+        opacity: 0.75;
+        display: block;
+        background: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 25%;
+        display: block;
+    }
+    .loader:before {
+        margin: 30%;
+    }
+
+
+    button.tt-arrow-button {
+        outline: none;
+    }
+
+    #form {
+        width : 100%;
+        padding: 0 10px 0 0px;
+    }
+    #form.sidepanel {
+        min-width: auto;
+    }
+    #form h3 {
+        font-size: 1.6rem;
+        margin-top: 0;
+    }
+    #form h5 {
+        font-size: 15px;
+        margin-bottom: 7px;
+    }
+    #form label {
+        margin: 10px 0;
+    }
+    #form small {
+        font-size: 10px;
+        color: gray;
+    }
+    #form li label { margin: 0 }
+
+    #form .disabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+
+    .position-row {
+        display: flex;
+    }
+    .position-row input {
+        padding-left: 10px;
+        line-height: 12px;
+    }
+    .position-row h4 {
+        margin: 0;
+        font-size: 10px;
+        font-weight: 100;
+        color: gray;
+    }
+    .latitude, .longitude { width: 47% }
+    .latitude {
+        margin-right: 6%;
+    }
+
+    .wider {
+        width: 350px!important;
+    }
+    .leaflet-popup-content button {
+        border: 0;
+        background: none;
+        color: gray;
+        text-decoration: underline;
+        position: absolute;
+        right: 19px;
+    }
+    .leaflet-popup-content .no-data {
+        font-weight: 800;
+        width: 100%;
+        text-align: center;
+        display: inline-block;
+    }
+    .leaflet-popup-content ul.fields li {
+        position: relative;
+    }
+    .leaflet-popup-content .field-value,
+    .leaflet-popup-content .field-name {
+        width: 155px;
+        display: inline-block;
+    }
+    .leaflet-popup-content .field-value {
+        margin-left: 170px;
+    }
+    .leaflet-popup-content .field-name {
+        top: 0;
+        position: absolute;
+        font-weight: 800;
+    }
+    .leaflet-popup-content .fields {
+        margin: 10px auto;
+        max-height: 200px;
+        overflow-y: auto;
+        list-style-type: none;
+        padding: 0;
+        transition: all ease-in 0.5s;
+    }
+    .leaflet-popup-content .details {
+        position: absolute;
+        right: 0;
+        bottom: -23px;
+    }
+    .leaflet-popup-content .freeform {
+        position: relative;
+        margin-bottom: 30px;
+    }
+    .leaflet-popup-content .hidden-fields .fields {
+        max-height: 0;
+        transition: all ease-in 0.5s;
+    }
+
+    #map .tomtom-foldable__content-body {
+        -ms-overflow-y: hidden;
+    }
+
+    #map #heading-buttons {
+        display: flex;
+        justify-content: space-between;
+        width: 80%;
+    }
+
+    @-moz-document url-prefix() {
+        .tomtom-foldable__content {
+            overflow-y: auto;
+        }
+    }
+
+    @media all and (-ms-high-contrast:none){
+        .tomtom-foldable__content-body {
+            padding-bottom: 30px;
+        }
+    }
+
+    _:-ms-lang(x), _:-webkit-full-screen, .formatting.tt-checkboxes {
+        margin-bottom: 30px!important;
+    }
+
+</style>
+</head>
+<body class='use-all-space'>
+    <div id='loader' class='loader loader-center hidden'></div>
+    <div id='map' class='use-all-space'></div>
+    <form class='sidepanel' id='form'>
+        <h3>Reverse geocoding</h3>
+
+        <h5>Language</h5>
+        <select class='language'>
+        </select>
+        <div class='sidepanel-input-group' id='tomtom-geopol-selector-placeholder'></div>
+
+        <h5>Position</h5>
+        <div class='position-row'>
+            <div class='latitude'>
+                <h4>Latitude</h4>
+                <input class='tt-disabled-input' disabled='true'>
+            </div>
+            <div class='longitude'>
+                <h4>Longitude</h4>
+                <input class='tt-disabled-input' disabled='true'>
+            </div>
+        </div>
+        <small>(Coordinates are filled automatically)</small>
+
+        <h5>Radius (10000 m)</h5>
+        <input id='radius' type='range' class='tt-range-slider'
+            min='0' max='100000' value='10000' step='100'>
+
+        <h5>Heading</h5>
+        <div id='heading-buttons'>
+            <button type='button' class='tt-arrow-button heading-west'>West</button>
+            <button type='button' class='tt-arrow-button heading-north'>North</button>
+            <button type='button' class='tt-arrow-button heading-south'>South</button>
+            <button type='button' class='tt-arrow-button heading-east'>East</button>
+        </div>
+
+        <h5>Preferred use of the road data</h5>
+
+        <select id='roadData' multiple class='road-data'>
+            <option value='LimitedAccess'>Limited access</option>
+            <option value='Arterial'>Arterial</option>
+            <option value='Terminal'>Terminal</option>
+            <option value='Ramp'>Ramp</option>
+            <option value='Rotary'>Rotary</option>
+            <option value='LocalStreet'>Local street</option>
+        </select>
+        <small>Press and hold CTRL to select multiple values or to deselect value</small>
+
+        <h5>House number</h5>
+        <input class='number' placeholder='Search for preferred house number'>
+
+        <h5>Include info on</h5>
+        <ul class='include-info tt-checkboxes'>
+            <li><label>
+                <input name='category'id='road-use' value='roaduse' type='checkbox'>
+                <span class='text'>Road use</span>
+            </label></li>
+            <li><label>
+                <input name='category' id='speedlimit' value='speedlimit' type='checkbox'>
+                <span class='text'>Speed limit</span>
+            </label></li>
+            <li><label>
+                <input name='category' id='matchtype' value='matchtype' type='checkbox'>
+                <span class='text'>Match type</span>
+            </label></li>
+        </ul>
+
+        <h5>Free form address formatting</h5>
+        <ul class='formatting tt-checkboxes'>
+            <li><label>
+                <input name='category' id='freeform' value='freeformnewlines' type='checkbox'>
+                <span class='text'>Allow new lines</span>
+            </label></li>
+        </ul>
+    </form>
+    <script>
+    (function(tomtom) {
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        // Set TomTom keys
+        tomtom.key('${api.key}');
+        tomtom.searchKey('${api.key.search}');
+
+        var map = tomtom.map('map', {
+            source: 'vector',
+            basePath: '/sdk'
+        });
+        map.zoomControl.setPosition('topright');
+        map.attributionControl.setPosition('bottomright');
+
+        tomtom.foldable({
+            position: 'topleft',
+            closeOnMapClick: false
+        }).addTo(map).addContent(document.getElementById('form'));
+
+        var languageSelector = document.querySelector('.language');
+        var geopolViewSelector;
+        languageSelector.addEventListener('input', request);
+
+        // set default language
+        var localeService = new tomtom.localeService();
+        var defaultLanguage = localeService.currentLocale.getLanguageCode();
+
+        // generate language selector options
+        L.LocaleService.getLocalesFor('search').forEach(function(locale) {
+            var option = tomtom.L.DomUtil.create('option');
+            option.setAttribute('value', locale.getLanguageCode());
+            if (option.value === defaultLanguage) {
+                option.setAttribute('selected', locale.getLanguageCode());
+            }
+            option.textContent = locale.getLabel();
+            languageSelector.appendChild(option);
+        });
+
+        var loader = document.getElementById('loader');
+        var marker;
+        var position = [50.8515, 4.3705];
+        map.setZoom(13);
+        putMarker();
+        updateUI();
+        buildGeopolSelector();
+
+        map.on('click', function(event) {
+            position = event.latlng;
+            request();
+        });
+
+        var form = document.getElementById('form');
+        form.addEventListener('change', function(event) {
+            event.preventDefault();
+        });
+
+        var buttons = [].slice.call(document.querySelectorAll('button.tt-arrow-button'));
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                buttons.forEach(function(otherButton) {
+                    if (otherButton !== button) {
+                        otherButton.classList.remove('selected');
+                    }
+                });
+                button.classList.toggle('selected');
+                request();
+            });
+        });
+
+        var radius = document.querySelector('#radius');
+        radius.addEventListener('change', function() {
+            radius.previousElementSibling.innerText = 'Radius (' + radius.value + ' m)';
+            request();
+        });
+
+        var roadDataSelector = document.querySelector('.road-data');
+
+        roadDataSelector.addEventListener('change', request);
+
+        var number = document.querySelector('.number');
+        var returnRoadUse = document.querySelector('#road-use');
+        var returnSpeedLimit = document.querySelector('#speedlimit');
+        var returnMatchType = document.querySelector('#matchtype');
+        var freeform = document.querySelector('#freeform');
+
+        [
+            returnRoadUse,
+            returnSpeedLimit,
+            returnMatchType,
+            freeform
+        ].forEach(function(element) {
+            element.addEventListener('click', request);
+        });
+        number.addEventListener('change', request);
+
+        var headings = {
+            north: 0,
+            east: 90,
+            south: 180,
+            west: 270
+        };
+
+        function getHeading() {
+            var button = document.querySelector('button.tt-arrow-button.selected');
+            if (!button) {
+                return null;
+            }
+
+            return button.className.match(/heading-(\w+)/)
+                .filter(function(match) {
+                    // filter out everything that is not in 'headings' object
+                    return typeof headings[match] !== 'undefined';
+                })
+                .reduce(function(acc, direction) {
+                    // select the numeral value of the heading
+                    return headings[direction];
+                }, null);
+        }
+
+        var requestCount = 0;
+        function request() {
+            var parameters = getParameters();
+            var currentRequest = ++requestCount;
+            loader.classList.remove('hidden');
+            tomtom.reverseGeocode(parameters).go().then(function(response) {
+                if (currentRequest !== requestCount) {
+                    return;
+                }
+                loader.classList.add('hidden');
+
+                if (!response) {
+                    tomtom.messageBox({closeAfter: 3000}).setContent('Couldn\'t find an address at given position').openOn(map);
+                    return;
+                }
+
+                putMarker(response);
+                updateUI(response.position);
+            }).catch(function() {
+                tomtom.messageBox({closeAfter: 3000}).setContent('Error occured, please try again').openOn(map);
+                loader.classList.add('hidden');
+                if (marker) {
+                    marker.remove();
+                }
+            });
+        }
+
+        function selectedOptions(select) {
+            return [].slice.call(select.querySelectorAll('option')).filter(function(option) {
+                return option.selected;
+            });
+        }
+
+        function getSelectedValues(selected) {
+            return [].slice.call(selectedOptions(selected)).map(function(option) {
+                return option.value;
+            });
+        }
+
+        function getParameters() {
+            var parameters = {
+                position: position,
+                language: languageSelector.value,
+                radius: radius.value,
+                returnRoadUse: returnRoadUse.checked,
+                returnSpeedLimit: returnSpeedLimit.checked,
+                returnMatchType: returnMatchType.checked,
+                allowFreeformNewline: freeform.checked,
+                view: geopolViewSelector.value
+            };
+            var heading = getHeading();
+
+            if (typeof heading !== 'undefined' && heading !== null) {
+                parameters.heading = heading;
+            }
+            if (number.value || number.value === '0') {
+                parameters.number = number.value;
+            }
+
+            var roadUse = getSelectedValues(roadDataSelector);
+            if (roadUse && roadUse.length) {
+                parameters.roadUse = roadUse;
+            }
+
+            return parameters;
+        }
+
+        function updateUI(responsePosition) {
+            var lat = position[0];
+            var lon = position[1];
+            if (typeof responsePosition === 'string') {
+                var split = responsePosition.split(',');
+                lat = parseFloat(split[0]);
+                lon = parseFloat(split[1]);
+            }
+            document.querySelector('.latitude input').value = lat.toFixed(5);
+            document.querySelector('.longitude input').value = lon.toFixed(5);
+        }
+
+        function extractBBox(address) {
+            if (!address.boundingBox) {
+                return null;
+            }
+            if (Array.isArray(address.boundingBox) && address.boundingBox.length) {
+                return address.boundingBox[0];
+            }
+            var hasNorthEast = typeof address.boundingBox.northEast === 'string';
+            var hasSouthWest = typeof address.boundingBox.southWest === 'string';
+            if (!(hasNorthEast && hasSouthWest)) {
+                return null;
+            }
+            return [
+                address.boundingBox.northEast.split(','),
+                address.boundingBox.southWest.split(',')
+            ];
+        }
+
+        function putMarker(response) {
+            var popup;
+            var markerPosition;
+            var boundingBox;
+            var offset;
+            if (!response) {
+                popup = 'Click anywhere on the map to get the address.';
+                markerPosition = position;
+            } else {
+                popup = generatePopup(response);
+                markerPosition = response.position.split(',');
+                boundingBox = extractBBox(response.address);
+            }
+
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            marker = tomtom.L.marker(markerPosition).addTo(map).bindPopup(popup).openPopup();
+
+            if (boundingBox) {
+                widerPopups();
+            }
+
+            offset = map.getSize().x < 900 ? 0.2 : 0.01;
+            L.MapUtils.setViewWithOffset(map, marker.getLatLng(), map.getZoom(), {}, {
+                x: map.getSize().x * offset,
+                y: 150
+            });
+        }
+
+        function narrowerPopups() {
+            [].slice.call(document.querySelectorAll('.leaflet-popup-content')).forEach(function(popup) {
+                popup.classList.remove('wider');
+                popup.parentElement.style.marginLeft = 'auto';
+            });
+        }
+
+        function widerPopups() {
+            [].slice.call(document.querySelectorAll('.leaflet-popup-content')).forEach(function(popup) {
+                popup.classList.add('wider');
+                popup.parentElement.style.marginLeft = '-50px';
+            });
+        }
+
+        var responseAttributes = [
+            'buildingNumber',
+            'streetNumber',
+            'routeNumbers',
+            'street',
+            'streetName',
+            'streetNameAndNumber',
+            'countryCode',
+            'municipality',
+            'postalCode',
+            'municipalitySubdivision',
+            'country',
+            'countryCodeISO3',
+            'speedLimit'
+        ];
+
+        function handleArrayValue(container, value) {
+            if (value.length !== 0) {
+                container.innerText = value.join(', ');
+            } else {
+                container.innerText = '(empty)';
+            }
+        }
+
+        function handleObjectValue(container, value) {
+            var key;
+            for (key in value) {
+                if (!Object.prototype.hasOwnProperty.call(value, key)) {
+                    return;
+                }
+                if (container.childElementCount) {
+                    tomtom.L.DomUtil.create('br', null, container);
+                }
+                var line = tomtom.L.DomUtil.create('span', null, container);
+                line.innerText = key + ': ' + value[key];
+            }
+        }
+
+        function createLine(key, value, container) {
+            if (typeof value === 'undefined') {
+                return null;
+            }
+            var li = tomtom.L.DomUtil.create('li', null, container);
+            var keyContainer = tomtom.L.DomUtil.create('div', 'field-name', li);
+            keyContainer.innerText = key;
+            var valueContainer = tomtom.L.DomUtil.create('div', 'field-value', li);
+            if (Array.isArray(value)) {
+                handleArrayValue(valueContainer, value);
+            } else if (typeof value === 'object') {
+                handleObjectValue(valueContainer, value);
+            } else {
+                valueContainer.innerText = value;
+            }
+            return li;
+        }
+
+        function addElementsToList(content, data) {
+            var address = data.address;
+            var list = tomtom.L.DomUtil.create('ul', 'fields', content);
+            var elementsAdded = 0;
+            ['matchType', 'roadUse'].forEach(function(property) {
+                if (typeof data[property] === 'undefined') {
+                    return;
+                }
+                createLine(property, data[property], list);
+                elementsAdded += 1;
+            });
+            return responseAttributes.map(function(name) {
+                return createLine(name, address[name], list) ? 1 : 0;
+            }).reduce(function(sum, current) { // count how many elements added
+                return sum + current;
+            }, elementsAdded);
+        }
+
+        var shouldBeOpen = false;
+        function generatePopup(data) {
+            var content;
+            var address = data.address;
+            var moreDetails;
+            var freeform;
+
+            if (typeof address.freeformAddress !== 'undefined') {
+                content = tomtom.L.DomUtil.create('div', shouldBeOpen ? '' : 'hidden-fields');
+
+                freeform = tomtom.L.DomUtil.create('div', 'freeform', content);
+                freeform.innerText = address.freeformAddress;
+
+                moreDetails = tomtom.L.DomUtil.create('button', 'details', freeform);
+                moreDetails.innerText = 'more details';
+                moreDetails.addEventListener('click', function() {
+                    shouldBeOpen = !shouldBeOpen;
+                    content.classList.toggle('hidden-fields');
+                });
+            } else {
+                content = tomtom.L.DomUtil.create('div');
+            }
+
+            if (addElementsToList(content, data)) {
+                return content;
+            }
+            if (freeform && moreDetails) {
+                freeform.removeChild(moreDetails);
+            } else {
+                var noData = tomtom.L.DomUtil.create('span', 'no-data', content);
+                noData.innerText = 'no data to show';
+            }
+            setTimeout(narrowerPopups, 10);
+            return content;
+        }
+
+        function buildGeopolSelector() {
+            geopolViewSelector = tomtom.geopolViewSelector.getHtmlElement(tomtom.globalGeopolViewService, 'reverseGeocoder');
+            var geopolSelectorContainer = document.getElementById('tomtom-geopol-selector-placeholder');
+
+            geopolViewSelector.id = 'tomtom-example-geopolViewCodesList';
+            geopolSelectorContainer.appendChild(geopolViewSelector);
+
+            var label = document.createElement('h5');
+            label.setAttribute('for', 'tomtom-example-geopolViewCodesList');
+            label.innerText = 'Geopolitical view';
+            geopolSelectorContainer.appendChild(label);
+        }
+
+        tomtom.globalGeopolViewService.on(tomtom.L.GeopolViewService.Events.GEOPOL_VIEW_CHANGED, function() {
+            request();
+        });
+
+        window.addEventListener('error', function(event) {
+            var error = event.error;
+            var message = error && (error.message || (error.error && error.error.description)) || 'Error occured';
+            tomtom.messageBox({closeAfter: 3000}).setContent(message).openOn(map);
+        });
+
+    })(tomtom);
+
+    </script>
+</body>
+</html>

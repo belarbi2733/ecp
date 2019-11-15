@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Routing travel mode</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+    <link rel='stylesheet' type='text/css' href='elements.css'/>
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+    <style>
+        label {
+            display: flex;
+            align-items: center;
+            margin: 2px;
+        }
+        select {
+            flex: auto;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body class='use-all-space'>
+    <div class='map-container use-all-space'>
+        <div id='map' class='use-all-space'></div>
+        <label for='travel_mode'>
+            Travel mode
+            <select id='travel_mode' name='travel_mode'>
+                <option value='pedestrian'>pedestrian</option>
+                <option value='car'>car</option>
+                <option value='truck'>truck</option>
+                <option value='bicycle'>bicycle</option>
+                <option value='bus'>bus</option>
+                <option value='van'>van</option>
+                <option value='motorcycle'>motorcycle</option>
+                <option value='taxi'>taxi</option>
+            </select>
+        </label>
+    </div>
+    <script>
+        (function(tomtom) {
+            // Define your product name and version
+            tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+            var route, colors = {
+                car: '#F020E8',
+                truck: '#F06368',
+                taxi: '#F77A03',
+                bus: '#1F9B9B',
+                van: '#258541',
+                motorcycle: '#FFFF00',
+                bicycle: '#9E2776',
+                pedestrian: '#1216F0'
+            };
+
+            // Setting TomTom keys
+            tomtom.routingKey('${api.key.routing}');
+
+            // Creating the map
+            var map = tomtom.map('map', {
+                key: '${api.key}',
+                source: 'vector',
+                basePath: '/sdk'
+            });
+
+            tomtom.controlPanel({
+                position: 'topright',
+                title: null,
+                close: null,
+                show: null,
+                collapsed: false,
+                closeOnMapClick: false
+            })
+                .addTo(map)
+                .addContent(document.getElementById('map').nextElementSibling);
+
+            function calculateRoute() {
+                var travelMode = document.getElementById('travel_mode').value;
+                tomtom.routing({traffic: false})
+                    .travelMode(travelMode)
+                    .locations('52.37173,4.91015:52.36357,4.898046255')
+                    .go()
+                    .then(function(routeJson) {
+                        if (route) {
+                            map.removeLayer(route);
+                        }
+                        route = tomtom.L.geoJson(routeJson, {
+                            style: {
+                                color: colors[travelMode],
+                                opacity: 0.7
+                            }
+                        }).addTo(map);
+                        map.fitBounds(route.getBounds(), {padding: [5, 5]});
+                    }
+                    );
+            }
+
+            document.getElementById('travel_mode').onchange = calculateRoute;
+            calculateRoute();
+        })(tomtom);
+    </script>
+</body>
+</html>

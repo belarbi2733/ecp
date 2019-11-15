@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Routing windingness and hilliness modes</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+    <link rel='stylesheet' type='text/css' href='elements.css'/>
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+    <style>
+        label {
+            display: flex;
+            align-items: center;
+            margin: 2px;
+        }
+        select {
+            flex: auto;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body class='use-all-space'>
+    <div class='map-container use-all-space'>
+        <div id='map' class='use-all-space'></div>
+        <div>
+            <label for='scenarios'>
+                Scenario
+                <select id='scenarios' name='scenarios'>
+                    <option value='lightTruck'>Light truck</option>
+                    <option value='lightExplosiveTruck'>Light truck with explosives</option>
+                    <option value='heavyTruck'>Heavy truck</option>
+                    <option value='heavyExplosiveTruck'>Heavy truck with explosives</option>
+                    <option value=''>Custom</option>
+                </select>
+            </label>
+            <label for='height'>
+                Height
+                <select id='height' name='height'>
+                    <option value='3'>3m</option>
+                    <option value='5'>5m</option>
+                </select>
+            </label>
+            <label for='weight'>
+                Weight
+                <select id='weight' name='weight'>
+                    <option value='15000'>15t</option>
+                    <option value='60000'>60t</option>
+                </select>
+            </label>
+            <label for='loadType'>
+                Hazardous load
+                <select id='loadType' name='loadType'>
+                    <option value=''>none</option>
+                    <option value='USHazmatClass1'>explosives</option>
+                </select>
+            </label>
+        </div>
+    </div>
+    <script>
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        var route;
+
+        // Setting TomTom keys
+        tomtom.key('${api.key}');
+        tomtom.routingKey('${api.key.routing}');
+
+        // Creating map
+        var map = tomtom.map('map', {
+            source: 'vector',
+            basePath: '/sdk'
+        });
+
+        tomtom.controlPanel({
+            position: 'topright',
+            title: null,
+            show: null,
+            close: null,
+            collapsed: false,
+            closeOnMapClick: false
+        })
+            .addTo(map)
+            .addContent(document.getElementById('map').nextElementSibling);
+
+        function calculateRoute() {
+            var height = document.getElementById('height').value,
+                weight = document.getElementById('weight').value,
+                loadType = document.getElementById('loadType').value;
+
+            tomtom.routing({traffic: false})
+                .travelMode('truck')
+                .vehicleHeight(height)
+                .vehicleWeight(weight)
+                .vehicleLoadType(loadType)
+                .locations('40.71305,-74.00723:38.89206,-77.01991')
+                .go()
+                .then(function(routeJson) {
+                    if (route) {
+                        map.removeLayer(route);
+                    }
+                    route = tomtom.L.geoJson(routeJson, {style: {color: '#06f', opacity: 0.5}})
+                        .addTo(map);
+                    map.fitBounds(route.getBounds(), {padding: [5, 5]});
+                }
+                );
+        }
+
+        var presetsElement = document.getElementById('scenarios'),
+            heightElement = document.getElementById('height'),
+            weightElement = document.getElementById('weight'),
+            loadTypeElement = document.getElementById('loadType');
+
+        presetsElement.onchange = function(event) {
+            switch (event.target.value) {
+            case 'lightTruck':
+                updateForm(0, 0, 0);
+                break;
+            case 'lightExplosiveTruck':
+                updateForm(0, 0, 1);
+                break;
+            case 'heavyTruck':
+                updateForm(1, 1, 0);
+                break;
+            case 'heavyExplosiveTruck':
+                updateForm(1, 1, 1);
+                break;
+            }
+        };
+
+        heightElement.onchange = updateInput;
+        weightElement.onchange = updateInput;
+        loadTypeElement.onchange = updateInput;
+        calculateRoute();
+
+        function updateForm(height, weight, loadType) {
+            heightElement.selectedIndex = height;
+            weightElement.selectedIndex = weight;
+            loadTypeElement.selectedIndex = loadType;
+            calculateRoute();
+        }
+
+        function updateInput() {
+            presetsElement.selectedIndex = presetsElement.children.length - 1;
+            calculateRoute();
+        }
+    </script>
+</body>
+</html>

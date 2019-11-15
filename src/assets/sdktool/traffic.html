@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Map with traffic</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel='stylesheet' type='text/css' href='sdk/map.css' />
+    <link rel='stylesheet' type='text/css' href='elements.css' />
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+    <style>
+        .map-container input[type=checkbox] {
+            margin: 0 4px;
+        }
+        label {
+            display: flex;
+            align-items: center;
+            margin: 2px;
+        }
+        select {
+            flex: auto;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body class='use-all-space'>
+    <div class='map-container use-all-space'>
+        <div id='map' class='use-all-space'></div>
+        <div>
+            <label for='baseLayer'>
+                Base Layer
+               <select id='baseLayer' name='baseLayer' autocomplete='off'></select>
+            </label>
+            <label>Traffic layers:</label>
+            <label for='trafficWithIncidents'>
+                <input type="checkbox" onchange="toggleLayer('trafficWithIncidents')" id='trafficWithIncidents' checked>
+                Incidents
+            </label>
+             <label for='trafficFlow'>
+                <input type="checkbox" onchange="toggleLayer('trafficFlow')" id='trafficFlow' checked>
+                Flow
+            </label>
+        </div>
+    </div>
+    <script>
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        var trafficOptions = {
+            style: 's3',
+            refresh: 5000,
+            key: '${api.key.traffic}',
+            diff: true
+        };
+        var trafficFlowOptions = {
+            key: '${api.key.trafficFlow}',
+            refresh: 180000
+        };
+
+        var map = tomtom.map('map', {
+            key: '${api.key}',
+            source: ['vector', 'raster'],
+            basePath: '/sdk',
+            traffic: trafficOptions,
+            trafficFlow: trafficFlowOptions,
+            center: [51.50276, -0.12634],
+            zoom: 10
+        });
+
+        var languageLabel = L.DomUtil.create('label');
+        languageLabel.innerHTML = 'Maps language';
+        var languageSelector = tomtom.languageSelector.getHtmlElement(tomtom.globalLocaleService, 'maps');
+        languageLabel.appendChild(languageSelector);
+        tomtom.controlPanel({
+            position: 'bottomright',
+            title: 'Settings',
+            collapsed: true,
+            closeOnMapClick: false
+        })
+            .addTo(map)
+            .addContent(languageLabel);
+
+        tomtom.controlPanel({
+            position: 'topright',
+            title: null,
+            show: null,
+            close: null,
+            collapsed: false,
+            closeOnMapClick: false
+        })
+            .addTo(map)
+            .addContent(document.getElementById('map').nextElementSibling);
+
+        function centerOnMarker(trafficIncidentsLayer) {
+            trafficIncidentsLayer.on('click', function(event) {
+                var marker = event.propagatedFrom;
+                map.setView(marker.getLatLng(), map.getZoom());
+            });
+        }
+
+        var layers = L.MapUtils.findLayersByName('trafficIncidents', map);
+        if (layers.length) {
+            centerOnMarker(layers[0]);
+        }
+
+        function toggleLayer(layerName) { 
+            var layer = tomtom.L.MapUtils.findLayersByName(layerName, map)[0];
+            var newTrafficLayer;
+            if (!layer) {
+                if (layerName === 'trafficWithIncidents') {
+                    newTrafficLayer = new L.TomTomTrafficWithIncidentsLayer(trafficOptions);
+                    map.addLayer(newTrafficLayer);
+                    centerOnMarker(newTrafficLayer.incidentsLayer);
+                } else {
+                    map.addLayer(new L.TomTomTrafficFlowLayer(trafficFlowOptions));
+                }
+            } else {
+                map.removeLayer(layer);
+            }
+        }
+
+        function updateBaseLayer() {
+            map.setMapSource(this.value);
+        }
+        document.getElementById('baseLayer').onchange = updateBaseLayer;
+
+        (function initializeTileSwitcher() {
+            var select = document.getElementById('baseLayer');
+            var layers = map.getBaseLayers();
+
+            function newOption(value, label, selected) {
+                var option = document.createElement('option');
+                option.value = value;
+                option.text = label;
+                if (selected) {
+                    option.selected = 'selected';
+                }
+                return option;
+            }
+
+            layers.raster && select.appendChild(newOption('raster', 'Raster'));
+            layers.vector && select.appendChild(newOption('vector', 'Vector', 'selected'));
+        })();
+    </script>
+</body>
+</html>
