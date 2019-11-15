@@ -10,13 +10,13 @@
     height: auto;
 }
 
-.btn:visited{
+/* .btn:visited{
     opacity:1;
 }
 
-.btn:hover{
-    cursor: pointer;
-}
+.btn :hover{
+    cursor: pointer ;
+} */
 
 @media only screen and (max-width: 768px) {
 /* For mobile phones: */
@@ -25,4 +25,15 @@
     min-width: 80px;
     width:auto;
 }
+}
+
+
+:host {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+}
+  
+.Site-content {
+    flex: 1;
 }

@@ -2,6 +2,9 @@
     padding: 0vw;
     margin : 0vw;
     height: 7vh;
+    width: 100%;
+    padding-right: 2vw;
+    padding-left: 1vw;
 }
 
 .logo, img {
@@ -33,3 +36,8 @@
 .navbar-nav{
     margin-left: 2vw;
 }
+
+li a:hover {
+    background-color: rgb(220,220,220);
+  }
+
