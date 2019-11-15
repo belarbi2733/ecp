@@ -32,8 +32,12 @@ span{
     color: white;
 }
 
-img {
-    width: 35px;
+.facebook {
+    width: 40px;
+}
+
+.insta{
+  width: 40px;
 }
 
 .minilogo {
