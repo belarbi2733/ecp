@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-inscr',
   templateUrl: './inscr.component.html',
-  styleUrls: ['./inscr.component.css']
+  styleUrls: ['./inscr.component.css','../../app.component.css']
 })
 export class InscrComponent implements OnInit {
 

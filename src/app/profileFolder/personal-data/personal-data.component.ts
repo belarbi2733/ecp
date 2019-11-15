@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 @Component({
   selector: 'app-personal-data',
   templateUrl: './personal-data.component.html',
-  styleUrls: ['./personal-data.component.css']
+  styleUrls: ['./personal-data.component.css','../../app.component.css']
 })
 export class PersonalDataComponent implements OnInit {
 
