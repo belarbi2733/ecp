@@ -7,16 +7,9 @@ import { alternative } from './alternative';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-
-  @Input() userNom: string = "NOM";
-  @Input() userPrenom: string = "PRENOM";
-  @Input() userSexe: string = "homme";
-  @Input() userMail: string = "MAIL";
-  @Input() userTel: string = "0492456789";
-  @Input() userDate: Date;
-
-  alternative=alternative;
   
+  alternative=alternative;
+
   constructor() { }
 
   ngOnInit() {
