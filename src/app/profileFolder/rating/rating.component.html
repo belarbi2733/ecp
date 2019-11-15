@@ -1,8 +1,11 @@
-<h4>Rating total</h4>
-<ngb-rating [rate]="6"></ngb-rating>
-<h4>Ponctualité </h4>
-<ngb-rating [rate]="10"></ngb-rating>
-<h4>Propreté</h4>
-<ngb-rating [rate]="2"></ngb-rating>
-<h4>Autre</h4>
-<ngb-rating [rate]="6"></ngb-rating>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<h4>Rating</h4>
+<ng-template #t let-fill="fill">
+  <span class="star" [class.full]="fill === 100">
+    <span class="fa fa-star"></span>
+  </span>
+</ng-template>
+<ngb-rating max=5 readonly=true [starTemplate]="t" [rate]="currentRate"></ngb-rating>
+<h4>Commentaires</h4>
+<p>{{ commentaire }}</p>
