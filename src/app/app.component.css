@@ -10,18 +10,14 @@
     height: auto;
 }
 
-/* .btn:visited{
-    opacity:1;
-}
-
-.btn :hover{
-    cursor: pointer ;
-} */
-
 .content {
 
     padding-top: 5vh;
 }
+
+input {
+    margin-bottom: 2vh;
+  }
 
 
 @media only screen and (max-width: 768px) {
