@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-add-colis',
   templateUrl: './add-colis.component.html',
-  styleUrls: ['./add-colis.component.css']
+  styleUrls: ['./add-colis.component.css','../../app.component.css']
 })
 export class AddColisComponent implements OnInit {
 
