@@ -1,7 +1,7 @@
 
 .colis {
   background-image: url("../../../assets/colis.jpg");
-  height: 500px;
+  height: 60vh;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -18,7 +18,18 @@
   color: white;
 }
 
-@media only screen and (max-width: 768px) {
+
+@media only screen and (max-width: 900px) {
+  /* for medium device style tablet */
+  
+
+  .colis {
+    height: 45vh;
+  }
+}
+
+
+@media only screen and (max-width: 576px) {
   /* For mobile phones: */
   .btn{
       background-color:transparent;
@@ -26,5 +37,9 @@
       width: 100px;
       border: none;
       right: 20px;
+  }
+
+  .colis {
+    height: 30vh;
   }
 }
