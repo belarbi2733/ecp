@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+
+<head>
+    <meta http-equiv='X-UA-Compatible' content='IE=Edge' />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Routing alternatives with deviation constraints</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel='stylesheet' type='text/css' href='sdk/map.css' />
+    <link rel='stylesheet' type='text/css' href='elements.css' />
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+    <style>
+        #parameters-inputs {
+            width: 150px;
+            min-width: 150px;
+        }
+        #parameters-inputs input {
+            margin-left: 5px;
+            margin-bottom: 8px;
+        }
+        #parameters-inputs label {
+            align-items: center;
+            display: flex;
+            height: 25px;
+        }
+        #results {
+            width: 165px;
+        }
+        h4 {
+            margin-top: 0;
+        }
+        #results-list-container {
+            font-size: 12px;
+        }
+        #results-list-container h5 {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        #results-list-container label {
+            margin-bottom: 0;
+        }
+        #results-list-container .result-row label, form label {
+            color: #363636 !important;
+        }
+        #results-list-container .result-row-details {
+            border-left-width: 5px;
+            border-left-style: solid;
+            border-radius: 5px;
+            padding-left: 5px;
+        }
+        #results-list-container .result-row:hover {
+            background-color: #E6E6E6;
+        }
+        .leaflet-left .tomtom-control-panel.tomtom-foldable.leaflet-popup-content-wrapper.leaflet-control {
+            padding: 0;
+        }
+        #map path {
+            transition: stroke-width .3s ease-in-out;
+        }
+    </style>
+</head>
+
+<body class='use-all-space'>
+    <div class='map-container use-all-space'>
+        <div id='loader' class='loader loader-center'></div>
+        <div id='map' class='use-all-space'></div>
+        <form class='sidepanel' id='parameters-inputs'>
+            <div>
+                <h4>Set parameters:</h4>
+                <label for='avoid-vignettes'>
+                    <input name='params-checkbox-group' type='checkbox' id='avoid-vignettes' checked/> Avoid Vignettes
+                </label>
+                <label for='avoid-area'>
+                    <input name='params-checkbox-group' type='checkbox' id='avoid-area' checked/> Avoid area
+                </label>
+                <label for='supporting-points'>
+                    <input name='params-checkbox-group' type='checkbox' id='supporting-points'/> Supporting points
+                </label>
+            </div>
+            <div id='none-selected-warning'></div>
+            <input id='submit' type='submit' value='Submit'>
+        </form>
+        <div id='results'>
+            <h4>Legend</h4>
+            <div id='results-list-container'>
+                Loading...
+            </div>
+        </div>
+    </div>
+    <script>
+        (function(tomtom) {
+            // Define your product name and version
+            tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+            var map,
+                layers = [],
+                startIcon = tomtom.L.icon({
+                    iconUrl: '/sdk/../img/start.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                }),
+                endIcon = tomtom.L.icon({
+                    iconUrl: '/sdk/../img/end.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                }),
+                supportingPointIcon = new tomtom.L.SVGIcon({
+                    background: {
+                        iconSize: [23, 23],
+                        iconAnchor: [10, 15],
+                        icon: 'icon-shield',
+                        noPlainSVG: false
+                    },
+                    icon: {
+                        iconSize: [25, 25],
+                        iconAnchor: [1, 1],
+                        icon: 'icon-ic_map_poi_998-white',
+                        noPlainSVG: false
+                    },
+                    popupAnchor: [0, -30],
+                    opacity: 0.8
+                }),
+                routeData = {
+                    originPoints: [{
+                        countryName: 'Budapest',
+                        point: {
+                            lat: 47.498280,
+                            lon: 19.040073
+                        }
+                    }, {
+                        countryName: 'Prague',
+                        point: {
+                            lat: 50.075500,
+                            lon: 14.437750
+                        }
+                    }],
+                    destinationPoints: [{
+                        countryName: 'Warsaw',
+                        point: {
+                            lat: 52.230127,
+                            lon: 21.013491
+                        }
+                    }, {
+                        countryName: 'Berlin',
+                        point: {
+                            lat: 52.517958,
+                            lon: 13.407608
+                        }
+                    }]
+                },
+                resultsListContainer = document.getElementById('results-list-container'),
+                avoidVignetteInput = document.getElementById('avoid-vignettes'),
+                avoidAreaInput = document.getElementById('avoid-area'),
+                supportingPointInput = document.getElementById('supporting-points'),
+                submitButton = document.getElementById('submit'),
+                loader = document.getElementById('loader'),
+                supportingPointsList = [[52.404972, 16.924601], [50.063740, 19.945056]],
+                areaBounds = [[51.814535, 16.160306], [50.764752, 18.234585]],
+                colorSet = ['#9810EF', '#F46502', '#48CFD4', '#2CB022'],
+                areaPolygon;
+
+            // Setting TomTom keys
+            tomtom.key('${api.key}');
+            tomtom.routingKey('${api.key.routing}');
+
+            // Creating map
+            map = tomtom.map('map', {
+                source: 'vector',
+                basePath: '/sdk',
+                center: [50.848731, 17.442212],
+                zoom: 5
+            });
+
+            map.zoomControl.setPosition('bottomleft');
+
+            // Adds the control panel to the map
+            tomtom.controlPanel({
+                position: 'topleft',
+                title: null,
+                show: null,
+                close: null,
+                collapsed: false,
+                closeOnMapClick: false
+            })
+                .addTo(map)
+                .addContent(document.getElementById('map').nextElementSibling);
+
+            // Adds the panel for route summary
+            tomtom.controlPanel({
+                position: 'topright',
+                collapsed: false,
+                close: null,
+                closeOnMapClick: false
+            })
+                .addTo(map)
+                .addContent(document.getElementById('results'));
+
+            function request() {
+                try {
+                    if (layers.length) {
+                        layers.forEach(function(layer) {
+                            map.removeLayer(layer);
+                        });
+                        layers = [];
+                    }
+                    showLoader();
+                    createMarkersAndArea();
+                    matrixWithPostParams().then(function(batchMatrixResult) {
+                        return batchRouting().then(function(batchResponse) {
+                            var routes = [];
+                            batchResponse.forEach(function(record, index) {
+                                routes.push(buildRouteOnMap(record, index));
+                            });
+                            renderResults(batchMatrixResult, routes);
+                            hideLoader();
+                        });
+                    }).catch(handleError);
+                } catch (error) {
+                    handleError(error);
+                }
+            }
+
+            function matrixWithPostParams() {
+                var batchMatrixRoutingHandler;
+
+                batchMatrixRoutingHandler = tomtom.matrixRouting({traffic: false});
+                batchMatrixRoutingHandler.origins(routeData.originPoints.map(extractPoint));
+                batchMatrixRoutingHandler.destinations(routeData.destinationPoints.map(extractPoint));
+
+                addPostParams(batchMatrixRoutingHandler);
+
+                return batchMatrixRoutingHandler.go();
+            }
+
+            function batchRouting() {
+                var requestOpts = [];
+                routeData.originPoints.forEach(function(originPoint) {
+                    routeData.destinationPoints.forEach(function(destinationPoint) {
+                        var newReq = {
+                            traffic: false,
+                            locations: [originPoint.point, destinationPoint.point]
+                        };
+                        addPostParams(newReq, true);
+                        requestOpts.push(newReq);
+                    });
+                });
+                return tomtom.routing(requestOpts).go();
+            }
+
+            function addPostParams(call, isObj) {
+                var vignettes = ['HUN', 'CZE', 'SVK'];
+                var avoidAreas = [{
+                    southWestCorner: areaPolygon.getBounds().getSouthWest(),
+                    northEastCorner: areaPolygon.getBounds().getNorthEast()
+                }];
+
+                if (isObj) {
+                    if (avoidVignetteInput.checked) {
+                        call.avoidVignette = vignettes;
+                    }
+                    if (avoidAreaInput.checked) {
+                        call.avoidAreas = avoidAreas;
+                    }
+                    if (supportingPointInput.checked) {
+                        call.supportingPoints = supportingPointsList;
+                    }
+                    return;
+                }
+
+                if (avoidVignetteInput.checked) {
+                    call.avoidVignette(vignettes);
+                }
+                if (avoidAreaInput.checked) {
+                    call.avoidAreas(avoidAreas);
+                }
+                if (supportingPointInput.checked) {
+                    call.supportingPoints(supportingPointsList);
+                }
+            }
+
+            function extractPoint(pointData) {
+                return {
+                    point: {
+                        latitude: pointData.point.lat,
+                        longitude: pointData.point.lon
+                    }
+                };
+            }
+
+            function renderResults(jsonResult, generatedRoutes) {
+                // the response can be mapped as follows:
+                // [
+                // [BUDAPEST-WARSAW, BUDAPEST-BERLIN]
+                // [PRAGUE-WARSAW, PRAGUE-BERLIN]
+                // ]
+                var indexCounter = 0;
+
+                resultsListContainer.innerHTML = '';
+
+                jsonResult.forEach(function(resultSet, i) {
+                    resultSet.forEach(function(routeDetails, j) {
+                        var id = indexCounter++;
+                        var label = routeData.originPoints[i].countryName + ' - ' + routeData.destinationPoints[j].countryName;
+                        var routeDetailsDiv = buildRouteSummaryMessage(routeDetails.routeSummary, label, colorSet[id]);
+                        routeDetailsDiv.addEventListener('mouseover', function() {
+                            generatedRoutes[id].setStyle({
+                                weight: 15
+                            });
+                        });
+                        routeDetailsDiv.addEventListener('mouseout', function() {
+                            generatedRoutes[id].setStyle({
+                                weight: 5 - id
+                            });
+                        });
+                        resultsListContainer.appendChild(routeDetailsDiv);
+                    });
+                });
+            }
+
+            function buildRouteSummaryMessage(summary, label, borderColor) {
+                var div = document.createElement('div');
+                div.className = 'result-row';
+                div.innerHTML = '<h5>' + label + '</h5>' +
+                    '<div class="result-row-details" style="border-left-color: ' + borderColor + ';"><div><label>Travel distance:</label> ' +
+                        tomtom.unitFormatConverter.formatDistance(summary.lengthInMeters) + '</div>' +
+                    '<div><label>Travel time:</label> ' + tomtom.unitFormatConverter.formatTime(summary.travelTimeInSeconds) +
+                    '</div></div>';
+                return div;
+            }
+
+            function buildRouteOnMap(routeJson, idx) {
+                var route = tomtom.L.geoJson(routeJson.features[0].geometry, {
+                    style: function() {
+                        return {
+                            color: colorSet[idx],
+                            weight: 5 - idx,
+                            opacity: 0.8
+                        };
+                    }
+                }).addTo(map);
+                layers.push(route);
+                return route;
+            }
+
+            function createMarkersAndArea() {
+                routeData.originPoints.forEach(function(originPoint) {
+                    createMarkerAndAddToMap([originPoint.point.lat, originPoint.point.lon], startIcon);
+                });
+
+                routeData.destinationPoints.forEach(function(destinationPoint) {
+                    createMarkerAndAddToMap([destinationPoint.point.lat, destinationPoint.point.lon], endIcon);
+                });
+
+                if (supportingPointInput.checked) {
+                    supportingPointsList.forEach(function(supportingPoint) {
+                        createMarkerAndAddToMap(supportingPoint, supportingPointIcon);
+                    });
+                }
+
+                if (avoidAreaInput.checked) {
+                    areaPolygon = tomtom.L.rectangle(areaBounds, {color: '#00D7FD', weight: 2}).addTo(map);
+                    layers.push(areaPolygon);
+                }
+            }
+
+            function createMarkerAndAddToMap(position, icon) {
+                var marker = tomtom.L.marker(position, { icon: icon }).addTo(map);
+                layers.push(marker);
+            }
+
+            function showLoader() {
+                loader.style.display = 'block';
+                submitButton.disabled = true;
+            }
+
+            function hideLoader() {
+                loader.style.display = 'none';
+                submitButton.disabled = false;
+            }
+
+            function onSubmit(e) {
+                e.preventDefault();
+                resultsListContainer.innerHTML = 'Loading...';
+                request();
+            }
+
+            function handleError(error) {
+                var message = error && error.message || (error.error && error.error.description) || 'Error occured';
+                hideLoader();
+                tomtom.messageBox({
+                    closeAfter: 3000
+                }).setContent(message).openOn(map);
+            }
+
+            submitButton.onclick = onSubmit;
+            request();
+        })(tomtom);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Heatmap</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel='stylesheet' type='text/css' href='sdk/map.css' />
+    <link rel='stylesheet' type='text/css' href='elements.css'>
+    <script src='sdk/tomtom.min.js'></script>
+    <script type='text/javascript' src='js/vendor/leaflet.heat/dist/leaflet-heat.js'></script>
+
+</head>
+<body class='use-all-space'>
+    <div id='map' class='use-all-space'></div>
+    <script>
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        tomtom.searchKey('${api.key.search}');
+
+        var map = tomtom.map('map', {
+            key: '${api.key}',
+            source: 'vector',
+            basePath: '/sdk',
+            center: [51.49164465653034, -0.14891624450683597],
+            zoom: 14
+        });
+
+        function getDataFromNearbySearch(center) {
+            return tomtom.nearbySearch({
+                center: center,
+                limit: 100,
+                radius: 5000}
+            ).go().then(function(results) {
+                return results.map(function(result) {
+                    return [result.position.lat, result.position.lon];
+                });
+            });
+        }
+
+        var locations = [
+            [51.49275353663178, -0.13642787933349612],
+            [51.489613866417066, -0.14689922332763675],
+            [51.497081918880454, -0.14840126037597656],
+            [51.496707877379755, -0.16000986099243167],
+            [51.49390246828458, -0.14591217041015628],
+            [51.49330128672925, -0.15520334243774417]
+        ];
+
+        var promises = locations.map(function(location) {
+            return getDataFromNearbySearch(location);
+        });
+        Promise.all(promises).then(function(results) {
+            var data = results.reduce(function(acc, result) {
+                return acc.concat(result);
+            }, []);
+            L.heatLayer(data).addTo(map);
+        });
+
+    </script>
+</body>
+</html>

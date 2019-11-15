@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+    <head>
+        <meta http-equiv='X-UA-Compatible' content='IE=Edge' />
+        <meta charset='UTF-8'>
+        <title>Maps SDK for Web - Batch Search example</title>
+        <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+        <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+        <link rel='stylesheet' type='text/css' href='elements.css'/>
+        <script type='text/javascript' src='js/form.js'></script>
+        <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+        <style>
+
+            .popup span {
+                font-weight: bold;
+            }
+            #panel {
+                width: 300px;
+            }
+            #panel label {
+                display: flex;
+                margin: 2px;
+            }
+            #panel label span {
+                flex: 1;
+                text-align: right;
+            }
+            #panel label select {
+                flex: 1;
+                margin-left: 10px;
+            }
+
+        </style>
+        <script type='text/template' id='popup'>
+            <div class='popup'>
+                <h1></h1>
+                <div>Type of road: <span class='type'></span></div>
+                <div>Average speed with traffic: <span class='speed-traffic'></span></div>
+                <div>Average speed w/o traffic: <span class='speed-no-traffic'></span></div>
+                <div>Travel time with traffic: <span class='time-traffic'></span></div>
+                <div>Travel time w/o traffic: <span class='time-no-traffic'></span></div>
+                <div>Real time traffic ratio: <span class='ratio'></span></div>
+            </div>
+        </script>
+    </head>
+    <body class='use-all-space'>
+        <div id='loader' class='loader loader-center hidden'></div>
+        <div id='map' class='use-all-space'></div>
+        <div id='panel'>
+            <label for='baseLayer'>
+                <span>Base Layer:</span>
+                <select id='baseLayer' name='baseLayer'>
+                    <option value='vector'>Vector</option>
+                    <option value='raster'>Raster</option>
+                </select>
+            </label>
+            <label for='trafficLayer'>
+                <span>Traffic Layer:</span>
+                <select id='trafficLayer' name='baseLayer'>
+                    <option value='vectorTrafficFlow'>Vector</option>
+                    <option value='trafficFlow'>Raster</option>
+                </select>
+            </label>
+            <label for='trafficStyle'>
+                <span>Traffic flow style</span>
+                <select id='trafficStyle' name='trafficStyle' autocomplete='off'>
+                    <option value='absolute'>absolute</option>
+                    <option value='relative' selected='selected'>relative</option>
+                    <option value='relative-delay'>relative-delay</option>
+                </select>
+            </label>
+            <label for='units'>
+                <span>Units of measurement:</span>
+                <select id='units' name='baseLayer'>
+                    <option value='KMPH'>metric</option>
+                    <option value='MPH'>imperial</option>
+                </select>
+            </label>
+        </div>
+        <script>
+    (function(tomtom) {
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        // Set TomTom keys
+        tomtom.key('${api.key}');
+        tomtom.trafficKey('${api.key.trafficFlow}');
+        tomtom.trafficFlowKey('${api.key.trafficFlow}');
+
+        var trafficFlowOptions = {
+            refresh: 180000,
+            style: 'relative'
+        };
+        var vectorTrafficFlowOptions = {
+            refresh: 180000,
+            basePath: '/sdk',
+            style: 'relative'
+        };
+
+        var mapCenter = [52.37297919217682, 4.889516830444336];
+
+        var map = tomtom.L.map('map', {
+            source: ['vector', 'raster'],
+            zoom: 15,
+            maxZoom: 18,
+            basePath: '/sdk',
+            minZoom: 5,
+            center: mapCenter,
+            vectorTrafficFlow: {
+                refresh: 180000,
+                basePath: '/sdk',
+                style: 'relative'
+            }
+        });
+        var route;
+
+        var panel = document.getElementById('panel');
+        panel.querySelector('#baseLayer').addEventListener('change', function(event) {
+            map.setMapSource(event.target.value);
+            var trafficLayer = L.MapUtils.findLayersByName('vectorTrafficFlow', map)[0];
+            if (trafficLayer) {
+                trafficLayer.bringToFront();
+            }
+        });
+
+        function createTrafficLayer(name) {
+            switch (name) {
+            case 'vectorTrafficFlow':
+                return new L.TomTomVectorTrafficFlowLayer(vectorTrafficFlowOptions);
+            case 'trafficFlow':
+                return new L.TomTomTrafficFlowLayer(trafficFlowOptions);
+            default:
+                return null;
+            }
+        }
+
+        var trafficLayer = L.MapUtils.findLayersByName('vectorTrafficFlow', map)[0];
+
+        panel.querySelector('#trafficLayer').addEventListener('change', function(event) {
+            var layerName = event.target.value;
+            map.removeLayer(trafficLayer);
+            trafficLayer = createTrafficLayer(layerName);
+            map.addLayer(trafficLayer);
+            if (trafficLayer) {
+                trafficLayer.bringToFront();
+            }
+        });
+
+        function isFlowLayer(name) {
+            return name && name.toLowerCase().indexOf('flow') >= 0;
+        }
+
+        function isVectorLayer(name) {
+            return name && name.toLowerCase().indexOf('vector') >= 0;
+        }
+
+        panel.querySelector('#trafficStyle').addEventListener('change', function(event) {
+            var selectedOption = event.target.value;
+            vectorTrafficFlowOptions.style = selectedOption;
+            trafficFlowOptions.style = selectedOption;
+            map.eachLayer(function(layer) {
+                if (!isFlowLayer(layer.name)) {
+                    return;
+                }
+                if (!isVectorLayer(layer.name)) {
+                    layer.options.style = selectedOption;
+                    layer.redraw();
+                } else {
+                    layer.updateOptions({style: selectedOption});
+                }
+            });
+            request(false);
+        });
+
+        tomtom.controlPanel({
+            collapsed: false,
+            closeOnMapClick: false,
+            position: 'bottomright',
+            title: 'Settings'
+        })
+            .addTo(map)
+            .addContent(panel);
+
+        function convertToLineGeoJson(points) {
+            return {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'LineString',
+                    coordinates: points.map(function(point) {
+                        return [point.longitude, point.latitude];
+                    })
+                }
+            };
+        }
+
+        function showPopup(position, text) {
+            tomtom.L.popup()
+                .setLatLng(position)
+                .setContent(text)
+                .openOn(map);
+        }
+
+        showPopup(mapCenter, 'Click somewhere on the road to get information about traffic flow data.');
+
+        var frc = {
+            'FRC0': 'Motorway, freeway or other major road',
+            'FRC1': 'Major road, less important than a motorway',
+            'FRC2': 'Other major road',
+            'FRC3': 'Secondary road',
+            'FRC4': 'Local connecting road',
+            'FRC5': 'Local road of high importance',
+            'FRC6': 'Local road',
+            'FRC7': 'Local road of minor importance',
+            'FRC8': 'Other road'
+        };
+
+        var units = {
+            'KMPH': ' km/h',
+            'MPH': ' mph'
+        };
+
+        function formatTime(sec) {
+            if (sec === -1) {
+                return '—';
+            }
+            return [
+                [60 * 60 * 24, ' days'],
+                [60 * 60, ' h'],
+                [60, ' min'],
+                [1, ' s']
+            ].reduce(function(sum, unit) {
+                var divider = unit[0];
+                var label = unit[1];
+                var value = Math.floor(sum.rest / divider);
+                sum.text += sum.text || value ? ' ' + value + label : '';
+                sum.rest -= value * divider;
+                return sum;
+            }, { text: '', rest: sec }).text || '—';
+        }
+
+        var unitsControl = document.getElementById('units');
+        function formatSpeed(speed) {
+            var value = unitsControl.value;
+            return speed + units[value];
+        }
+
+        function generatePopup(data) {
+            var popup = document.createElement('div');
+            popup.innerHTML = document.getElementById('popup').innerHTML;
+
+            popup.querySelector('.type').innerText = frc[data.frc] || '—';
+            popup.querySelector('.speed-traffic').innerText = formatSpeed(data.currentSpeed) || '—';
+            popup.querySelector('.speed-no-traffic').innerText = formatSpeed(data.freeFlowSpeed) || '—';
+            popup.querySelector('.time-traffic').innerText = formatTime(data.currentTravelTime);
+            popup.querySelector('.time-no-traffic').innerText = formatTime(data.freeFlowTravelTime);
+            if (data.realtimeRatio) {
+                popup.querySelector('.ratio').innerText = data.realtimeRatio || '—';
+            } else {
+                popup.querySelector('.ratio').parentElement.hidden = true;
+            }
+
+            return popup;
+        }
+
+        function trafficFlowSegmentData(latlng) {
+            if (!latlng) {
+                return Promise.reject();
+            }
+            return tomtom.trafficFlowSegmentData({
+                zoom: map.getZoom(),
+                point: latlng.lat + ',' + latlng.lng,
+                style: document.getElementById('trafficStyle').value,
+                unit: document.getElementById('units').value
+            }).go();
+        }
+
+        var latlng;
+        var fallbackLatlng;
+        function request(shouldPan, ttl) {
+            if (typeof ttl === 'undefined') {
+                ttl = 2;
+            } else if (ttl === 0) {
+                return null;
+            }
+
+            return trafficFlowSegmentData(latlng)
+                .then(function(response) {
+                    var flowSegmentData = response.flowSegmentData;
+                    var coordinates = flowSegmentData.coordinates.coordinate;
+                    var routeJson = convertToLineGeoJson(coordinates);
+                    var pin = null;
+                    for (var i = 0; i < coordinates.length; i++) {
+                        if (!pin || coordinates[i].latitude > pin.lat) {
+                            pin = {
+                                lat: coordinates[i].latitude,
+                                lng: coordinates[i].longitude
+                            };
+                        }
+                    }
+                    fallbackLatlng = {
+                        lat: coordinates[1].latitude,
+                        lng: coordinates[1].longitude
+                    };
+
+                    if (route) {
+                        route.remove();
+                    }
+
+                    route = tomtom.L.geoJson(routeJson, {
+                        style: {
+                            weight: 13,
+                            color: 'rgb(123, 26, 180)',
+                            opacity: 0.8
+                        }
+                    }).addTo(map);
+
+                    var bounds = map.getBounds();
+                    if (bounds.contains(pin) || shouldPan) {
+                        tomtom.L.popup()
+                            .setLatLng(pin)
+                            .setContent(generatePopup(flowSegmentData))
+                            .openOn(map);
+                    }
+
+                    if (shouldPan) {
+                        map.panTo(pin);
+                    }
+                })
+                .catch(function(error) {
+                    var err = error.errorResponse && error.errorResponse['@description'] || error.message;
+                    var message = err;
+                    if (fallbackLatlng) {
+                        message = err + '.<br/>Latitude and longitude have been changed.';
+                    }
+                    tomtom.messageBox({closeAfter: 3000})
+                        .setContent(message)
+                        .openOn(map);
+                    latlng = fallbackLatlng;
+                    map.closePopup();
+                    if (route) {
+                        route.remove();
+                    }
+                    if (latlng) {
+                        request(false, ttl - 1);
+                    }
+                });
+        }
+
+        map.on('zoomend', function() {
+            if (latlng) {
+                request();
+            }
+        });
+
+        map.on('click', function(event) {
+            latlng = event.latlng;
+            fallbackLatlng = null;
+            showPopup(latlng, 'Loading...');
+            request(true);
+        });
+
+    })(tomtom);
+    </script>
+</body>
+</html>

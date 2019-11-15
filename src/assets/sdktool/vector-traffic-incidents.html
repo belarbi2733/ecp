@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+    <head>
+        <meta http-equiv='X-UA-Compatible' content='IE=Edge' />
+        <meta charset='UTF-8'>
+        <title>Maps SDK for Web - Vector Traffic Incidents</title>
+        <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+        <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+        <link rel='stylesheet' type='text/css' href='elements.css'/>
+        <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+        <style>
+
+            #panel {
+                width: 300px;
+            }
+            #panel label {
+                display: flex;
+                margin: 2px;
+                font-weight: bold;
+            }
+            #panel label span {
+                flex: 1;
+                text-align: right;
+            }
+            #panel label select {
+                flex: 1;
+                margin-left: 10px;
+            }
+
+        </style>
+    </head>
+    <body class='use-all-space'>
+        <div id='loader' class='loader loader-center hidden'></div>
+        <div id='map' class='use-all-space'></div>
+        <div id='panel'>
+           <label for='trafficIncidents'>
+                <span>Traffic incidents</span>
+                <select id='trafficIncidents' name='trafficIncidents'>
+                    <option value='vector'>Vector</option>
+                    <option value='raster'>Raster</option>
+                </select>
+            </label> <label for='baseLayer'>
+                <span>Base layer</span>
+                <select id='baseLayer' name='baseLayer'>
+                    <option value='vector'>Vector</option>
+                    <option value='raster'>Raster</option>
+                </select>
+            </label>
+            <label for='trafficStyle'>
+                <span>Traffic incidents style</span>
+                <select id='trafficStyle' name='trafficStyle' autocomplete='off'>
+                    <option value='s1' selected='selected'>s1</option>
+                    <option value='s2'>s2</option>
+                    <option value='s3'>s3</option>
+                    <option value='night'>night</option>
+                </select>
+            </label>
+        </div>
+        <script>
+    (function(tomtom) {
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        // Set TomTom keys
+        tomtom.key('${api.key}');
+
+        var mapCenter = [52.37297919217682, 4.889516830444336];
+
+        var map = tomtom.L.map('map', {
+            source: ['raster'],
+            zoom: 15,
+            maxZoom: 18,
+            minZoom: 5,
+            center: mapCenter,
+            basePath: '/sdk'
+        });
+
+        function createTrafficLayer(style, type) {
+            switch (type) {
+            case 'vector':
+                return new L.TomTomVectorTrafficWithIncidentsLayer({
+                    style: style,
+                    key: '${api.key.traffic}',
+                    basePath: '/sdk'
+                });
+            case 'raster':
+                return new L.TomTomTrafficWithIncidentsLayer({
+                    style: style,
+                    key: '${api.key.traffic}'
+                });
+            default:
+                return null;
+            }
+        }
+
+        var incidents;
+        var panel = document.getElementById('panel');
+
+        function setIncidentsLayer() {
+            var style = panel.querySelector('#trafficStyle').value;
+            var incidentsType = panel.querySelector('#trafficIncidents').value;
+            if (incidents) {
+                map.removeLayer(incidents);
+            }
+            incidents = createTrafficLayer(style, incidentsType);
+            map.addLayer(incidents);
+            if (typeof incidents.bringToFront === 'function') {
+                incidents.bringToFront();
+            }
+        }
+
+        panel.querySelector('#baseLayer').addEventListener('change', function(event) {
+            map.setMapSource(event.target.value);
+            setIncidentsLayer();
+        });
+
+        panel.querySelector('#trafficIncidents').addEventListener('change', setIncidentsLayer);
+        panel.querySelector('#trafficStyle').addEventListener('change', setIncidentsLayer);
+
+        tomtom.controlPanel({
+            collapsed: false,
+            closeOnMapClick: false,
+            position: 'bottomright',
+            title: 'Settings'
+        })
+            .addTo(map)
+            .addContent(panel);
+
+        setIncidentsLayer();
+
+    })(tomtom);
+    </script>
+</body>
+</html>

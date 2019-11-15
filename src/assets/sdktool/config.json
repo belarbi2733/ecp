@@ -1,0 +1,12 @@
+{
+    "keys": {
+        "maps": "<your maps key>",
+        "routing": "<your routing key>",
+        "search": "<your search key>",
+        "traffic": "<your traffic key>",
+        "trafficFlow": "<your traffic flow key>"
+    },
+    "paths": {
+        "basePath": "/sdk"
+    }
+}
