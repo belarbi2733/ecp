@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Max speed restriction</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel='stylesheet' type='text/css' href='sdk/map.css' />
+    <link rel='stylesheet' type='text/css' href='elements.css'>
+    <script type='text/javascript' src='js/form.js'></script>
+    <script src='sdk/tomtom.min.js'></script>
+    <style>
+        .max-restriction-input {
+            width: 100%;
+        }
+
+        .loader {
+            opacity: 0.75;
+            display: block;
+            background: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 25%;
+        }
+
+        .loader:before {
+            margin: 30%;
+        }
+
+        input[disabled] {
+            opacity: 0.3;
+        }
+
+        .tomtom-foldable {
+            max-width: 200px;
+        }
+
+        .sidepanel {
+            min-width: 0px;
+            width: 100%;
+        }
+
+        .title-label-text {
+            font-weight: bold;
+        }
+
+        .summary-row > label {
+            margin-bottom: 5px;
+            font-weight: 100;
+        }
+
+        .tomtom-foldable__header {
+            min-height: 30px;
+        }
+
+    </style>
+</head>
+<body class='use-all-space'>
+    <div id='loader' class='loader loader-center'></div>
+    <div id='map' class='use-all-space'></div>
+    <script>
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        // Setting TomTom keys
+        tomtom.key('${api.key}');
+        tomtom.routingKey('${api.key.routing}');
+
+        // Creating map
+        var loader = document.getElementById('loader');
+        var submitBtn = createSubmitButton();
+        var route, vehicleMaxSpeed, errorMessage;
+
+        var endIcon = tomtom.L.icon({iconUrl: '/sdk/../img/end.png', iconSize: [30, 30], iconAnchor: [15, 15]});
+        var startIcon = tomtom.L.icon({iconUrl: '/sdk/../img/start.png', iconSize: [30, 30], iconAnchor: [15, 15]});
+        var map = tomtom.L.map('map', {
+            key: '${api.key}',
+            source: 'vector',
+            basePath: '/sdk'
+        });
+
+        map.zoomControl.setPosition('bottomleft');
+
+        var foldable = new L.Foldable({
+            closeOnMapClick: false,
+            position: 'topleft',
+            title: 'Routing options:'
+        }).addTo(map);
+
+        var routeSummary = new L.Foldable({
+            closeOnMapClick: false,
+            position: 'topright',
+            title: 'Route summary:'
+        }).addTo(map);
+
+        hideLoader();
+        foldable.addContent(createOptionsFoldable());
+        getRoute();
+
+        function addMarkers(feature) {
+            var startPoint, endPoint;
+            if (feature.geometry.type === 'MultiLineString') {
+                startPoint = feature.geometry.coordinates[0][0].reverse(); //get first point from first line
+                endPoint = feature.geometry.coordinates.slice(-1)[0].slice(-1)[0].reverse(); //get last point from last line
+            } else {
+                startPoint = feature.geometry.coordinates[0].reverse();
+                endPoint = feature.geometry.coordinates.slice(-1)[0].reverse();
+            }
+            tomtom.L.marker(startPoint, {icon: startIcon}).addTo(map);
+            tomtom.L.marker(endPoint, {icon: endIcon}).addTo(map);
+        }
+
+        function addRouteSummaryRow(propertyName, value, parentContainer) {
+            var container = document.createElement('div');
+            container.className = 'summary-row';
+            var title = document.createElement('div');
+            var titleLabel = document.createElement('label');
+            titleLabel.appendChild(document.createTextNode(propertyName + ': '));
+            titleLabel.className = 'title-label-text';
+            title.appendChild(titleLabel);
+            var valueContainer = document.createElement('div');
+            var valueLabel = document.createElement('label');
+            valueLabel.appendChild(document.createTextNode(value));
+            valueContainer.appendChild(valueLabel);
+            container.appendChild(title);
+            container.appendChild(valueLabel);
+            parentContainer.appendChild(container);
+        }
+
+        function createRouteSummary(routeJson) {
+            var summary = routeJson.features[0].properties.summary;
+            var container = document.createElement('div');
+            addRouteSummaryRow('Length', formatLengthMetric(summary.lengthInMeters), container);
+            addRouteSummaryRow('Traffic delay', formatTime(summary.trafficDelayInSeconds), container);
+            addRouteSummaryRow('Departure time', new Date(summary.departureTime).toLocaleString(), container);
+            addRouteSummaryRow('Arrival time', new Date(summary.arrivalTime).toLocaleString(), container);
+            addRouteSummaryRow('Travel time', formatTime(summary.travelTimeInSeconds), container);
+            addRouteSummaryRow('Travel time w/o traffic', formatTime(summary.noTrafficTravelTimeInSeconds), container);
+            addRouteSummaryRow('Historic traffic travel time', formatTime(summary.historicTrafficTravelTimeInSeconds), container);
+            addRouteSummaryRow('Live traffic travel time', formatTime(summary.liveTrafficIncidentsTravelTimeInSeconds), container);
+            routeSummary.setContent(container);
+        }
+
+        function formatTime(time) {
+            var mins = Math.floor(time / 60);
+            var secs = Math.floor(time % 60);
+            var hours = Math.floor(mins / 60);
+            if (hours > 0) {
+                mins = Math.floor(mins % 60);
+            }
+
+            if (!secs && !mins && !hours) {
+                return 'none';
+            }
+
+            var result = '';
+
+            if (hours) {
+                result += hours + ' h ';
+            }
+
+            if (mins) {
+                result += mins + ' min' + (mins === 1 ? ' ' : 's ');
+            }
+
+            if (secs) {
+                result += secs + ' sec' + (secs === 1 ? '' : 's');
+            }
+
+            return result;
+        }
+
+        function formatLengthMetric(lengthInMeters) {
+            var kms = parseInt(lengthInMeters / 1000);
+
+            if (kms) {
+                return (lengthInMeters / 1000).toFixed(2) + ' km';
+            } else {
+                return lengthInMeters + ' m';
+            }
+
+        }
+
+        function createOptionsFoldable() {
+            var container = document.createElement('div');
+            container.className = 'sidepanel parameter-sidepanel sidepanel-input-group';
+            var label = document.createElement('label');
+            label.appendChild(document.createTextNode('Vehicle max speed (km/h)'));
+            vehicleMaxSpeed = document.createElement('input');
+            vehicleMaxSpeed.className = 'max-restriction-input';
+            vehicleMaxSpeed.type = 'number';
+            vehicleMaxSpeed.min = 1;
+            vehicleMaxSpeed.value = 70;
+            container.appendChild(label);
+            container.appendChild(vehicleMaxSpeed);
+            container.appendChild(submitBtn);
+            return container;
+        }
+
+        function createSubmitButton() {
+            var button = document.createElement('input');
+            button.type = 'submit';
+            button.className = 'submit-btn';
+            button.value = 'Submit';
+            button.onclick = getRoute;
+            return button;
+        }
+
+        function removeElement(element) {
+            element.parentNode.removeChild(element);
+        }
+
+        function validateInput() {
+            if (errorMessage) {
+                removeElement(errorMessage);
+                errorMessage = undefined;
+            }
+
+            if (vehicleMaxSpeed.value < 1) {
+                errorMessage = document.createElement('label');
+                errorMessage.id = 'error-label';
+                errorMessage.appendChild(document.createTextNode('Vehicle speed should be greater than 0'));
+                submitBtn.parentNode.insertBefore(errorMessage, submitBtn);
+                return false;
+            }
+            return true;
+        }
+
+        function getRoute() {
+            var isValid = validateInput();
+            if (!isValid) {
+                return;
+            }
+
+            if (route) {
+                map.removeLayer(route);
+            }
+
+            showLoader();
+            try {
+                tomtom.routing({traffic: false})
+                    .locations('52.37317,4.89066:52.09126,5.12275')
+                    .vehicleMaxSpeed(vehicleMaxSpeed.value)
+                    .computeTravelTimeFor('all')
+                    .go().then(function(routeJson) {
+                        route = tomtom.L.geoJson(routeJson, {
+                            onEachFeature: addMarkers,
+                            style: {color: '#00d7ff', opacity: 0.8}
+                        }).addTo(map);
+                        map.fitBounds(route.getBounds(), {padding: [5, 5]});
+                        createRouteSummary(routeJson);
+                        hideLoader();
+                    }).catch(function() {
+                        tomtom.messageBox({closeAfter: 3000}).setContent('An error occured, please try again').openOn(map);
+                        hideLoader();
+                    });
+            } catch (err) {
+                tomtom.messageBox({closeAfter: 3000}).setContent(err.message).openOn(map);
+                hideLoader();
+            }
+
+        }
+
+        function showLoader() {
+            loader.style.display = 'block';
+            submitBtn.disabled = true;
+        }
+
+        function hideLoader() {
+            loader.style.display = 'none';
+            submitBtn.disabled = false;
+        }
+
+    </script>
+</body>
+</html>

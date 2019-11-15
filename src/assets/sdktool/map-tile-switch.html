@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Switching Tiles</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel='stylesheet' type='text/css' href='sdk/map.css' />
+    <link rel='stylesheet' type='text/css' href='elements.css' />
+    <script type='text/javascript' src='js/form.js'></script>
+    <script src='sdk/tomtom.min.js'></script>
+    <style>
+        label {
+            display: flex;
+            align-items: center;
+            margin: 2px;
+        }
+        select {
+            flex: auto;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body class='use-all-space'>
+    <div class='map-container use-all-space'>
+        <div id='inputs'>
+            <label for='baseLayer'>
+                Base Layer
+                <select id='baseLayer' name='baseLayer' onchange='updateBaseLayer()' autocomplete='off'>
+                </select>
+            </label>
+        </div>
+        <div id='map' class='use-all-space'></div>
+    </div>
+    <script>
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        var map = tomtom.map('map', {
+            key: '${api.key}',
+            source: ['vector', 'raster'],
+            basePath: '/sdk'
+        });
+
+        tomtom.controlPanel({
+            position: 'topright',
+            collapsed: false,
+            closeOnMapClick: false,
+            title: null,
+            show: null,
+            close: null
+        })
+            .addTo(map)
+            .addContent(document.getElementById('inputs'));
+
+        var languageLabel = L.DomUtil.create('label');
+        languageLabel.innerHTML = 'Maps language';
+        var languageSelector = tomtom.languageSelector.getHtmlElement(tomtom.globalLocaleService, 'maps');
+        languageLabel.appendChild(languageSelector);
+        tomtom.controlPanel({
+            position: 'bottomright',
+            title: 'Settings',
+            collapsed: true,
+            closeOnMapClick: false
+        })
+            .addTo(map)
+            .addContent(languageLabel);
+
+        function updateBaseLayer() { 
+            var selectedOption = document.getElementById('baseLayer').value || 'raster';
+            var baseLayers = map.getBaseLayers();
+
+            if (selectedOption === 'raster') {
+                map.addLayer(baseLayers.raster);
+                map.removeLayer(baseLayers.vector);
+            } else if (selectedOption === 'vector') {
+                map.addLayer(baseLayers.vector);
+                map.removeLayer(baseLayers.raster);
+            }
+        }
+
+        (function initializeTileSwitcher() {
+            var select = document.getElementById('baseLayer');
+            var layers = map.getBaseLayers();
+
+            function newOption(value, label, selected) {
+                var option = document.createElement('option');
+                option.value = value;
+                option.text = label;
+                if (selected) {
+                    option.selected = 'selected';
+                }
+                return option;
+            }
+
+            layers.raster && select.appendChild(newOption('raster', 'Raster'));
+            layers.vector && select.appendChild(newOption('vector', 'Vector', 'selected'));
+        })();
+    </script>
+</body>
+</html>
