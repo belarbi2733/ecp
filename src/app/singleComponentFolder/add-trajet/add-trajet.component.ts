@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-add-trajet',
   templateUrl: './add-trajet.component.html',
-  styleUrls: ['./add-trajet.component.css']
+  styleUrls: ['./add-trajet.component.css','../../app.component.css']
 })
 export class AddTrajetComponent implements OnInit {
 

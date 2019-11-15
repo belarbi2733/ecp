@@ -1,22 +1,26 @@
+<div class="container content">
+
 <h3>Ajouter un colis : </h3>
 
 <div class="form-group">
-  <label for="colisNom">Nom : {{ colisNom }} </label>
+  <!-- <label for="colisNom">Nom : {{ colisNom }} </label> -->
   <input type="text" class="form-control" placeholder="Nom" [(ngModel)]="colisNom">
-  <label for="colisDepart">Départ : {{ colisDepart }} </label>
+  <!-- <label for="colisDepart">Départ : {{ colisDepart }} </label> -->
   <input type="text" class="form-control" placeholder="Départ" [(ngModel)]="colisDepart">
-  <label for="colisDestination">Destination : {{ colisDestination }} </label>
+  <!-- <label for="colisDestination">Destination : {{ colisDestination }} </label> -->
   <input type="text" class="form-control" placeholder="Destination" [(ngModel)]="colisDestination">
-  <label for="colisDate">Heure et date : {{ colisDate }} </label>
-  <input type="date" class="form-control" placeholder="Heure et date" [(ngModel)]="colisDate">
-  <label for="colisPoids">Poids : {{ colisPoids }} </label>
+  <!-- <label for="colisDate">Heure et date : {{ colisDate }} </label> -->
+  <input type="date" class="form-control" placeholder="Date du départ" [(ngModel)]="colisDate">
+  <!-- <label for="colisPoids">Poids : {{ colisPoids }} </label> -->
   <input type="number" class="form-control" placeholder="Poids" [(ngModel)]="colisPoids">
-  <label for="colisVolume">Volume : {{ colisVolume }} </label>
+  <!-- <label for="colisVolume">Volume : {{ colisVolume }} </label> -->
   <input type="number" class="form-control" placeholder="Volume" [(ngModel)]="colisVolume">
-  <label for="colisDescription">Description : {{ colisDescription }} </label>
+  <!-- <label for="colisDescription">Description : {{ colisDescription }} </label> -->
   <textarea class="form-control" id="description" rows="3" placeholder="Description" [(ngModel)]="colisDescription"></textarea>
 </div>
 
 <button class="btn btn-success" (click)="addCol()">
   Ajouter
 </button>
+
+</div>
