@@ -19,8 +19,20 @@
       </td>
       <td>
         <a routerLink="/messagerie" routerLinkActive="active"> <input type="button" value="Ouvrir la messagerie" /></a>
-        <button (click)="rembours()">Rembourser le passager</button>
-        <button (click)="payer()">Payer le chauffeur</button>
+        <ng-template #popContent>
+            <button class='btn btn-success' (click)='rembours()'>Confirmer </button>
+        </ng-template>
+        <button type="button" placement="right"
+        [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr de vouloir rembourser le passager?" [autoClose]="false">
+        Rembourser le passager
+        </button>
+        <ng-template #popContent>
+            <button class='btn btn-success' (click)='payer()'>Confirmer </button>
+        </ng-template>
+        <button type="button" placement="right"
+        [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr de vouloir payer le chauffeur?" [autoClose]="false">
+        Payer le chauffeur
+        </button>
       </td>
     </tr>
   </tbody>
