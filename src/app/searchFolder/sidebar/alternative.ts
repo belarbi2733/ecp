@@ -10,5 +10,9 @@ export const alternative = [
     {
       name: 'Alternative 3',
       distance: 299
+    },
+    {
+      name: 'Alternative 4',
+      distance: 399
     }
   ];
