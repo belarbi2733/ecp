@@ -19,7 +19,7 @@ export class PersonalDataComponent implements OnInit {
   ngOnInit() {
   }
 
-  modifierInfo(){
+  modifierInfo() {
 
   }
 
