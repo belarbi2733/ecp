@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Vehicle size and weight</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+    <link rel='stylesheet' type='text/css' href='elements.css'/>
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+    <style>
+        .parameter-header {
+            font-size: 13px;
+            color: #000;
+            font-weight: bolder;
+            margin-top: 0px;
+            text-align: center;
+        }
+
+        .sidepanel {
+            min-width: 200px;
+            width: 200px;
+        }
+
+        .sidepanel input {
+            margin-bottom: 4px;
+        }
+
+        .sidepanel .sidepanel-input-group {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body class='use-all-space'>
+    <div class='map-container use-all-space'>
+        <div id='loader' class='loader loader-center'></div>
+        <div id='map' class='use-all-space'></div>
+        <div class='sidepanel parameter-sidepanel'>
+            <div id='parametersText' class='parameter-header'>Truck size and weight</div>
+            <div class='sidepanel-input-group'>
+                <select id='scenario'>
+                    <option value="lightTruck">Light truck</option>
+                    <option value="heavyTruck">Heavy truck</option>
+                </select>
+                <label for='scenario'>Scenario</label>
+            </div>
+            <div class='sidepanel-input-group'>
+                <input id='vehicleWeight'>
+                <label for='vehicleWeight'>Vehicle weight (kg)</label>
+            </div>
+            <div class='sidepanel-input-group'>
+                <input id='vehicleAxleWeight'>
+                <label for='vehicleAxleWeight'>Vehicle axle weight (kg)</label>
+            </div>
+            <div class='sidepanel-input-group'>
+                <input id='vehicleLength'>
+                <label for='vehicleLength'>Vehicle length (m)</label>
+            </div>
+            <div class='sidepanel-input-group'>
+                <input id='vehicleWidth'>
+                <label for='vehicleWidth'>Vehicle width (m)</label>
+            </div><div class='sidepanel-input-group'>
+                <input id='vehicleHeight'>
+                <label for='vehicleHeight'>Vehicle height (m)</label>
+            </div>
+
+            <input id='submit' type='submit' value='Submit'>
+        </div>
+    </div>
+    <script>
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        var route,
+            submitButton = document.getElementById('submit'),
+            loader = document.getElementById('loader');
+
+        // Setting TomTom keys
+        tomtom.key('${api.key}');
+        tomtom.routingKey('${api.key.routing}');
+        var scenarioSelect = document.getElementById('scenario');
+
+        scenarioSelect.onchange = function() {
+            setScenario(scenarioSelect.value);
+        };
+
+        var controls = {
+            vehicleWeight: document.getElementById('vehicleWeight'),
+            vehicleAxleWeight: document.getElementById('vehicleAxleWeight'),
+            vehicleLength: document.getElementById('vehicleLength'),
+            vehicleWidth: document.getElementById('vehicleWidth'),
+            vehicleHeight: document.getElementById('vehicleHeight')
+        };
+
+        var scenarios = {
+            lightTruck: {
+                vehicleWeight: 7000,
+                vehicleAxleWeight: 3500,
+                vehicleLength: 7,
+                vehicleWidth: 2.6,
+                vehicleHeight: 3
+            },
+            heavyTruck: {
+                vehicleWeight: 20000,
+                vehicleAxleWeight: 4000,
+                vehicleLength: 20,
+                vehicleWidth: 2.6,
+                vehicleHeight: 3.4
+            }
+        };
+
+        function setScenario(selectedScenario) {
+            var scenario = scenarios[selectedScenario];
+            for (var control in controls) {
+                controls[control].value = scenario[control];
+            }
+            calculateRoute();
+        }
+
+        setScenario('lightTruck');
+
+        // Creating map
+        var map = tomtom.map('map', {
+            source: 'vector',
+            basePath: '/sdk'
+        });
+
+        map.zoomControl.setPosition('topright');
+        map.attributionControl.setPosition('bottomright');
+
+        tomtom.controlPanel({
+            position: 'topleft',
+            title: null,
+            show: null,
+            close: null,
+            collapsed: false,
+            closeOnMapClick: false
+        })
+            .addTo(map)
+            .addContent(document.getElementById('map').nextElementSibling);
+
+        function calculateRoute() {
+            var vehicleWeight = controls.vehicleWeight.value,
+                vehicleAxleWeight = controls.vehicleAxleWeight.value,
+                vehicleLength = controls.vehicleLength.value,
+                vehicleWidth = controls.vehicleWidth.value,
+                vehicleHeight = controls.vehicleHeight.value;
+
+            showLoader();
+
+            try {
+                tomtom.routing({traffic: false})
+                    .travelMode('truck')
+                    .vehicleWeight(vehicleWeight)
+                    .vehicleAxleWeight(vehicleAxleWeight)
+                    .vehicleLength(vehicleLength)
+                    .vehicleWidth(vehicleWidth)
+                    .vehicleHeight(vehicleHeight)
+                    .locations('52.529098,19.656761:52.541826,19.685137')
+                    .go()
+                    .then(function(routeJson) {
+                        if (route) {
+                            map.removeLayer(route);
+                        }
+                        route = tomtom.L.geoJson(routeJson, {style: {color: '#06f', opacity: 0.5}})
+                            .addTo(map);
+                        map.fitBounds(route.getBounds(), {padding: [5, 5]});
+                        hideLoader();
+                    }, handleError);
+            } catch (error) {
+                handleError(error);
+            }
+        }
+
+        function handleError(error) {
+            var message = error && error.message || (error.error && error.error.description) || 'Error occured';
+            hideLoader();
+            tomtom.messageBox({
+                closeAfter: 10000
+            }).setContent(message).openOn(map);
+        }
+
+        function showLoader() {
+            loader.style.display = 'block';
+            submitButton.disabled = true;
+        }
+
+        function hideLoader() {
+            loader.style.display = 'none';
+            submitButton.disabled = false;
+        }
+
+        submitButton.onclick = calculateRoute;
+    </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv='X-UA-Compatible' content='IE=Edge' />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Cross Street Lookup</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+    <link rel="stylesheet" type="text/css" href="assets/css/tomtom2.css">
+    <link rel='stylesheet' type='text/css' href='elements.css'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+    <style>
+        #map {
+            font-family: 'TomTom ssm book', Helvetica, Arial, sans-serif;
+        }
+        #map .tomtom-foldable {
+            max-width: 310px;
+        }
+        #map .tomtom-foldable__header {
+            height: 0;
+        }
+        #map .sidepanel {
+            min-width: 0;
+            width: 100%;
+            padding-left: 0;
+            margin: 0;
+        }
+        #map .sidepanel h3 {
+            margin-top: 0;
+            font-size: 1.6rem;
+        }
+        #map .sidepanel .tt-select.select:hover::before {
+            cursor: pointer;
+        }
+        #map .sidepanel .tt-select.select ul {
+            max-height: 230px;
+            overflow-y: scroll;
+        }
+        #map .sidepanel .sidepanel-input-group label {
+            font-weight: normal;
+        }
+        #map #heading-buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+        }
+        #map #position-container {
+            display: flex;
+        }
+        #map #position-container .sidepanel-input-group:first-child {
+            margin-right: 6%;
+        }
+        #map .tt-select.select,
+        #map #position-container .sidepanel-input-group input {
+            margin: 0px;
+            box-sizing: border-box;
+        }
+        #map #position-container .sidepanel-input-group input {
+            line-height: 12px;
+        }
+        #map #position-container .sidepanel-input-group {
+            margin-top: 0px;
+            width: 47%;
+        }
+        #map input[type=range].tt-range-slider {
+            display: inline-block;
+        }
+        #map h5 {
+            margin-bottom: 7px;
+            margin-top: 10px;
+            font-size: 15px;
+        }
+        #map p {
+            color: #888;
+            font-size: 12px;
+        }
+        #map #country-selected {
+            margin-bottom: 0;
+        }
+        /* Fixes for IE */
+        #map .tomtom-foldable__content-body {
+            -ms-overflow-y: hidden;
+            overflow: hidden;
+        }
+
+        #tomtom-example-inputs {
+            padding: 0px;
+        }
+    </style>
+</head>
+<body class='use-all-space'>
+        <div id='loader' class='loader loader-center'></div>
+        <div id='map' class='use-all-space'></div>
+        <div id='tomtom-example-inputs' class='sidepanel'>
+            <h3>Cross street lookup parameters</h3>
+            <form onsubmit='return false'>
+                <div id='tomtom-example-inputsWrapper'>
+                    <h5>Language</h5>
+                    <select id='country-selected' name='country-selected'>
+                    </select>
+
+                    <h5>Position</h5>
+                    <div id='position-container'>
+                        <div class='sidepanel-input-group'>
+                            <input type='text' id='lonParam' name='position'
+                                value='4.3696404'
+                                class='tt-disabled-input'
+                                disabled='true'
+                            />
+                            <label for='lonParam'>Longitude</label>
+                        </div>
+                        <div class='sidepanel-input-group'>
+                            <input type='text' id='latParam' name='position'
+                                value='50.8480065'
+                                class='tt-disabled-input'
+                                disabled='true'
+                            />
+                            <label for='latParam'>Latitude</label>
+                        </div>
+                    </div>
+                    <p>(Coordinates are filled automatically)</p>
+
+                    <h5 id='radiusAmount'>Radius (10000 m)</h5>
+                    <input type='range' id='radius' class='tt-range-slider' name='radius' min='0' max='100000' value='10000' />
+
+                    <h5>Heading</h5>
+                    <div id='heading-buttons'>
+                        <button type='button' class='tt-arrow-button heading-west'>West</button>
+                        <button type='button' class='tt-arrow-button'>North</button>
+                        <button type='button' class='tt-arrow-button heading-south'>South</button>
+                        <button type='button' class='tt-arrow-button heading-east'>East</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        (function(tomtom) {
+            // Define your product name and version
+            tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+            tomtom.searchKey('${api.key.search}');
+
+            var radiusElement = document.getElementById('radius'),
+                latInput = document.getElementById('latParam'),
+                lngInput = document.getElementById('lonParam'),
+                radiusAmountElement = document.getElementById('radiusAmount'),
+                countrySelectedElem = document.getElementById('country-selected'),
+                headingButtonsElem = document.getElementById('heading-buttons'),
+                localeService = new tomtom.localeService(),
+                headingAngles = {
+                    'North': 0,
+                    'East': 90,
+                    'South': 180,
+                    'West': 270
+                },
+                selectedAngle,
+                locationNotFoundErrorMsg = 'Cannot find an address for the given location. </br>Try to change the radius or click in a different place.',
+                errorMsgBox;
+
+            // generate language selector options
+            L.LocaleService.getLocalesFor('search').forEach(function(locale) {
+                // <option value='stadium'>Stadium</option>
+                var option = tomtom.L.DomUtil.create('option');
+                option.setAttribute('value', locale.getLanguageCode());
+                if (localeService.currentLocale.getLanguageCode() === locale.getLanguageCode()) {
+                    option.selected = true;
+                }
+                option.textContent = locale.getLabel();
+                countrySelectedElem.appendChild(option);
+            });
+
+            var map = tomtom.L.map('map', {
+                key: '${api.key}',
+                source: 'vector',
+                basePath: '/sdk'
+            });
+
+            map.zoomControl.setPosition('topright');
+            map.attributionControl.setPosition('bottomright');
+
+            // And Control Panel with the submit button
+            tomtom.foldable({
+                position: 'topleft',
+                collapsed: false,
+                close: null,
+                closeOnMapClick: false
+            })
+                .addTo(map)
+                .addContent(document.getElementById('map').nextElementSibling);
+
+            // Adds first marker
+            var marker = tomtom.L.marker([50.8480065, 4.3696404])
+                .addTo(map)
+                .bindPopup('Click on the map to get the address and position of the closest junction.')
+                .openPopup();
+            map.setView([50.8515, map.getSize().x >= 600 && map.getSize().x <= 850 ? 4.3405 : 4.3705], 13);
+
+            // handles clicks on the map (showing marker with full address in the clicked place on the map)
+            function handleMapClick(e) {
+                var position = e.latlng;
+                latInput.value = position.lat.toFixed(6);
+                lngInput.value = position.lng.toFixed(6);
+                callCrossStreetLookup();
+            }
+
+            var requestCount = 0;
+
+            function callCrossStreetLookup() {
+                var currentRequest = ++requestCount;
+
+                var joinedCoordinates = latInput.value + ',' + lngInput.value;
+                var callable = tomtom.crossStreetLookup().position(joinedCoordinates).radius(radiusElement.value);
+
+                map.removeLayer(marker);
+                if (errorMsgBox) {
+                    errorMsgBox.close();
+                }
+
+                callable.language(countrySelectedElem.value);
+                if (selectedAngle) {
+                    callable.heading(selectedAngle);
+                }
+
+                callable.go(function(geoResponse) {
+                    if (currentRequest !== requestCount) {
+                        return;
+                    }
+                    if (!geoResponse) {
+                        handleError();
+                    }
+                    drawMarkerOnMap(geoResponse, geoResponse.position);
+                }, handleError);
+            }
+
+            function drawMarkerOnMap(geoResponse, position) {
+                var popupContent;
+                if (typeof position === 'string') {
+                    position = position.split(/[ ,]/);
+                } else if (position === undefined) {
+                    position = [0, 0];
+                }
+                if (geoResponse) {
+                    popupContent = '<span id="address-result">' + geoResponse.address.freeformAddress.replace(/(?:\r\n|\r|\n)/g, '<br>') + '</span>' || 'Cannot get free-form address.';
+                } else {
+                    popupContent = locationNotFoundErrorMsg;
+                }
+
+                marker = tomtom.L.marker(position)
+                    .addTo(map)
+                    .bindPopup(popupContent)
+                    .openPopup();
+
+                var mapSize = map.getSize();
+
+                var offset = mapSize.x < 900 ? 0.2 : 0.01;
+
+                L.MapUtils.setViewWithOffset(map, marker.getLatLng(), map.getZoom(), {}, {
+                    x: mapSize.x * offset,
+                    y: mapSize.y * offset
+                });
+            }
+
+            function handleRadiusUpdate() {
+                radiusAmountElement.innerHTML = 'Radius (' + radiusElement.value + ' m)';
+                callCrossStreetLookup();
+            }
+
+            function handleHeadingButtonsClick(e) {
+                if (e.target.tagName !== 'BUTTON') {
+                    return;
+                }
+                var prevSelectedButton = document.querySelector('.tt-arrow-button.selected');
+                if (prevSelectedButton) {
+                    prevSelectedButton.classList.remove('selected');
+                }
+                if (prevSelectedButton && (prevSelectedButton.textContent === e.target.textContent)) {
+                    selectedAngle = undefined;
+                } else {
+                    e.target.classList.add('selected');
+                    selectedAngle = headingAngles[e.target.textContent];
+                }
+                callCrossStreetLookup();
+            }
+
+            function handleError() {
+                errorMsgBox = tomtom.messageBox({closeAfter: 4000}).setContent(locationNotFoundErrorMsg).openOn(map);
+            }
+
+            function setPanelMaxHeight() {
+                document.getElementsByClassName('tomtom-foldable__content')[0].style.maxHeight = document.getElementById('map').offsetHeight - 40 + 'px';
+            }
+
+            setPanelMaxHeight();
+
+            map.on('click', handleMapClick);
+            window.onresize = setPanelMaxHeight;
+            radiusElement.onchange = handleRadiusUpdate;
+            headingButtonsElem.onclick = handleHeadingButtonsClick;
+            countrySelectedElem.onchange = callCrossStreetLookup;
+        })(tomtom);
+        </script>
+</body>
+</html>

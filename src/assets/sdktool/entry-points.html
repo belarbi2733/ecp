@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Map</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+    <link rel='stylesheet' type='text/css' href='elements.css'/>
+    <link rel='stylesheet' href='js/vendor/font-awesome/css/font-awesome.min.css'>
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+    <style>
+        .input-container label {
+            display: flex;
+            margin: 2px;
+        }
+        .input-container select {
+            flex: auto;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body class='use-all-space'>
+<div class='map-container use-all-space'>
+    <div id='map' class='use-all-space'></div>
+</div>
+<script>
+    (function(tomtom) {
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        var controlPanel, map, searchBoxInstance, markersLayer, markerOpt, popupOpt;
+        // Setting TomTom keys
+        tomtom.searchKey('${api.key.search}');
+        tomtom.routingKey('${api.key.routing}');
+
+        // Creating map
+        map = tomtom.L.map('map', {
+            key: '${api.key}',
+            source: 'vector',
+            basePath: '/sdk'
+        });
+
+        controlPanel = tomtom.controlPanel({
+            position: 'bottomright',
+            title: 'Settings',
+            collapsed: true
+        }).addTo(map);
+
+        controlPanel
+            .addContent(buildLanguageViewControl())
+            .addContent(buildGeopolViewControl(map));
+
+        searchBoxInstance = tomtom.searchBox({
+            position: 'topright',
+            searchOnDragEnd: false,
+            serviceOptions: {unwrapBbox: true}
+        })
+            .addTo(map);
+        markersLayer = L.tomTomMarkersLayer();
+        markerOpt = {
+            entryPoints: {
+                addCounterToMainPoint: true
+            }
+        };
+        popupOpt = {
+            entryPoints: {
+                popupHoverContent: function(entry, point) {
+                    return point.poi && point.poi.name + ' (entry)';
+                }
+            },
+            enableRoutingActions: true,
+            enableSearchActions: true
+        };
+        markersLayer.setMarkerOptions(markerOpt)
+            .setPopupOptions(popupOpt)
+            .addTo(map);
+
+        searchBoxInstance.on(searchBoxInstance.Events.ResultsFound, function(results) {
+
+            markersLayer.setMarkersData(results.data)
+                .addMarkers();
+            markersLayer.getMarkers().forEach(function(markerLayer) {
+                markerLayer.on('click', function() {
+                    var viewport = markerLayer.options.point.viewport;
+                    if (viewport) {
+                        map.fitBounds([viewport.topLeftPoint, viewport.btmRightPoint]);
+                    } else {
+                        map.panTo(markerLayer.getLatLng());
+                    }
+                });
+            });
+        });
+
+        searchBoxInstance.on(searchBoxInstance.Events.ResultsCleared, function() {
+            markersLayer.clearLayers();
+        });
+
+        searchBoxInstance.on(searchBoxInstance.Events.ResultClicked, function(result) {
+            var viewport;
+            markersLayer.setMarkersData([result.data])
+                .addMarkers();
+
+            viewport = result.data.viewport;
+            if (viewport) {
+                map.fitBounds([viewport.topLeftPoint, viewport.btmRightPoint]);
+            } else {
+                map.fitBounds(markersLayer.getBounds());
+            }
+        });
+
+        function buildLanguageViewControl() {
+            var languageSelector = tomtom.languageSelector.getHtmlElement(tomtom.globalLocaleService, 'search');
+            languageSelector.addEventListener('change', updateLanguageSelection);
+
+            return wrapControl(languageSelector, 'Search language');
+        }
+
+        function buildGeopolViewControl() {
+            var geopolViewSelector = tomtom.geopolViewSelector.getHtmlElement(tomtom.globalGeopolViewService, 'search');
+
+            return wrapControl(geopolViewSelector, 'Geopolitical view');
+        }
+
+        function wrapControl(control, label) {
+            var rowElement = document.createElement('div');
+            var labelElement = document.createElement('label');
+            labelElement.innerHTML = label + ': ';
+            labelElement.appendChild(control);
+            rowElement.appendChild(labelElement);
+            rowElement.className = 'input-container';
+            return rowElement;
+        }
+
+        function updateLanguageSelection(evt) {
+            searchBoxInstance.language(evt.target.value);
+            searchBoxInstance.search(searchBoxInstance.lastSearchText);
+        }
+    })(tomtom);
+</script>
+</body>
+
+</html>

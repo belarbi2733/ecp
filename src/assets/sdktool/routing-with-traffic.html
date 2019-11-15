@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Routing including traffic</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+    <link rel='stylesheet' type='text/css' href='elements.css'/>
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+    <style>
+        label {
+            display: flex;
+            align-items: center;
+            margin: 2px;
+        }
+        input[type=checkbox] {
+            margin: 3px;
+        }
+        select {
+            flex: auto;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body class='use-all-space'>
+    <div class='map-container use-all-space'>
+        <div id='map' class='use-all-space'></div>
+        <label for='with_traffic'>
+            <input type='checkbox' name='with_traffic' id='with_traffic' checked/>
+            With traffic
+        </label>
+    </div>
+    <script>
+        (function(tomtom) {
+            // Define your product name and version
+            tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+            var route;
+
+            // Setting TomTom keys
+            tomtom.key('${api.key}');
+            tomtom.trafficKey('${api.key.traffic}');
+            tomtom.routingKey('${api.key.routing}');
+
+            // Creating map
+            var trafficOptions = { diff: true };
+            var map = tomtom.map('map', {
+                traffic: trafficOptions,
+                source: 'vector',
+                basePath: '/sdk'
+            });
+
+            tomtom.controlPanel({
+                position: 'topright',
+                title: null,
+                close: null,
+                show: null,
+                collapsed: false,
+                closeOnMapClick: false
+            })
+                .addTo(map)
+                .addContent(document.getElementById('map').nextElementSibling);
+
+            function centerOnMarker(trafficIncidentsLayer) {
+                trafficIncidentsLayer.on('click', function(event) {
+                    var marker = event.propagatedFrom;
+                    map.setView(marker.getLatLng(), map.getZoom());
+                    trafficIncidentsLayer.once(L.TomTomTrafficIncidentsLayer.Events.TRAFFIC_INCIDENTS_RECEIVED, function() {
+                        trafficIncidentsLayer.getLayers()
+                            .filter(function(layer) {
+                                return layer.getLatLng().equals(marker.getLatLng());
+                            }).forEach(function(layer) {
+                                layer.openPopup();
+                            });
+                    });
+                });
+            }
+
+            var layers = L.MapUtils.findLayersByName('trafficIncidents', map);
+            if (layers.length) {
+                centerOnMarker(layers[0]);
+            }
+
+            function calculateRoute() {
+                var traffic = document.getElementById('with_traffic').checked;
+                tomtom.routing()
+                    .traffic(traffic ? trafficOptions : false)
+                    .locations('51.52968,-0.11124:51.40991,-0.06729')
+                    .go()
+                    .then(function(routeJson) {
+                        if (route) {
+                            map.removeLayer(route);
+                        }
+                        route = tomtom.L.geoJson(routeJson, {
+                            style: {color: traffic ? '#0f0' : '#00f', opacity: 0.8}
+                        }).addTo(map);
+                        map.fitBounds(route.getBounds(), {padding: [5, 5]});
+                    }
+                    );
+            }
+
+            document.getElementById('with_traffic').onchange = calculateRoute;
+            calculateRoute();
+        })(tomtom);
+    </script>
+</body>
+</html>

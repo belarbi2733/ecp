@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Vehicle heading</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+    <link rel='stylesheet' type='text/css' href='elements.css'/>
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+    <style>
+        label {
+            display: flex;
+            align-items: center;
+            margin: 2px;
+        }
+        select {
+            flex: auto;
+            margin-left: 10px;
+        }
+        img[src$='start.png'] {
+            transform-origin: 15px 15px;
+        }
+        #arrow-container {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            overflow:hidden;
+            padding: 10px;
+        }
+        #arrow-container img{
+            width: 40px;
+            height: 40px;
+            transition-property: transform;
+            transition-duration: 0.8s;
+        }
+        #arrow-container img.north{
+            transform: rotate(0deg);
+        }
+        #arrow-container img.east{
+            transform: rotate(90deg);
+        }
+        #arrow-container img.south{
+            transform: rotate(180deg);
+        }
+        #arrow-container img.west{
+            transform: rotate(270deg);
+        }
+    </style>
+</head>
+<body class='use-all-space'>
+    <div class='map-container use-all-space'>
+        <div id='map' class='use-all-space'></div>
+        <div>
+            <label for='heading'>
+                Vehicle heading
+                <select id='heading' name='heading'>
+                    <option value='north'>North</option>
+                    <option value='east'>East</option>
+                    <option value='south'>South</option>
+                    <option value='west'>West</option>
+                </select>
+            </label>
+            <div id='arrow-container'>
+                <img id='arrow-img' src='/sdk/../img/arrow.png' alt='heading arrow'/>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        var endIcon = tomtom.L.icon({iconUrl: '/sdk/../img/end.png', iconSize: [30, 30], iconAnchor: [15, 15]}),
+            startIcon = tomtom.L.icon({iconUrl: '/sdk/../img/start.png', iconSize: [30, 30], iconAnchor: [15, 15]}),
+            startMarker = null,
+            headingInput = document.getElementById('heading'),
+            arrowImgNode = document.getElementById('arrow-img'),
+            headings = {
+                north: 0,
+                east: 90,
+                south: 180,
+                west: 270
+            },
+            mapElementsToRemove = [];
+
+        // Setting TomTom keys
+        tomtom.key('${api.key}');
+        tomtom.routingKey('${api.key.routing}');
+
+        // Creating map
+        var map = tomtom.map('map', {
+            source: 'vector',
+            basePath: '/sdk'
+        });
+
+        map.zoomControl.setPosition('bottomright');
+
+        tomtom.controlPanel({
+            position: 'topleft',
+            title: null,
+            show: null,
+            close: null,
+            collapsed: false,
+            closeOnMapClick: false
+        })
+            .addTo(map)
+            .addContent(document.getElementById('map').nextElementSibling);
+
+        function calculateRoute() {
+            tomtom.routing({traffic: false})
+                .vehicleHeading(headings[headingInput.value])
+                .locations('51.791815,19.367751:51.794484,19.366455')
+                .go()
+                .then(function(routeJson) {
+                    var route;
+                    mapElementsToRemove.forEach(function(elem) {
+                        map.removeLayer(elem);
+                    });
+                    mapElementsToRemove = [];
+                    route = tomtom.L.geoJson(routeJson, {
+                        style: {color: '#06f', opacity: 0.5},
+                        onEachFeature: addMarkers
+                    });
+                    mapElementsToRemove.push(route);
+
+                    route.addTo(map);
+                    map.fitBounds(route.getBounds(), {padding: [5, 5]});
+                    setArrowHeading();
+                });
+        }
+
+        function addMarkers(feature) {
+            var startPoint, endPoint;
+            if (feature.geometry.type === 'MultiLineString') {
+                startPoint = feature.geometry.coordinates[0][0].reverse(); //get first point from first line
+                endPoint = feature.geometry.coordinates.slice(-1)[0].slice(-1)[0].reverse(); //get last point from last line
+            } else {
+                startPoint = feature.geometry.coordinates[0].reverse();
+                endPoint = feature.geometry.coordinates.slice(-1)[0].reverse();
+            }
+            startIcon.options.iconUrl = '/sdk/../img/start_' + headingInput.value + '.png';
+            startMarker = tomtom.L.marker(startPoint, {icon: startIcon}).addTo(map);
+            mapElementsToRemove.push(startMarker);
+            mapElementsToRemove.push(tomtom.L.marker(endPoint, {icon: endIcon}).addTo(map));
+        }
+
+        function setArrowHeading() {
+            arrowImgNode.className = headingInput.value;
+        }
+
+        headingInput.onchange = calculateRoute;
+        calculateRoute();
+    </script>
+</body>
+</html>

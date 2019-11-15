@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Truck load types</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+    <link rel='stylesheet' href='js/vendor/font-awesome/css/font-awesome.min.css'>
+    <link rel='stylesheet' type='text/css' href='elements.css'/>
+    <style>
+        .sidepanel {
+            min-width: 220px;
+            width: 220px;
+            margin-right: 0px;
+        }
+
+        .sidepanel input[type=submit]:disabled {
+            background: lightgray;
+        }
+
+        .sidepanel input[type=submit] {
+            margin-bottom: 0;
+        }
+
+        .selected-load-types {
+            width: 100%;
+        }
+
+        .selected-load-types__delete-button {
+            width: 10%;
+        }
+
+        button.fa {
+            margin-left: 10px;
+        }
+    </style>
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+</head>
+<body class='use-all-space'>
+<div id='loader' class='loader loader-center'></div>
+<div id='map' class='use-all-space'></div>
+<div id='loadTypes' class='sidepanel'>
+    <div class='sidepanel-input-group'>
+        <select id='loadTypesSelector'>
+            <option value="-1">Pick a load type...</option>
+        </select>
+    </div>
+    <div class='sidepanel-input-group'>
+        <table id='selectedLoadTypes' class='selected-load-types'></table>
+    </div>
+    <div class='sidepanel-input-group'>
+        <input id='submit' type='submit' value='Submit' />
+    </div>
+</div>
+<script>
+    // Define your product name and version
+    tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+    //Setting TomTom keys
+    tomtom.routingKey('${api.key.routing}');
+    tomtom.searchKey('${api.key.search}');
+
+    // Creating map
+    var map = tomtom.L.map('map', {
+        key: '${api.key}',
+        source: 'vector',
+        basePath: '/sdk'
+    });
+    map.zoomControl.setPosition('topright');
+
+    function LoadTypesSelector() {
+
+        this._loadTypes = [];
+        this._routeStartEndPoints = [];
+        this.geoJson = null;
+
+        this._loader = document.getElementById('loader');
+
+        this._controlPanel = tomtom.controlPanel({
+            position: 'topleft',
+            collapsed: false,
+            close: null,
+            closeOnMapClick: false
+        }).addTo(map);
+
+        this._routeOnMapView = tomtom.routeOnMap({
+            // Options for the route start marker
+            startMarker: {
+                icon: tomtom.L.icon({
+                    iconUrl: '/sdk/../img/start.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                })
+            },
+            // Options for the route end marker
+            endMarker: {
+                icon: tomtom.L.icon({
+                    iconUrl: '/sdk/../img/end.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15]
+                })
+            },
+            serviceOptions: {
+                sectionType: 'country',
+                travelMode: 'truck',
+                vehicleLoadType: this._loadTypes
+            }
+        });
+
+        this._usaLoadTypes = {
+            'USHazmatClass1': 'Explosives US',
+            'USHazmatClass2': 'Compressed gas US',
+            'USHazmatClass3': 'Flammable liquids US',
+            'USHazmatClass4': 'Flammable solids US',
+            'USHazmatClass5': 'Oxidizers US',
+            'USHazmatClass6': 'Poisons US',
+            'USHazmatClass7': 'Radioactive US',
+            'USHazmatClass8': 'Corrosives US',
+            'USHazmatClass9': 'Miscellaneous US'
+        };
+
+        this._otherLoadTypes = {
+            'otherHazmatExplosive': 'Explosives',
+            'otherHazmatGeneral': 'Miscellaneous',
+            'otherHazmatHarmfulToWater': 'Harmful to water'
+        };
+
+        this._routeOnMapView.on(this._routeOnMapView.Events.RouteChanged, this._onRouteChanged.bind(this));
+        this._routeOnMapView.on(this._routeOnMapView.Events.RouteNotFound, this._hideLoader.bind(this));
+
+        this._fillInSelector(this._otherLoadTypes);
+
+        this._updateSelectorState();
+
+        document.getElementById('loadTypesSelector').addEventListener('change', function(event) {
+            var selectorElement = event.currentTarget;
+            var selectedLoadType = selectorElement.options[selectorElement.selectedIndex].value;
+            if (selectedLoadType === '-1' || this._loadTypes.indexOf(selectedLoadType) !== -1) {
+                return;
+            }
+            this._loadTypes.push(selectedLoadType);
+            this._drawLoadTypes();
+            selectorElement.selectedIndex = 0;
+        }.bind(this));
+
+        document.getElementById('submit').addEventListener('click', this._drawRoute.bind(this));
+    }
+
+    LoadTypesSelector.prototype._removeChildren = function(element) {
+        if (!element) {
+            return;
+        }
+
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+    };
+
+    LoadTypesSelector.prototype._drawLoadTypes = function() {
+        var selectedLoadTypesElement = document.getElementById('selectedLoadTypes');
+        this._removeChildren(selectedLoadTypesElement);
+        for (var i = 0; i < this._loadTypes.length; ++i) {
+            var loadTypeRowElement = document.createElement('tr');
+            var loadTypeNameElement = document.createElement('td');
+            var loadTypeButtonElement = document.createElement('td');
+            loadTypeRowElement.appendChild(loadTypeNameElement);
+            loadTypeRowElement.appendChild(loadTypeButtonElement);
+
+            loadTypeNameElement.innerText = this._usaLoadTypes[this._loadTypes[i]] || this._otherLoadTypes[this._loadTypes[i]];
+
+            var removeRowButton = document.createElement('button');
+            removeRowButton.classList.add('fa', 'fa-trash');
+            removeRowButton.addEventListener('click', function(index) {
+                return function() {
+                    this._loadTypes.splice(index, 1);
+                    this._drawLoadTypes();
+                }.bind(this);
+            }.bind(this)(i));
+            loadTypeButtonElement.classList.add('selected-load-types__delete-button');
+            loadTypeButtonElement.appendChild(removeRowButton);
+
+            selectedLoadTypesElement.appendChild(loadTypeRowElement);
+        }
+    };
+
+    LoadTypesSelector.prototype._areStartEndPointsNotEmpty = function() {
+        return this._routeStartEndPoints && this._routeStartEndPoints.length === 2 && this._routeStartEndPoints[0] &&
+            this._routeStartEndPoints[1];
+    };
+
+    LoadTypesSelector.prototype._updateSelectorState = function(activate) {
+        var loadTypesSelectorElement = document.getElementById('loadTypesSelector');
+        var submitButtonElement = document.getElementById('submit');
+
+        if (activate) {
+            loadTypesSelectorElement.removeAttribute('disabled');
+            submitButtonElement.removeAttribute('disabled');
+        } else {
+            loadTypesSelectorElement.setAttribute('disabled', true);
+            submitButtonElement.setAttribute('disabled', true);
+        }
+
+    };
+
+    LoadTypesSelector.prototype._checkRoute = function(geoJson, countryCodeComparator) {
+        if (!geoJson || !geoJson.features || geoJson.features.length <= 0) {
+            return false;
+        }
+
+        var features = geoJson.features;
+        for (var i = 0; i < features.length; ++i) {
+            var feature = features[i];
+            var sections = (feature.properties && feature.properties.sections) || [];
+            for (var j = 0; j < sections.length; ++j) {
+                var section = sections[j];
+                if (countryCodeComparator(section.countryCode)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    };
+
+    LoadTypesSelector.prototype._isUSARoute = function(geoJson) {
+        return this._checkRoute(geoJson, function(countryCode) {
+            return countryCode === 'USA';
+        });
+    };
+
+    LoadTypesSelector.prototype._isOtherRoute = function(geoJson) {
+        return this._checkRoute(geoJson, function(countryCode) {
+            return countryCode !== 'USA';
+        });
+    };
+
+    LoadTypesSelector.prototype._onRouteChanged = function(event) {
+        this._removeChildren(document.getElementById('loadTypesSelector'));
+
+        this._fillInSelector({'-1': 'Pick a load type...'});
+
+        if (this._isUSARoute(event.geoJson)) {
+            this._fillInSelector(this._usaLoadTypes);
+        }
+
+        if (this._isOtherRoute(event.geoJson)) {
+            this._fillInSelector(this._otherLoadTypes);
+        }
+        this._updateSelectorState(true);
+        this._hideLoader();
+    };
+
+    LoadTypesSelector.prototype._fillInSelector = function(loadTypes) {
+        var loadTypesSelectorElement = document.getElementById('loadTypesSelector');
+        for (var loadTypeKey in loadTypes) {
+            if (loadTypes.hasOwnProperty(loadTypeKey)) {
+                var optionElement = document.createElement('option');
+                optionElement.setAttribute('value', loadTypeKey);
+                optionElement.innerText = loadTypes[loadTypeKey];
+                loadTypesSelectorElement.appendChild(optionElement);
+            }
+        }
+    };
+
+    LoadTypesSelector.prototype._drawRoute = function() {
+        if (this._areStartEndPointsNotEmpty()) {
+            this._showLoader();
+        }
+        this._routeOnMapView.draw(this._routeStartEndPoints);
+    };
+
+    LoadTypesSelector.prototype.addTo = function(map) {
+        this._controlPanel.addContent(document.getElementById('loadTypes'));
+        this._routeOnMapView.addTo(map);
+    };
+
+    LoadTypesSelector.prototype.onRouteInputsChanged = function(event) {
+        this._routeStartEndPoints = event.points;
+        this._loadTypes.splice(0, this._loadTypes.length);
+        this._drawLoadTypes();
+        this._drawRoute();
+        this._updateSelectorState(false);
+    };
+
+    LoadTypesSelector.prototype._showLoader = function() {
+        this._loader.style.display = 'block';
+    };
+
+    LoadTypesSelector.prototype._hideLoader = function() {
+        this._loader.style.display = 'none';
+    };
+
+    // Creating route inputs widget
+    var routeInputsInstance = tomtom.routeInputs({location: false})
+        .addTo(map);
+
+    var loadTypesSelector = new LoadTypesSelector();
+    loadTypesSelector.addTo(map);
+
+    // Connecting the route inputs widget with the route widget
+    routeInputsInstance.on(routeInputsInstance.Events.LocationsFound, loadTypesSelector.onRouteInputsChanged.bind(loadTypesSelector));
+
+    routeInputsInstance.on(routeInputsInstance.Events.LocationsCleared, loadTypesSelector.onRouteInputsChanged.bind(loadTypesSelector));
+
+</script>
+</body>
+</html>

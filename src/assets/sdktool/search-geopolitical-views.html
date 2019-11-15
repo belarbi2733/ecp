@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Search geopolitical views</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel='stylesheet' type='text/css' href='sdk/map.css' />
+    <link rel='stylesheet' type='text/css' href='elements.css'>
+    <link rel='stylesheet' type='text/css' href='assets/css/tomtom2.css'>
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+    <script type='text/javascript' src='js/vendor/leaflet.sync/L.Map.Sync.js'></script>
+
+    <style type='text/css'>
+        #example {
+            height: auto;
+        }
+        .controls {
+            display: inline-flex;
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .controls__field {
+            margin-right: 24px;
+        }
+
+        .controls__label {
+            font-weight: bolder;
+            display: block;
+        }
+
+        .controls__select {
+            display: block;
+            width: 100%;
+        }
+
+        .text-secondary {
+            color: #777777;
+        }
+
+        .text-highlighted {
+            color: #ff0000;
+        }
+
+        .maps-container {
+            display: inline-flex;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .geoResponse-result {
+            max-width: 200px;
+        }
+
+    </style>
+</head>
+
+<body class='use-all-space'>
+    <div class='use-all-space container'>
+        <h1>Search parameters</h1>
+        <div class='controls'>
+            <div class='controls__field'>
+                <label for='scenario' class='controls__label'>Scenario</label>
+                <select id='scenario' class='controls__select'>
+                    <option value='kashmir' selected>Srinagar (Kashmir)</option>
+                    <option value='western sahara'>El Samara (Western Sahara)</option>
+                    <option value='gaza'>Mosque (Gaza)</option>
+                </select>
+            </div>
+            <div class='controls__field'>
+                <label for='geopolitical-view-1' class='controls__label'>
+                    Geopolitical view 1 <span class='text-secondary'>(left)</span>
+                </label>
+                <select id='geopolitical-view-1' class='controls__select'>
+                    <option value='india'>India</option>
+                    <option value='pakistan'>Pakistan</option>
+                    <option value='unified'>Unified</option>
+                </select>
+            </div>
+            <div class='controls__field'>
+                <label for='geopolitical-view-2' class='controls__label'>
+                    Geopolitical view 2 <span class='text-secondary'>(right)</span>
+                </label>
+                <select id='geopolitical-view-2' class='controls__select'>
+                    <option value='unified'>Unified</option>
+                    <option value='pakistan'>Pakistan</option>
+                    <option value='india'>India</option>
+                </select>
+            </div>
+        </div>
+        <div class='maps-container'>
+            <div id='map' class='flex-expand'></div>
+            <div id='map-right' class='flex-expand'></div>
+        </div>
+    </div>
+
+    <script>
+        (function(tomtom, document) {
+            // Define your product name and version
+            tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+
+            var elements = {
+                scenerioSelect: document.getElementById('scenario'),
+                viewLeftSelect: document.getElementById('geopolitical-view-1'),
+                viewRightSelect: document.getElementById('geopolitical-view-2'),
+                mapLeft: document.getElementById('map'),
+                mapRight: document.getElementById('map-right')
+            };
+
+            var countryCodes = {
+                india: 'IN',
+                pakistan: 'PK',
+                argentina: 'AR',
+                morocco: 'MA',
+                israel: 'IL',
+                unified: 'Unified'
+            };
+
+            var views = {
+                'kashmir': {
+                    query: 'Srinagar',
+                    center: [34.0811141, 74.8046206],
+                    names: [
+                        'India',
+                        'Pakistan',
+                        'Unified'
+                    ]
+                },
+                'western sahara': {
+                    query: 'El samara',
+                    center: [26.746126, -11.6695703],
+                    names: [
+                        'Morocco',
+                        'Unified'
+                    ]
+                },
+                'gaza': {
+                    query: 'mosque',
+                    center: [31.5021087, 34.4648144],
+                    names: [
+                        'Israel',
+                        'Unified'
+                    ]
+                }
+            };
+
+            var currentScenario = 'kashmir';
+
+            // Set keys and create maps
+            tomtom.searchKey('${api.key.search}');
+
+            var mapLeft = tomtom.L.map('map', {
+                key: '${api.key}',
+                source: 'vector',
+                basePath: '/sdk'
+            }).setView(views.kashmir.center, 10);
+
+            var mapRight = tomtom.L.map('map-right', {
+                key: '${api.key}',
+                source: 'vector',
+                basePath: '/sdk'
+            }).setView(views.kashmir.center, 10);
+
+            var markersLayers = {
+                left: L.featureGroup().addTo(mapLeft),
+                right: L.featureGroup().addTo(mapRight)
+            };
+
+            var searchOptions = {
+                center: [34.0811141, 74.8046206],
+                view: 'PK',
+                radius: 100000,
+                idxSet: 'POI'
+            };
+
+            var resultsLists = {
+                left: tomtom.resultsList()
+                    .addTo(mapLeft)
+                    .setContent(''),
+                right: tomtom.resultsList()
+                    .addTo(mapRight)
+                    .setContent('')
+            };
+
+            // Synchronizing maps using Leaflet.Sync (https://github.com/jieter/Leaflet.Sync)
+            mapLeft.sync(mapRight);
+            mapRight.sync(mapLeft);
+
+            mapLeft.on('popupclose', closePopups(mapRight));
+            mapRight.on('popupclose', closePopups(mapLeft));
+
+            var maps = {
+                left: mapLeft,
+                right: mapRight
+            };
+
+            elements.scenerioSelect.addEventListener('change', onScenarioChange);
+            elements.viewLeftSelect.addEventListener('change', onViewChange('left'));
+            elements.viewRightSelect.addEventListener('change', onViewChange('right'));
+
+            updateMap({
+                location: elements.viewLeftSelect.value,
+                which: 'left',
+                isDifferent: true
+            });
+
+            updateMap({
+                location: elements.viewRightSelect.value,
+                which: 'right',
+                isDifferent: true
+            });
+
+            function closePopups(map) {
+                return function() {
+                    map.closePopup();
+                };
+            }
+
+            /**
+             * Get result name from response
+             */
+            function getResultName(result) {
+                if (typeof result.poi !== 'undefined' && typeof result.poi.name !== 'undefined') {
+                    return result.poi.name;
+                }
+                return result.nm;
+            }
+
+            /**
+             * Get result address from response
+             */
+            function getResultAddress(result, isDifferent) {
+                if (typeof result.address !== 'undefined') {
+                    var address = [];
+                    if (typeof result.address.freeformAddress !== 'undefined') {
+                        address.push(result.address.freeformAddress);
+                    }
+                    if (typeof result.address.countryCodeISO3 !== 'undefined') {
+                        if (isDifferent) {
+                            address.push('<span class=\'text-highlighted\'>' + result.address.countryCodeISO3 + '</span>');
+                        } else {
+                            address.push(result.address.countryCodeISO3);
+                        }
+                    }
+                    return address.join(', ');
+                } else if (typeof result.a2 !== 'undefined') {
+                    return result.a2;
+                }
+                return '';
+            }
+
+            /**
+             * Get result distance from search center
+             */
+            function getResultDistance(result) {
+                if (typeof result.dist !== 'undefined') {
+                    return result.dist;
+                }
+                return '';
+            }
+
+            /**
+             * Prepare result element for popup and result list
+             */
+            function prepareResultElement(result, isDifferent) {
+                var resultElement = new tomtom.L.DomUtil.create('div', 'geoResponse-result');
+                var name = getResultName(result);
+                var address = getResultAddress(result, isDifferent);
+                var distance = getResultDistance(result);
+                if (typeof name !== 'undefined') {
+                    var nameWrapper = tomtom.L.DomUtil.create('div', 'geoResponse-result-name', resultElement);
+                    nameWrapper.innerHTML = name;
+                }
+                if (typeof address !== 'undefined') {
+                    var addressWrapper = tomtom.L.DomUtil.create('div', 'geoResponse-result-address', resultElement);
+                    addressWrapper.innerHTML = address;
+                }
+                if (typeof distance !== 'undefined') {
+                    var distanceElement = tomtom.L.DomUtil.create('div', 'geoResponse-result-distance', resultElement);
+                    distanceElement.innerHTML = tomtom.unitFormatConverter.formatDistance(distance);
+                }
+                return resultElement;
+            }
+
+            function onViewChange(which) {
+                return function(event) {
+                    var isDifferent = elements.viewLeftSelect.value !== elements.viewRightSelect.value;
+                    updateMap({
+                        location: event.target.value,
+                        which: which,
+                        isDifferent: isDifferent,
+                        shouldUpdateOtherMap: true
+                    });
+                };
+            }
+
+            function updateMap(options) {
+                searchOptions.view = countryCodes[options.location];
+                searchOptions.center = views[currentScenario].center;
+                tomtom.fuzzySearch(searchOptions)
+                    .query(views[currentScenario].query)
+                    .go()
+                    .then(prepareResults(options))
+                    .catch(handleError(options.which));
+            }
+
+            function prepareResults(options) {
+                var isDifferent = options.isDifferent;
+                var which = options.which;
+                var opposite = which === 'left' ? 'right' : 'left';
+                var shouldUpdateOtherMap = options.shouldUpdateOtherMap || false;
+
+                return function(results) {
+                    markersLayers[which].clearLayers();
+                    results.forEach(addMarker(isDifferent, which));
+
+                    updateResultsList(markersLayers[which], markersLayers[opposite], isDifferent, resultsLists[which], maps[which], results);
+                    maps[which].getGeopolViewService().setCurrentGeopolView(countryCodes[options.location]);
+
+                    if (shouldUpdateOtherMap) {
+                        updateSecondMapPopups(markersLayers[opposite], isDifferent);
+                        updateResultsList(markersLayers[opposite], markersLayers[which], isDifferent, resultsLists[opposite], maps[opposite]);
+                    }
+
+                    // Maps are in sync, so we need to change view only in one of them
+                    var bounds = markersLayers.left.getBounds();
+                    if (which === 'left' && bounds) {
+                        maps[which].setView(bounds.getCenter());
+                        maps[which].fitBounds(bounds, {
+                            paddingBottomRight: [250, 0]
+                        });
+                    }
+                };
+            }
+
+            function addMarker(isDifferent, which) {
+                var opposite = which === 'left' ? 'right' : 'left';
+                return function(result) {
+                    var marker = tomtom.L.marker([result.position.lat, result.position.lon]);
+                    var options = {
+                        result: result
+                    };
+
+                    tomtom.L.Util.setOptions(marker, options);
+                    marker.bindPopup(
+                        L.popup().setContent(prepareResultElement(result, isDifferent))
+                    );
+
+                    marker.addTo(markersLayers[which]);
+                    marker.on('click', openMatchingLayer(marker, markersLayers[opposite]));
+                };
+            }
+
+            function handleError(which) {
+                var map = which === 'left' ? mapLeft : mapRight;
+                return function(err) {
+                    if (err.description) {
+                        tomtom.messageBox({closeAfter: 5000}).setContent(err.description).openOn(map);
+                    } else {
+                        tomtom.messageBox({closeAfter: 5000}).setContent('Error occured while fetching results.').openOn(map);
+                    }
+                };
+            }
+
+            function updateResultsList(markersLayer, secondMarkersLayer, isDifferent, resultsList, map, results) {
+                resultsList.clear().unfold();
+
+                var layerIndex = 0;
+                markersLayer.eachLayer(function(layer) {
+                    var point;
+                    if (results) {
+                        point = results[layerIndex];
+                        layerIndex = layerIndex + 1;
+                    } else {
+                        point = layer.options.result;
+                    }
+
+                    var geoResponseWrapper = prepareResultElement(point, isDifferent);
+                    var viewport = point.viewport;
+
+                    resultsList.addContent(geoResponseWrapper);
+                    geoResponseWrapper.onclick = handleMarkerClick.bind(this, layer, secondMarkersLayer, map, viewport);
+                });
+            }
+
+            function handleMarkerClick(marker, secondMarkersLayer, map, viewport) {
+                resultsLists.left.fold();
+                resultsLists.right.fold();
+
+                if (viewport) {
+                    map.fitBounds([viewport.topLeftPoint, viewport.btmRightPoint]);
+                } else {
+                    map.panTo(secondMarkersLayer.getLatLng());
+                }
+                marker.openPopup();
+                var markers = secondMarkersLayer.getLayers();
+                var idx = findMarkerIndex(marker.options.result.poi.name, markers);
+
+                if (idx > -1) {
+                    markers[idx].openPopup();
+                }
+            }
+
+            function findMarkerIndex(name, markers) {
+                var foundIndex = -1;
+                for (var index = 0; index < markers.length; index++) {
+                    if (name === markers[index].options.result.poi.name) {
+                        foundIndex = index;
+                        break;
+                    }
+                }
+
+                return foundIndex;
+            }
+
+            function updateSecondMapPopups(markersLayer, isDifferent) {
+                markersLayer.eachLayer(function(layer) {
+                    var popup = L.popup().setContent(prepareResultElement(layer.options.result, isDifferent));
+                    layer.bindPopup(popup);
+                });
+            }
+
+            function openMatchingLayer(marker, layersGroup) {
+                return function(event) {
+                    if (!event.target.getPopup().isOpen()) {
+                        event.originalEvent.preventDefault();
+                        return;
+                    }
+
+                    resultsLists.left.fold();
+                    resultsLists.right.fold();
+
+                    layersGroup.eachLayer(function(layer) {
+                        if (layer.options.result.poi.name === marker.options.result.poi.name) {
+                            layer.openPopup();
+                        }
+                    });
+                };
+            }
+
+            function onScenarioChange(event) {
+                currentScenario = event.target.value;
+                updateViewSelects(currentScenario);
+            }
+
+            function createOption(value) {
+                var option = document.createElement('option');
+                option.text = value;
+                option.value = value.toLowerCase();
+
+                return option;
+            }
+
+            function updateViewSelects(selectedValue) {
+                elements.viewLeftSelect.innerHTML = null;
+
+                views[selectedValue].names.forEach(function(name) {
+                    elements.viewLeftSelect.add(createOption(name));
+                });
+                triggerChangeEvent(elements.viewLeftSelect);
+                mapLeft.setView(views[event.target.value].center, 10);
+
+                elements.viewRightSelect.innerHTML = null;
+                var names = views[selectedValue].names.slice();
+                names.reverse();
+
+                names.forEach(function(name) {
+                    elements.viewRightSelect.add(createOption(name));
+                });
+
+                triggerChangeEvent(elements.viewRightSelect);
+                mapRight.setView(views[event.target.value].center, 10);
+            }
+
+            function triggerChangeEvent(element) {
+                element.dispatchEvent(new Event('change'));
+            }
+
+        })(tomtom, document);
+    </script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Polygons for search results</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel='stylesheet' type='text/css' href='sdk/map.css' />
+    <link rel='stylesheet' type='text/css' href='elements.css' />
+    <script type='text/javascript' src='js/form.js'></script>
+    <script type='text/javascript' src='sdk/tomtom.min.js'></script>
+    <style>
+        label {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .label--geometries-zoom {
+            color: #888;
+            margin-top: 1rem;
+        }
+
+        .zoom-control {
+            min-width: 190px !important;
+        }
+
+        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: #808080;
+            opacity: 1; /* Firefox */
+        }
+
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: #808080;
+        }
+
+        ::-ms-input-placeholder { /* Microsoft Edge */
+            color: #808080;
+        }
+
+        .zoom-control .tomtom-foldable__header {
+            display: none;
+        }
+
+        .zoom-control .tomtom-foldable__content-body {
+            overflow: visible;
+        }
+
+        input[type="range"] {
+            display: block;
+            width: 100%;
+        }
+
+        input[type="range"]:focus ~ .label--geometries-zoom {
+            color: #94B208
+        }
+
+        select {
+            flex: auto;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body class='use-all-space'>
+<div class='map-container use-all-space'>
+    <div id='loader' class='loader loader-center'></div>
+    <div id='map' class='use-all-space'></div>
+</div>
+<script>
+    (function(tomtom, document) {
+        // Define your product name and version
+        tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+        // Setting TomTom keys
+        tomtom.searchKey('${api.key.search}');
+        var lastGeometry;
+        // Creating map
+        var map = tomtom.L.map('map', {
+            key: '${api.key}',
+            source: 'vector',
+            basePath: '/sdk'
+        });
+
+        function zoomControl() {
+            var container = document.createElement('div');
+            var controlContainer = document.createElement('div');
+            var controlLabel = document.createElement('label');
+            controlLabel.textContent = 'Geometries zoom (11)';
+            controlLabel.id = 'geometriesZoomLevel';
+            controlLabel.setAttribute('class', 'label--geometries-zoom');
+            var control = document.createElement('input');
+            control.type = 'range';
+            control.id = 'test-zoom';
+            control.min = 0;
+            control.max = 22;
+            control.step = 1;
+            control.value = 11;
+
+            control.onchange = function(event) {
+                udpateGeometriesZoomLabel(event.target.value);
+                if (lastGeometry) {
+                    removeGeoJsonLayer();
+                    getGeometry(lastGeometry);
+                }
+            };
+
+            controlContainer.appendChild(controlLabel);
+            controlContainer.appendChild(control);
+
+            var label = document.createElement('label');
+            label.id = 'mapZoomLevel';
+            container.appendChild(label);
+            container.appendChild(controlContainer);
+
+            return container;
+        }
+
+        tomtom.foldable({
+            className: 'zoom-control',
+            closeOnMapClick: false,
+            position: 'topleft'
+        }).addTo(map).addContent(zoomControl());
+
+        map.on('zoomend', updateZoomLabels);
+
+        tomtom.controlPanel({collapsed: true, position: 'bottomright'})
+            .addTo(map)
+            .addContent(buildGeopolViewControl(map));
+
+        function updateZoomLabels() {
+            document.getElementById('mapZoomLevel').textContent = 'Map zoom: ' + map.getZoom();
+        }
+
+        function udpateGeometriesZoomLabel(value) {
+            document.getElementById('geometriesZoomLevel').textContent = 'Geometries zoom (' + value + ')';
+        }
+        updateZoomLabels();
+
+        // Relocating zoom buttons
+        map.zoomControl.setPosition('bottomleft');
+
+        // Search input field
+        var searchBoxInstance = tomtom.searchBox({
+            position: 'topright',
+            language: 'en-GB', // optional
+            searchOnDragEnd: false,
+            serviceOptions: {unwrapBbox: true},
+            placeholder: 'Search for place...'
+        }).addTo(map);
+
+        // Marker layer to indicate the center of the search
+        var searchCenterLayer = tomtom.markersView()
+            .addTo(map);
+
+        // Marker layer to display the results over the map
+        var markersLayer = L.tomTomMarkersLayer().addTo(map);
+
+        // Draw markers for all the results found by the searchBox control (before user selects one)
+        searchBoxInstance.on(searchBoxInstance.Events.ResultsFound, function(results) {
+            drawSearchCenter();
+            markersLayer.setMarkersData(results.data)
+                .addMarkers();
+        });
+
+        function buildGeopolViewControl() {
+            var geopolViewSelector = tomtom.geopolViewSelector.getHtmlElement(tomtom.globalGeopolViewService, 'search');
+
+            return wrapControl(geopolViewSelector, 'Geopolitical view');
+        }
+
+        function wrapControl(control, label) {
+            var rowElement = document.createElement('div');
+            var labelElement = document.createElement('label');
+            labelElement.innerHTML = label + ': ';
+            labelElement.appendChild(control);
+            rowElement.appendChild(labelElement);
+            rowElement.className = 'input-container';
+            return rowElement;
+        }
+
+        function drawMarker(searchResult) {
+            if (searchResult) {
+                markersLayer.setMarkersData([searchResult.data])
+                    .addMarkers();
+            }
+        }
+
+        function fitToMarkers(searchResult) {
+            var viewport = searchResult.data.viewport;
+            if (viewport) {
+                map.fitBounds([viewport.topLeftPoint, viewport.btmRightPoint]);
+            } else {
+                map.fitBounds(markersLayer.getBounds());
+            }
+        }
+
+        function showLoader() {
+            document.getElementById('loader').style.display = 'block';
+        }
+
+        function hideLoader() {
+            document.getElementById('loader').style.display = 'none';
+        }
+
+        var geoJsonLayer = null;
+        function removeGeoJsonLayer() {
+            if (geoJsonLayer) {
+                geoJsonLayer.remove();
+                geoJsonLayer = null;
+            }
+        }
+
+        function clearMarkersLayer() {
+            if (markersLayer) {
+                markersLayer.clearLayers();
+            }
+        }
+
+        var control = document.getElementById('test-zoom');
+
+        function getGeometry(result) {
+            var shouldFitToMarkers = true;
+            lastGeometry = result;
+            control.setAttribute('disabled', true);
+            showLoader();
+            removeGeoJsonLayer();
+            clearMarkersLayer();
+            var dataSources = result.data.dataSources;
+            if (dataSources && dataSources.geometry) {
+                tomtom.additionalData({
+                    geometries: [dataSources.geometry.id]
+                }).geometriesZoom(control.value).go()
+                    .then(function(data) {
+                        if (data.additionalData && data.additionalData.length) {
+                            var geometryData = data.additionalData[0].geometryData;
+                            geoJsonLayer = tomtom.L.geoJson(geometryData, { style: { color: '#00d7ff', opacity: 0.8 } });
+                            geoJsonLayer.addTo(map);
+                            map.fitBounds(geoJsonLayer.getBounds(), { paddingTopLeft: [0, 100] });
+                            shouldFitToMarkers = false;
+                        }
+                    })
+                    .catch(function() {
+                        tomtom.messageBox({closeAfter: 3000})
+                            .setContent('Some problems were encountered while requesting a given polygon.')
+                            .openOn(map);
+                    })
+                    .then(function() {
+                        drawMarker(result);
+
+                        if (shouldFitToMarkers) {
+                            fitToMarkers(result);
+                        }
+
+                        control.removeAttribute('disabled');
+                        hideLoader();
+                    });
+            } else {
+                tomtom
+                    .messageBox({closeAfter: 3000})
+                    .setContent('No geometry data found for this search result.')
+                    .openOn(map);
+
+                drawMarker(result);
+                fitToMarkers(result);
+                control.removeAttribute('disabled');
+                hideLoader();
+            }
+        }
+
+        searchBoxInstance.on(searchBoxInstance.Events.ResultClicked, function(result) {
+            getGeometry(result);
+        });
+
+        // Draw a marker at the center of the map
+        function drawSearchCenter() {
+            var currentLocation = map.getCenter();
+            var markerOptions = {
+                title: 'Search Center\nLatitude: ' + currentLocation.lat + '\nLongitude: ' + currentLocation.lng,
+                icon: tomtom.L.icon({
+                    iconUrl: '/sdk/../img/center_marker.svg',
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 12]
+                })
+            };
+            searchCenterLayer.clearLayers();
+            searchCenterLayer.addLayer(
+                tomtom.L.marker([currentLocation.lat, currentLocation.lng], markerOptions)
+            ).addTo(map);
+        }
+    })(tomtom, document);
+</script>
+</body>
+
+</html>

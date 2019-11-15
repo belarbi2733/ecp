@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+<head>
+    <meta http-equiv='X-UA-Compatible' content='IE=Edge' />
+    <meta charset='UTF-8'>
+    <title>Maps SDK for Web - Matrix Routing</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <link rel='stylesheet' type='text/css' href='sdk/map.css'/>
+    <link rel='stylesheet' type='text/css' href='elements.css'>
+    <style>
+        #map {
+            font-family: 'TomTom ssm book', Helvetica, Arial, sans-serif;
+        }
+
+        .tomtom-foldable.leaflet-popup-content-wrapper.leaflet-control {
+            padding: 0px;
+        }
+
+        #map .tomtom-foldable__header {
+            height: 0;
+        }
+
+        #map .tomtom-foldable__content-body {
+            width: 310px;
+            overflow: hidden;
+        }
+
+        #map h3 {
+            margin-top: 10px;
+        }
+
+        #map .sidepanel {
+            width: 100%;
+            min-width: 0;
+            margin: 0;
+        }
+
+        #map #toggle-live-traffic {
+            height: 22px;
+        }
+
+        #map #results-heading {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-top: 5px;
+            justify-content: space-between;
+        }
+
+        #map #results-heading div {
+            display: flex;
+        }
+
+        #map #results-heading h3 {
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        #map #results-heading img {
+            margin-left: 8px;
+        }
+
+        #map #results-heading span:hover,
+        #map #results-heading img:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        #map #results-container {
+            float: left;
+            margin: 10px;
+            margin-top: 0;
+        }
+
+        #map #results-container .result-rows {
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        #map #results-container .result-rows .result-row.clicked,
+        #map #results-container .result-rows .result-row.highlighted,
+        #map #results-container .result-rows .result-row:hover {
+            background-color: #E4E4E4;
+            cursor: pointer;
+        }
+
+        #map #results-container .header,
+        #map #results-container .result-rows,
+        #map #results-container .result-rows .result-row {
+            width: 100%;
+            float: left;
+            box-sizing: border-box;
+        }
+
+        #map #results-container .header div {
+            font-size: 11px;
+        }
+
+        #map #results-container .header div,
+        #map #results-container .result-rows .result-row div {
+            padding: 1px;
+            width: 21%;
+            float: left;
+            box-sizing: border-box;
+            padding-right: 10px;
+        }
+
+        #map #results-container .header div:first-child,
+        #map #results-container .result-rows .result-row div:first-child {
+            width: 36%;
+        }
+
+        #map #results-container .header div:nth-child(2),
+        #map #results-container .header div:nth-child(5),
+        #map #results-container .result-rows .result-row div:nth-child(2),
+        #map #results-container .result-rows .result-row div:nth-child(5) {
+            width: 22%;
+        }
+
+        #map #results-container .result-rows .result-row div:not(:first-child) {
+            font-weight: bold;
+        }
+
+        #map #results-container .header {
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            height: 41px;
+        }
+
+        #map #results-container .result-rows .result-row div {
+            font-size: 11px;
+        }
+
+        #map .not-visible {
+            display: none;
+        }
+
+        #map .sidepanel #submit-btn {
+            margin-top: 0;
+            margin-bottom: 0;
+            border-radius: 20px;
+        }
+
+        #map .pop-up-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Fixes for edge */
+        @supports (-ms-ime-align: auto) {
+            #map #results-container .header div:nth-child(4),
+            #map #results-container .result-rows .result-row div:nth-child(4) {
+                text-align: center;
+            }
+
+            #map .tomtom-foldable__content-body {
+                width: 350px;
+            }
+        }
+
+    </style>
+    <script type='text/javascript' src='js/form.js'></script>
+    <script src='sdk/tomtom.min.js'></script>
+</head>
+<body class='use-all-space'>
+    <div id='loader' class='loader loader-center'></div>
+    <div id='map' class='use-all-space'></div>
+    <div>
+        <form class='sidepanel'>
+                <h3>CATEGORIES</h3>
+            <select id='categories' name='categories'>
+                <option value='none'>Pick a category ...</option>
+                <option value='hospital'>Hospital</option>
+                <option value='pharmacy'>Pharmacy</option>
+                <option value='stadium'>Stadium</option>
+            </select>
+            <input id='submit-btn' type='submit' value='Submit'>
+        </form>
+        <div id='results-heading'>
+            <div>
+                <h3>RESULTS</h3>
+                <img id='toggle-live-traffic' class='not-visible' src='/sdk/../img/switch_button.png'/>
+            </div>
+            <span id='show-results' class='not-visible'>Hide</span>
+        </div>
+        <div id='results-container'>Please select one of the categories above. There will be maximum 10 results presented.</div>
+    </div>
+<script>
+    // Define your product name and version
+    tomtom.setProductInfo('MapsWebSDKExamplesSelfhosted', '4.48.5-SNAPSHOT');
+    var errorCodes = {
+            noResultsFound: 'NO_RESULTS_FOUND'
+        },
+        loader = document.getElementById('loader'),
+        submitButton = document.getElementById('submit-btn'),
+        categorySelector = document.getElementById('categories'),
+        resultsContainerElem = document.getElementById('results-container'),
+        toggleLiveTrafficButton = document.getElementById('toggle-live-traffic'),
+        currentRoute = null,
+        markersLayer = L.tomTomMarkersLayer(),
+        showLiveResults = false,
+        resultsHidden = false,
+        showResultsButton = document.getElementById('show-results'),
+        selectedRow;
+
+    // Setup the map
+    tomtom.searchKey('${api.key.search}');
+    tomtom.routingKey('${api.key.routing}');
+    var map = tomtom.L.map('map', {
+        key: '${api.key}',
+        source: 'vector',
+        center: [48.85862, 2.34987],
+        zoom: 12,
+        basePath: '/sdk'
+    });
+
+    map.zoomControl.setPosition('topright');
+    map.attributionControl.setPosition('bottomright');
+
+    markersLayer.setMarkerOptions({noMarkerClustering: true}).addTo(map);
+
+    // And Control Panel with the submit button
+    tomtom.foldable({
+        position: 'topleft',
+        collapsed: false,
+        close: null,
+        closeOnMapClick: false
+    })
+        .addTo(map)
+        .addContent(document.getElementById('map').nextElementSibling);
+
+    // Everything starts when this button is clicked
+    function submitBtnClickHandler(e) {
+        e.preventDefault();
+
+        var mapCenter = map.getCenter();
+        var selector = categorySelector;
+        var selectedValue = selector.value;
+        if ('none' === selectedValue) {
+            return;
+        }
+
+        showLoader();
+        disableCategoryControls();
+        performCategorySearchRequest(selectedValue, mapCenter).then(function(searchResults) {
+            return performMatrixRoutingRequest(mapCenter, searchResults);
+        }).then(function(result) {
+            // We have both search and matrix responses
+            var searchResults = result.searchResults,
+                matrixRoutingResponse = result.matrixRoutingResponse;
+
+            cleanUp();
+            resetUiControls(false);
+
+            markersLayer.setPopupOptions({
+                popupContent: markerPopupContentGenerator
+            })
+                .setMarkersData(searchResults).addMarkers();
+            var mapCenterMarker = prepareSearchCenterMarker(mapCenter);
+            markersLayer.addLayer(mapCenterMarker);
+
+            prepareResultsContent(searchResults, matrixRoutingResponse, mapCenter, markersLayer.getMarkers());
+            map.fitBounds(markersLayer.getBounds());
+            hideLoader();
+            enableCategoryControls();
+        }).catch(function(error) {
+            // Handle errors here
+            hideLoader();
+            if (error && error.reason === errorCodes.noResultsFound) {
+                cleanUp();
+                resetUiControls(true);
+                resultsContainerElem.innerHTML = 'Cannot find results for a requested category. Please move to a different area.';
+                enableCategoryControls();
+            }
+        });
+    }
+
+    // reset button and elements to initial state
+    function resetUiControls(isError) {
+        resultsContainerElem.innerHTML = '';
+        showResultsButton.classList[isError ? 'add' : 'remove']('not-visible');
+        showResultsButton.innerText = 'Hide';
+        toggleLiveTrafficButton.classList[isError ? 'add' : 'remove']('not-visible');
+        resultsContainerElem.classList.remove('not-visible');
+        toggleLiveTrafficBtnImage(false);
+    }
+
+    // Draw search center position
+    function prepareSearchCenterMarker(mapCenter) {
+        var currentLocation = mapCenter;
+        var markerOptions = {
+            title: 'Search Center\nLatitude: ' + currentLocation.lat +
+            '\nLongitude: ' + currentLocation.lng,
+            icon: tomtom.L.icon({
+                iconUrl: '/sdk/../img/center_marker.svg',
+                iconSize: [24, 24],
+                iconAnchor: [12, 12]
+            })
+        };
+
+        return tomtom.L.marker(currentLocation, markerOptions);
+    }
+
+    // Clears markers, search results and a route.
+    function cleanUp() {
+        showLiveResults = false;
+        markersLayer.clearLayers();
+        if (currentRoute) {
+            currentRoute.remove();
+            currentRoute = null;
+        }
+    }
+
+    // Requests data from routing service
+    function performRoutingRequest(mapCenter, searchResult) {
+        return tomtom.routing()
+            .locations(prepareLocationsForRouting(mapCenter, searchResult))
+            .go();
+    }
+
+    // Requests data from search service
+    function performCategorySearchRequest(query, center) {
+        return tomtom.categorySearch()
+            .query(query)
+            .center(center)
+            .radius(10000)
+            .limit(10)
+            .go();
+    }
+
+    // Requests data from matrix routing service
+    function performMatrixRoutingRequest(mapCenter, searchResults) {
+        function convertToPoint(coordinateArray) {
+            return {
+                point: {
+                    latitude: coordinateArray[0],
+                    longitude: coordinateArray[1]
+                }
+            };
+        }
+
+        if (!searchResults || searchResults.length === 0) {
+            return new Promise(function(resolve, reject) {
+                reject({reason: errorCodes.noResultsFound});
+            });
+        }
+
+        return tomtom.matrixRouting({traffic: false})
+            .computeTravelTimeFor('all')
+            .departAt('now')
+            .origins([convertToPoint([mapCenter.lat, mapCenter.lng])])
+            .destinations(searchResults.map(function(searchResult) {
+                return convertToPoint([searchResult.position.lat, searchResult.position.lon]);
+            }))
+            .go()
+            .then(function(matrixRoutingResponse) {
+                return new Promise(function(resolve) {
+                    resolve({ 'searchResults': searchResults, 'matrixRoutingResponse': matrixRoutingResponse });
+                });
+            });
+    }
+
+    // Format coordinates in a way understood by routing service
+    function prepareLocationsForRouting(mapCenter, searchResult) {
+        return String(mapCenter.lat) + ',' + String(mapCenter.lng) + ':' + String(searchResult.position.lat) + ',' +
+                String(searchResult.position.lon);
+    }
+
+    // Generates marker popup content
+    function markerPopupContentGenerator(point) {
+        var container = tomtom.L.DomUtil.create('div');
+        var title = tomtom.L.DomUtil.create('div');
+        var address = tomtom.L.DomUtil.create('div');
+        title.innerHTML = '<div class="pop-up-title">' + point.poi.name + '</div>';
+        address.innerHTML = '<b>Address:</b> ' + point.address.freeformAddress + ', ' + point.address.country;
+        container.appendChild(title);
+        container.appendChild(address);
+        return container;
+    }
+
+    // creates a DOM element
+    function createDomElement(domElem, value, className) {
+        var elem = tomtom.L.DomUtil.create('div', className);
+        elem.textContent = value;
+        return elem;
+    }
+
+    function createResultsHeader() {
+        var poiName = createDomElement('div', 'Description');
+
+        // not live data
+        var notLiveData = [
+            createDomElement('div', 'Distance'),
+            createDomElement('div', 'ETA'),
+            createDomElement('div', 'Delay')
+        ];
+
+        // live data
+        var liveData = [
+            createDomElement('div', 'Live Traffic', 'not-visible'),
+            createDomElement('div', 'Historic Traffic', 'not-visible'),
+            createDomElement('div', 'No Traffic', 'not-visible')
+        ];
+
+        return {
+            poiName: poiName,
+            notLiveData: notLiveData,
+            liveData: liveData
+        };
+    }
+
+    function getResultRowElements(searchResult, matrixRoutingResult) {
+
+        var poiName = createDomElement('div', searchResult.poi.name);
+        var routeSummary = matrixRoutingResult.routeSummary;
+
+        var notLiveData = [
+            createDomElement('div', tomtom.unitFormatConverter.formatDistance(routeSummary.lengthInMeters)),
+            createDomElement('div', new Date(routeSummary.arrivalTime).toLocaleTimeString()),
+            createDomElement('div', tomtom.unitFormatConverter.formatTime(routeSummary.trafficDelayInSeconds))
+        ];
+
+        var liveData = [
+            createDomElement('div', tomtom.unitFormatConverter.formatTime(routeSummary.liveTrafficIncidentsTravelTimeInSeconds), 'not-visible'),
+            createDomElement('div', tomtom.unitFormatConverter.formatTime(routeSummary.historicTrafficTravelTimeInSeconds), 'not-visible'),
+            createDomElement('div', tomtom.unitFormatConverter.formatTime(routeSummary.noTrafficTravelTimeInSeconds), 'not-visible')
+        ];
+
+        return {
+            poiName: poiName,
+            notLiveData: notLiveData,
+            liveData: liveData
+        };
+    }
+
+    // Creates result rows
+    function prepareResultsContent(searchResults, matrixRoutingResults, mapCenter, markers) {
+        var generatedElements = [];
+        var createElement = tomtom.L.DomUtil.create;
+
+        // generate header elements
+        var header = createElement('div', 'header');
+        var headerElements = createResultsHeader();
+        generatedElements.push(headerElements);
+
+        // append header elements
+        [headerElements.poiName].concat(headerElements.notLiveData).concat(headerElements.liveData).forEach(function(elem) {
+            header.appendChild(elem);
+        });
+        resultsContainerElem.appendChild(header);
+
+        // generate result rows
+        var resultRowsDiv = createElement('div', 'result-rows');
+
+        searchResults.forEach(function(searchResult, searchResultIndex) {
+            var matrixRoutingResult = matrixRoutingResults[0][searchResultIndex];
+            if (typeof matrixRoutingResult !== 'string') {
+                var row = tomtom.L.DomUtil.create('div', 'result-row');
+                var resultRowData = getResultRowElements(searchResult, matrixRoutingResult);
+                generatedElements.push(resultRowData);
+                // append result elements
+                [resultRowData.poiName].concat(resultRowData.notLiveData).concat(resultRowData.liveData).forEach(function(elem) {
+                    row.appendChild(elem);
+                });
+
+                appendResultListeners(row, mapCenter, markers, searchResult, searchResultIndex);
+
+                resultRowsDiv.appendChild(row);
+            }
+        });
+
+        resultsContainerElem.appendChild(resultRowsDiv);
+
+        setContainerHeight();
+
+        var rowWidth;
+        // set all rows with the same height
+        for (var i = 0; i < resultRowsDiv.childNodes.length; ++i) {
+            var elem = resultRowsDiv.childNodes[i];
+            elem.style.minHeight = elem.offsetHeight + 'px';
+            if (!rowWidth) {
+                rowWidth = elem.offsetWidth;
+            }
+        }
+
+        header.style.paddingRight = header.offsetWidth - rowWidth + 'px';
+
+        appendLiveInfoButtonListener(generatedElements);
+    }
+
+    // remove event listeners from button - this technique allows you to remove all event listeners bound
+    // to an element
+    function appendLiveInfoButtonListener(generatedElements) {
+        var newButtonElem = toggleLiveTrafficButton.cloneNode(true);
+        toggleLiveTrafficButton.parentNode.replaceChild(newButtonElem, toggleLiveTrafficButton);
+        toggleLiveTrafficButton = document.getElementById('toggle-live-traffic');
+
+        toggleLiveTrafficButton.addEventListener('click', liveTrafficButtonHandler.bind(this, [].concat(generatedElements)));
+    }
+
+    // adds listeners to each row
+    function appendResultListeners(row, mapCenter, markers, searchResult, index) {
+        function onResultClickedHandler() {
+            performRoutingRequest(mapCenter, searchResult)
+                .then(function(routeJson) {
+                    if (currentRoute) {
+                        currentRoute.remove();
+                    }
+
+                    if (selectedRow) {
+                        selectedRow.classList.remove('clicked');
+                    }
+
+                    selectedRow = row;
+                    selectedRow.classList.add('clicked');
+
+                    var popup = markers[index].openPopup().getPopup();
+
+                    currentRoute = tomtom.L.geoJson(routeJson, {
+                        style: {color: '#FF00D2', opacity: 0.8}
+                    }).addTo(map);
+
+                    L.MapUtils.setViewWithOffset(map, markers[index].getLatLng(), map.getZoom(), {}, {
+                        x: map.getSize().x * 0.25,
+                        y: popup.getElement().getBoundingClientRect().height
+                    });
+                });
+        }
+
+        function onResultHoverHandler(big) {
+            return function() {
+                markers[index].setIcon(getIcon(big, markers[index].options.icon.options.icon.icon));
+                markers[index] = markers[index];
+            };
+        }
+
+        row.addEventListener('click', onResultClickedHandler);
+        row.addEventListener('mouseover', onResultHoverHandler(true));
+        row.addEventListener('mouseout', onResultHoverHandler(false));
+        markers[index].addEventListener('click', onResultClickedHandler);
+        markers[index].addEventListener('mouseover', function() {
+            row.classList.add('highlighted');
+            row.parentNode.scrollTop = row.offsetTop - row.parentNode.offsetTop;
+        });
+        markers[index].addEventListener('mouseout', function() {
+            row.classList.remove('highlighted');
+        });
+    }
+
+    // creates a new icon
+    function getIcon(big, iconName) {
+        return new tomtom.L.SVGIcon({
+            background: {
+                iconSize: big ? [36, 43] : [30, 36],
+                noPlainSVG: false
+            },
+            icon: {
+                iconSize: big ? [36, 43] : [30, 36],
+                icon: iconName,
+                iconAnchor: big ? [-1, 3] : [0, 1],
+                noPlainSVG: false
+            },
+            popupAnchor: [0, -30],
+            opacity: 0.8
+        });
+    }
+
+    // toggle live traffic on or off
+    function liveTrafficButtonHandler(elements) {
+        showLiveResults = !showLiveResults;
+
+        toggleLiveTrafficBtnImage(showLiveResults);
+
+        elements.forEach(function(elem) {
+            // toggle class
+            elem.notLiveData.forEach(function(notLiveElem) {
+                notLiveElem.classList.toggle('not-visible');
+            });
+
+            elem.liveData.forEach(function(liveElem) {
+                liveElem.classList.toggle('not-visible');
+            });
+        });
+
+        setContainerHeight();
+    }
+
+    function toggleLiveTrafficBtnImage(show) {
+        toggleLiveTrafficButton.setAttribute('src', show ? '/sdk/../img/switch_button_highlighted.png' : '/sdk/../img/switch_button.png');
+    }
+
+    // set result container height for overflow
+    function setContainerHeight() {
+        var resultsCointainer = document.getElementsByClassName('result-rows')[0];
+        resultsCointainer.style.height = 'auto';
+        var parentHeight = document.getElementsByClassName('tomtom-foldable')[0].offsetHeight;
+        resultsCointainer.style.height = parentHeight - resultsCointainer.offsetTop - 10 + 'px';
+    }
+
+    function showLoader() {
+        loader.style.display = 'block';
+    }
+
+    function hideLoader() {
+        loader.style.display = 'none';
+    }
+
+    function disableCategoryControls() {
+        categorySelector.disabled = true;
+        submitButton.disabled = true;
+    }
+
+    function enableCategoryControls() {
+        categorySelector.disabled = false;
+        submitButton.disabled = false;
+    }
+
+    function toggleResultsHandler() {
+        resultsHidden = !resultsHidden;
+        resultsContainerElem.classList[resultsHidden ? 'add' : 'remove']('not-visible');
+        showResultsButton.innerText = !resultsHidden ? 'Hide' : 'Show';
+    }
+
+    // event listeners
+    window.addEventListener('resize', setContainerHeight);
+    submitButton.addEventListener('click', submitBtnClickHandler);
+    showResultsButton.addEventListener('click', toggleResultsHandler);
+    </script>
+</body>
+</html>
