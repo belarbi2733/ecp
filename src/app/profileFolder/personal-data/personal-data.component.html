@@ -1,16 +1,16 @@
 
     <div class="form-group">
 
-        <label for="userNom">Nom : {{ userNom }}</label>
+        <!-- <label for="userNom">Nom : {{ userNom }}</label> -->
         <input type="text" class="form-control" id="name" aria-describedby="name" [(ngModel)]="userNom">
 
-        <label for="userPrenom">Prénom : {{ userPrenom }}</label>
+        <!-- <label for="userPrenom">Prénom : {{ userPrenom }}</label> -->
         <input type="text" class="form-control" id="firstname" aria-describedby="firstname" [(ngModel)]="userPrenom">
 
-        <label for="userSexe">Sexe : {{ userSexe }}</label>
+        <!-- <label for="userSexe">Sexe : {{ userSexe }}</label> -->
         <div class="form-check">
             <input class="form-check-input" type="radio" name="sexe" id="homme" [(ngModel)]="userSexe" value="homme">
-            <label class="form-check-label" for="homme" style="margin-right:3rem;">
+            <label class="form-check-label" for="homme" style="margin-right:3rem;"> -->
                 Homme
             </label>
             <input class="form-check-input" type="radio" name="sexe" id="femme" [(ngModel)]="userSexe" value="femme">
@@ -19,18 +19,20 @@
             </label>
         </div>
 
-        <label for="userMail">Email address : {{ userMail }}</label>
+        <!-- <label for="userMail">Email address : {{ userMail }}</label> -->
         <input type="email" class="form-control" id="email" aria-describedby="email" [(ngModel)]="userMail">
 
-        <label for="userTel">Numéro de téléphone : {{ userTel }}</label>
+        <!-- <label for="userTel">Numéro de téléphone : {{ userTel }}</label> -->
         <input type="tel" class="form-control" id="phone" aria-describedby="phone" name="phone" pattern="[0-9]{10}" [(ngModel)]="userTel">
         <small class="form-text text-muted">Format: 0123456789</small>
 
-        <label for="userDate">Date de naissance : {{ userDate }}</label>
+        <!-- <label for="userDate">Date de naissance : {{ userDate }}</label> -->
         <input type="date" class="form-control" id="date" aria-describedby="date" [(ngModel)]="userDate">
 
+        <button class="btn" (click)="modifierInfo()">
+            Modifier vos informations
+          </button>
+          
     </div>
 
-<button (click)="modifierInfo()">
-  Modifier vos informations
-</button>
+

@@ -18,6 +18,12 @@
     cursor: pointer ;
 } */
 
+.content {
+
+    padding-top: 5vh;
+}
+
+
 @media only screen and (max-width: 768px) {
 /* For mobile phones: */
 .btn{
@@ -37,3 +43,5 @@
 .Site-content {
     flex: 1;
 }
+
+
