@@ -1,17 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// @ts-ignore
 import { ChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-//services
+// services
 import { AuthGuard } from './services/auth-guard.service';
-import { AdminGuard } from './services/admin-guard.service';
 import { AccueilService } from './services/accueil.service';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './singleComponentFolder/auth/auth.service';
 
-//components
+// components
 import { AppComponent } from './app.component';
 import { ProfileTabsComponent } from './profileFolder/profile-tabs/profile-tabs.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -49,16 +48,13 @@ import { LoginstatComponent } from './adminFolder/loginstat/loginstat.component'
 import { ParcelstatComponent } from './adminFolder/parcelstat/parcelstat.component';
 import { TripstatComponent } from './adminFolder/tripstat/tripstat.component';
 import { UserstatComponent } from './adminFolder/userstat/userstat.component';
-import { NavbarAdminComponent } from './adminFolder/navbar-admin/navbar-admin.component';
-import { NavbarReservationComponent } from './profileFolder/navbar-reservation/navbar-reservation.component';
-import { MesTrajComponent } from './profileFolder/mes-traj/mes-traj.component';
-import { MesColisComponent } from './profileFolder/mes-colis/mes-colis.component';
-import { MesTournComponent } from './profileFolder/mes-tourn/mes-tourn.component';
+import {FormsModule} from '@angular/forms';
+import {InscrService} from './singleComponentFolder/inscr/inscr.service';
 
 
 const appRoutes: Routes = [
 
-  { path: 'profile', canActivate: [AuthGuard], component: ProfileTabsComponent }, // :id is a route parameter and data is to parse static data
+  { path: 'profile', canActivate: [AuthGuard], component: ProfileTabsComponent },
   { path: 'accueil', component: AccueilComponent },
   { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
   { path: 'add-colis', canActivate: [AuthGuard], component: AddColisComponent },
@@ -66,24 +62,22 @@ const appRoutes: Routes = [
   { path: 'aide', component: AideComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'description', component: DescriptionComponent },
-  { path: 'mes-traj', canActivate: [AuthGuard], component: MesTrajComponent },
-  { path: 'mes-colis', canActivate: [AuthGuard], component: MesColisComponent },
-  { path: 'mes-tourn', canActivate: [AuthGuard], component: MesTournComponent },
-  { path: 'messagerie', canActivate: [AuthGuard], component: MessagerieComponent },
-  { path: 'payements', canActivate: [AuthGuard], component: PaymentsComponent },
-  { path: 'admin', canActivate: [AdminGuard], component: AdminComponent },
-  { path: 'admin-list-ut', canActivate: [AdminGuard], component: AdminListUtComponent },
-  { path: 'admin-list-traj', canActivate: [AdminGuard], component: AdminListTrajComponent },
-  { path: 'info-traj', canActivate: [AuthGuard], component: InfoTrajComponent },
-  { path: 'admin-rembours', canActivate: [AdminGuard], component: AdminRemboursComponent },
+  { path: 'messagerie', component: MessagerieComponent },
+  { path: 'admin', component: AdminComponent },
+  { path: 'admin-list-ut', component: AdminListUtComponent },
+  { path: 'admin-list-traj', component: AdminListTrajComponent },
+  { path: 'info-traj', component: InfoTrajComponent },
+  { path: 'admin-rembours', component: AdminRemboursComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
   { path: '', component: AccueilComponent },
   { path: '**', component: FourOhFourComponent }
 
 
-   //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
-   //                                      configuration. This is useful for displaying a "404 - Not Found" page or redirecting to another route. It MUST BE THE LAST ROUTE
+
+
+  //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
+  //   configuration. This is useful for displaying a "404 - Not Found" page or redirecting to another route. It MUST BE THE LAST ROUTE
 ];
 
 @NgModule({
@@ -124,25 +118,20 @@ const appRoutes: Routes = [
     ParcelstatComponent,
     TripstatComponent,
     UserstatComponent,
-    NavbarAdminComponent,
-    NavbarReservationComponent,
-    MesTrajComponent,
-    MesColisComponent,
-    MesTournComponent
   ],
   imports: [
     BrowserModule,
     NgbModule,
-    FormsModule,
-    RouterModule.forRoot(appRoutes, { enableTracing: true }),
+    RouterModule.forRoot(appRoutes, {enableTracing: true}),
     ChartsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     AccueilService,
-    AuthService,
     AuthGuard,
-    AdminGuard
+    InscrService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })
