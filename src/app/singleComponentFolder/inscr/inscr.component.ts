@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 @Component({
   selector: 'app-inscr',
   templateUrl: './inscr.component.html',
-  styleUrls: ['./inscr.component.css']
+  styleUrls: ['./inscr.component.css' , '../../app.component.css']
 })
 
 @Injectable()
