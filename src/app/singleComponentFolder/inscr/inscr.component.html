@@ -7,25 +7,6 @@
   <input name="mot_passe" id="mot_passe" #mot_passe="ngModel" [(ngModel)]="inscription.mot_passe" class="form-control">
   <label for="verification_mot_passe">Vérification du mot de passe : </label>
   <input name="verification_mot_passe" id="verification_mot_passe" #verification_mot_passe="ngModel" [(ngModel)]="inscription.verification_mot_passe" class="form-control">
-
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>adresse</th>
-      <th>mot passe</th>
-      <th>verification_mot_passe</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of dataNode">
-      <td>{{ data.id_utilisateur }}</td>
-      <td>{{ data.adresse_mail}}</td>
-      <td>{{ data.mot_passe}}</td>
-      <td>{{ data.verification_mot_passe}}</td>
-    </tr>
-    </tbody>
-  </table>
 </div>
 
 <button class="btn btn-success" (click)="inscrire(inscription)">
