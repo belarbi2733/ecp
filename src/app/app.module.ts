@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './services/auth-guard.service';
 import { AccueilService } from './services/accueil.service';
 import { AuthService } from './singleComponentFolder/auth/auth.service';
+import { AuthService } from './services/auth.service';
 
 // components
 import { AppComponent } from './app.component';
@@ -36,7 +37,7 @@ import { PhotoComponent } from './profileFolder/photo/photo.component';
 import { VehicleComponent } from './profileFolder/vehicle/vehicle.component';
 import { PreferencesComponent } from './profileFolder/preferences/preferences.component';
 import { RatingComponent } from './profileFolder/rating/rating.component';
-import { PaymentsComponent } from './profileFolder/payments/payments.component';
+import { PaymentsComponent } from './singleComponentFolder/payments/payments.component';
 import { AccountComponent } from './profileFolder/account/account.component';
 import { AdminListUtComponent } from './adminFolder/admin-list-ut/admin-list-ut.component';
 import { AdminListTrajComponent } from './adminFolder/admin-list-traj/admin-list-traj.component';
@@ -48,8 +49,14 @@ import { LoginstatComponent } from './adminFolder/loginstat/loginstat.component'
 import { ParcelstatComponent } from './adminFolder/parcelstat/parcelstat.component';
 import { TripstatComponent } from './adminFolder/tripstat/tripstat.component';
 import { UserstatComponent } from './adminFolder/userstat/userstat.component';
+
 import {FormsModule} from '@angular/forms';
 import {InscrService} from './singleComponentFolder/inscr/inscr.service';
+import { NavbarAdminComponent } from './adminFolder/navbar-admin/navbar-admin.component';
+import { NavbarReservationComponent } from './reservations/navbar-reservation/navbar-reservation.component';
+import { MesTrajComponent } from './reservations/mes-traj/mes-traj.component';
+import { MesColisComponent } from './reservations/mes-colis/mes-colis.component';
+import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component';
 
 
 const appRoutes: Routes = [
