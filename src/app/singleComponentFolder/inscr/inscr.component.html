@@ -1,6 +1,15 @@
 <div class="container content">
   <h3>Inscription</h3>
 
+
+<div class="form-group">
+  <label for="adresse_mail">Adresse mail : </label>
+  <input name="adresse_mail" id="adresse_mail" #adresse_mail="ngModel" [(ngModel)]="inscription.adresse_mail" class="form-control">
+  <label for="mot_passe">Mot de passe : </label>
+  <input name="mot_passe" id="mot_passe" #mot_passe="ngModel" [(ngModel)]="inscription.mot_passe" class="form-control">
+  <label for="verification_mot_passe">Vérification du mot de passe : </label>
+  <input name="verification_mot_passe" id="verification_mot_passe" #verification_mot_passe="ngModel" [(ngModel)]="inscription.verification_mot_passe" class="form-control">
+</div>
   <div class="form-group">
     <label for="adresse_mail">Adresse mail : </label>
     <input name="adresse_mail" id="adresse_mail" #adresse_mail="ngModel" [(ngModel)]="inscription.adresse_mail" class="form-control">
