@@ -1,33 +1,25 @@
-<div class="container content">
-
 <h3>Authentification</h3>
 
 <div class="form-group">
-  <!-- <label for="connectMail">Adresse mail : {{ connectMail }} </label> -->
-  <input type="email" class="form-control" placeholder="Adresse mail" [(ngModel)]="connectMail">
-  <!-- <label for="connectMdp">Mot de passe : {{ connectMdp }} </label> -->
-  <input type="text" class="form-control" placeholder="Mot de passe" [(ngModel)]="connectMdp">
+  <label for="adresse_mail">Adresse mail : </label>
+  <input name="adresse_mail" id="adresse_mail" #adresse_mail="ngModel" [(ngModel)]="auth.adresse_mail" class="form-control">
+  <label for="mot_passe">Mot de passe : </label>
+  <input name="mot_passe" id="mot_passe" #mot_passe="ngModel" [(ngModel)]="auth.mot_passe" class="form-control">
 </div>
 
-<button class="btn" *ngIf="!authStatus" (click)="onSignIn()">
+<button class="btn btn-success"  (click)="onSignIn(auth)">
   Se connecter
 </button>
-<button class="btn" *ngIf="!authStatus" (click)="onSignInAdmin()">
+<button class="btn btn-success"  (click)="onSignInAdmin()">
   Se connecter en tant qu'administrateur
 </button>
-<button class="btn" *ngIf="authStatus" (click)="onSignOut()">
+<button class="btn btn-danger"  (click)="onSignOut()">
   Se déconnecter
 </button>
 
 <br>
 
-<br>
-
-<br>
-
-<h5>Vous n'êtes pas encore inscrit?</h5>
-<button class="btn" (click)="toInscr()">
+<h5>Si vous n'êtes pas encore inscrit :</h5>
+<button (click)="toInscr()">
   S'inscrire
 </button>
-
-</div>
