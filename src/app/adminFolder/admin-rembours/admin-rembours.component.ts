@@ -10,7 +10,7 @@ export class AdminRemboursComponent implements OnInit {
   trajetStatus: boolean;
 
   constructor() {
-    this.trajetStatus = false;
+    this.trajetStatus = true;
   }
 
   ngOnInit() {
