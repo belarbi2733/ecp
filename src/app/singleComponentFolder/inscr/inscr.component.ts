@@ -36,7 +36,6 @@ export class InscrComponent implements OnInit {
       if (data.mot_passe === data.verification_mot_passe) {
         this.error = '';
         this.inscrService.inscription(data);
-        this.inscrService.getInscr();
       } else {
         this.error = 'Les mots de passe ne correspondent pas !';
       }
