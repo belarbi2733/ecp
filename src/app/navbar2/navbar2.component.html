@@ -20,7 +20,7 @@
         <button [style.display] ="CloseBtnDisplay" class = "navbar navbar-toggler" (click)="disToggleCollapsed()" id="CLOSEBtn" >
             <span class="navbar-toggler-icon"></span>
         </button>
-      <div class="list-group list-group-flush">
+      <div class="list-group list-group-flush" (click)='disToggleCollapsed()'>
         <a class="nav-link" routerLink="/add-trajet" routerLinkActive="active">Proposer un trajet</a>
         <a class="nav-link" routerLink="/add-colis" routerLinkActive="active">Proposer un colis</a>
         <a class="nav-link" routerLink="/searchTrajConduct" routerLinkActive="active">Rechercher</a>
@@ -43,7 +43,8 @@
         <button [style.display]="OpenBtnDisplay" class = "navbar navbar-toggler" (click)="toggleCollapsed()" id="OPENBtn">
                 <span class="navbar-toggler-icon"></span>
         </button>
-        <h3 id="ECPLogo">Easy Car Pool</h3>
+        <!-- <a id="ECPLogo">Easy Car Pool</a> -->
+        <a class="navbar-brand"  routerLink="/accueil" routerLinkActive="active"><img src="assets\ecp-logo.png" alt="logo"> </a>
         <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button> -->
