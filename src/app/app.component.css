@@ -27,6 +27,20 @@ input {
     min-width: 80px;
     width:auto;
 }
+app-navbar{
+    display : none;
+}
+app-navbar2{
+    display: block;
+}
+}
+@media only screen and (min-width: 768px){
+    app-navbar{
+        display : block;
+    }
+    app-navbar2{
+        display: none;
+    }
 }
 
 
