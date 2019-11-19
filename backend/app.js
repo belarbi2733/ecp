@@ -14,15 +14,15 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 
 app.post('/inscription', function (req, res) {
-  User.addUtilisateur(req,function(err,rows){
+  console.log("CC");
+  User.addUtilisateur(req,function(err,res){
     console.log(req.body);
-    console.log(rows);
     if(err) {
       res.status(400).json(err);
     }
     else
     {
-      res.json(rows);
+      res.json(res);
     }
   });
 });
