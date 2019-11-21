@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import {Inscription} from './inscr.interface';
-import { HttpClient } from '@angular/common/http';
+import {DataInscription} from './inscr.interface';
 import { Injectable } from '@angular/core';
-import { InscrService } from './inscr.service';
+import { InscrService } from '../../services/inscr.service';
 
 
 @Component({
@@ -14,21 +12,20 @@ import { InscrService } from './inscr.service';
 
 @Injectable()
 export class InscrComponent implements OnInit {
-  inscription: Inscription = {
+  inscription: DataInscription = {
     id_utilisateur: null,
     adresse_mail: '',
     mot_passe: '',
     verification_mot_passe: ''
   };
 
-  dataNode: Inscription[];
+  dataNode: DataInscription[];
   error: string;
   constructor(private inscrService: InscrService) {
   }
   ngOnInit() {
   }
-
-  inscrire(data: Inscription) {
+  inscrire(data: DataInscription) {
     if (data.mot_passe === '' || data.verification_mot_passe === '' || data.adresse_mail === '') {
       this.error = 'Certains champs ne sont pas complétés !';
       this.constructor();

@@ -21,7 +21,8 @@ let Utilisateur = {
 
     getUtilisateur: function(utilisateur, callback)
     {
-        return db.query('SELECT * FROM utilisateur WHERE nom = $1 OR prenom = $2', [utilisateur.body.adresse_mail,utilisateur.body.mot_passe],callback);
+      console.log("getUser : " + utilisateur.body.mail);
+      return db.query('SELECT password FROM utilisateur WHERE mail = $1', [utilisateur.body.mail],callback);
     }
 };
 

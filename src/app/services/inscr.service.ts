@@ -16,6 +16,7 @@ export class InscrService {
       .subscribe(
         res => {
           console.log(res);
+          this.router.navigate(['accueil']);
         },
         err => {
           console.log('Error occured:' , err);
