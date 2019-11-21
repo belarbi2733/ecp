@@ -58,7 +58,7 @@ import { MesColisComponent } from './reservations/mes-colis/mes-colis.component'
 import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component';
 import { Navbar2Component } from './navbar2/navbar2.component';
 import { PaypalComponent } from './paypal/paypal.component';
-import {InscrService} from './singleComponentFolder/inscr/inscr.service';
+import {InscrService} from './services/inscr.service';
 
 
 const appRoutes: Routes = [

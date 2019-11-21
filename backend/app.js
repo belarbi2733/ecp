@@ -11,10 +11,12 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(bodyParser.json());
 
 app.post('/inscription', function (req, res) {
-  console.log("CC");
   User.addUtilisateur(req,function(err,result){
     console.log(req.body);
     if(err) {
@@ -27,4 +29,22 @@ app.post('/inscription', function (req, res) {
   });
 });
 
+app.post('/auth', function (req,res) {
+  User.getUtilisateur(req, function (err, result) {
+    console.log(req.body);
+    console.log(err);
+    if (err) {
+      res.status(400).json(err);
+      console.log("Erreur");
+    } else {
+      if (result.rows[0].password === req.body.password) {
+        res.json(true);
+      } else {
+        res.json(false);
+      }
+    }
+  });
+});
+
 app.listen(8080);
+

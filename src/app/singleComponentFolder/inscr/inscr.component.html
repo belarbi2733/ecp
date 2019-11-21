@@ -3,7 +3,7 @@
 
   <div class="form-group">
     <label for="adresse_mail">Adresse mail : </label>
-    <input name="adresse_mail" id="adresse_mail" #adresse_mail="ngModel" [(ngModel)]="inscription.adresse_mail" class="form-control">
+    <input name="adresse_mail" type="email" id="adresse_mail" #adresse_mail="ngModel" [(ngModel)]="inscription.adresse_mail" class="form-control">
     <label for="mot_passe">Mot de passe : </label>
     <input name="mot_passe" type="password" id="mot_passe" #mot_passe="ngModel" [(ngModel)]="inscription.mot_passe" class="form-control">
     <label for="verification_mot_passe">Vérification du mot de passe : </label>
@@ -33,8 +33,8 @@
     S'inscrire
   </button>
 
-  <div>
-    <label>{{error}}</label>
-  </div>
+  <br>
+  <br>
+  <label>{{error}}</label>
 
 </div>
