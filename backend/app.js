@@ -32,14 +32,17 @@ app.post('/inscription', function (req, res) {
 app.post('/auth', function (req,res) {
   User.getUtilisateur(req, function (err, result) {
     console.log(req.body);
-    console.log(err);
+    console.log('err : ' + err);
     if (err) {
       res.status(400).json(err);
       console.log("Erreur");
     } else {
-      if (result.rows[0].password === req.body.password) {
-        res.json(true);
-      } else {
+      if(result.rows.length !== 0) { // Check si il y a le mail dans la database
+        if (result.rows[0].password === req.body.password) { //Check si les mots de passes correspondent
+          res.send(true);
+        }
+      }
+      else {
         res.json(false);
       }
     }

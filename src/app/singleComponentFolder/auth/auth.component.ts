@@ -12,7 +12,6 @@ export class AuthComponent implements OnInit {
 
   authStatus: boolean;
   adminStatus: boolean;
-  validationStatus = -1;
 
   auth: DataAuth = {
     mail: '',
@@ -27,12 +26,10 @@ export class AuthComponent implements OnInit {
     this.authStatus = this.authService.isAuth;
   }
 
-  onSignIn() {
-    console.log('Validation : ' + this.validationStatus);
-    if (this.validationStatus === 0) { // Erreur
-      this.authFailed = 'Erreur avec la database';
-    } else {
-      if (this.validationStatus === 2) { // Right password
+  onSignIn(validationStatus: number) {
+    console.log('Validation : ' + validationStatus);
+    switch (validationStatus) {
+      case 2: {
         this.authService.signIn().then(
           () => {
             this.authStatus = this.authService.isAuth;
@@ -40,16 +37,25 @@ export class AuthComponent implements OnInit {
             this.router.navigate(['accueil']);
           }
         );
-      } else {
-        // Wrong password
-          this.authFailed = 'Identifiants de connexion érronés';
-        }
+        break;
+      }
+      case 1: {
+        console.log('Identifiants de connexion érronés');
+        break;
+      }
+      case 0: {
+        console.log('Erreur avec la database');
+        break;
+      }
+      default: {
+        console.log('Nothing happens');
+      }
     }
   }
-  onClickSignIn() {
-    console.log(this.authService.authentification(this.auth, this.onSignIn));
-  }
 
+  onClickSignIn() {
+    this.authService.authentification(this.auth, this.onSignIn);
+  }
 
   onSignInAdmin() {
     this.authService.signInAdmin().then(
