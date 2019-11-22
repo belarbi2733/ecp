@@ -26,10 +26,10 @@ export class AuthComponent implements OnInit {
     this.authStatus = this.authService.isAuth;
   }
 
-  onSignIn(validationStatus: number) {
+  onSignIn(validationStatus: boolean) {
     console.log('Validation : ' + validationStatus);
     switch (validationStatus) {
-      case 2: {
+      case true: {
         this.authService.signIn().then(
           () => {
             this.authStatus = this.authService.isAuth;
@@ -39,12 +39,8 @@ export class AuthComponent implements OnInit {
         );
         break;
       }
-      case 1: {
-        console.log('Identifiants de connexion érronés');
-        break;
-      }
-      case 0: {
-        console.log('Erreur avec la database');
+      case false: {
+        this.authFailed = 'Identifiants de connexion érronés';
         break;
       }
       default: {
@@ -54,7 +50,12 @@ export class AuthComponent implements OnInit {
   }
 
   onClickSignIn() {
-    this.authService.authentification(this.auth, this.onSignIn);
+    this.authService.authentification(this.auth)
+      .then((validationStatus: boolean) => {
+      this.onSignIn(validationStatus);})
+      .catch(() => {
+      this.authFailed = 'Erreur avec la database';
+    });
   }
 
   onSignInAdmin() {

@@ -47,32 +47,28 @@ export class AuthService {
     this.isAdmin = false;
   }
 
-  authentification(data: DataAuth, onSignIn: (response: number) => void) {
-    let validationStatus  = -1;
-    this.http.post(`${this.url}/auth`, data)
-      .subscribe(
-      res => {
-        console.log('Auth : ' + res);
-        if (res === true) {
-          console.log('Bon password');
-          validationStatus = 2; // Right password
-          console.log(validationStatus);
-          onSignIn(validationStatus);
-        } else {
-          if (res === false) {
-            console.log('Mauvais password');
-            validationStatus = 1; // Wrong password
-            console.log(validationStatus);
-            onSignIn(validationStatus);
-          }
-        }
-      },
-      err => {
-        console.log('Error occured:' + err);
-        validationStatus = 0;
-        onSignIn(validationStatus);
-      }
-    );
+  authentification(data: DataAuth) {
+    return new Promise(
+      (resolve, reject) => {
+        this.http.post(`${this.url}/auth`, data)
+          .subscribe(
+            res => {
+              console.log('Auth : ' + res);
+              if (res === true) {
+                console.log('Bon password');
+              } else {
+                if (res === false) {
+                  console.log('Mauvais password');
+                }
+              }
+              resolve(res); // Renvoie true ou false selon si bon ou pas
+            },
+            err => {
+              console.log('Error occured:' + err);
+              reject();
+            }
+          );
+      });
   }
 }
 
