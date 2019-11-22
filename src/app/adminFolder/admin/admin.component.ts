@@ -8,6 +8,7 @@ import { Color, Label } from 'ng2-charts';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
+  exemplStat = 25;
 
   constructor() { }
 

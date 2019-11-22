@@ -56,6 +56,7 @@ import { MesTrajComponent } from './reservations/mes-traj/mes-traj.component';
 import { MesColisComponent } from './reservations/mes-colis/mes-colis.component';
 import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component';
 import { Navbar2Component } from './navbar2/navbar2.component';
+import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
 
 
 const appRoutes: Routes = [
@@ -131,7 +132,8 @@ const appRoutes: Routes = [
     MesTrajComponent,
     MesColisComponent,
     MesTournComponent,
-    Navbar2Component
+    Navbar2Component,
+    AdmintableComponent
   ],
   imports: [
     BrowserModule,
