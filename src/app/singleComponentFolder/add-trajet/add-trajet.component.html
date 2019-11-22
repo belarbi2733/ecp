@@ -3,15 +3,15 @@
 <h3>Ajouter un trajet : </h3>
 
 <div class="form-group">
-  <!-- <label for="trajDepart">Départ : {{ trajDepart }} </label> -->
-  <input type="text" class="form-control" placeholder="Départ" [(ngModel)]="trajDepart">
-  <!-- <label for="trajDestination">Destination : {{ trajDestination }} </label> -->
-  <input type="text" class="form-control" placeholder="Destination" [(ngModel)]="trajDestination">
-  <!-- <label for="trajDate">Heure et date : {{ trajDate }} </label> -->
-  <input type="date" class="form-control" placeholder="Date du départ" [(ngModel)]="trajDate">
+  <label for="depart">Départ : </label>
+  <input name="depart" id="depart" #destination="ngModel"    [(ngModel)]="addtrajet.depart" class="form-control" >
+  <label for="depart">Destination : </label>
+  <input name="destination" id="destination" #destination="ngModel" class="form-control" [(ngModel)]="addtrajet.destination">
+  <label for="depart">Date : </label>
+  <input name="destination" id="destination" #destination="ngModel"  class="form-control"  [(ngModel)]="addtrajet.date">
 </div>
 
-<button class="btn btn-success" (click)="addTraj()">
+<button class="btn btn-success" (click)="addTraj(addtrajet)">
   Ajouter
 </button>
 
