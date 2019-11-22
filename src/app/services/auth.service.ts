@@ -47,32 +47,32 @@ export class AuthService {
     this.isAdmin = false;
   }
 
-  authentification(data: DataAuth, onSignIn: () => void): number {
-    let validationStatus = -1;
+  authentification(data: DataAuth, onSignIn: (response: number) => void) {
+    let validationStatus  = -1;
     this.http.post(`${this.url}/auth`, data)
       .subscribe(
-        res => {
-          console.log('Auth : ' + res);
-          if (res === true) {
-            console.log('Bon password');
-            validationStatus = 2; // Right password
+      res => {
+        console.log('Auth : ' + res);
+        if (res === true) {
+          console.log('Bon password');
+          validationStatus = 2; // Right password
+          console.log(validationStatus);
+          onSignIn(validationStatus);
+        } else {
+          if (res === false) {
+            console.log('Mauvais password');
+            validationStatus = 1; // Wrong password
             console.log(validationStatus);
-            onSignIn();
-          } else {
-            if (res === false) {
-              console.log('Mauvais password');
-              validationStatus = 1; // Wrong password
-              console.log(validationStatus);
-              onSignIn();
-            }
+            onSignIn(validationStatus);
           }
-        },
-        err => {
-          console.log('Error occured:' + err);
-          validationStatus = 0;
-          onSignIn();
         }
-      );
-    return validationStatus;
+      },
+      err => {
+        console.log('Error occured:' + err);
+        validationStatus = 0;
+        onSignIn(validationStatus);
+      }
+    );
   }
 }
+
