@@ -59,6 +59,7 @@ import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component'
 import { Navbar2Component } from './navbar2/navbar2.component';
 import { PaypalComponent } from './paypal/paypal.component';
 import {InscrService} from './services/inscr.service';
+import {AddColisService} from './singleComponentFolder/add-colis/add-colis.service';
 
 
 const appRoutes: Routes = [
@@ -152,7 +153,8 @@ const appRoutes: Routes = [
     AuthService,
     AuthGuard,
     InscrService,
-    AdminGuard
+    AdminGuard,
+    AddColisService
   ],
   bootstrap: [AppComponent]
 })

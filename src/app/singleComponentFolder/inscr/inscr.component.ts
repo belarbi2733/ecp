@@ -19,7 +19,6 @@ export class InscrComponent implements OnInit {
     verification_mot_passe: ''
   };
 
-  dataNode: DataInscription[];
   error: string;
   constructor(private inscrService: InscrService) {
   }

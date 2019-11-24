@@ -2,6 +2,7 @@ let express = require('express');
 let app = express();
 let User = require('./user');
 let bodyParser = require('body-parser');
+let Colis = require('./colis');
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -45,6 +46,21 @@ app.post('/auth', function (req,res) {
       else {
         res.json(false);
       }
+    }
+  });
+});
+
+
+app.post('/addColis', function (req, res) {
+  Colis.addColis(req,function(err,rows){
+    console.log(req.body);
+    console.log(rows);
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      res.json(rows);
     }
   });
 });
