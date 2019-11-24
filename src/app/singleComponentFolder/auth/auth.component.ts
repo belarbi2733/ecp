@@ -52,7 +52,7 @@ export class AuthComponent implements OnInit {
   onClickSignIn() {
     this.authService.authentification(this.auth)
       .then((validationStatus: boolean) => {
-      this.onSignIn(validationStatus);})
+      this.onSignIn(validationStatus); } )
       .catch(() => {
       this.authFailed = 'Erreur avec la database';
     });
