@@ -57,6 +57,7 @@ import { MesColisComponent } from './reservations/mes-colis/mes-colis.component'
 import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component';
 import { Navbar2Component } from './navbar2/navbar2.component';
 import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
+import { MailingService } from './services/mailing.service';
 
 
 const appRoutes: Routes = [
@@ -147,7 +148,8 @@ const appRoutes: Routes = [
     AccueilService,
     AuthService,
     AuthGuard,
-    AdminGuard
+    AdminGuard,
+    MailingService
   ],
   bootstrap: [AppComponent]
 })
