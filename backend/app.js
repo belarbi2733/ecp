@@ -19,6 +19,8 @@ app.use(function(req, res, next) {
 
 app.use(bodyParser.json());
 
+// !!!!!!!!!! Il faut mettre votre mdp de votre database dans db.js sinon ca fonctionne pas
+
 app.post('/inscription',function (req, res) {
   User.addUtilisateur(req,function(err,result){
     console.log(req.body);
