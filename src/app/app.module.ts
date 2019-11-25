@@ -5,6 +5,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxPayPalModule } from 'ngx-paypal';
 //services
 import { AuthGuard } from './services/auth-guard.service';
 import { AdminGuard } from './services/admin-guard.service';
@@ -58,7 +59,9 @@ import { MesColisComponent } from './reservations/mes-colis/mes-colis.component'
 import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component';
 import { Navbar2Component } from './navbar2/navbar2.component';
 import { RouteData } from './searchFolder/map/map.interface';
-
+import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
+import { MailingService } from './services/mailing.service';
+import { PaypalComponent } from './paypal/paypal.component';
 
 
 const appRoutes: Routes = [
@@ -76,6 +79,7 @@ const appRoutes: Routes = [
   { path: 'mes-tourn', canActivate: [AuthGuard], component: MesTournComponent },
   { path: 'messagerie', canActivate: [AuthGuard], component: MessagerieComponent },
   { path: 'payements', canActivate: [AuthGuard], component: PaymentsComponent },
+  { path: 'paypal', canActivate: [AuthGuard], component: PaypalComponent },
   { path: 'admin', canActivate: [AdminGuard], component: AdminComponent },
   { path: 'admin-list-ut', canActivate: [AdminGuard], component: AdminListUtComponent },
   { path: 'admin-list-traj', canActivate: [AdminGuard], component: AdminListTrajComponent },
@@ -108,6 +112,7 @@ const appRoutes: Routes = [
     SidebarComponent,
     AddTrajetComponent,
     AddColisComponent,
+    PaypalComponent,
     FooterComponent,
     AideComponent,
     ContactComponent,
@@ -136,11 +141,7 @@ const appRoutes: Routes = [
     MesColisComponent,
     MesTournComponent,
     Navbar2Component,
-    
-    
-    
-    
-
+    AdmintableComponent
   ],
   imports: [
     BrowserModule,
@@ -148,14 +149,16 @@ const appRoutes: Routes = [
     FormsModule,
     RouterModule.forRoot(appRoutes, { enableTracing: true }),
     ChartsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxPayPalModule
   ],
   providers: [
     AccueilService,
     AuthService,
     AuthGuard,
     AdminGuard,
-    DriverService
+    DriverService,
+    MailingService
   ],
   bootstrap: [AppComponent]
 })
