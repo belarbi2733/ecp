@@ -10,6 +10,7 @@ import { AuthGuard } from './services/auth-guard.service';
 import { AdminGuard } from './services/admin-guard.service';
 import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/auth.service';
+import { DriverService } from './searchFolder/map/map.service';
 // import { NavbarModule, WavesModule, ButtonsModule } from 'angular-bootstrap-md'
 
 //components
@@ -56,6 +57,8 @@ import { MesTrajComponent } from './reservations/mes-traj/mes-traj.component';
 import { MesColisComponent } from './reservations/mes-colis/mes-colis.component';
 import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component';
 import { Navbar2Component } from './navbar2/navbar2.component';
+import { RouteData } from './searchFolder/map/map.interface';
+
 
 
 const appRoutes: Routes = [
@@ -81,7 +84,8 @@ const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
   { path: '', component: AccueilComponent },
-  { path: '**', component: FourOhFourComponent }
+  { path: '**', component: FourOhFourComponent },
+  { path: 'map', canActivate: [DriverService], component: MapComponent },
 
 
    //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
@@ -131,7 +135,12 @@ const appRoutes: Routes = [
     MesTrajComponent,
     MesColisComponent,
     MesTournComponent,
-    Navbar2Component
+    Navbar2Component,
+    
+    
+    
+    
+
   ],
   imports: [
     BrowserModule,
@@ -145,7 +154,8 @@ const appRoutes: Routes = [
     AccueilService,
     AuthService,
     AuthGuard,
-    AdminGuard
+    AdminGuard,
+    DriverService
   ],
   bootstrap: [AppComponent]
 })
