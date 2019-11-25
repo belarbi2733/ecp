@@ -6,14 +6,15 @@ import { ChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPayPalModule } from 'ngx-paypal';
-//services
+
+// services
 import { AuthGuard } from './services/auth-guard.service';
 import { AdminGuard } from './services/admin-guard.service';
 import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/auth.service';
 // import { NavbarModule, WavesModule, ButtonsModule } from 'angular-bootstrap-md'
 
-//components
+// components
 import { AppComponent } from './app.component';
 import { ProfileTabsComponent } from './profileFolder/profile-tabs/profile-tabs.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -59,11 +60,13 @@ import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component'
 import { Navbar2Component } from './navbar2/navbar2.component';
 import { PaypalComponent } from './paypal/paypal.component';
 import {InscrService} from './services/inscr.service';
-import {AddColisService} from './singleComponentFolder/add-colis/add-colis.service';
+import {AddColisService} from './services/add-colis.service';
+import {AddtrajetService} from './services/addtrajet.service';
 
 
 const appRoutes: Routes = [
 
+  // tslint:disable-next-line:max-line-length
   { path: 'profile', canActivate: [AuthGuard], component: ProfileTabsComponent }, // :id is a route parameter and data is to parse static data
   { path: 'accueil', component: AccueilComponent },
   { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
@@ -89,8 +92,8 @@ const appRoutes: Routes = [
   { path: '**', component: FourOhFourComponent }
 
 
-   //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
-   //                                      configuration. This is useful for displaying a "404 - Not Found" page or redirecting to another route. It MUST BE THE LAST ROUTE
+  // tslint:disable-next-line:max-line-length
+  //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the configuration. This is useful for displaying a "404 - Not Found" page or redirecting to another route. It MUST BE THE LAST ROUTE
 ];
 
 @NgModule({
@@ -154,7 +157,8 @@ const appRoutes: Routes = [
     AuthGuard,
     InscrService,
     AdminGuard,
-    AddColisService
+    AddColisService,
+    AddtrajetService
   ],
   bootstrap: [AppComponent]
 })

@@ -3,9 +3,9 @@
 <h3>Authentification</h3>
 
 <div class="form-group">
-  <!-- <label for="connectMail">Adresse mail : {{ connectMail }} </label> -->
+  <label> Adresse mail : </label>
   <input name="mail" id="mail" type="email" class="form-control" #mail="ngModel" placeholder="Adresse mail" [(ngModel)]="auth.mail">
-  <!-- <label for="connectMdp">Mot de passe : {{ connectMdp }} </label> -->
+  <label> Mot de passe : </label>
   <input name="password" id="password" type="password" #password="ngModel" class="form-control" placeholder="Mot de passe" [(ngModel)]="auth.password">
 </div>
 

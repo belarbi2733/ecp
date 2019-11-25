@@ -4,9 +4,8 @@ let Colis = {
 
   addColis: function(colis, callback)
   {
-
     console.log("Insert colis en cours...");
-    return db.query('INSERT INTO Colis () VALUES (NULL, ?, ?, ?, ?)',
+    return db.query('INSERT INTO Colis  VALUES (NULL, ?, ?, ?, ?)',
       [colis.id, colis.id_user, colis.poids, colis.dimension, colis.id_trajet], callback);
   },
 
