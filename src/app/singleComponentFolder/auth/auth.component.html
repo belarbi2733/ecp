@@ -3,13 +3,13 @@
 <h3>Authentification</h3>
 
 <div class="form-group">
-  <!-- <label for="connectMail">Adresse mail : {{ connectMail }} </label> -->
-  <input type="email" class="form-control" placeholder="Adresse mail" [(ngModel)]="connectMail">
-  <!-- <label for="connectMdp">Mot de passe : {{ connectMdp }} </label> -->
-  <input type="text" class="form-control" placeholder="Mot de passe" [(ngModel)]="connectMdp">
+  <label> Adresse mail : </label>
+  <input name="mail" id="mail" type="email" class="form-control" #mail="ngModel" placeholder="Adresse mail" [(ngModel)]="auth.mail">
+  <label> Mot de passe : </label>
+  <input name="password" id="password" type="password" #password="ngModel" class="form-control" placeholder="Mot de passe" [(ngModel)]="auth.password">
 </div>
 
-<button class="btn" *ngIf="!authStatus" (click)="onSignIn()">
+<button class="btn" *ngIf="!authStatus" (click)="onClickSignIn()">
   Se connecter
 </button>
 <button class="btn" *ngIf="!authStatus" (click)="onSignInAdmin()">
@@ -21,7 +21,7 @@
 
 <br>
 
-<br>
+<label>{{authFailed}}</label>
 
 <br>
 

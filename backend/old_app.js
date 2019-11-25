@@ -56,7 +56,7 @@ app.get('/',function (req,res) {
 
     var inscription = [{
         id_utilisateur: 'test_id',
-        adresse_mail: 'test_adress',
+        mail: 'test_adress',
         mot_passe: 'test_mot',
         verification_mot_passe: 'test_mot',
     }];
