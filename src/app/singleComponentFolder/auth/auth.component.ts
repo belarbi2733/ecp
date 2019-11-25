@@ -1,36 +1,64 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import {DataAuth} from './auth.interface';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css','../../app.component.css']
+  styleUrls: ['./auth.component.css', '../../app.component.css']
 })
 export class AuthComponent implements OnInit {
 
-  @Input() connectMail: string;
-  @Input() connectMdp: string;
   authStatus: boolean;
-  adminStatus:boolean;
+  adminStatus: boolean;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  auth: DataAuth = {
+    mail: '',
+    password: ''
+};
+
+  authFailed: string;
+  constructor(private authService: AuthService, private router: Router) { console.log('Coucou');
+  }
 
   ngOnInit() {
     this.authStatus = this.authService.isAuth;
   }
 
-  onSignIn(){
-    this.authService.signIn().then(
-      () => {
-        this.authStatus = this.authService.isAuth;
-        this.adminStatus = this.authService.isAdmin;
-        this.router.navigate(['accueil']);
+  onSignIn(validationStatus: boolean) {
+    console.log('Validation : ' + validationStatus);
+    switch (validationStatus) {
+      case true: {
+        this.authService.signIn().then(
+          () => {
+            this.authStatus = this.authService.isAuth;
+            this.adminStatus = this.authService.isAdmin;
+            this.router.navigate(['accueil']);
+          }
+        );
+        break;
       }
-    );
+      case false: {
+        this.authFailed = 'Identifiants de connexion érronés';
+        break;
+      }
+      default: {
+        console.log('Nothing happens');
+      }
+    }
   }
 
-  onSignInAdmin(){
+  onClickSignIn() {
+    this.authService.authentification(this.auth)
+      .then((validationStatus: boolean) => {
+      this.onSignIn(validationStatus); } )
+      .catch(() => {
+      this.authFailed = 'Erreur avec la database';
+    });
+  }
+
+  onSignInAdmin() {
     this.authService.signInAdmin().then(
       () => {
         this.authStatus = this.authService.isAuth;
@@ -40,14 +68,13 @@ export class AuthComponent implements OnInit {
     );
   }
 
-  onSignOut(){
+  onSignOut() {
     this.authService.signOut();
     this.authStatus = this.authService.isAuth;
     this.adminStatus = this.authService.isAdmin;
   }
 
-  toInscr(){
+  toInscr() {
     this.router.navigate(['inscrire']);
   }
-
 }

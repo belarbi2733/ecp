@@ -62,6 +62,9 @@ import { RouteData } from './searchFolder/map/map.interface';
 import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
 import { MailingService } from './services/mailing.service';
 import { PaypalComponent } from './paypal/paypal.component';
+import {InscrService} from './services/inscr.service';
+import {AddColisService} from './services/add-colis.service';
+import {AddtrajetService} from './services/addtrajet.service';
 
 
 const appRoutes: Routes = [
@@ -158,7 +161,10 @@ const appRoutes: Routes = [
     AuthGuard,
     AdminGuard,
     DriverService,
-    MailingService
+    MailingService,
+    InscrService,
+    AddColisService,
+    AddtrajetService
   ],
   bootstrap: [AppComponent]
 })

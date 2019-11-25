@@ -5,7 +5,7 @@ let Utilisateur = {
     addUtilisateur: function(utilisateur, callback)
     {
       console.log("Insert user en cours...");
-      db.query('INSERT INTO utilisateur (mail,password) VALUES ($1, $2)', [utilisateur.body.adresse_mail, utilisateur.body.mot_passe], callback);
+      db.query('INSERT INTO utilisateur (mail,password,statut) VALUES ($1, $2, $3)', [utilisateur.body.adresse_mail, utilisateur.body.mot_passe,1], callback);
     },
 
     updateUtilisateur: function(utilisateur, callback)
@@ -21,7 +21,8 @@ let Utilisateur = {
 
     getUtilisateur: function(utilisateur, callback)
     {
-        return db.query('SELECT * FROM utilisateur WHERE nom = $1 OR prenom = $2', [utilisateur.body.adresse_mail,utilisateur.body.mot_passe],callback);
+      console.log("getUser : " + utilisateur.body.mail);
+      return db.query('SELECT password FROM utilisateur WHERE mail = $1', [utilisateur.body.mail],callback);
     }
 };
 

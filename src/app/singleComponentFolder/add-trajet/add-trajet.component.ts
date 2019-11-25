@@ -1,24 +1,40 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import {DataTrajet} from './add-trajet.interface';
+import { Injectable } from '@angular/core';
+import { AddtrajetService } from '../../services/addtrajet.service';
+
 
 @Component({
   selector: 'app-add-trajet',
   templateUrl: './add-trajet.component.html',
-  styleUrls: ['./add-trajet.component.css','../../app.component.css']
+  styleUrls: ['./add-trajet.component.css', '../../app.component.css']
 })
+
+@Injectable()
 export class AddTrajetComponent implements OnInit {
+  addtraj: DataTrajet = {
+    id_utilisateur: null,
+    arrivee: '',
+    depart: '',
+    date: '',
+  };
 
-  @Input() trajDepart: string;
-  @Input() trajDestination: string;
-  @Input() trajDate: Date;
+  trajDepart: string;
+  trajDestination: string;
+  trajDate: string;
 
-  constructor(private router: Router) { }
+  constructor(private addtrajserv: AddtrajetService  ) { }
 
   ngOnInit() {
+
   }
 
-  addTraj(){
-    this.router.navigate(['accueil']);
+  OnclickaddTraj(data: DataTrajet) {
+
+    console.log('Depart: ' + data.depart);
+    console.log('Destination: ' + data.arrivee);
+    this.addtrajserv.addtrajet(data);
   }
 
 }
+

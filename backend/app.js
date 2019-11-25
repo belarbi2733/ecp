@@ -1,16 +1,13 @@
-var http = require('http');
-var url = require('url');
-var express = require('express');
-var user ;
-var app = express();
-var bodyParser = require('body-parser');
+let http = require('http');
+let url = require('url');
+let express = require('express');
+let app = express();
+let bodyParser = require('body-parser');
+let User = require('./user');
+let Colis = require('./colis');
+let Trajet = require('./trajet');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
-// app.get('/', function (req, res) {
-//     res.setHeader('Content-Type', 'text/plain');
-//     res.send('hello word page d\'acceuille');
-//
-// })
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -22,8 +19,56 @@ app.use(function(req, res, next) {
 
 app.use(bodyParser.json());
 
-app.post('/inscription', function (req, res) {
-  User.addUtilisateur(req,function(err,rows){
+app.post('/inscription',function (req, res) {
+  User.addUtilisateur(req,function(err,result){
+    console.log(req.body);
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      res.json(result);
+    }
+  });
+});
+
+app.post('/auth', function (req,res) {
+  User.getUtilisateur(req, function (err, result) {
+    console.log(req.body);
+    console.log('err : ' + err);
+    if (err) {
+      res.status(400).json(err);
+      console.log("Erreur");
+    } else {
+      if(result.rows.length !== 0) { // Check si il y a le mail dans la database
+        if (result.rows[0].password === req.body.password) { //Check si les mots de passes correspondent
+          res.send(true);
+        }
+      }
+      else {
+        res.json(false);
+      }
+    }
+  });
+});
+
+
+app.post('/addColis', function (req, res) {
+  Colis.addColis(req,function(err,rows){
+    console.log(req.body);
+    console.log(rows);
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      res.json(rows);
+    }
+  });
+});
+
+app.post('/addtrajet' , function (req, res) {
+  Trajet.addTrajet(req,function(err,rows){
     console.log(req.body);
     console.log(rows);
     if(err) {
@@ -69,7 +114,7 @@ app.get('/sendmail/contact', (req, res) => {
         rejectUnauthorized : false
       }
     });
-  
+
     // setup email data with unicode symbols
     let mailOptions = {
         from: 'mail@sender.com', // sender address
@@ -78,17 +123,17 @@ app.get('/sendmail/contact', (req, res) => {
         text: 'Nouvelle demande de contacte reçue :', // plain text body
         html: output // html body
     };
-  
+
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             return console.log(error);
         }else{
-          console.log('Message sent: %s', info.messageId);   
+          console.log('Message sent: %s', info.messageId);
           console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
           res.send(output);
         }
-        
+
     });
 });
 
