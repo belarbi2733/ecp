@@ -1,1 +1,15 @@
-<div id="map"></div>
+
+<body class="use-all-space">
+    <div class="map-container use-all-space">
+        <form id="form" action="javascript:void(0)">
+            <select id="type">
+                <option>arrive at</option>
+                <option selected="selected">depart at</option>
+            </select>
+            <input id="date" type="datetime-local" pattern="\d{4}-\d{2}-\d{2} [0-1]?\d:[0-6]\d" />
+            <small class="warning">insert a date in format yyyy-MM-dd hh:mm</small>
+            <input type="submit" value="Submit" disabled="disabled" />
+        </form>
+        <div id="map" class="use-all-space"></div>
+    </div>
+</body>
