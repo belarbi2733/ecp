@@ -59,6 +59,7 @@ import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component'
 import { Navbar2Component } from './navbar2/navbar2.component';
 import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
 import { MailingService } from './services/mailing.service';
+import { PaypalComponent } from './paypal/paypal.component';
 
 
 const appRoutes: Routes = [
@@ -108,6 +109,7 @@ const appRoutes: Routes = [
     SidebarComponent,
     AddTrajetComponent,
     AddColisComponent,
+    PaypalComponent,
     FooterComponent,
     AideComponent,
     ContactComponent,

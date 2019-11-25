@@ -42,7 +42,7 @@ app.use(bodyParser.json({type : '*/*'}));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.json());
 
-app.use(express.urlencoded({extended:TextTrackCue}));
+app.use(express.urlencoded({extended:true}));
 app.get('/sendmail/contact', (req, res) => {
     let subject = req.query['subject'];
     let mail = req.query['mail'];
