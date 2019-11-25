@@ -1,5 +1,5 @@
 
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     body {
         overflow-x: hidden;
       }
@@ -46,5 +46,13 @@
     .navbar-toggler {
         z-index: 1;
     }
+    .logo, img {
+      padding: 0vw;
+      margin: 0vw;
+      max-height: 5vh;
   }
+  a{
+    color : grey;
+  }
+}
   

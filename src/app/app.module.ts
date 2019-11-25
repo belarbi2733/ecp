@@ -57,7 +57,8 @@ import { MesTrajComponent } from './reservations/mes-traj/mes-traj.component';
 import { MesColisComponent } from './reservations/mes-colis/mes-colis.component';
 import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component';
 import { Navbar2Component } from './navbar2/navbar2.component';
-import { PaypalComponent } from './paypal/paypal.component';
+import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
+import { MailingService } from './services/mailing.service';
 
 
 const appRoutes: Routes = [
@@ -135,7 +136,7 @@ const appRoutes: Routes = [
     MesColisComponent,
     MesTournComponent,
     Navbar2Component,
-    PaypalComponent
+    AdmintableComponent
   ],
   imports: [
     BrowserModule,
@@ -150,7 +151,8 @@ const appRoutes: Routes = [
     AccueilService,
     AuthService,
     AuthGuard,
-    AdminGuard
+    AdminGuard,
+    MailingService
   ],
   bootstrap: [AppComponent]
 })
