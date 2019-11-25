@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {DataColis} from './add-colis.interface';
-import {AddColisService} from './add-colis.service';
+import {AddColisService} from '../../services/add-colis.service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 
