@@ -1,18 +1,38 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {RouteData} from './map.interface';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import {DriverService} from './map.service';
 declare let L;
 declare let tomtom: any;
 declare let document:any;
+var iter =0;
+//var iteration = 0;
+var driverinfo ; //stocke les informations sur le trajet conducteur
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css'],
   encapsulation : ViewEncapsulation.None
 })
+
+
+@Injectable()
 export class MapComponent implements OnInit {
 
-  constructor() { }
-
+    donnee: RouteData = {
+        departuretime: null,
+        time: null,
+        distance: null,
+        trafficdelay: null
+      };
+    
+    dataNode: RouteData[];
+    constructor(private inscrService: DriverService, private router: Router, private http: HttpClient) {
+      }
   ngOnInit() {
+    
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
     // Set TomTom keys
@@ -20,7 +40,7 @@ export class MapComponent implements OnInit {
     tomtom.routingKey('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
     tomtom.searchKey('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
 
-
+    
     var formOptions = {
         closeOnMapClick: false,
         position: 'topleft',
@@ -107,21 +127,27 @@ function clickFirstListItem() {
     }
 }
 var expandVisibleRows = function(items, firstVisible, lastVisible) {
+    
     items.forEach(function(item, index) {
         if (lastVisible < index || index < firstVisible) {
             item.classList.remove('visible');
         } else {
             item.classList.add('visible');
         }
+    
     });
+
 };
 function updateScrollEvent(data) {
+
     var results = data.results;
+
     var list = batchRoutingControl.container.querySelector('ol');
     var items = Array.apply(null, list.querySelectorAll('li.item'));
     var cellHeight = 30;
     var lastVisible;
     var firstVisible;
+    
     list.removeEventListener('scroll', listScrollHandler);
     listScrollHandler = function() {
         firstVisible = Math.min(Math.ceil(list.scrollTop / cellHeight) - 1, results.length);
@@ -136,7 +162,9 @@ function updateScrollEvent(data) {
     };
     list.addEventListener('scroll', listScrollHandler);
     listScrollHandler();
+
     return data;
+
 }
 function requestNextPage(date, previousData) {
     if (batchRequestsLock) {
@@ -144,6 +172,7 @@ function requestNextPage(date, previousData) {
     }
     batchRequestsLock = 'page';
     try {
+        
         batch(timeSeries(date))
             .then(function(data) {
                 // batchRequestsLock can be changed in the meantime
@@ -159,6 +188,7 @@ function requestNextPage(date, previousData) {
             .then(updateScrollEvent)
             .then(updateListElements)
             .then(unlockBatchRequests, handleBatchRequestError);
+        
     } catch (err) {
         handleBatchRequestError(err);
     }
@@ -231,6 +261,10 @@ function showDetails(result) {
     delay.innerHTML = result.delay ? formatDiff(result.delay) : '--';
     live.innerHTML = result.liveTraffic ? formatDiff(result.liveTraffic) : '--';
     noTraffic.innerHTML = result.noTraffic ? formatDiff(result.noTraffic) : '--';
+
+    
+
+
 }
 var route;
 function drawRoute(result) {
@@ -263,7 +297,7 @@ function onRowClick(result) {
         .on('mouseover', showDetails.bind(null, result))
         .on('mouseout', showDetails);
 }
-function onRowMouseOver(result) {
+function onRowMouseOver(result,data:RouteData) {
     drawRoute(result);
     showDetails(result);
 }
@@ -341,6 +375,10 @@ function createDetails() {
     toValue.innerHTML = '--';
     return details;
 }
+
+
+
+
 function showError(list) {
     list.classList.add('empty', 'error');
 }
@@ -402,6 +440,7 @@ function updateListElements(data) {
         var date = element.querySelector('.date');
         var bar = element.querySelector('.bar');
         var to = element.querySelector('.to');
+
         from.innerHTML = formatTime(result.from);
         to.innerHTML = formatTime(result.to);
         date.classList.add('hidden');
@@ -435,7 +474,10 @@ function attachColorAndRatio(min, max) {
         return result;
     };
 }
-function prepareData(data) {
+
+
+
+function prepareData(data,donnee: RouteData) {
     var results = data.filter(function(record) {
         return typeof record.error === 'undefined';
     }).map(function(record) {
@@ -445,6 +487,32 @@ function prepareData(data) {
             geometry: feature.geometry
         };
     }).map(function(record) {
+
+        if (iter <1){
+
+            /*
+            donnee.departuretime = record.summary.departureTime ;
+            this.donnee.time = record.summary.travelTimeInSeconds ;
+            this.donnee.distance = record.summary.lengthInMeters ;
+            this.donnee.trafficdelay = record.summary.liveTrafficIncidentsTravelTimeInSeconds -record.summary.noTrafficTravelTimeInSeconds ;
+           
+            this.DriverService.inscription(donnee);
+            //console.log(donnee.time);
+            */
+            driverinfo =  {"departuretime" : record.summary.departureTime,
+            "traveltimeinseconds" : record.summary.travelTimeInSeconds,
+            "distanceinmeters" : record.summary.lengthInMeters,
+            "delaytraffic" : record.summary.liveTrafficIncidentsTravelTimeInSeconds -record.summary.noTrafficTravelTimeInSeconds,
+            "routegeometry" : record.geometry}; //premier élément de route geometry = coordonnées de départ, dernier = arrivée;
+            
+            var driverinfo = JSON.stringify(driverinfo);
+            
+            console.log(driverinfo);
+            //console.log(JSON.stringify(record.geometry));
+
+            iter = iter + 1; //comme ça ne stocke que pour le temps demander
+        }
+
         return {
             from: new Date(record.summary.departureTime),
             to: new Date(record.summary.arrivalTime),
@@ -455,6 +523,7 @@ function prepareData(data) {
             time: record.summary.travelTimeInSeconds,
             route: record.geometry
         };
+        
     });
     var times = results.map(function(record) {
         return record.time;
@@ -545,4 +614,14 @@ function formatDate(date) {
 }
 
 }
+
+getto(donnee: RouteData) {
+    this.donnee.departuretime =  driverinfo.departuretime;
+    this.donnee.time =  driverinfo.traveltimeinseconds;
+    this.router.navigate(['accueil']);
+    //this.DriverService.inscription(donnee);
+    console.log('temps de depart: ' + donnee.departuretime)
+    console.log ('temps : '+ donnee.time);
+}
+
 }
