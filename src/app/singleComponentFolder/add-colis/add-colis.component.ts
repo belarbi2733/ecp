@@ -2,8 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {DataColis} from './add-colis.interface';
 import {AddColisService} from '../../services/add-colis.service';
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
 
 
 @Component({
@@ -11,16 +9,18 @@ import {Injectable} from '@angular/core';
   templateUrl: './add-colis.component.html',
   styleUrls: ['./add-colis.component.css', '../../app.component.css']
 })
+
 export class AddColisComponent implements OnInit {
 
   addColis: DataColis = {
-  colisNom: '',
-  colisDepart: '',
-  colisDestination: '',
-  colisDate: '',
-  colisPoids: null,
-  colisVolume: null,
-  colisDescription: '',
+    idUser: 1,
+    nom: '',
+    depart: '',
+    arrivee: '',
+    date: '',
+    poids: 0,
+    dimension: 0,
+    description: '',
 };
   constructor(private router: Router, private addColisService: AddColisService) { }
 
@@ -29,16 +29,7 @@ export class AddColisComponent implements OnInit {
   }
 
   addCol(data: DataColis) {
-  this.addColisService.addColis(data);
-  this.router.navigate(['accueil']);
-  console.log('Nom colis: ' + data.colisNom);
-  console.log('Depart colis: ' + data.colisDepart);
-  console.log('Destination colis: ' + data.colisDestination);
-  console.log('Date colis: ' + data.colisDate);
-  console.log('Poids colis ' + data.colisPoids);
-  console.log('Volume colis: ' + data.colisVolume);
-  console.log('Description colis: ' + data.colisDescription);
-
+    this.addColisService.addColis(data);
   }
 
 }
