@@ -55,15 +55,21 @@ app.post('/auth', function (req,res) {
 
 app.post('/addColis', function (req, res) {
   Colis.addColis(req.body,function(err,result){
-    console.log(req);
+    console.log(req.body);
     if(err) {
       res.status(400).json(err);
-      console.log('Erreur');
+      console.log('Erreur add');
     }
-    else
-    {
-      res.json(result);
-      console.log(result);
+    else {
+      Colis.generateTrajet(req.body, req.body.depart, req.body.arrivee, function (err2, result2){
+        if(err2) {
+          res.status(400).json(err2);
+          console.log('Erreur generate');
+        }
+        else {
+          res.json(result);
+        }
+      });
     }
   });
 });
