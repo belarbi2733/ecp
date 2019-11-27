@@ -1,5 +1,3 @@
-let http = require('http');
-let url = require('url');
 let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
@@ -56,15 +54,16 @@ app.post('/auth', function (req,res) {
 
 
 app.post('/addColis', function (req, res) {
-  Colis.addColis(req,function(err,rows){
-    console.log(req.body);
-    console.log(rows);
+  Colis.addColis(req.body,function(err,result){
+    console.log(req);
     if(err) {
       res.status(400).json(err);
+      console.log('Erreur');
     }
     else
     {
-      res.json(rows);
+      res.json(result);
+      console.log(result);
     }
   });
 });

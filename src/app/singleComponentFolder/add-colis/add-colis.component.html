@@ -4,20 +4,20 @@
 
 
 <div class="form-group">
-  <label for="colisNom">Nom : {{ colisNom }} </label>
-      <input name="colisNom" id="colisNom" #colisNom = "ngModel"  [(ngModel)]="addColis.colisNom" class="form_control">
-  <label for="colisDepart">Départ : {{ colisDepart }} </label>
-      <input name="colisDepart" id="colisDepart" #colisDepart="ngModel" [(ngModel)]="addColis.colisDepart" class="form_control">
-  <label for="colisDestination">Destination : {{ colisDestination }} </label>
-      <input name="colisDestination" id="colisDestination" #colisDestination="ngModel" [(ngModel)]="addColis.colisDestination" class="form_control">
-  <label for="colisDate">Heure et date : {{ colisDate }} </label>
-      <input name="colisDate" id ="colisDate" #colisDate="ngModel" [(ngModel)]="addColis.colisDate" class="form_control">
-  <label for="colisPoids">Poids : {{ colisPoids }} </label>
-      <input name="colisPoids" id = "colisPoids" #colisPoids="ngModel" [(ngModel)]="addColis.colisPoids">
-  <label for="colisVolume">Volume : {{ colisVolume }} </label>
-      <input name="colisVolume" id = "colisVolume" #colisVolume="ngModel" [(ngModel)]="addColis.colisVolume" class ="form_control">
-  <label for="colisDescription">Description : {{ colisDescription }} </label>
-  <input name="colisDescription" id = "colisDescription" #colisDescription="ngModel" [(ngModel)]="addColis.colisDescription" class ="form_control">
+  <label for="colisNom">Nom : </label>
+      <input name="colisNom" id="colisNom" #colisNom = "ngModel"  [(ngModel)]="addColis.nom" class="form_control">
+  <label for="colisDepart">Départ : </label>
+      <input name="colisDepart" id="colisDepart" #colisDepart="ngModel" [(ngModel)]="addColis.depart" class="form_control">
+  <label for="colisDestination">Destination : </label>
+      <input name="colisDestination" id="colisDestination" #colisDestination="ngModel" [(ngModel)]="addColis.arrivee" class="form_control">
+  <label for="colisDate">Heure et date : </label>
+      <input name="colisDate" id ="colisDate" #colisDate="ngModel" [(ngModel)]="addColis.date" class="form_control">
+  <label for="colisPoids">Poids : </label>
+      <input name="colisPoids" id = "colisPoids" #colisPoids="ngModel" [(ngModel)]="addColis.poids">
+  <label for="colisVolume">Volume : </label>
+      <input name="colisVolume" id = "colisVolume" #colisVolume="ngModel" [(ngModel)]="addColis.dimension" class ="form_control">
+  <label for="colisDescription">Description : </label>
+  <input name="colisDescription" id = "colisDescription" #colisDescription="ngModel" [(ngModel)]="addColis.description" class ="form_control">
 </div>
 
 
