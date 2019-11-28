@@ -17,6 +17,7 @@ export class AddTrajetComponent implements OnInit {
     arrivee: '',
     depart: '',
     date: '',
+    places: null
   };
 
   trajDepart: string;

@@ -50,7 +50,7 @@ export class AuthService {
   authentification(data: DataAuth) {
     return new Promise(
       (resolve, reject) => {
-        this.http.post(`${this.url}/auth`, data)
+        this.http.post(`${this.url}/auth/checkPassword`, data)
           .subscribe(
             res => {
               console.log('Auth : ' + res);
@@ -69,6 +69,21 @@ export class AuthService {
             }
           );
       });
+  }
+
+  getIdForLocalStorage(data: DataAuth) {
+    return new Promise((resolve, reject) => {
+      console.log('getIdForLocalStorage() : ');
+      this.http.post(`${this.url}/auth/getId`, data).subscribe(
+        res => {
+          resolve(res);
+        },
+        err => {
+          console.log('Error occured in getId:' + err);
+          reject();
+        }
+      );
+    });
   }
 }
 

@@ -1,23 +1,23 @@
 <div class="container content">
 
-<h3>Ajouter un colis : </h3>
+<h3>Ajouter un colis</h3>
 
 
 <div class="form-group">
-  <label for="colisNom">Nom : </label>
-      <input name="colisNom" id="colisNom" #colisNom = "ngModel"  [(ngModel)]="addColis.nom" class="form_control">
-  <label for="colisDepart">Départ : </label>
-      <input name="colisDepart" id="colisDepart" #colisDepart="ngModel" [(ngModel)]="addColis.depart" class="form_control">
-  <label for="colisDestination">Destination : </label>
-      <input name="colisDestination" id="colisDestination" #colisDestination="ngModel" [(ngModel)]="addColis.arrivee" class="form_control">
-  <label for="colisDate">Heure et date : </label>
-      <input name="colisDate" id ="colisDate" #colisDate="ngModel" [(ngModel)]="addColis.date" class="form_control">
-  <label for="colisPoids">Poids : </label>
-      <input name="colisPoids" id = "colisPoids" #colisPoids="ngModel" [(ngModel)]="addColis.poids">
-  <label for="colisVolume">Volume : </label>
-      <input name="colisVolume" id = "colisVolume" #colisVolume="ngModel" [(ngModel)]="addColis.dimension" class ="form_control">
-  <label for="colisDescription">Description : </label>
-  <input name="colisDescription" id = "colisDescription" #colisDescription="ngModel" [(ngModel)]="addColis.description" class ="form_control">
+  <!-- <label for="colisNom">Nom : </label> -->
+      <input name="colisNom" id="colisNom" #colisNom = "ngModel" placeholder="Nom du colis" [(ngModel)]="addColis.nom" class="form-control">
+  <!-- <label for="colisDepart">Départ : </label> -->
+      <input name="colisDepart" id="colisDepart" #colisDepart="ngModel" placeholder="Lieu de départ" [(ngModel)]="addColis.depart" class="form-control">
+  <!-- <label for="colisDestination">Destination : </label> -->
+      <input name="colisDestination" id="colisDestination" #colisDestination="ngModel" placeholder="Lieu d'arrivée" [(ngModel)]="addColis.arrivee" class="form-control">
+  <!-- <label for="colisDate">Heure et date : </label> -->
+      <input name="colisDate" id ="colisDate" #colisDate="ngModel" placeholder="Date/Heure" [(ngModel)]="addColis.date" class="form-control">
+  <!-- <label for="colisPoids">Poids : </label> -->
+      <input name="colisPoids" id = "colisPoids" #colisPoids="ngModel" placeholder="Poids du colis en kg (ex : 2)" [(ngModel)]="addColis.poids" class="form-control">
+  <!-- <label for="colisVolume">Volume : </label> -->
+      <input name="colisVolume" id = "colisVolume" #colisVolume="ngModel" placeholder="Dimension du colis" [(ngModel)]="addColis.dimension" class ="form-control">
+  <!-- <label for="colisDescription">Description : </label> -->
+  <textarea name="colisDescription" id = "colisDescription" #colisDescription="ngModel" placeholder="Description" rows=2 [(ngModel)]="addColis.description" class ="form-control"></textarea>
 </div>
 
 

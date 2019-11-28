@@ -9,15 +9,16 @@ import {DataPersonal} from './personal-data.interface';
 export class PersonalDataComponent implements OnInit {
 
   personalInfos: DataPersonal = {
-    nom: 'Nom',
-    prenom: 'Prenom',
-    sexe: 'Homme',
-    mail: 'Mail',
-    tel: '0492456789',
+    nom: '',
+    prenom: '',
+    sexe: '',
+    mail: '',
+    tel: '',
     date_naiss: ''
 }
 
-  constructor() { }
+  constructor() { const idUser = JSON.parse(localStorage.getItem('idUser')).id; // Loading idUser in localStorage
+                  }
 
   ngOnInit() {
   }

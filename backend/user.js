@@ -19,10 +19,21 @@ let Utilisateur = {
         return db.query('DELETE FROM utilisateur WHERE id_User = utilisateur.id_User', callback);
     },
 
-    getUtilisateur: function(utilisateur, callback)
+    checkPasswordByMail: function(utilisateur, callback)
     {
-      console.log("getUser : " + utilisateur.body.mail);
+      console.log("checkPassword : " + utilisateur.body.mail);
       return db.query('SELECT password FROM utilisateur WHERE mail = $1', [utilisateur.body.mail],callback);
+    },
+
+    getIdUtilisateurByMail: function(mail, callback)
+    {
+      console.log("getId : " + mail);
+      return db.query('SELECT id FROM utilisateur WHERE mail = $1', [mail], callback);
+    },
+
+    getMailById: function(id, callback)
+    {
+      console.log("getMail : ");
     }
 };
 

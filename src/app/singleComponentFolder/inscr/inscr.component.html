@@ -2,12 +2,12 @@
   <h3>Inscription</h3>
 
   <div class="form-group">
-    <label for="adresse_mail">Adresse mail : </label>
-    <input name="adresse_mail" type="email" id="adresse_mail" #adresse_mail="ngModel" [(ngModel)]="inscription.adresse_mail" class="form-control">
-    <label for="mot_passe">Mot de passe : </label>
-    <input name="mot_passe" type="password" id="mot_passe" #mot_passe="ngModel" [(ngModel)]="inscription.mot_passe" class="form-control">
-    <label for="verification_mot_passe">Vérification du mot de passe : </label>
-    <input name="verification_mot_passe" type="password" id="verification_mot_passe" #verification_mot_passe="ngModel" [(ngModel)]="inscription.verification_mot_passe" class="form-control">
+    <!--<label for="adresse_mail">Adresse mail</label>-->
+    <input name="adresse_mail" type="email" id="adresse_mail" #adresse_mail="ngModel" placeholder="Adresse mail" [(ngModel)]="inscription.adresse_mail" class="form-control">
+    <!---<label for="mot_passe">Mot de passe</label>-->
+    <input name="mot_passe" type="password" id="mot_passe" #mot_passe="ngModel" placeholder="Mot de passe" [(ngModel)]="inscription.mot_passe" class="form-control">
+    <!--<label for="verification_mot_passe">Vérification du mot de passe</label>-->
+    <input name="verification_mot_passe" type="password" id="verification_mot_passe" #verification_mot_passe="ngModel" placeholder="Vérification du mot de passe" [(ngModel)]="inscription.verification_mot_passe" class="form-control">
 
   </div>
 
