@@ -3,4 +3,5 @@ export interface DataTrajet {
   depart: string;
   arrivee: string;
   date: string;
+  places: number;
 }

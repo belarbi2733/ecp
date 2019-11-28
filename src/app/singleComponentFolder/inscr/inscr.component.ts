@@ -24,6 +24,9 @@ export class InscrComponent implements OnInit {
   }
   ngOnInit() {
   }
+
+  // Dans l'inscription faut vérifier que l'adresse mail n'est pas déjà dans la database !!! A faire
+
   inscrire(data: DataInscription) {
     if (data.mot_passe === '' || data.verification_mot_passe === '' || data.adresse_mail === '') {
       this.error = 'Certains champs ne sont pas complétés !';

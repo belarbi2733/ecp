@@ -18,8 +18,8 @@ export class AddColisComponent implements OnInit {
     depart: '',
     arrivee: '',
     date: '',
-    poids: 0,
-    dimension: 0,
+    poids: null,
+    dimension: null,
     description: '',
 };
   constructor(private router: Router, private addColisService: AddColisService) { }

@@ -1,36 +1,37 @@
+<div class="form-group">
 
-    <div class="form-group">
+  <!-- <label for="userNom">Nom : {{ userNom }}</label> -->
+  <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Nom" [(ngModel)]="personalInfos.nom">
 
-        <!-- <label for="userNom">Nom : {{ userNom }}</label> -->
-        <input type="text" class="form-control" id="name" aria-describedby="name" [(ngModel)]="personalInfos.nom">
+  <!-- <label for="userPrenom">Prénom : {{ userPrenom }}</label> -->
+  <input type="text" class="form-control" id="firstname" aria-describedby="firstname" placeholder="Prénom" [(ngModel)]="personalInfos.prenom">
 
-        <!-- <label for="userPrenom">Prénom : {{ userPrenom }}</label> -->
-        <input type="text" class="form-control" id="firstname" aria-describedby="firstname" [(ngModel)]="personalInfos.prenom">
+  <!-- <label for="userSexe">Sexe : {{ userSexe }}</label> -->
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="sexe" id="homme" [(ngModel)]="personalInfos.sexe" value="homme">
+    <label class="form-check-label" for="homme" style="margin-right:3rem;">
+      Homme
+    </label>
+    <input class="form-check-input" type="radio" name="sexe" id="femme" [(ngModel)]="personalInfos.sexe" value="femme">
+    <label class="form-check-label" for="femme">
+      Femme
+    </label>
+  </div>
 
-        <!-- <label for="userSexe">Sexe : {{ userSexe }}</label> -->
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="sexe" id="homme" [(ngModel)]="personalInfos.sexe" value="homme">
-            <label class="form-check-label" for="homme" style="margin-right:3rem;">
-                Homme
-            </label>
-            <input class="form-check-input" type="radio" name="sexe" id="femme" [(ngModel)]="personalInfos.sexe" value="femme">
-            <label class="form-check-label" for="femme">
-                Femme
-            </label>
-        </div>
+  <br>
 
-        <!-- <label for="userMail">Email address : {{ userMail }}</label> -->
-        <input type="email" class="form-control" id="email" aria-describedby="email" [(ngModel)]="personalInfos.mail">
+  <!-- <label for="userMail">Email address : {{ userMail }}</label> -->
+  <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="Adresse mail" [(ngModel)]="personalInfos.mail">
 
-        <!-- <label for="userTel">Numéro de téléphone : {{ userTel }}</label> -->
-        <input type="tel" class="form-control" id="phone" aria-describedby="phone" name="phone" pattern="[0-9]{10}" [(ngModel)]="personalInfos.tel">
-        <small class="form-text text-muted">Format: 0123456789</small>
+  <!-- <label for="userTel">Numéro de téléphone : {{ userTel }}</label> -->
+  <input type="tel" class="form-control" id="phone" aria-describedby="phone" name="phone" pattern="[0-9]{10}" placeholder="Téléphone" [(ngModel)]="personalInfos.tel">
+  <!-- <small class="form-text text-muted">Format: 0123456789</small> -->
 
-        <!-- <label for="userDate">Date de naissance : {{ userDate }}</label> -->
-        <input type="date" class="form-control" id="date" aria-describedby="date" [(ngModel)]="personalInfos.date_naiss">
+  <!-- <label for="userDate">Date de naissance : {{ userDate }}</label> -->
+  <input type="date" class="form-control" id="date" aria-describedby="date" placeholder="Date de naissance" [(ngModel)]="personalInfos.date_naiss">
 
-        <button class="btn" (click)="modifierInfo(personalInfos)">
-            Modifier vos informations
-          </button>
+  <button class="btn" (click)="modifierInfo(personalInfos)">
+    Modifier vos informations
+  </button>
 
-    </div>
+</div>

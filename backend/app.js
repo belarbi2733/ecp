@@ -32,24 +32,45 @@ app.post('/inscription',function (req, res) {
   });
 });
 
-app.post('/auth', function (req,res) {
-  User.getUtilisateur(req, function (err, result) {
+app.post('/auth/checkPassword', function (req,res) {
+  User.checkPasswordByMail(req, function (err, result) {
     console.log(req.body);
     console.log('err : ' + err);
     if (err) {
       res.status(400).json(err);
-      console.log("Erreur");
+      console.log("Erreur in checkPassword");
     } else {
       if(result.rows.length !== 0) { // Check si il y a le mail dans la database
         if (result.rows[0].password === req.body.password) { //Check si les mots de passes correspondent
-          res.send(true);
+          res.json(true);
+        }
+        else {
+          res.json(false); // Le cas où les mots de passe ne correspondent pas
+          console.log(false);
         }
       }
       else {
-        res.json(false);
+        res.json(false); // Le cas où le mail n'a pas été trouvé dans la database (result est vide)
+        console.log(false);
       }
     }
   });
+});
+
+app.post('/auth/getId', function (req,res) {
+  console.log('getAuth : ' + req.body.mail);
+  User.getIdUtilisateurByMail(req.body.mail, function (err, result) {
+    if(err) {
+      res.status(400).json(err);
+      console.log("Erreur in getId");
+    }
+    else {
+      if(result.rows.length !== 0) {
+        console.log("getId Ok : " + result.rows[0].id);
+        res.json(result.rows[0].id);
+      }
+    }
+  })
 });
 
 
@@ -75,7 +96,7 @@ app.post('/addColis', function (req, res) {
 });
 
 app.post('/addtrajet' , function (req, res) {
-  Trajet.addTrajet(req,function(err,rows){
+  Trajet.addTrajet(req.body,function(err,rows){
     console.log(req.body);
     console.log(rows);
     if(err) {

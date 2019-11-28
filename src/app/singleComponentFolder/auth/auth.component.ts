@@ -19,7 +19,7 @@ export class AuthComponent implements OnInit {
 };
 
   authFailed: string;
-  constructor(private authService: AuthService, private router: Router) { console.log('Coucou');
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   ngOnInit() {
@@ -52,10 +52,22 @@ export class AuthComponent implements OnInit {
   onClickSignIn() {
     this.authService.authentification(this.auth)
       .then((validationStatus: boolean) => {
-      this.onSignIn(validationStatus); } )
+        this.onSignIn(validationStatus);
+        if (validationStatus) {  // Si l'authentification est vérifiée
+          // On sauvegarde l'idUser en variable de session avec localStorage
+          this.authService.getIdForLocalStorage(this.auth).then((idUser: number) => {
+            console.log('idUser : ' + idUser);
+            const idJson = {id: idUser};
+            localStorage.setItem('idUser', JSON.stringify(idJson));
+          })
+            .catch(() => {
+              console.log('Error in getIdForLocalStorage');
+            });
+        }
+      })
       .catch(() => {
-      this.authFailed = 'Erreur avec la database';
-    });
+        this.authFailed = 'Erreur avec la database';
+      });
   }
 
   onSignInAdmin() {

@@ -1,14 +1,15 @@
 <div class="container content">
 
-  <h3>Ajouter un trajet : </h3>
+  <h3>Ajouter un trajet</h3>
 
   <div class="form-group">
-    <label>Départ :  </label>
-    <input name="Depart" id="depart" #depart="ngModel"  [(ngModel)]="addtraj.depart"  class="form-control">
-    <label>Arrivee :  </label>
-    <input name="Arrivee" id="arrivee" #destination="ngModel" [(ngModel)]=addtraj.arrivee class="form-control">
-    <label>Date </label>
-    <input name="Date" id="date" #date="ngModel"  [(ngModel)]="addtraj.date"  class="form-control">
+    <!-- <label>Départ :  </label> -->
+    <input name="Depart" id="depart" #depart="ngModel" placeholder="Lieu de départ" [(ngModel)]="addtraj.depart"  class="form-control">
+    <!-- <label>Arrivee :  </label> -->
+    <input name="Arrivee" id="arrivee" #destination="ngModel" placeholder="Lieu d'arrivée" [(ngModel)]=addtraj.arrivee class="form-control">
+    <!-- <label>Date </label> -->
+    <input name="Date" id="date" #date="ngModel" placeholder="Date/Heure" [(ngModel)]="addtraj.date"  class="form-control">
+    <input name="NbrePlaces" id="nbrePlaces" #nbrePlaces="ngModel" placeholder="Nombre de places souhaité" [(ngModel)]="addtraj.places" class="form-control">
   </div>
 
   <button class="btn btn-success" (click)="OnclickaddTraj(addtraj)">
