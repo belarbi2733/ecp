@@ -33,7 +33,7 @@ app.post('/inscription',function (req, res) {
 });
 
 app.post('/auth/checkPassword', function (req,res) {
-  User.checkPasswordByMail(req, function (err, result) {
+  User.checkPasswordByMail(req.body, function (err, result) {
     console.log(req.body);
     console.log('err : ' + err);
     if (err) {
@@ -96,15 +96,53 @@ app.post('/addColis', function (req, res) {
 });
 
 app.post('/addtrajet' , function (req, res) {
-  Trajet.addTrajet(req.body,function(err,rows){
+  Trajet.addTrajet(req.body,function(err,result){
     console.log(req.body);
-    console.log(rows);
+    console.log(result);
     if(err) {
       res.status(400).json(err);
     }
     else
     {
-      res.json(rows);
+      res.json(result);
+    }
+  });
+});
+
+app.post('/personalData/getDataUser', function(req,res) {
+  User.getDataById(req.body.idUser, function(err, result) {
+    console.log(req.body);
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      const tmpResult = result.rows[0];
+      //console.log(result.rows[0]);
+      let objJson = {
+          "nom": tmpResult.nom,
+          "prenom": tmpResult.prenom,
+          "tel": tmpResult.telephone,
+          "mail": tmpResult.mail,
+          "sexe": tmpResult.sexe,
+          "date_naiss": tmpResult.date_naiss,
+          "description": tmpResult.descr
+      };
+      console.log(JSON.stringify(objJson));
+      res.json(objJson);
+    }
+  });
+});
+
+app.post('/personalData/update',function (req,res) {
+  console.log(req.body);
+  User.updateUtilisateur(req.body,function (err,result) {
+    if(err) {
+      res.status(400).json(err);
+    }
+    else {
+      // console.log(result);
+      res.json(result);
     }
   });
 });

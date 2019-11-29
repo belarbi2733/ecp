@@ -6,7 +6,7 @@ import { ChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPayPalModule } from 'ngx-paypal';
-//services
+// services
 import { AuthGuard } from './services/auth-guard.service';
 import { AdminGuard } from './services/admin-guard.service';
 import { AccueilService } from './services/accueil.service';
@@ -14,7 +14,7 @@ import { AuthService } from './services/auth.service';
 import { DriverService } from './searchFolder/map/map.service';
 // import { NavbarModule, WavesModule, ButtonsModule } from 'angular-bootstrap-md'
 
-//components
+// components
 import { AppComponent } from './app.component';
 import { ProfileTabsComponent } from './profileFolder/profile-tabs/profile-tabs.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -65,6 +65,7 @@ import { PaypalComponent } from './paypal/paypal.component';
 import {InscrService} from './services/inscr.service';
 import {AddColisService} from './services/add-colis.service';
 import {AddtrajetService} from './services/addtrajet.service';
+import {PersonalDataService} from './services/personal-data.service';
 
 
 const appRoutes: Routes = [
@@ -96,6 +97,7 @@ const appRoutes: Routes = [
 
 
    //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
+  // tslint:disable-next-line:max-line-length
    //                                      configuration. This is useful for displaying a "404 - Not Found" page or redirecting to another route. It MUST BE THE LAST ROUTE
 ];
 
@@ -164,7 +166,8 @@ const appRoutes: Routes = [
     MailingService,
     InscrService,
     AddColisService,
-    AddtrajetService
+    AddtrajetService,
+    PersonalDataService
   ],
   bootstrap: [AppComponent]
 })

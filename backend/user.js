@@ -11,18 +11,20 @@ let Utilisateur = {
     updateUtilisateur: function(utilisateur, callback)
     {
       console.log("Update user en cours...");
-      db.query('UPDATE Client SET nom = $1,prenom = $2,telephone = $3, sexe = $4, date_naiss = $5, descr = $6',callback);
+      db.query('UPDATE utilisateur SET nom = $1,prenom = $2,telephone = $3, mail = $4, sexe = $5, date_naiss = $6, descr = $7 WHERE id = $8',
+        [utilisateur.nom,utilisateur.prenom,utilisateur.tel,utilisateur.mail,utilisateur.sexe,utilisateur.date_naiss,utilisateur.description,utilisateur.idUser],
+        callback);
     },
 
     removeUtilisateur: function(utilisateur, callback)
     {
-        return db.query('DELETE FROM utilisateur WHERE id_User = utilisateur.id_User', callback);
+      return db.query('DELETE FROM utilisateur WHERE id_User = utilisateur.id_User', callback);
     },
 
     checkPasswordByMail: function(utilisateur, callback)
     {
-      console.log("checkPassword : " + utilisateur.body.mail);
-      return db.query('SELECT password FROM utilisateur WHERE mail = $1', [utilisateur.body.mail],callback);
+      console.log("checkPassword : " + utilisateur.mail);
+      return db.query('SELECT password FROM utilisateur WHERE mail = $1', [utilisateur.mail],callback);
     },
 
     getIdUtilisateurByMail: function(mail, callback)
@@ -31,9 +33,10 @@ let Utilisateur = {
       return db.query('SELECT id FROM utilisateur WHERE mail = $1', [mail], callback);
     },
 
-    getMailById: function(id, callback)
+    getDataById: function(id, callback)
     {
-      console.log("getMail : ");
+      console.log("getDataById : " + id);
+      return db.query('SELECT * FROM utilisateur WHERE id = $1', [id], callback);
     }
 };
 
