@@ -30,8 +30,15 @@
   <!-- <label for="userDate">Date de naissance : {{ userDate }}</label> -->
   <input type="date" class="form-control" id="date" aria-describedby="date" placeholder="Date de naissance" [(ngModel)]="personalInfos.date_naiss">
 
+  <textarea id = "colisDescription" placeholder="Une description de vous-même (facultatif)" rows=2 [(ngModel)]="personalInfos.description" class ="form-control"></textarea>
+
+  <br>
+
   <button class="btn" (click)="modifierInfo(personalInfos)">
     Modifier vos informations
   </button>
+  <br>
+  <br>
+  <label>{{error}}</label>
 
 </div>
