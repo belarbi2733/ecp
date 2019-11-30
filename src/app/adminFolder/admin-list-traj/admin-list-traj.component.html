@@ -22,7 +22,18 @@
         <a routerLink="/messagerie" routerLinkActive="active"> <input type="button" value="Ouvrir la messagerie" /></a>
       </td>
     </tr>
+
     <tr>
+      <td>{{adminListTraj.idUser}}</td>
+      <td>{{adminListTraj.depart}}</td>
+      <td>{{adminListTraj.arrivee}}</td>
+      <td>{{adminListTraj.nbrePlaces}}</td>
+      <td>
+        <a routerLink="/info-traj" routerLinkActive="active"> <input type="button" value="Plus d'info" /></a>
+        <a routerLink="/messagerie" routerLinkActive="active"> <input type="button" value="Ouvrir la messagerie" /></a>
+      </td>
+    </tr>
+ <!--   <tr>
       <input type="text" class="form-control" id="depart" aria-describedby="depart" placeholder="depart" [(ngModel)]="adminListTraj.depart">
 
 
@@ -31,6 +42,6 @@
         <a routerLink="/messagerie" routerLinkActive="active"> <input type="button" value="Ouvrir la messagerie" /></a>
       </td>
 
-    </tr>
+    </tr>-->
   </tbody>
 </table>
