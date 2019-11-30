@@ -128,7 +128,7 @@ app.post('/personalData/getDataUser', function(req,res) {
           "date_naiss": tmpResult.date_naiss,
           "description": tmpResult.descr
       };
-      console.log(JSON.stringify(objJson));
+      console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
       res.json(objJson);
     }
   });
@@ -146,6 +146,30 @@ app.post('/personalData/update',function (req,res) {
     }
   });
 });
+
+app.post('/admin-list-traj', function (req,res) {
+  Trajet.getTrajetById(req.body.idUser, function(err,result){
+    console.log(req.body);
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      const dispResult = result.rows[0]; // Il est possible qu'il y ait un problème car il n'affiche que le 1er
+
+      let trajObjJson = {
+        "depart": dispResult.depart,
+        "arrivee": dispResult.arrivee,
+        "nbre_places": dispResult.nbre_places,
+        "id": dispResult.id,
+
+      }; // création du fichier JSon
+      console.log(JSON.stringify(trajObjJson));
+      res.json(trajObjJson);
+    }
+  });
+  });
+
 
 //Script nodemailer
 app.use(cors({origin: "*"}));

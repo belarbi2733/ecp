@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 @Injectable()
 export class InscrService {
   constructor(private http: HttpClient, private router: Router) { }
-  url = 'http://localhost:8080';
+  url = 'http://192.168.2.9';
   getInscr() {
     return this
       .http
