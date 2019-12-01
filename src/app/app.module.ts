@@ -12,6 +12,7 @@ import { AdminGuard } from './services/admin-guard.service';
 import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/auth.service';
 import { DriverService } from './searchFolder/map/map.service';
+
 // import { NavbarModule, WavesModule, ButtonsModule } from 'angular-bootstrap-md'
 
 // components
@@ -66,10 +67,12 @@ import {InscrService} from './services/inscr.service';
 import {AddColisService} from './services/add-colis.service';
 import {AddtrajetService} from './services/addtrajet.service';
 import {PersonalDataService} from './services/personal-data.service';
+import {DataTrajService} from './services/admin-list-traj.service';
+import {MesTournService} from './services/mestourn.service';
+import {AdminListUtService} from './services/admin-list-user.service';
 
 
 const appRoutes: Routes = [
-
   { path: 'profile', canActivate: [AuthGuard], component: ProfileTabsComponent }, // :id is a route parameter and data is to parse static data
   { path: 'accueil', component: AccueilComponent },
   { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
@@ -167,7 +170,10 @@ const appRoutes: Routes = [
     InscrService,
     AddColisService,
     AddtrajetService,
-    PersonalDataService
+    PersonalDataService,
+    DataTrajService,
+    MesTournService,
+    AdminListUtService
   ],
   bootstrap: [AppComponent]
 })

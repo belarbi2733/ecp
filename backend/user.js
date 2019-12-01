@@ -37,7 +37,14 @@ let Utilisateur = {
     {
       console.log("getDataById : " + id);
       return db.query('SELECT * FROM utilisateur WHERE id = $1', [id], callback);
+    },
+
+    getAllUser: function(callback)
+    {
+      console.log("Get All User");
+      return db.query('SELECT * FROM utilisateur', callback);
     }
+
 };
 
 
