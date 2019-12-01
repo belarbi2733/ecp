@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DispListTraj } from '../adminFolder/admin-list-traj/dispadmintraj.interface';
 
-
+@Injectable()
 export class DataTrajService {
   constructor(private http: HttpClient, private router: Router) { }
   url = 'http://localhost:8080';
@@ -11,7 +11,7 @@ export class DataTrajService {
 
   dispAdminTraj(data)  {
     return new Promise((resolve, reject) => {
-      this.http.post(`${this.url}/admin-list-traj`, data)
+      this.http.get(`${this.url}/admin-list-traj`, data)
         .subscribe(
           res => {
             console.log('Test');

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input , OnInit } from '@angular/core';
 
-/*import {DataTrajService} from '../../services/admin-list-traj.service';*/
+import {DataTrajService} from '../../services/admin-list-traj.service';
 
 import {DataTrajet} from '../../singleComponentFolder/add-trajet/add-trajet.interface';
 import {DispListTraj} from './dispadmintraj.interface';
@@ -17,8 +17,8 @@ import {DispListTraj} from './dispadmintraj.interface';
 export class AdminListTrajComponent implements OnInit {
   adminListTraj: DispListTraj = {
     idUser: 2,
-    depart: 'Mons',
-    arrivee: 'Toulon',
+    depart: 'Test',
+    arrivee: 'Test',
     nbrePlaces: 4
   };
 
@@ -26,12 +26,12 @@ export class AdminListTrajComponent implements OnInit {
 
   error: string;
 
-  constructor(/*private  dataTrajService: DataTrajService*/) {
-    /*this.adminListTraj.idUser = JSON.parse(localStorage.getItem('idUser')).id;*/
+  constructor(private  dataTrajService: DataTrajService) {
+
   }
 
   ngOnInit() {
-   /* this.dataTrajService.dispAdminTraj(this.adminListTraj)
+    this.dataTrajService.dispAdminTraj(this.adminListTraj)
       .then((dataTrajet: DataTrajet) => {
         this.adminListTraj.arrivee = dataTrajet.arrivee;
         this.adminListTraj.depart = dataTrajet.depart;
@@ -40,7 +40,7 @@ export class AdminListTrajComponent implements OnInit {
       })
       .catch(() => {
         console.log('Error in getUserDataById');
-      });*/
+      });
   }
 }
 
