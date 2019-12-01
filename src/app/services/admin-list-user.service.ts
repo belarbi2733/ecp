@@ -9,7 +9,7 @@ export class AdminListUtService {
   url = 'http://localhost:8080';
 
   getAllUser(data){
-    return new promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.http.post(`${this.url}/admin-list-ut`, data)
         .subscribe(
           res => {
