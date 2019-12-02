@@ -10,18 +10,21 @@ import {DataVehicle} from './vehicle.interface';
 export class VehicleComponent implements OnInit {
 
   vehicule: DataVehicle = {
+    idUser: null,
     marque: '',
     modele: '',
     sieges: 1,
     volumeCoffre: null,
   };
 
-  constructor(private vehiculeService: VehicleService) { }
+  constructor(private vehiculeService: VehicleService) {
+    this.vehicule.idUser = JSON.parse(localStorage.getItem('idUser')).id;
+  }
 
   ngOnInit() {
   }
 
-  updateVehicule() {
+  updateVehicule(data: DataVehicle) {
 
   }
 
