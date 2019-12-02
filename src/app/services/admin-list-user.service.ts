@@ -10,7 +10,7 @@ export class AdminListUtService {
 
   getAllUser(data){
     return new Promise((resolve, reject) => {
-      this.http.post(`${this.url}/admin-list-ut`, data)
+      this.http.get(`${this.url}/admin-list-ut`, data)
         .subscribe(
           res => {
             console.log('testuser');
