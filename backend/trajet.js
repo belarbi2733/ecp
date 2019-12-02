@@ -23,6 +23,12 @@ let Trajet = {
   {
     console.log("getTrajetById : " + 1);
     return db.query('SELECT * FROM trajet', callback);
+  },
+
+  calcPrixTraj: function(callback)
+  {
+    console.log("Calcul du Prix du trajet");
+    return db.query('SELECT book_places, distance FROM trajet',callback);
   }
 };
 
