@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DataInscription} from './inscr.interface';
 import { Injectable } from '@angular/core';
-import { InscrService } from '../../services/inscr.service';
+import { InscrService } from '../../services/singleComponentServices/inscr.service';
 
 
 @Component({
