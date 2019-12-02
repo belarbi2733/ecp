@@ -30,7 +30,11 @@ app.use(bodyParser.json());
 6: mes-tourn
 7: personalData/getDataUser
 8: personalData/update
-9: admin-list-traj*/
+9: admin-list-traj
+10: adminListUt
+11: calcPrixTraj
+*/
+
 
 /*-------------------------1------------------------------------------------------------------------------------ */
 
@@ -282,12 +286,12 @@ app.get('/admin-list-traj', function(req,res){
 
     else {
       const tmpResultUser2 = result.rows[0];
-    /*  let trajObjJson = {
-        "depart": tmpResultUser2.depart,
+     let trajObjJson = {
+       /* "depart": tmpResultUser2.depart,
         "arrivee": tmpResultUser2.arrivee,
         "nbre_places": tmpResultUser2.nbre_places,
-        "id": tmpResultUser2.id_user
-      };*/
+        "id": tmpResultUser2.id_user */
+     };
       console.log(JSON.stringify(result.rows[0]));
       res.json(result.rows[0]);
     }
@@ -306,12 +310,65 @@ app.get('/admin-list-ut', function(req,res) {
       const tmpResultUser = result.rows[0];
       //console.log(result.rows[0]);
       let objJson = {
-        "nom": tmpResultUser.nom,
+        /*"nom": tmpResultUser.nom,
         "prenom": tmpResultUSer.prenom,
-        "nbre_traj": tmpResult.status
+        "nbre_traj": tmpResult.status*/
+        "nom": "Test",
+        "prenom": "Mathis",
+        "nbre_traj": 4
       };
       console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
       res.json(objJson);
+    }
+  });
+});
+
+/*-----------------------------------11---------------------------------------------------------------------------- */
+
+
+app.get('/calcPrixTraj', function(req,res){
+  Trajet.calcPrixTraj(function(err,result){
+    if(err) {
+      console.log("Erreur dans le calcul du prix. Les données de la base de donnée ne sont pas chargées");
+    }
+
+    else {
+      let prixCarb = 1.4;
+      let consoVoit = 4.5;
+      const tmpResultPrix = result.rows[0];
+      let distance = tmpResultPrix.distance;
+      let bookPlaces = tmpResultPrix.book_places;
+      function prixTraj(a,b,c) {
+        var d = ((c * b)/100)*a ;
+
+        d = discount(d,bookPlaces);
+        return d;
+
+      }
+      console.log(prixTraj(prixCarb,consoVoit, distance) + " € ");
+
+      function discount(prix, bookPlaces) {
+        if(bookPlaces === 1)
+        {
+          return prix - ((prix / 100) * 5);
+        }
+        if(bookPlaces === 2)
+        {
+          return prix - ((prix / 100) * 10);
+        }
+        if(bookPlaces === 3)
+        {
+          return prix - ((prix / 100) * 15);
+        }
+        if(bookPlaces === 4)
+        {
+          return prix - ((prix/100) * 20);
+        }
+        else {
+          console.log("Erreur trop ou pas assez de clients dans le véhicule");
+        }
+      }
+
     }
   });
 });
