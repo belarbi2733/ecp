@@ -27,7 +27,11 @@ export class Navbar2Component implements OnInit {
     this.OpenBtnDisplay = 'block';
   }
   seeAdmin() {
-    return JSON.parse(localStorage.getItem('isAdmin')).isAdmin;
+    if (localStorage.length !== 0) {
+      return JSON.parse(localStorage.getItem('isAdmin')).isAdmin;
+    } else {
+      return false;
+    }
   }
 
 }
