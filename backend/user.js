@@ -45,7 +45,14 @@ let Utilisateur = {
       return db.query('UPDATE utilisateur SET pref_animaux = $1, pref_fumer = $2 WHERE id = $3',
         [utilisateur.prefAnimaux, utilisateur.prefFumer,utilisateur.idUser],
         callback);
+    },
+
+    getAllUser: function(callback)
+    {
+      console.log("Get All User");
+      return db.query('SELECT * FROM utilisateur', callback);
     }
+
 };
 
 
