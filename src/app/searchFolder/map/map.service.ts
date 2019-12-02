@@ -3,16 +3,17 @@ import { Router } from '@angular/router';
 import { RouteData } from './map.interface';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ServerconfigService } from 'src/app/serverconfig.service';
 
 @Injectable()
 export class DriverService {
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private rurl:ServerconfigService) { }
   //(): Observable<HttpResponse<RouteData[]>> {
   //  return this.http.get<RouteData[]>(
   //    'http://localhost:8080', { observe: 'response' });
   //}
   
-  url = 'http://localhost:8080';
+  url = this.rurl.nodeUrl;
   getInscr() {
     return this
       .http

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ServerconfigService } from '../serverconfig.service';
 
 @Injectable()
 export class InscrService {
-  constructor(private http: HttpClient, private router: Router) { }
-  url = 'http://localhost:8080';
+  constructor(private http: HttpClient, private router: Router, private rurl:ServerconfigService) { }
+  url = this.rurl.nodeUrl;
   getInscr() {
     return this
       .http

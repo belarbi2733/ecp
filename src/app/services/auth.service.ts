@@ -3,14 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import {DataAuth} from '../singleComponentFolder/auth/auth.interface';
 import {getCallDecoratorImport} from '@angular/core/schematics/utils/typescript/decorators';
+import { ServerconfigService } from '../serverconfig.service';
 
 @Injectable()
 export class AuthService {
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private rurl:ServerconfigService) {
   }
 
-  url = 'http://localhost:8080';
+  url = this.rurl.nodeUrl;
   isAuth = false;
   isAdmin = false;
 

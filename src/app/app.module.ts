@@ -65,6 +65,7 @@ import { PaypalComponent } from './paypal/paypal.component';
 import {InscrService} from './services/inscr.service';
 import {AddColisService} from './services/add-colis.service';
 import {AddtrajetService} from './services/addtrajet.service';
+import { ServerconfigService } from './serverconfig.service';
 
 
 const appRoutes: Routes = [
@@ -164,7 +165,8 @@ const appRoutes: Routes = [
     MailingService,
     InscrService,
     AddColisService,
-    AddtrajetService
+    AddtrajetService,
+    ServerconfigService
   ],
   bootstrap: [AppComponent]
 })
