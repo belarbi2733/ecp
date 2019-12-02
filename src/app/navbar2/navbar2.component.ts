@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer2, ElementRef, Directive } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../services/singleComponentServices/auth.service';
 
 @Component({
   selector: 'app-navbar2',
@@ -7,27 +7,27 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./navbar2.component.css']
 })
 export class Navbar2Component implements OnInit {
-  private isCollapsed:boolean = true;
-  private OpenBtnDisplay = "block";
-  private CloseBtnDisplay = "none";
+  private isCollapsed = true;
+  private OpenBtnDisplay = 'block';
+  private CloseBtnDisplay = 'none';
   constructor(private authService: AuthService) {
 
    }
 
   ngOnInit() {
   }
-  toggleCollapsed(){
+  toggleCollapsed() {
     this.isCollapsed = false;
-    this.OpenBtnDisplay = "none";
-    this.CloseBtnDisplay = "block";
+    this.OpenBtnDisplay = 'none';
+    this.CloseBtnDisplay = 'block';
   }
-  disToggleCollapsed(){
+  disToggleCollapsed() {
     this.isCollapsed = true;
-    this.CloseBtnDisplay = "none";
-    this.OpenBtnDisplay = "block";
+    this.CloseBtnDisplay = 'none';
+    this.OpenBtnDisplay = 'block';
   }
-  seeAdmin(){
-    return this.authService.isAdmin;
+  seeAdmin() {
+    return JSON.parse(localStorage.getItem('isAdmin')).isAdmin;
   }
 
 }

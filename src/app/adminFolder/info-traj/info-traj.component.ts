@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/singleComponentServices/auth.service';
 
 @Component({
   selector: 'app-info-traj',
@@ -13,7 +13,7 @@ export class InfoTrajComponent implements OnInit {
   ngOnInit() {
   }
 
-  seeAdmin(){
+  seeAdmin() {
     return this.authService.isAdmin;
   }
 

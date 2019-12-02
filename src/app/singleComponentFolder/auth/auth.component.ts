@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/singleComponentServices/auth.service';
 import { Router } from '@angular/router';
 import {DataAuth} from './auth.interface';
 
@@ -20,10 +20,12 @@ export class AuthComponent implements OnInit {
 
   authFailed: string;
   constructor(private authService: AuthService, private router: Router) {
+    this.authStatus = this.authService.isAuth;
+    this.adminStatus = this.authService.isAdmin;
   }
 
   ngOnInit() {
-    this.authStatus = this.authService.isAuth;
+    console.log(this.authStatus + ' et ' + this.adminStatus);
   }
 
   onSignIn(validationStatus: boolean) {
@@ -81,9 +83,13 @@ export class AuthComponent implements OnInit {
   }
 
   onSignOut() {
-    this.authService.signOut();
-    this.authStatus = this.authService.isAuth;
-    this.adminStatus = this.authService.isAdmin;
+    this.authService.signOut().then(
+      () => {
+        this.authStatus = this.authService.isAuth;
+        this.adminStatus = this.authService.isAdmin;
+        this.router.navigate(['accueil']);
+      }
+    );
   }
 
   toInscr() {

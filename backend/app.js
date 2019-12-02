@@ -4,6 +4,8 @@ let bodyParser = require('body-parser');
 let User = require('./user');
 let Colis = require('./colis');
 let Trajet = require('./trajet');
+let ModeleVoiture = require('./modeleVoiture');
+let Voiture = require('./voiture');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
 
@@ -21,7 +23,7 @@ app.use(bodyParser.json());
 
 app.post('/inscription',function (req, res) {
   User.addUtilisateur(req,function(err,result){
-    console.log(req.body);
+    // console.log(req.body);
     if(err) {
       res.status(400).json(err);
     }
@@ -34,7 +36,7 @@ app.post('/inscription',function (req, res) {
 
 app.post('/auth/checkPassword', function (req,res) {
   User.checkPasswordByMail(req.body, function (err, result) {
-    console.log(req.body);
+    // console.log(req.body);
     console.log('err : ' + err);
     if (err) {
       res.status(400).json(err);
@@ -58,7 +60,7 @@ app.post('/auth/checkPassword', function (req,res) {
 });
 
 app.post('/auth/getId', function (req,res) {
-  console.log('getAuth : ' + req.body.mail);
+  // console.log('getAuth : ' + req.body.mail);
   User.getIdUtilisateurByMail(req.body.mail, function (err, result) {
     if(err) {
       res.status(400).json(err);
@@ -76,7 +78,7 @@ app.post('/auth/getId', function (req,res) {
 
 app.post('/addColis', function (req, res) {
   Colis.addColis(req.body,function(err,result){
-    console.log(req.body);
+    // console.log(req.body);
     if(err) {
       res.status(400).json(err);
       console.log('Erreur add');
@@ -97,7 +99,7 @@ app.post('/addColis', function (req, res) {
 
 app.post('/addtrajet' , function (req, res) {
   Trajet.addTrajet(req.body,function(err,result){
-    console.log(req.body);
+    // console.log(req.body);
     console.log(result);
     if(err) {
       res.status(400).json(err);
@@ -111,7 +113,7 @@ app.post('/addtrajet' , function (req, res) {
 
 app.post('/personalData/getDataUser', function(req,res) {
   User.getDataById(req.body.idUser, function(err, result) {
-    console.log(req.body);
+    // console.log(req.body);
     if(err) {
       res.status(400).json(err);
     }
@@ -119,7 +121,7 @@ app.post('/personalData/getDataUser', function(req,res) {
     {
       const tmpResult = result.rows[0];
       //console.log(result.rows[0]);
-      let objJson = {
+      let objJson = {      // Je crée cet objet objJson pour restructurer les variables de result.rows et aussi pour éviter d'envoyer des données sensibles contenu dans result.rows comme le mot de passe
           "nom": tmpResult.nom,
           "prenom": tmpResult.prenom,
           "tel": tmpResult.telephone,
@@ -129,13 +131,13 @@ app.post('/personalData/getDataUser', function(req,res) {
           "description": tmpResult.descr
       };
       console.log(JSON.stringify(objJson));
-      res.json(objJson);
+      res.json(objJson);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
     }
   });
 });
 
 app.post('/personalData/update',function (req,res) {
-  console.log(req.body);
+  // console.log(req.body);
   User.updateUtilisateur(req.body,function (err,result) {
     if(err) {
       res.status(400).json(err);
@@ -146,6 +148,75 @@ app.post('/personalData/update',function (req,res) {
     }
   });
 });
+
+app.post('/deleteAccount', function (req,res) {
+  // console.log(req.body);
+  User.removeUtilisateur(req.body.idUser, function (err,result) {
+    if(err) {
+      res.status(400).json(err);
+    }
+    else {
+      // console.log(result);
+      res.json(result);
+    }
+  });
+});
+
+app.post('/pref/update' , function (req,res) {
+  console.log(req.body);
+  console.log(req.body.idUser);
+  User.updateUtilisateurPref(req.body, function (err, result) {
+    if(err) {
+      res.status(400).json(err);
+    }
+    else {
+      // console.log(result);
+      res.json(result);
+    }
+  })
+});
+
+app.post('/pref/getPref' , function (req,res) {
+  console.log(req.body);
+  User.getDataById(req.body.idUser, function(err, result) {
+    console.log(req.body);
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      const tmpResult = result.rows[0];
+      console.log(result.rows[0]);
+      let objJson = {      // Je crée cet objet objJson pour restructurer les variables de result.rows et aussi pour éviter d'envoyer des données sensibles contenu dans result.rows comme le mot de passe
+        "prefAnimaux": tmpResult.pref_Animaux,
+        "prefFumer": tmpResult.pref_Fumer,
+      };
+      console.log(JSON.stringify(objJson));
+      res.json(objJson);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
+    }
+  });
+});
+
+app.post('/rating' , function (req,res) {
+  console.log(req.body);
+  User.getDataById(req.body.idUser, function(err, result) {
+    console.log(req.body);
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      const tmpResult = result.rows[0];
+      console.log(result.rows[0]);
+      let objJson = {      // Je crée cet objet objJson pour restructurer les variables de result.rows et aussi pour éviter d'envoyer des données sensibles contenu dans result.rows comme le mot de passe
+        "currentRate": tmpResult.note,
+      };
+      console.log(JSON.stringify(objJson));
+      res.json(objJson);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
+    }
+  });
+});
+
 
 //Script nodemailer
 app.use(cors({origin: "*"}));
