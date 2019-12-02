@@ -24,13 +24,19 @@
         <a routerLink="/profile" routerLinkActive="active"><input type="button" value="Voir le profil" /></a>
         <a routerLink="/messagerie" routerLinkActive="active"><input type="button" value="Ouvrir une messagerie" /></a>
         <ng-template #popContent>
-            <button class='btn btn-success' (click)='suspendre()'>Confirmer </button>
+
         </ng-template>
         <button type="button" placement="right"
         [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="false">
         Suspendre
         </button>
       </td>
+    </tr>
+
+    <tr>
+      <td>{{adminListUtInterface.nom}}</td>
+      <td>{{adminListUtInterface.prenom}}</td>
+      <td>{{adminListUtInterface.nbre_traj}}</td>
     </tr>
 
   </tbody>

@@ -310,12 +310,8 @@ app.get('/admin-list-ut', function(req,res) {
       const tmpResultUser = result.rows[0];
       //console.log(result.rows[0]);
       let objJson = {
-        /*"nom": tmpResultUser.nom,
+        "nom": tmpResultUser.nom,
         "prenom": tmpResultUSer.prenom,
-        "nbre_traj": tmpResult.status*/
-        "nom": "Test",
-        "prenom": "Mathis",
-        "nbre_traj": 4
       };
       console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
       res.json(objJson);
@@ -414,7 +410,7 @@ app.get('/sendmail/contact', (req, res) => {
     const output = `
       <p>You have a new contact request</p>
       <h3>Contact Details</h3>
-      <ul>  
+      <ul>
         <li>Sujet: ${subject}</li>
         <li>Email: ${mail}</li>
       </ul>
