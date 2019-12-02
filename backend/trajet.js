@@ -19,9 +19,10 @@ let Trajet = {
     return db.query('DELETE FROM trajet WHERE id_User = trajet.id_User', callback);
   },
 
-  getTrajet: function(trajet, callback)
+  getTrajetById: function(id, callback)
   {
-    return db.query('SELECT * FROM trajet WHERE id_User = trajet.id_User',callback);
+    console.log("getTrajetById : " + id);
+    return db.query('SELECT * FROM trajet WHERE id_User = $1', [id], callback);
   }
 };
 

@@ -6,6 +6,7 @@ let Colis = require('./colis');
 let Trajet = require('./trajet');
 let ModeleVoiture = require('./modeleVoiture');
 let Voiture = require('./voiture');
+let Tournee = require('./tournee');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
 
@@ -21,6 +22,20 @@ app.use(bodyParser.json());
 
 // !!!!!!!!!! Il faut mettre votre mdp de votre database dans db.js sinon ca fonctionne pas
 
+/*Index :
+1 : Inscription
+2 : CheckPassword
+3 : getId
+4: addColis
+5: addtrajet
+6: mes-tourn
+7: personalData/getDataUser
+8: personalData/update
+9: admin-list-traj*/
+
+/*-------------------------1------------------------------------------------------------------------------------ */
+
+
 app.post('/inscription',function (req, res) {
   User.addUtilisateur(req,function(err,result){
     // console.log(req.body);
@@ -33,6 +48,9 @@ app.post('/inscription',function (req, res) {
     }
   });
 });
+
+/*--------------------------2------------------------------------------------------------------------------------- */
+
 
 app.post('/auth/checkPassword', function (req,res) {
   User.checkPasswordByMail(req.body, function (err, result) {
@@ -59,8 +77,11 @@ app.post('/auth/checkPassword', function (req,res) {
   });
 });
 
+/*--------------------------3------------------------------------------------------------------------------------- */
+
+
 app.post('/auth/getId', function (req,res) {
-  // console.log('getAuth : ' + req.body.mail);
+  console.log('getAuth : ' + req.body.mail);
   User.getIdUtilisateurByMail(req.body.mail, function (err, result) {
     if(err) {
       res.status(400).json(err);
@@ -74,6 +95,8 @@ app.post('/auth/getId', function (req,res) {
     }
   })
 });
+
+/*----------------------------4----------------------------------------------------------------------------------- */
 
 
 app.post('/addColis', function (req, res) {
@@ -97,6 +120,9 @@ app.post('/addColis', function (req, res) {
   });
 });
 
+/*---------------------------5------------------------------------------------------------------------------------ */
+
+
 app.post('/addtrajet' , function (req, res) {
   Trajet.addTrajet(req.body,function(err,result){
     // console.log(req.body);
@@ -110,6 +136,33 @@ app.post('/addtrajet' , function (req, res) {
     }
   });
 });
+
+/* Création de la requête post pour les infos des tournées de l user */
+/*----------------------------6----------------------------------------------------------------------------------- */
+app.post('/mes-tourn', function(req,res) {
+  Tournee.getDataTournee(1, function(err, result){
+    console.log(req.body);
+    if(err) {
+      res.status(400).json(err);
+    }
+
+    else
+    {
+      const tmpResult2 = result.rows[0];
+      let objJson2 = {
+        "depart": tmpResult2.depart,
+        "arrivee": tmpResult2.arrivee,
+        "nbre_pass": tmpResult2.heure_depart
+      };
+      console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
+      res.json(objJson);
+    }
+  });
+
+
+});
+
+/*----------------------------7----------------------------------------------------------------------------------- */
 
 app.post('/personalData/getDataUser', function(req,res) {
   User.getDataById(req.body.idUser, function(err, result) {
@@ -135,6 +188,8 @@ app.post('/personalData/getDataUser', function(req,res) {
     }
   });
 });
+
+/*-----------------------------8-------------------------------------------------------------------------------- */
 
 app.post('/personalData/update',function (req,res) {
   // console.log(req.body);
@@ -216,6 +271,68 @@ app.post('/rating' , function (req,res) {
     }
   });
 });
+
+
+/*-----------------------------9---------------------------------------------------------------------------------- */
+
+app.post('/admin-list-traj', function(req,res){
+  let trajObjJson = {
+    "depart": 'Mons',
+    "arrivee": 'Tournai',
+    "nbre_places": 3,
+    "id": 1,
+  };
+  console.log(JSON.stringify(trajObjJson));
+  res.json(trajObjJson);
+});
+
+/*-----------------------------------10---------------------------------------------------------------------------- */
+
+app.post('/admin-list-ut', function(req,res) {
+  User.getAllUser(function(err, result) {
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      const tmpResultUser = result.rows[0];
+      //console.log(result.rows[0]);
+      let objJson = {
+        "nom": tmpResultUser.nom,
+        "prenom": tmpResultUSer.prenom,
+        "nbre_traj": tmpResult.status
+      };
+      console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
+      res.json(objJson);
+    }
+  });
+});
+
+
+/*app.post('/admin-list-traj', function (req,res) {
+  Trajet.getTrajetById(req.body.idUser, function(err,result){
+    console.log(req.body);
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      const dispResult = result.rows[0];
+
+      let trajObjJson = {
+        "depart": 'Mons',
+        "arrivee": 'Tournai',
+        "nbre_places": 3,
+        "id": 1,
+
+      }; // création du fichier JSon
+      console.log(JSON.stringify(trajObjJson));
+      res.json(trajObjJson);
+    }
+  });
+  });*/
+
+/*--------------------------------------------------------------------------------------------------------------- */
 
 
 //Script nodemailer
