@@ -204,20 +204,29 @@ app.post('/personalData/update',function (req,res) {
 
 /*-----------------------------9---------------------------------------------------------------------------------- */
 
-app.post('/admin-list-traj', function(req,res){
-  let trajObjJson = {
-    "depart": 'Mons',
-    "arrivee": 'Tournai',
-    "nbre_places": 3,
-    "id": 1,
-  };
-  console.log(JSON.stringify(trajObjJson));
-  res.json(trajObjJson);
+app.get('/admin-list-traj', function(req,res){
+  Trajet.getTrajetById(function(err,result){
+    if(err) {
+      console.log("Erreur dans getTrajetById");
+    }
+
+    else {
+      const tmpResultUser2 = result.rows[0];
+    /*  let trajObjJson = {
+        "depart": tmpResultUser2.depart,
+        "arrivee": tmpResultUser2.arrivee,
+        "nbre_places": tmpResultUser2.nbre_places,
+        "id": tmpResultUser2.id_user
+      };*/
+      console.log(JSON.stringify(result.rows[0]));
+      res.json(result.rows[0]);
+    }
+  });
 });
 
 /*-----------------------------------10---------------------------------------------------------------------------- */
 
-app.post('/admin-list-ut', function(req,res) {
+app.get('/admin-list-ut', function(req,res) {
   User.getAllUser(function(err, result) {
     if(err) {
       res.status(400).json(err);
