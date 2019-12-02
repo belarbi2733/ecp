@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DataTrajet} from './add-trajet.interface';
 import { Injectable } from '@angular/core';
-import { AddtrajetService } from '../../services/addtrajet.service';
+import { AddtrajetService } from '../../services/singleComponentServices/addtrajet.service';
 
 
 @Component({

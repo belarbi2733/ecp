@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {DataPersonal} from './personal-data.interface';
-import {PersonalDataService} from '../../services/personal-data.service';
+import {PersonalDataService} from '../../services/profileServices/personal-data.service';
 
 @Component({
   selector: 'app-personal-data',
@@ -22,7 +22,7 @@ export class PersonalDataComponent implements OnInit {
 
   error: string;
   constructor(private personalDataService: PersonalDataService) {
-    this.personalInfos.idUser = JSON.parse(localStorage.getItem('idUser')).id; // Loading idUser in localStorage
+    this.personalInfos.idUser = JSON.parse(localStorage.getItem('idUser')).id; // Loading idUser from localStorage
                   }
 
   ngOnInit() {

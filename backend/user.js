@@ -16,9 +16,10 @@ let Utilisateur = {
         callback);
     },
 
-    removeUtilisateur: function(utilisateur, callback)
+    removeUtilisateur: function(id, callback)
     {
-      return db.query('DELETE FROM utilisateur WHERE id_User = utilisateur.id_User', callback);
+      console.log('Delete Id : ' + id);
+      return db.query('DELETE FROM utilisateur WHERE id = $1',[id], callback);
     },
 
     checkPasswordByMail: function(utilisateur, callback)
@@ -37,6 +38,13 @@ let Utilisateur = {
     {
       console.log("getDataById : " + id);
       return db.query('SELECT * FROM utilisateur WHERE id = $1', [id], callback);
+    },
+
+    updateUtilisateurPref : function (utilisateur, callback) {
+      console.log("update Pref, idUser : " + utilisateur.idUser);
+      return db.query('UPDATE utilisateur SET pref_animaux = $1, pref_fumer = $2 WHERE id = $3',
+        [utilisateur.prefAnimaux, utilisateur.prefFumer,utilisateur.idUser],
+        callback);
     },
 
     getAllUser: function(callback)
