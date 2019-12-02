@@ -63,10 +63,10 @@ import { RouteData } from './searchFolder/map/map.interface';
 import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
 import { MailingService } from './services/mailing.service';
 import { PaypalComponent } from './paypal/paypal.component';
-import {InscrService} from './services/inscr.service';
-import {AddColisService} from './services/add-colis.service';
-import {AddtrajetService} from './services/addtrajet.service';
-import {PersonalDataService} from './services/personal-data.service';
+import {InscrService} from './services/singleComponentServices/inscr.service';
+import {AddColisService} from './services/singleComponentServices/add-colis.service';
+import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
+import {PersonalDataService} from './services/profileServices/personal-data.service';
 import {AccountService} from './services/profileServices/account.service';
 import {PreferencesService} from './services/profileServices/preferences.service';
 import {RatingService} from './services/profileServices/rating.service';
@@ -77,6 +77,7 @@ import {AdminListUtService} from './services/admin-list-user.service';
 
 
 const appRoutes: Routes = [
+  // tslint:disable-next-line:max-line-length
   { path: 'profile', canActivate: [AuthGuard], component: ProfileTabsComponent }, // :id is a route parameter and data is to parse static data
   { path: 'accueil', component: AccueilComponent },
   { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
