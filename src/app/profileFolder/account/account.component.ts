@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {IdDeleteAccount} from './account.interface';
+import {AccountService} from '../../services/profileServices/account.service';
+import {AuthService} from '../../services/singleComponentServices/auth.service';
 
 @Component({
   selector: 'app-account',
@@ -8,12 +10,19 @@ import { Router } from '@angular/router';
 })
 export class AccountComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  dataId: IdDeleteAccount = {
+    idUser: null,
+  };
+
+  constructor(private accountService: AccountService, private authService: AuthService) {
+    this.dataId.idUser = JSON.parse(localStorage.getItem('idUser')).id; // Loading idUser in localStorage
+  }
 
   ngOnInit() {
   }
 
-  toAccueil() {
-    this.router.navigate(['accueil']);
+  deleteAccount(data: IdDeleteAccount) {
+    this.authService.signOut();
+    this.accountService.deleteAccount(data);
   }
 }

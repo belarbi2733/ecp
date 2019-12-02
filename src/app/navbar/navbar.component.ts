@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../services/singleComponentServices/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,8 +13,8 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
   }
 
-  seeAdmin(){
-    return this.authService.isAdmin;
+  seeAdmin() {
+    return JSON.parse(localStorage.getItem('isAdmin')).isAdmin;
   }
 
 }

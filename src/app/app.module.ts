@@ -7,10 +7,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPayPalModule } from 'ngx-paypal';
 // services
-import { AuthGuard } from './services/auth-guard.service';
-import { AdminGuard } from './services/admin-guard.service';
+import { AuthGuard } from './services/singleComponentServices/auth-guard.service';
+import { AdminGuard } from './services/singleComponentServices/admin-guard.service';
 import { AccueilService } from './services/accueil.service';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './searchFolder/map/map.service';
 
 // import { NavbarModule, WavesModule, ButtonsModule } from 'angular-bootstrap-md'
@@ -63,16 +63,21 @@ import { RouteData } from './searchFolder/map/map.interface';
 import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
 import { MailingService } from './services/mailing.service';
 import { PaypalComponent } from './paypal/paypal.component';
-import {InscrService} from './services/inscr.service';
-import {AddColisService} from './services/add-colis.service';
-import {AddtrajetService} from './services/addtrajet.service';
-import {PersonalDataService} from './services/personal-data.service';
+import {InscrService} from './services/singleComponentServices/inscr.service';
+import {AddColisService} from './services/singleComponentServices/add-colis.service';
+import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
+import {PersonalDataService} from './services/profileServices/personal-data.service';
+import {AccountService} from './services/profileServices/account.service';
+import {PreferencesService} from './services/profileServices/preferences.service';
+import {RatingService} from './services/profileServices/rating.service';
+import {VehicleService} from './services/profileServices/vehicle.service';
 import {DataTrajService} from './services/admin-list-traj.service';
 import {MesTournService} from './services/mestourn.service';
 import {AdminListUtService} from './services/admin-list-user.service';
 
 
 const appRoutes: Routes = [
+  // tslint:disable-next-line:max-line-length
   { path: 'profile', canActivate: [AuthGuard], component: ProfileTabsComponent }, // :id is a route parameter and data is to parse static data
   { path: 'accueil', component: AccueilComponent },
   { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
@@ -171,6 +176,10 @@ const appRoutes: Routes = [
     AddColisService,
     AddtrajetService,
     PersonalDataService,
+    AccountService,
+    PreferencesService,
+    RatingService,
+    VehicleService,
     DataTrajService,
     MesTournService,
     AdminListUtService

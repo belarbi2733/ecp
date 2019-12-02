@@ -1,18 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import {DataAuth} from '../singleComponentFolder/auth/auth.interface';
+import {DataAuth} from '../../singleComponentFolder/auth/auth.interface';
 import {getCallDecoratorImport} from '@angular/core/schematics/utils/typescript/decorators';
 
 @Injectable()
 export class AuthService {
 
+  isAuth: boolean;
+  isAdmin: boolean;
+
   constructor(private http: HttpClient, private router: Router) {
+    if (localStorage.length !== 0) {
+      this.isAuth = JSON.parse(localStorage.getItem('isAuth')).isAuth;
+      this.isAdmin = JSON.parse(localStorage.getItem('isAdmin')).isAdmin;
+      console.log(this.isAuth + ' et2 ' + this.isAdmin);
+    } else {
+      this.isAuth = false;
+      this.isAdmin = false;
+    }
   }
 
   url = 'http://localhost:8080';
-  isAuth = false;
-  isAdmin = false;
 
   signIn() {
     return new Promise(
@@ -21,7 +30,8 @@ export class AuthService {
           () => {
             this.isAuth = true;
             this.isAdmin = false;
-            resolve(true);
+            this.setUpBooleanAuth(); // Remplissage de localStorage
+            resolve();
           }, 0
         );
       }
@@ -35,7 +45,8 @@ export class AuthService {
           () => {
             this.isAuth = true;
             this.isAdmin = true;
-            resolve(true);
+            this.setUpBooleanAuth();  // Remplissage de localStorage
+            resolve();
           }, 0
         );
       }
@@ -43,8 +54,32 @@ export class AuthService {
   }
 
   signOut() {
-    this.isAuth = false;
-    this.isAdmin = false;
+    return new Promise(
+      (resolve, reject) => {
+        this.isAuth = false;
+        this.isAdmin = false;
+        localStorage.clear();
+        // On le vide puis on le remplit avec les valeurs par défaut
+        const isAuthJson = {isAuth: false};
+        localStorage.setItem('isAuth', JSON.stringify(isAuthJson)); // Stockage de is Auth par défaut dans localstorage
+
+        const isAdminJson = {isAdmin: false};
+        localStorage.setItem('isAdmin', JSON.stringify(isAdminJson)); // Stockage de is Admin par défaut dans localstorage
+
+        const idJson = {id: -1};
+        localStorage.setItem('idUser', JSON.stringify(idJson)); // Stockage de idUser par défaut dans localstorage
+        resolve();
+      }
+    );
+  }
+
+  setUpBooleanAuth() {
+    const isAuthJson = {isAuth: this.isAuth};
+    localStorage.setItem('isAuth', JSON.stringify(isAuthJson)); // Stockage de is Auth dans localstorage
+
+    const isAdminJson = {isAdmin: this.isAdmin};
+    localStorage.setItem('isAdmin', JSON.stringify(isAdminJson)); // Stockage de is Admin dans localstorage
+    console.log(localStorage);
   }
 
   authentification(data: DataAuth) {
