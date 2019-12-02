@@ -4,7 +4,6 @@ let bodyParser = require('body-parser');
 let User = require('./user');
 let Colis = require('./colis');
 let Trajet = require('./trajet');
-let ModeleVoiture = require('./modeleVoiture');
 let Voiture = require('./voiture');
 let Tournee = require('./tournee');
 const nodemailer = require('nodemailer');
