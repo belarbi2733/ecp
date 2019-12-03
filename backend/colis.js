@@ -21,7 +21,7 @@ let Colis = {
 
   generateTrajet: function(colis, depart, arrivee, callback) {
     console.log("Generate Trajet en cours...");
-    return db.query('INSERT INTO trajet (id_user,id_colis,depart,arrivee,nbre_places) VALUES ($1,$2,$3,$4,$5)',[colis.idUser,1,depart,arrivee,0],callback);
+    return db.query('INSERT INTO trajet (id_user,id_colis,depart,arrivee,book_places) VALUES ($1,$2,$3,$4,$5)',[colis.idUser,1,depart,arrivee,0],callback);
   }
 };
 

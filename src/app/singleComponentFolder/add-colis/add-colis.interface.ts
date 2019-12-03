@@ -1,10 +1,10 @@
-export interface DataColis {
-  idUser: number;
-  nom: string;
-  depart: string;
-  arrivee: string;
-  date: string;
-  poids: number;
-  dimension: number;
-  description: string;
-}
+export interface Colis {
+    nom: string;
+    volume: string;
+    departuretime: string;
+    traveltimeinseconds: string;
+    distanceinmeters: string;
+    delaytraffic: string;
+    departance: string;
+    arrival: string;
+  }

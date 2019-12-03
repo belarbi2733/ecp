@@ -13,6 +13,7 @@ export class AddColisService {
   }
 
   addColis(data) {
+    console.log('CC');
     this.http.post(`${this.url}/addColis`, data)
       .subscribe(
         res => {

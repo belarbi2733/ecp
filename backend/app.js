@@ -104,7 +104,7 @@ app.post('/auth/getId', function (req,res) {
 
 app.post('/addColis', function (req, res) {
   Colis.addColis(req.body,function(err,result){
-    // console.log(req.body);
+    console.log(req.body);
     if(err) {
       res.status(400).json(err);
       console.log('Erreur add');
@@ -157,7 +157,7 @@ app.post('/mes-tourn', function(req,res) {
         "arrivee": tmpResult2.arrivee,
         "nbre_pass": tmpResult2.heure_depart
       };
-      console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
+      //console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
       res.json(objJson);
     }
   });
@@ -186,7 +186,7 @@ app.post('/personalData/getDataUser', function(req,res) {
           "date_naiss": tmpResult.date_naiss,
           "description": tmpResult.descr
       };
-      console.log(JSON.stringify(objJson));
+      //console.log(JSON.stringify(objJson));
       res.json(objJson);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
     }
   });
@@ -221,8 +221,8 @@ app.post('/deleteAccount', function (req,res) {
 });
 
 app.post('/pref/update' , function (req,res) {
-  console.log(req.body);
-  console.log(req.body.idUser);
+  // console.log(req.body);
+  // console.log(req.body.idUser);
   User.updateUtilisateurPref(req.body, function (err, result) {
     if(err) {
       res.status(400).json(err);
@@ -235,21 +235,21 @@ app.post('/pref/update' , function (req,res) {
 });
 
 app.post('/pref/getPref' , function (req,res) {
-  console.log(req.body);
+  // console.log(req.body);
   User.getDataById(req.body.idUser, function(err, result) {
-    console.log(req.body);
+    // console.log(req.body);
     if(err) {
       res.status(400).json(err);
     }
     else
     {
       const tmpResult = result.rows[0];
-      console.log(result.rows[0]);
+      // console.log(result.rows[0]);
       let objJson = {      // Je crée cet objet objJson pour restructurer les variables de result.rows et aussi pour éviter d'envoyer des données sensibles contenu dans result.rows comme le mot de passe
-        "prefAnimaux": tmpResult.pref_Animaux,
-        "prefFumer": tmpResult.pref_Fumer,
+        "prefAnimaux": tmpResult.pref_animaux,
+        "prefFumer": tmpResult.pref_fumer,
       };
-      console.log(JSON.stringify(objJson));
+      //console.log(JSON.stringify(objJson));
       res.json(objJson);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
     }
   });
@@ -269,7 +269,7 @@ app.post('/rating' , function (req,res) {
       let objJson = {      // Je crée cet objet objJson pour restructurer les variables de result.rows et aussi pour éviter d'envoyer des données sensibles contenu dans result.rows comme le mot de passe
         "currentRate": tmpResult.note,
       };
-      console.log(JSON.stringify(objJson));
+      //console.log(JSON.stringify(objJson));
       res.json(objJson);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
     }
   });
@@ -286,13 +286,13 @@ app.get('/admin-list-traj', function(req,res){
 
     else {
       const tmpResultUser2 = result.rows[0];
-     let trajObjJson = {
-       /* "depart": tmpResultUser2.depart,
+    /*  let trajObjJson = {
+        "depart": tmpResultUser2.depart,
         "arrivee": tmpResultUser2.arrivee,
         "nbre_places": tmpResultUser2.nbre_places,
-        "id": tmpResultUser2.id_user */
-     };
-      console.log(JSON.stringify(result.rows[0]));
+        "id": tmpResultUser2.id_user
+      };*/
+      //console.log(JSON.stringify(result.rows[0]));
       res.json(result.rows[0]);
     }
   });
@@ -313,7 +313,7 @@ app.get('/admin-list-ut', function(req,res) {
         "nom": tmpResultUser.nom,
         "prenom": tmpResultUSer.prenom,
       };
-      console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
+      //console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
       res.json(objJson);
     }
   });
@@ -365,6 +365,43 @@ app.get('/calcPrixTraj', function(req,res){
         }
       }
 
+    }
+  });
+});
+
+app.post('/vehicule/update', function(req,res) {
+  console.log(req.body);
+  Voiture.addVoiture(req.body,function(err,result) {
+    if(err) {
+      res.status(400).json(err);
+    }
+    else {
+      console.log(result);
+      res.json(result);
+    }
+  })
+});
+
+app.post('/vehicule/getData' , function (req,res) {
+  // console.log(req.body);
+  Voiture.getDataVoitureById(req.body.idUser, function(err, result) {
+    // console.log(req.body);
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      const tmpResult = result.rows[0];
+      // console.log(result.rows[0]);
+      let objJson = {      // Je crée cet objet objJson pour restructurer les variables de result.rows et aussi pour éviter d'envoyer des données sensibles contenu dans result.rows comme le mot de passe
+        "marque": tmpResult.nom_marque,
+        "modele": tmpResult.nom_modele,
+        "sieges": tmpResult.nbre_places,
+        "volumeCoffre": tmpResult.coffre,
+
+      };
+      console.log(JSON.stringify(objJson));
+      res.json(objJson);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
     }
   });
 });
