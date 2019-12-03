@@ -9,8 +9,29 @@ export class VehicleService {
   url = 'http://localhost:8080';
 
   modifVehicule(data: DataVehicle) {
-
+    this.http.post(`${this.url}/vehicule/update`, data)
+      .subscribe(
+        res => {
+          console.log(res);
+        },
+        err => {
+          console.log('Error occured:' , err);
+        }
+      );
   }
 
-  // getVehicleDataById
+  getVehicleDataById(data: DataVehicle) {
+    return new Promise((resolve, reject) => {
+      this.http.post(`${this.url}/vehicule/getData`, data)
+        .subscribe(
+          res => {
+            resolve(res);
+          },
+          err => {
+            console.log('Error occured:', err);
+            reject();
+          }
+        );
+    });
+  }
 }

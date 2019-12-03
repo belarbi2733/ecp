@@ -26,7 +26,7 @@ export class PreferencesComponent implements OnInit {
       .then((dataUser: DataPreferences) => {
         this.preferences.prefAnimaux = dataUser.prefAnimaux;
         this.preferences.prefFumer = dataUser.prefFumer;
-        console.log(this.preferences);
+        console.log('Preferences : ' + dataUser.prefAnimaux + ' et ' + dataUser.prefFumer);
         this.error = '';
       })
       .catch( () => {

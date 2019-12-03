@@ -1,16 +1,16 @@
 <label class="label" >Les animaux sont autorisés : </label>
-<div class="form-check margbot">
-    <input class="form-check-input" type="radio" name="animaux" id="1" [(ngModel)]="preferences.prefAnimaux" value="1">
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="prefAnimaux" id="1" [(ngModel)]="preferences.prefAnimaux" value="1">
     <label class="form-check-label" for="1" style="margin-right:3rem;">
         oui
     </label>
 
-    <input class="form-check-input" type="radio" name="animaux" id="0" [(ngModel)]="preferences.prefAnimaux" value="0">
+    <input class="form-check-input" type="radio" name="prefAnimaux" id="0" [(ngModel)]="preferences.prefAnimaux" value="0">
     <label class="form-check-label" for="0" style="margin-right:3rem;">
         non
     </label>
 
-    <input class="form-check-input" type="radio" name="animaux" id="2" [(ngModel)]="preferences.prefAnimaux" value="2">
+    <input class="form-check-input" type="radio" name="prefAnimaux" id="2" [(ngModel)]="preferences.prefAnimaux" value="2">
     <label class="form-check-label" for="2" >
         En fonction de l'animal
     </label>
@@ -18,12 +18,12 @@
 </div>
 
 <label class="label">J'accepte que l'on fume dans ma voiture : </label>
-<div class="form-check margbot">
-    <input class="form-check-input" type="radio" name="fumeur" id="true" [(ngModel)]="preferences.prefFumer" value="true">
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="prefFumeur" id="true" [(ngModel)]="preferences.prefFumer" value="true">
     <label class="form-check-label" for="true" style="margin-right:3rem;">
         oui
     </label>
-    <input class="form-check-input" type="radio" name="fumeur" id="false" [(ngModel)]="preferences.prefFumer" value="false">
+    <input class="form-check-input" type="radio" name="prefFumeur" id="false" [(ngModel)]="preferences.prefFumer" value="false">
     <label class="form-check-label" for="false">
         non
     </label>

@@ -5,7 +5,7 @@ let Trajet = {
   addTrajet: function(trajet, callback)
   {
     console.log("Insert trajet en cours...");
-    db.query('INSERT INTO trajet (depart, arrivee, nbre_places) VALUES ($1, $2, $3)', [trajet.depart, trajet.arrivee, trajet.places], callback);
+    db.query('INSERT INTO trajet (depart, arrivee, book_places) VALUES ($1, $2, $3)', [trajet.depart, trajet.arrivee, trajet.places], callback);
   },
 
   // updateTrajet: function(Trajet, callback)
