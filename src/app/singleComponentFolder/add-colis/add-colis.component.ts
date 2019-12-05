@@ -37,7 +37,7 @@ function recordcolis(data: Colis) {
   data.arrival = routecolis[1].arrival;
 
   console.log(JSON.stringify(data));
-  addColis(data);
+  // addColis(data);
 }
 
 /*function addColis(data: Colis) {
