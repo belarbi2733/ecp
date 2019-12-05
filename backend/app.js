@@ -457,23 +457,21 @@ app.get('/sendmail/contact', (req, res) => {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
         //SMTP SERVER INFO
-      service : "hotmail", // true for 465, false for other ports
-      auth: {
-          user: 'YOUR-E-MAIL', // generated ethereal user
-          pass: 'YOUR-PASSWORD'  // generated ethereal password
-      },
-      tls:{
-        rejectUnauthorized : false
-      }
+        host: "smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+          user: "e005c016d0db91",
+          pass: "5e24274bd11a0a"
+        }
     });
 
     // setup email data with unicode symbols
     let mailOptions = {
-        from: 'mail@sender.com', // sender address
-        to: 'mail@reciever.com', // list of receivers
-        subject: req.params.subject, // Subject line
-        text: 'Nouvelle demande de contacte reçue :', // plain text body
-        html: output // html body
+      from: 'farid-f33@live.be', // sender address
+      to: 'farid-f32@msn.com', // list of receivers
+      subject: req.params.subject, // Subject line
+      text: 'Nouvelle demande de contacte reçue :', // plain text body
+      html: output // html body
     };
 
     // send mail with defined transport object
@@ -490,8 +488,9 @@ app.get('/sendmail/contact', (req, res) => {
 });
 
 module.exports = app;
-app.listen(8080, ()=>{
-    console.log("Server started, listening to 8080 port");
+port=8081;
+app.listen(port, ()=>{
+    console.log("Server started, listening to "+ port+ " port");
 });
 
 
