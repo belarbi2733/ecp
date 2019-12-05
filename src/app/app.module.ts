@@ -74,6 +74,10 @@ import {VehicleService} from './services/profileServices/vehicle.service';
 import {DataTrajService} from './services/admin-list-traj.service';
 import {MesTournService} from './services/mestourn.service';
 import {AdminListUtService} from './services/admin-list-user.service';
+import {InscrService} from './services/inscr.service';
+import {AddColisService} from './services/add-colis.service';
+import {AddtrajetService} from './services/addtrajet.service';
+import { ServerconfigService } from './serverconfig.service';
 
 
 const appRoutes: Routes = [
@@ -183,6 +187,8 @@ const appRoutes: Routes = [
     DataTrajService,
     MesTournService,
     AdminListUtService
+    AddtrajetService,
+    ServerconfigService
   ],
   bootstrap: [AppComponent]
 })
