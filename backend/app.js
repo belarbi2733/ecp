@@ -311,7 +311,11 @@ app.get('/admin-list-ut', function(req,res) {
       //console.log(result.rows[0]);
       let objJson = {
         "nom": tmpResultUser.nom,
-        "prenom": tmpResultUSer.prenom,
+        "prenom": tmpResultUser.prenom,
+        "id": tmpResultUser.id
+        /*"nom": "TestfinalNode",
+        "prenom": "TestFinalNode",
+        "nbre_traj": 3*/
       };
       //console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
       res.json(objJson);
