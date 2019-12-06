@@ -186,7 +186,7 @@ const appRoutes: Routes = [
     VehicleService,
     DataTrajService,
     MesTournService,
-    AdminListUtService
+    AdminListUtService,
     AddtrajetService,
     ServerconfigService
   ],
