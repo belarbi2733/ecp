@@ -10,9 +10,9 @@ import {AdminListUtInterface} from './admin-list-ut.interface';
 
 export class AdminListUtComponent implements OnInit {
   adminListUtInterface: AdminListUtInterface = {
-    nom: 'testnameadminut',
-    prenom: 'testprenomadminut',
-    nbre_traj: 5
+    nom: '',
+    prenom: '',
+    id: null
   };
 
   constructor(private adminListUtService: AdminListUtService) {
@@ -23,7 +23,7 @@ export class AdminListUtComponent implements OnInit {
       .then((adminListUtInterface: AdminListUtInterface) => {
         this.adminListUtInterface.nom = adminListUtInterface.nom;
         this.adminListUtInterface.prenom = adminListUtInterface.prenom;
-        this.adminListUtInterface.nbre_traj = adminListUtInterface.nbre_traj;
+        this.adminListUtInterface.id = adminListUtInterface.id;
       })
       .catch(() => {
         console.log('Error in getUserDataById');
