@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {DriverService} from './map.service';
+import { ServerconfigService } from 'src/app/serverconfig.service';
 declare let L;
 declare let tomtom: any;
 declare let document:any;
@@ -42,10 +43,12 @@ export class MapComponent implements OnInit {
 
     
     dataNode: Driver[];
-    constructor(private inscrService: DriverService, private router: Router, private http: HttpClient) {
+    constructor(private inscrService: DriverService, private router: Router, private http: HttpClient, private rurl: ServerconfigService) {
       }
   ngOnInit() {
-    
+    const https = this.http;
+    const routeur = this.router;
+    const url = this.rurl.nodeUrl;
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
     // Set TomTom keys
@@ -524,6 +527,17 @@ function prepareData(data) {
             //console.log(driverinfo);
             //console.log(JSON.stringify(record.geometry));
             recorddriver(inscrire);
+            https.post(`${url}/addDriver`, inscrire)
+            .subscribe(
+                res => {
+                    console.log(res);
+                    routeur.navigate(['accueil']);
+                },
+                err => {
+                    console.log('Erreur avec ajout driver:' , err);
+                }
+            );
+            
             iter = iter + 1; //comme ça ne stocke que pour le temps demander
         }
 
