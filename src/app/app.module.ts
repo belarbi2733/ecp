@@ -13,6 +13,7 @@ import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './searchFolder/map/map.service';
 
+
 // import { NavbarModule, WavesModule, ButtonsModule } from 'angular-bootstrap-md'
 
 // components
@@ -59,7 +60,7 @@ import { MesTrajComponent } from './reservations/mes-traj/mes-traj.component';
 import { MesColisComponent } from './reservations/mes-colis/mes-colis.component';
 import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component';
 import { Navbar2Component } from './navbar2/navbar2.component';
-//import { RouteData } from './searchFolder/map/map.interface';
+// import { RouteData } from './searchFolder/map/map.interface';
 import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
 import { MailingService } from './services/mailing.service';
 import { PaypalComponent } from './paypal/paypal.component';
@@ -77,6 +78,7 @@ import {AddtrajetService} from './services/singleComponentServices/addtrajet.ser
 import { ServerconfigService } from './serverconfig.service';
 import { AdminpayComponent } from './adminFolder/adminpay/adminpay.component';
 import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
+import {UserStatService} from './services/adminServices/userstat.service';
 
 
 const appRoutes: Routes = [
@@ -191,7 +193,8 @@ const appRoutes: Routes = [
     MesTournService,
     AdminListUtService,
     AddtrajetService,
-    ServerconfigService
+    ServerconfigService,
+    UserStatService
   ],
   bootstrap: [AppComponent]
 })

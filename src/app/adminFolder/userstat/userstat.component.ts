@@ -9,15 +9,16 @@ import { Color, Label } from 'ng2-charts';
 })
 export class UserstatComponent implements OnInit {
   public graphData = {
-    data : [65, 59, 80, 81, 56, 55, 40],
-    label : 'Nombre d utilisateur'
-  }
-  public lineChartData: ChartDataSets[]= [
+    data : [65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40],
+    label : 'Nombre d utilisateurs'
+  };
+  public lineChartData: ChartDataSets[] = [
     this.graphData
   ];
-  public lineChartLabels : Label [] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public lineChartLabels: Label [] = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+    'August', 'September', 'October', 'November', 'December'];
 
-  public lineChartOptions:(ChartOptions) = {
+  public lineChartOptions: (ChartOptions) = {
     responsive: true,
   };
   public lineChartColors: Color[] = [
@@ -29,6 +30,7 @@ export class UserstatComponent implements OnInit {
   public lineChartLegend = true;
   public lineChartType = 'line';
   public lineChartPlugins = [];
+
   constructor() { }
 
   ngOnInit() {
