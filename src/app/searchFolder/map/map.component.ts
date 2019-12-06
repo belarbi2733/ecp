@@ -526,6 +526,7 @@ function prepareData(data) {
             
             //console.log(driverinfo);
             //console.log(JSON.stringify(record.geometry));
+            
             recorddriver(inscrire);
             https.post(`${url}/addDriver`, inscrire)
             .subscribe(
@@ -537,7 +538,7 @@ function prepareData(data) {
                     console.log('Erreur avec ajout driver:' , err);
                 }
             );
-            
+
             iter = iter + 1; //comme ça ne stocke que pour le temps demander
         }
 
