@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ServerconfigService} from '../../serverconfig.service';
-import { DataTrajet} from '../../singleComponentFolder/add-trajet/add-trajet.interface';
+import { Trajet} from '../../singleComponentFolder/add-trajet/add-trajet.interface';
 
 @Injectable()
 export class AddtrajetService {
@@ -11,7 +11,7 @@ export class AddtrajetService {
   url = this.rurl.nodeUrl;
 
 
-  addtrajet(data: DataTrajet) {
+  addtrajet(data: Trajet) {
     this.http.post(`${this.url}/addtrajet`, data)
       .subscribe(
         res => {
