@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { RouteData } from './map.interface';
+import { Driver } from './map.interface';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ServerconfigService } from 'src/app/serverconfig.service';
@@ -20,7 +20,7 @@ export class DriverService {
       .get(`${this.url}/inscription`);
   }
 
-  inscription(data:RouteData) {
+  inscription(data:Driver) {
     return this.http.post(`${this.url}/inscription`, data)
       .subscribe(
         res => {

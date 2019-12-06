@@ -1,7 +1,8 @@
-export interface DataTrajet {
-  id_utilisateur: number;
-  depart: string;
-  arrivee: string;
-  date: string;
-  places: number;
+export interface Trajet {
+  departuretime: string;
+  traveltimeinseconds: string;
+  distanceinmeters: string;
+  delaytraffic: string;
+  departance: string;
+  arrival: string;
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {RouteData} from './map.interface';
+import {Driver} from './map.interface';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -7,9 +7,28 @@ import {DriverService} from './map.service';
 declare let L;
 declare let tomtom: any;
 declare let document:any;
+var driverinfo = [];
+
 var iter =0;
+var inscrire : Driver = {
+    departuretime: '',
+    time: '',
+    distance: '',
+    trafficdelay: '',
+    routegeometry: ''}
+function recorddriver(data:Driver){
+  data.departuretime = driverinfo[0].departuretime;
+  data.time = driverinfo[0].traveltimeinseconds;
+  data.distance = driverinfo[0].distance;
+  data.trafficdelay = driverinfo[0].delaytraffic;
+  data.routegeometry= driverinfo[0].routegeometry;
+  console.log(JSON.stringify(data));
+  
+
+  //console.log(JSON.stringify(data));
+
+}
 //var iteration = 0;
-var driverinfo ; //stocke les informations sur le trajet conducteur
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -21,14 +40,8 @@ var driverinfo ; //stocke les informations sur le trajet conducteur
 @Injectable()
 export class MapComponent implements OnInit {
 
-    donnee: RouteData = {
-        departuretime: null,
-        time: null,
-        distance: null,
-        trafficdelay: null
-      };
     
-    dataNode: RouteData[];
+    dataNode: Driver[];
     constructor(private inscrService: DriverService, private router: Router, private http: HttpClient) {
       }
   ngOnInit() {
@@ -297,7 +310,7 @@ function onRowClick(result) {
         .on('mouseover', showDetails.bind(null, result))
         .on('mouseout', showDetails);
 }
-function onRowMouseOver(result,data:RouteData) {
+function onRowMouseOver(result) {
     drawRoute(result);
     showDetails(result);
 }
@@ -477,7 +490,7 @@ function attachColorAndRatio(min, max) {
 
 
 
-function prepareData(data,donnee: RouteData) {
+function prepareData(data) {
     var results = data.filter(function(record) {
         return typeof record.error === 'undefined';
     }).map(function(record) {
@@ -499,17 +512,18 @@ function prepareData(data,donnee: RouteData) {
             this.DriverService.inscription(donnee);
             //console.log(donnee.time);
             */
-            driverinfo =  {"departuretime" : record.summary.departureTime,
+            driverinfo.push( {"departuretime" : record.summary.departureTime,
             "traveltimeinseconds" : record.summary.travelTimeInSeconds,
             "distanceinmeters" : record.summary.lengthInMeters,
             "delaytraffic" : record.summary.liveTrafficIncidentsTravelTimeInSeconds -record.summary.noTrafficTravelTimeInSeconds,
-            "routegeometry" : record.geometry}; //premier élément de route geometry = coordonnées de départ, dernier = arrivée;
+            "routegeometry" : record.geometry});//premier élément de route geometry = coordonnées de départ, dernier = arrivée;
             
-            var driverinfo = JSON.stringify(driverinfo);
+        
             
-            console.log(driverinfo);
+            
+            //console.log(driverinfo);
             //console.log(JSON.stringify(record.geometry));
-
+            recorddriver(inscrire);
             iter = iter + 1; //comme ça ne stocke que pour le temps demander
         }
 
@@ -615,13 +629,5 @@ function formatDate(date) {
 
 }
 
-getto(donnee: RouteData) {
-    this.donnee.departuretime =  driverinfo.departuretime;
-    this.donnee.time =  driverinfo.traveltimeinseconds;
-    this.router.navigate(['accueil']);
-    //this.DriverService.inscription(donnee);
-    console.log('temps de depart: ' + donnee.departuretime)
-    console.log ('temps : '+ donnee.time);
-}
 
 }
