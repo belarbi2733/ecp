@@ -253,7 +253,6 @@ export class AddColisComponent implements OnInit {
           .then(updateListElements)
           .then(clickFirstListItem)
           .then(unlockBatchRequests, handleBatchRequestError);
-
       } catch (err) {
         handleBatchRequestError(err);
       }
@@ -300,10 +299,6 @@ export class AddColisComponent implements OnInit {
       delay.innerHTML = result.delay ? formatDiff(result.delay) : '--';
       live.innerHTML = result.liveTraffic ? formatDiff(result.liveTraffic) : '--';
       noTraffic.innerHTML = result.noTraffic ? formatDiff(result.noTraffic) : '--';
-
-
-
-
     }
     let route;
     function drawRoute(result) {
@@ -533,8 +528,8 @@ export class AddColisComponent implements OnInit {
             distanceinmeters : record.summary.lengthInMeters,
             delaytraffic : record.summary.liveTrafficIncidentsTravelTimeInSeconds - record.summary.noTrafficTravelTimeInSeconds,
             departance : record.geometry.coordinates[1],
+            // tslint:disable-next-line:max-line-length
             arrival : record.geometry.coordinates[record.geometry.coordinates.length - 1]}); // premier élément de route geometry = coordonnées de départ, dernier = arrivée;
-
 
           // AddColis(colis);
           // console.log(JSON.stringify(routecolis));
@@ -583,6 +578,11 @@ export class AddColisComponent implements OnInit {
         results: results.map(attachColorAndRatio(min, max))
       };
     }
+
+    function sendDataToService(service: AddColisService) {
+      service.addColis(inscription);
+    }
+
     function mergeData(previous) {
       return function(current) {
         let results = current.results;

@@ -21,4 +21,12 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  seeAuth() {
+    if (localStorage.length !== 0) {
+      return JSON.parse(localStorage.getItem('isAuth')).isAuth;
+    } else {
+      return false;
+    }
+  }
+
 }
