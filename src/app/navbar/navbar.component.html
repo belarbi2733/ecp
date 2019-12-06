@@ -24,10 +24,13 @@
   </ul>
   <ul class="navbar-nav right">
     <li class="nav-item">
-      <a class="nav-link" routerLink="/auth" routerLinkActive="active">Connexion</a>
+      <a class="nav-link" *ngIf=!seeAuth() routerLink="/auth" routerLinkActive="active">Connexion</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" routerLink="/inscrire" routerLinkActive="active">S'inscrire</a>
+      <a class="nav-link" *ngIf=!seeAuth() routerLink="/inscrire" routerLinkActive="active">S'inscrire</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" *ngIf=seeAuth() routerLink="/auth" routerLinkActive="active">Déconnexion</a>
     </li>
 
     <li class="nav-item dropdown">
