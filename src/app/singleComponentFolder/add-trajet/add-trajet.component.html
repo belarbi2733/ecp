@@ -1,20 +1,15 @@
 <div class="container content">
-
-  <h3>Ajouter un trajet</h3>
-
-  <div class="form-group">
-    <!-- <label>Départ :  </label> -->
-    <input name="Depart" id="depart" #depart="ngModel" placeholder="Lieu de départ" [(ngModel)]="addtraj.depart"  class="form-control">
-    <!-- <label>Arrivee :  </label> -->
-    <input name="Arrivee" id="arrivee" #destination="ngModel" placeholder="Lieu d'arrivée" [(ngModel)]=addtraj.arrivee class="form-control">
-    <!-- <label>Date </label> -->
-    <input name="Date" id="date" #date="ngModel" placeholder="Date/Heure" [(ngModel)]="addtraj.date"  class="form-control">
-    <input name="NbrePlaces" id="nbrePlaces" #nbrePlaces="ngModel" placeholder="Nombre de places souhaité" [(ngModel)]="addtraj.places" class="form-control">
-  </div>
-
-  <button class="btn btn-success" (click)="OnclickaddTraj(addtraj)">
-    Ajouter
-  </button>
-
+  <h3>Ajouter trajet</h3>
+    <div class="map-container use-all-space">
+        <form id="form" action="javascript:void(0)" >
+            <select id="type">
+                <option>arrive at</option>
+                <option selected="selected">depart at</option>
+            </select>
+            <input id="date" type="datetime-local" pattern="\d{4}-\d{2}-\d{2} [0-1]?\d:[0-6]\d" />
+            <small class="warning">insert a date in format yyyy-MM-dd hh:mm</small>
+            <input type="submit" value="Submit" disabled="disabled" />
+        </form>
+        <div id="map" class="use-all-space"></div>
+    </div>
 </div>
-
