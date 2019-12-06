@@ -1,7 +1,8 @@
-export interface RouteData {
-    departuretime: number;
-    time: number;
-    distance: number;
-    trafficdelay: number;
+export interface Driver {
+    departuretime: string;
+    time: string;
+    distance: string;
+    trafficdelay: string;
+    routegeometry: string;
 }
   
