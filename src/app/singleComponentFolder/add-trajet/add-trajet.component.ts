@@ -1,16 +1,20 @@
 
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Trajet } from './add-trajet.interface';
-//import {AddColisService} from '../../services/singleComponentServices/add-colis.service';
-//import {HttpClient} from '@angular/common/http';
+import {AddtrajetService} from '../../services/singleComponentServices/addtrajet.service';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import { ServerconfigService} from '../../serverconfig.service';
 //import { ColisComponent } from 'src/app/accueilFolder/colis/colis.component';
 // import { FormGroup, FormBuilder } from '@angular/forms';
 
 declare let L;
 declare let tomtom: any;
 declare let document:any;
+//var addtrajetservice : AddtrajetService;
+
+
 var inscription: Trajet = {
   departuretime : '',
   traveltimeinseconds : '',
@@ -24,18 +28,21 @@ var iter =0;
 //var iteration = 0;
 var routetrajet = []  ; //stocke les informations sur le trajet conducteur
 function recordtrajet (data: Trajet){
+
   data.departuretime = routetrajet[0].departuretime;
   data.traveltimeinseconds = routetrajet[0].traveltimeinseconds;
   data.distanceinmeters = routetrajet[0].distanceinmeters;
   data.delaytraffic = routetrajet[0].delaytraffic;
   data.departance = routetrajet[0].departance;
   data.arrival = routetrajet[0].arrival;
-
-  console.log(JSON.stringify(data));
-  
-  
+  console.log(JSON.stringify(data)); 
+  //AddTrajetComponent.addtrajet();
+  //addtrajet(data);
 
 }
+
+
+
 @Component({
   selector: 'app-add-trajet',
   templateUrl: './add-trajet.component.html',
@@ -44,11 +51,20 @@ function recordtrajet (data: Trajet){
 
 @Injectable()
 export class AddTrajetComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
   
+  constructor( private router: Router ,private addtrajetservice :AddtrajetService, public http : HttpClient,private rurl: ServerconfigService) { }
+
+
+  
+
+  
+  ngOnInit() {
+
+    //let addtraj :AddTrajetComponent;
+    const https = this.http;
+    const routeur = this.router;
+    const url = this.rurl.nodeUrl;
+
     //this.bite(this.inscription);
     //let co = this.http.get(`http://localhost:8080/`);
     
@@ -75,6 +91,9 @@ export class AddTrajetComponent implements OnInit {
     source : 'vector'
     });
     
+    
+
+
     
     
     var routeInputs = tomtom.routeInputs().addTo(map);
@@ -112,12 +131,16 @@ export class AddTrajetComponent implements OnInit {
     }
     submitButton.disabled = !routePoints;
     });
+
     // add submit handler to form
     submitButton.addEventListener('click', function() {
     this.setAttribute('disabled', 'disabled');
     request(getDate());
     });
+
     var batchRequestsLock = null;
+
+    
     function unlockBatchRequests() {
     batchRequestsLock = null;
     submitButton.removeAttribute('disabled');
@@ -504,6 +527,7 @@ export class AddTrajetComponent implements OnInit {
     };*/
     
     function prepareData(data) {
+      
     var results = data.filter(function(record) {
       return typeof record.error === 'undefined';
     }).map(function(record) {
@@ -529,6 +553,18 @@ export class AddTrajetComponent implements OnInit {
           //console.log(JSON.stringify(routecolis));
           //console.log(JSON.stringify(routecolis[0].nom));
           recordtrajet(inscription);
+          //addtraj.addtrajet(inscription);
+          
+          https.post(`${url}/addtrajet`, inscription)
+        .subscribe(
+          res => {
+            routeur.navigate(['accueil']);
+            console.log(res);
+          },
+          err => {
+            console.log('Error occured:' , err);
+          }
+          );
           //AddColisComponent.bite(AddColisComponent.inscription);
     
     
@@ -562,6 +598,7 @@ export class AddTrajetComponent implements OnInit {
       results: results.map(attachColorAndRatio(min, max))
     };
     }
+    
     function mergeData(previous) {
     return function(current) {
       var results = current.results;
@@ -639,7 +676,13 @@ export class AddTrajetComponent implements OnInit {
       ':' + pad(date.getMinutes());
     }
     
+    
     }
     
+    public addtrajet(data: Trajet) {
     
+      
+        
+  
+    }
     }

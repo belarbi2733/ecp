@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ServerconfigService} from '../../serverconfig.service';
 import { Trajet} from '../../singleComponentFolder/add-trajet/add-trajet.interface';
+//import {https} from ''
 
 @Injectable()
 export class AddtrajetService {
