@@ -9,6 +9,7 @@ import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
  export class PaypalComponent implements OnInit {
 
    public payPalConfig?: IPayPalConfig;
+   prix: string = '0.99';
 
    ngOnInit(): void {
      this.initConfig();
@@ -17,29 +18,29 @@ import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
    private initConfig(): void {
      this.payPalConfig = {
      currency: 'EUR',
-     clientId: 'sb',
+     clientId: 'AXHTZO11HV_dLhnyDxxlsRiYHWaWFIB4HL9gmHHavzx13IPXvQNSiJWcNCRQQESic_-H-CLOFc0NW0Qq',
      createOrderOnClient: (data) => <ICreateOrderRequest>{
        intent: 'CAPTURE',
        purchase_units: [
          {
            amount: {
              currency_code: 'EUR',
-             value: '9.99',
+             value: this.prix,
              breakdown: {
                item_total: {
                  currency_code: 'EUR',
-                 value: '9.99'
+                 value: this.prix
                }
              }
            },
            items: [
              {
-               name: 'Enterprise Subscription',
+               name: 'Payment',
                quantity: '1',
                category: 'DIGITAL_GOODS',
                unit_amount: {
                  currency_code: 'EUR',
-                 value: '9.99',
+                 value: this.prix,
                },
              }
            ]
