@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ServerconfigService} from '../../serverconfig.service';
 
 @Injectable()
 export class PersonalDataService {
 
-  constructor(private http: HttpClient) { }
-  url = 'http://localhost:8080';
+  constructor(private http: HttpClient, private servUrl: ServerconfigService) { }
+
+  url = this.servUrl.nodeUrl;
 
   updatePersonalData(data) {
     this.http.post(`${this.url}/personalData/update`, data)

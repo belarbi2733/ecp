@@ -488,9 +488,9 @@ app.get('/sendmail/contact', (req, res) => {
 });
 
 module.exports = app;
-port=8081;
+port = 8081;
 app.listen(port, ()=>{
-    console.log("Server started, listening to "+ port+ " port");
+    console.log("Server started, listening to "+ port + " port");
 });
 
 
