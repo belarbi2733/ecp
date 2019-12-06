@@ -75,6 +75,8 @@ import {InscrService} from './services/singleComponentServices/inscr.service';
 import {AddColisService} from './services/singleComponentServices/add-colis.service';
 import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
 import { ServerconfigService } from './serverconfig.service';
+import { AdminpayComponent } from './adminFolder/adminpay/adminpay.component';
+import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
 
 
 const appRoutes: Routes = [
@@ -97,7 +99,9 @@ const appRoutes: Routes = [
   { path: 'admin-list-ut', canActivate: [AdminGuard], component: AdminListUtComponent },
   { path: 'admin-list-traj', canActivate: [AdminGuard], component: AdminListTrajComponent },
   { path: 'info-traj', canActivate: [AuthGuard], component: InfoTrajComponent },
+  { path: 'info-cond', canActivate: [AuthGuard], component: InfoCondComponent },
   { path: 'admin-rembours', canActivate: [AdminGuard], component: AdminRemboursComponent },
+  { path: 'adminpay', canActivate: [AdminGuard], component: AdminpayComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
   { path: '', component: AccueilComponent },
@@ -155,7 +159,9 @@ const appRoutes: Routes = [
     MesColisComponent,
     MesTournComponent,
     Navbar2Component,
-    AdmintableComponent
+    AdmintableComponent,
+    AdminpayComponent,
+    InfoCondComponent
   ],
   imports: [
     BrowserModule,
