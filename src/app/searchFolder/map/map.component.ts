@@ -526,7 +526,7 @@ function prepareData(data) {
             
             //console.log(driverinfo);
             //console.log(JSON.stringify(record.geometry));
-            
+
             recorddriver(inscrire);
             https.post(`${url}/addDriver`, inscrire)
             .subscribe(
