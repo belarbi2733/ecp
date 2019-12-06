@@ -63,9 +63,6 @@ import { RouteData } from './searchFolder/map/map.interface';
 import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
 import { MailingService } from './services/mailing.service';
 import { PaypalComponent } from './paypal/paypal.component';
-import {InscrService} from './services/singleComponentServices/inscr.service';
-import {AddColisService} from './services/singleComponentServices/add-colis.service';
-import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
 import {PersonalDataService} from './services/profileServices/personal-data.service';
 import {AccountService} from './services/profileServices/account.service';
 import {PreferencesService} from './services/profileServices/preferences.service';
@@ -74,9 +71,9 @@ import {VehicleService} from './services/profileServices/vehicle.service';
 import {DataTrajService} from './services/admin-list-traj.service';
 import {MesTournService} from './services/mestourn.service';
 import {AdminListUtService} from './services/admin-list-user.service';
-import {InscrService} from './services/inscr.service';
-import {AddColisService} from './services/add-colis.service';
-import {AddtrajetService} from './services/addtrajet.service';
+import {InscrService} from './services/singleComponentServices/inscr.service';
+import {AddColisService} from './services/singleComponentServices/add-colis.service';
+import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
 import { ServerconfigService } from './serverconfig.service';
 
 

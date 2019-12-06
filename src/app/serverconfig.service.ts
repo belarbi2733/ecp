@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class ServerconfigService {
   readonly nodeUrl = 'http://localhost:8081';
-constructor() { 
-
-}
+  constructor() {
+  }
 }

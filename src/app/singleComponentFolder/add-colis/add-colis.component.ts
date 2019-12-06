@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { Colis } from './add-colis.interface';
+import { DataColis } from './add-colis.interface';
 import {AddColisService} from '../../services/singleComponentServices/add-colis.service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
@@ -11,7 +11,7 @@ declare let tomtom: any;
 declare let document: any;
 
 
-let inscription: Colis = {
+let inscription: DataColis = {
   nom: '',
   volume: '',
   departuretime : '',
@@ -25,7 +25,7 @@ let inscription: Colis = {
 let iter = 0;
 // var iteration = 0;
 const routecolis = []  ; // stocke les informations sur le trajet conducteur
-function recordcolis(data: Colis) {
+function recordcolis(data: DataColis) {
 
   data.nom = routecolis[0].nom;
   data.volume = routecolis[0].volume;
@@ -40,7 +40,7 @@ function recordcolis(data: Colis) {
   // addColis(data);
 }
 
-/*function addColis(data: Colis) {
+/*function addColis(data: DataColis) {
   console.log('CC' + JSON.stringify(data));
   http.post(`${this.url}/addColis`, data)
     .subscribe(
@@ -78,7 +78,7 @@ export class AddColisComponent implements OnInit {
   }
 
   /*
-    inscrire(data: Colis) {
+    inscrire(data: DataColis) {
       this.router.navigate(['accueil']);
       console.log('adresse mail: ' + data.nom);
       console.log('mot de passe: ' + data.volume);
@@ -544,7 +544,7 @@ export class AddColisComponent implements OnInit {
       };
     }
 
-    /*function AddColis(data: Colis){
+    /*function AddColis(data: DataColis){
       data.nom = routecolis[0].nom;
       data.volume = routecolis[0].volume;
       console.log(JSON.stringify(data))

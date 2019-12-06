@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ServerconfigService } from '../../serverconfig.service';
 
 @Injectable()
 export class RatingService {
 
-  constructor(private http: HttpClient) { }
-  url = 'http://localhost:8080';
+  constructor(private http: HttpClient, private servUrl: ServerconfigService) { }
+  url = this.servUrl.nodeUrl;
 
   getRatingById(data) {
     return new Promise((resolve, reject) => {

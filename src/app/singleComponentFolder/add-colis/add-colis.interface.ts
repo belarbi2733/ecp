@@ -1,4 +1,4 @@
-export interface Colis {
+export interface DataColis {
     nom: string;
     volume: string;
     departuretime: string;

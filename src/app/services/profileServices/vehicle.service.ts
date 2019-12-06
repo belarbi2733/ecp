@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {DataVehicle} from '../../profileFolder/vehicle/vehicle.interface';
+import {ServerconfigService} from '../../serverconfig.service';
 
 @Injectable()
 export class VehicleService {
 
-  constructor(private http: HttpClient) { }
-  url = 'http://localhost:8080';
+  constructor(private http: HttpClient, private servUrl: ServerconfigService) { }
+  url = this.servUrl.nodeUrl;
 
   modifVehicule(data: DataVehicle) {
     this.http.post(`${this.url}/vehicule/update`, data)

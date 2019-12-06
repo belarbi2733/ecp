@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import {DataAuth} from '../../singleComponentFolder/auth/auth.interface';
+import {ServerconfigService} from '../../serverconfig.service';
 
 @Injectable()
 export class AuthService {
@@ -9,7 +10,7 @@ export class AuthService {
   isAuth: boolean;
   isAdmin: boolean;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private servUrl: ServerconfigService) {
     if (localStorage.length !== 0) {
       this.isAuth = JSON.parse(localStorage.getItem('isAuth')).isAuth;
       this.isAdmin = JSON.parse(localStorage.getItem('isAdmin')).isAdmin;
@@ -20,7 +21,7 @@ export class AuthService {
     }
   }
 
-  url = 'http://localhost:8080';
+  url = this.servUrl.nodeUrl;
 
   signIn() {
     return new Promise(
