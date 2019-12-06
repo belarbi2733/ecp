@@ -434,6 +434,18 @@ app.post('/vehicule/getData' , function (req,res) {
   });
   });*/
 
+app.get('/adminDashBoard/getNbreUsers', function(req,res) {
+  console.log('Request');
+  User.getAllUser(function (err, result) {
+    console.log(result);
+    if (err) {
+      res.status(400).json(err);
+      console.log('Marie tes chiante');
+    } else {
+      res.json(result.rows.length);
+    }
+  });
+});
 /*--------------------------------------------------------------------------------------------------------------- */
 
 

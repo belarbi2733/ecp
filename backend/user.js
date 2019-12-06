@@ -52,7 +52,6 @@ let Utilisateur = {
       console.log("Get All User");
       return db.query('SELECT * FROM utilisateur', callback);
     }
-
 };
 
 
