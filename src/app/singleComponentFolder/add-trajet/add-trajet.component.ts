@@ -520,11 +520,6 @@ export class AddTrajetComponent implements OnInit {
     };
     }
     
-    /*function AddColis(data: Colis){
-      data.nom = routecolis[0].nom;
-      data.volume = routecolis[0].volume;
-      console.log(JSON.stringify(data))
-    };*/
     
     function prepareData(data) {
       
@@ -679,10 +674,4 @@ export class AddTrajetComponent implements OnInit {
     
     }
     
-    public addtrajet(data: Trajet) {
-    
-      
-        
-  
-    }
     }
