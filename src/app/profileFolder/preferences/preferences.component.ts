@@ -24,10 +24,12 @@ export class PreferencesComponent implements OnInit {
   ngOnInit() {
     this.prefServ.getUserPrefById(this.preferences)
       .then((dataUser: DataPreferences) => {
-        this.preferences.prefAnimaux = dataUser.prefAnimaux;
-        this.preferences.prefFumer = dataUser.prefFumer;
-        console.log('Preferences : ' + dataUser.prefAnimaux + ' et ' + dataUser.prefFumer);
-        this.error = '';
+        if (dataUser.prefAnimaux !== null || dataUser.prefFumer !== null) {
+          this.preferences.prefAnimaux = dataUser.prefAnimaux.toString();
+          this.preferences.prefFumer = dataUser.prefFumer.toString();
+          console.log('Preferences : ' + this.preferences.prefAnimaux + ' et ' + this.preferences.prefFumer);
+          this.error = '';
+        }
       })
       .catch( () => {
         console.log('Error in getUserPrefById');
@@ -36,16 +38,20 @@ export class PreferencesComponent implements OnInit {
   }
 
   updatePreferences(data: DataPreferences) {
-    console.log('Pref id :' + this.preferences.idUser);
+    /*console.log('Pref id :' + this.preferences.idUser);
     console.log('Pref Animaux : ' + this.preferences.prefAnimaux);
-    console.log('Pref Fumer : ' + this.preferences.prefFumer);
-    this.prefServ.updatePref(data)
-      .then(() => {
-        this.error = 'Vos préférences ont bien été enregistrées';
-      })
-      .catch(() => {
-        console.log('Error in updatePreferences');
-        this.error = 'Erreur database !';
-      });
+    console.log('Pref Fumer : ' + this.preferences.prefFumer);*/
+    if (data.prefFumer === null || data.prefAnimaux === null) {
+      this.error = 'Tous les champs ne sont pas complétés !';
+    } else {
+      this.prefServ.updatePref(data)
+        .then(() => {
+          this.error = 'Vos préférences ont bien été enregistrées';
+        })
+        .catch(() => {
+          console.log('Error in updatePreferences');
+          this.error = 'Erreur database !';
+        });
+    }
   }
 }

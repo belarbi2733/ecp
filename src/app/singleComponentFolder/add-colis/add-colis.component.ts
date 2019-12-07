@@ -1,18 +1,14 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { DataColis } from './add-colis.interface';
 import {AddColisService} from '../../services/singleComponentServices/add-colis.service';
-import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import { ColisComponent } from 'src/app/accueilFolder/colis/colis.component';
-import { ServerconfigService} from '../../serverconfig.service';
-// import { FormGroup, FormBuilder } from '@angular/forms';
 declare let L;
 declare let tomtom: any;
 declare let document: any;
 
 
 let inscription: DataColis = {
+  idUser: null,
   nom: '',
   volume: '',
   departuretime : '',
@@ -53,7 +49,9 @@ export class AddColisComponent implements OnInit {
   nom = '';
   volume = '';
 
-  constructor(private router: Router, public http : HttpClient,private rurl: ServerconfigService) { }
+  constructor(private addColisService: AddColisService) {
+    inscription.idUser = JSON.parse(localStorage.getItem('idUser')).id;
+  }
 
   save() {
 
@@ -65,9 +63,7 @@ export class AddColisComponent implements OnInit {
 
   ngOnInit() {
 
-    const https = this.http;
-    const routeur = this.router;
-    const url = this.rurl.nodeUrl;
+    const service = this.addColisService;
 
 // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
@@ -535,17 +531,7 @@ export class AddColisComponent implements OnInit {
           // console.log(JSON.stringify(routecolis));
           // console.log(JSON.stringify(routecolis[0].nom));
           recordcolis(inscription);
-          https.post(`${url}/addColis`, inscription)
-          .subscribe(
-            res => {
-             console.log(res);
-             routeur.navigate(['accueil']);
-           },
-            err => {
-             console.log('Erreur avec ajout colis:' , err);
-            }
-          );
-          // AddColisComponent.bite(AddColisComponent.inscription);
+          service.addColis(inscription);
 
 
           iter = iter + 1; // comme ça ne stocke que pour le temps demander

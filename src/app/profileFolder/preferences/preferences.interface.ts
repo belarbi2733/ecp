@@ -1,6 +1,6 @@
 export interface DataPreferences {
   idUser: number;
-  prefAnimaux: number;
-  prefFumer: boolean;
+  prefAnimaux: string;
+  prefFumer: string;
 }
 

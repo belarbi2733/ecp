@@ -29,8 +29,10 @@ export class VehicleComponent implements OnInit {
         this.vehicule.modele = dataUser.modele;
         this.vehicule.sieges = dataUser.sieges;
         this.vehicule.volumeCoffre = dataUser.volumeCoffre;*/
-        this.vehicule = dataUser;
-        console.log(this.vehicule);
+        if (dataUser !== null) {
+          this.vehicule = dataUser;
+          console.log(this.vehicule);
+        }
       })
       .catch( () => {
         console.log('Error in getUserDataById');

@@ -44,7 +44,7 @@ export class PersonalDataComponent implements OnInit {
 
   modifierInfo(data: DataPersonal) {
     this.error = '';
-    if (data.nom === '' || data.prenom === '' || data.sexe === '' || data.mail === '' || data.tel === '' || data.date_naiss === '') {
+    if (data.nom === '' || data.prenom === '' || data.sexe === null || data.mail === '' || data.tel === '' || data.date_naiss === '') {
       this.error = 'Certains champs ne sont pas complétés !';
     } else {
       console.log('Update Perso');

@@ -1,4 +1,5 @@
 export interface DataColis {
+    idUser: number;
     nom: string;
     volume: string;
     departuretime: string;
