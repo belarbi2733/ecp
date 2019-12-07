@@ -24,7 +24,7 @@ export class RatingComponent implements OnInit {
     this.ratingService.getRatingById(this.rating)
       .then((dataUser: RatingInterface) => {
         this.rating.currentRate = dataUser.currentRate;
-        console.log(this.ratingService);
+        // console.log(this.rating.currentRate);
       })
       .catch( () => {
         console.log('Error in getRatingById');

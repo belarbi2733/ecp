@@ -1,11 +1,8 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component, OnInit} from '@angular/core';
 import { Trajet } from './add-trajet.interface';
 import {AddtrajetService} from '../../services/singleComponentServices/addtrajet.service';
-import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import { ServerconfigService} from '../../serverconfig.service';
-// import { FormGroup, FormBuilder } from '@angular/forms';
 
 declare let L;
 declare let tomtom: any;
@@ -25,6 +22,7 @@ let inscription: Trajet = {
 let iter = 0;
 // var iteration = 0;
 let routetrajet = []  ; // stocke les informations sur le trajet conducteur
+
 function recordtrajet(data: Trajet) {
 
   data.departuretime = routetrajet[0].departuretime;
@@ -46,17 +44,12 @@ function recordtrajet(data: Trajet) {
 @Injectable()
 export class AddTrajetComponent implements OnInit {
 
-  constructor(private router: Router, private addtrajetservice: AddtrajetService, public http: HttpClient, private servUrl: ServerconfigService) {
+  constructor(private addtrajetservice: AddtrajetService, private servUrl: ServerconfigService) {
     inscription.idUser = JSON.parse(localStorage.getItem('idUser')).id;
   }
 
-
   ngOnInit() {
-
-    // let addtraj :AddTrajetComponent;
-    const https = this.http;
-    const routeur = this.router;
-    const url = this.servUrl.nodeUrl;
+    const service = this.addtrajetservice; // Pour pouvoir utiliser le service dans les functions;
 
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
@@ -558,22 +551,10 @@ export class AddTrajetComponent implements OnInit {
           // console.log(JSON.stringify(routecolis));
           // console.log(JSON.stringify(routecolis[0].nom));
           recordtrajet(inscription);
-          //addtraj.addtrajet(inscription);
-
-          https.post(`${url}/addtrajet`, inscription)
-            .subscribe(
-              res => {
-                routeur.navigate(['accueil']);
-                console.log(res);
-              },
-              err => {
-                console.log('Error occured:', err);
-              }
-            );
-          //AddColisComponent.bite(AddColisComponent.inscription);
+          service.addtrajet(inscription);
 
 
-          iter = iter + 1; //comme ça ne stocke que pour le temps demander
+          iter = iter + 1; // comme ça ne stocke que pour le temps demander
 
 
         }
