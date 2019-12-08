@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
+import {PaypalInterface} from './paypal.interface';
+import {PaypalService} from '../services/paypal.service';
+
 
 @Component({
   selector: 'app-paypal',
@@ -8,28 +11,40 @@ import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
 })
  export class PaypalComponent implements OnInit {
 
+
+  paypalInterface: PaypalInterface = {
+    prix: ''
+  };
+  constructor(private paypalService: PaypalService) {
+  }
    public payPalConfig?: IPayPalConfig;
-   prix: string = '0.99';
 
    ngOnInit(): void {
      this.initConfig();
-   }
 
+     this.paypalService.getPricePaypal(this.paypalInterface)
+       .then((paypalInterface: PaypalInterface) => {
+         this.paypalInterface.prix = paypalInterface.prix;
+       })
+       .catch(() => {
+         console.log('Error');
+       });
+   }
    private initConfig(): void {
      this.payPalConfig = {
      currency: 'EUR',
      clientId: 'AXHTZO11HV_dLhnyDxxlsRiYHWaWFIB4HL9gmHHavzx13IPXvQNSiJWcNCRQQESic_-H-CLOFc0NW0Qq',
-     createOrderOnClient: (data) => <ICreateOrderRequest>{
+     createOrderOnClient: (data) => <ICreateOrderRequest> {
        intent: 'CAPTURE',
        purchase_units: [
          {
            amount: {
              currency_code: 'EUR',
-             value: this.prix,
+             value: this.paypalInterface.prix,
              breakdown: {
                item_total: {
                  currency_code: 'EUR',
-                 value: this.prix
+                 value: this.paypalInterface.prix
                }
              }
            },
@@ -40,7 +55,7 @@ import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
                category: 'DIGITAL_GOODS',
                unit_amount: {
                  currency_code: 'EUR',
-                 value: this.prix,
+                 value: this.paypalInterface.prix,
                },
              }
            ]

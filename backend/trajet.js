@@ -8,6 +8,8 @@ let Trajet = {
     db.query('INSERT INTO trajet (depart, arrivee, book_places) VALUES ($1, $2, $3)', [trajet.depart, trajet.arrivee, trajet.places], callback);
   },
 
+
+
   // updateTrajet: function(Trajet, callback)
   // {
   //   console.log("Update trajet en cours...");
@@ -25,6 +27,13 @@ let Trajet = {
     return db.query('SELECT * FROM trajet', callback);
   },
 
+  getPrice: function(callback)
+  {
+    console.log("getPrice : ");
+    console.log("test");
+    return db.query('SELECT prix FROM trajet ');
+
+  },
   calcPrixTraj: function(callback)
   {
     console.log("Calcul du Prix du trajet");

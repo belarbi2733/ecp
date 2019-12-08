@@ -40,7 +40,7 @@ app.use(bodyParser.json());
 
 
 app.post('/inscription',function (req, res) {
-  User.addUtilisateur(req,function(err,result){
+    User.addUtilisateur(req,function(err,result){
     // console.log(req.body);
     if(err) {
       res.status(400).json(err);
@@ -127,7 +127,7 @@ app.post('/addColis', function (req, res) {
 
 
 app.post('/addtrajet' , function (req, res) {
-  Trajet.addTrajet(req.body,function(err,result){
+  Trajet.addTrajet(req, function(err,result) {
     // console.log(req.body);
     console.log(result);
     if(err) {
@@ -305,20 +305,31 @@ app.get('/admin-list-ut', function(req,res) {
     if(err) {
       res.status(400).json(err);
     }
-    else
-    {
+    else {
       const tmpResultUser = result.rows[0];
       //console.log(result.rows[0]);
       let objJson = {
         "nom": tmpResultUser.nom,
         "prenom": tmpResultUser.prenom,
         "id": tmpResultUser.id
-        /*"nom": "TestfinalNode",
-        "prenom": "TestFinalNode",
-        "nbre_traj": 3*/
       };
-      //console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
+
       res.json(objJson);
+     // console.log(result.rowCount);
+     /* console.log(result.row);*/
+     /* for(let i=0; i < result.rowCount ; i++)
+      {
+      const tmpResultUser = result.rows[0];
+      //console.log(result.rows[0]);
+      let objJson = {
+        "nom": tmpResultUser.nom,
+        "prenom": tmpResultUser.prenom,
+        "id": tmpResultUser.id
+      };
+
+      }*/
+      //console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
+     /* res.json(objJson);*/
     }
   });
 });
@@ -326,8 +337,8 @@ app.get('/admin-list-ut', function(req,res) {
 /*-----------------------------------11---------------------------------------------------------------------------- */
 
 
-app.get('/calcPrixTraj', function(req,res){
-  Trajet.calcPrixTraj(function(err,result){
+/*app.get('/paypal', function(req,res){
+  // Trajet.calcPrixTraj(function(err,result){
     if(err) {
       console.log("Erreur dans le calcul du prix. Les données de la base de donnée ne sont pas chargées");
     }
@@ -335,40 +346,54 @@ app.get('/calcPrixTraj', function(req,res){
     else {
       let prixCarb = 1.4;
       let consoVoit = 4.5;
-      const tmpResultPrix = result.rows[0];
-      let distance = tmpResultPrix.distance;
-      let bookPlaces = tmpResultPrix.book_places;
-      function prixTraj(a,b,c) {
-        var d = ((c * b)/100)*a ;
+      //  const tmpResultPrix = result.rows[0];
+      /!* let distance = tmpResultPrix.distance;
+       let bookPlaces = tmpResultPrix.book_places;*!/
+      let bookPlaces = 2;
+      let distance = 100;
 
-        d = discount(d,bookPlaces);
-        return d;
+      function prixTraj(a, b, c, d) {
+        let e = ((c * b) / 100) * a;
+
+        e = discount(e, d);
+        return e;
 
       }
-      console.log(prixTraj(prixCarb,consoVoit, distance) + " € ");
+
+      console.log(prixTraj(prixCarb, consoVoit, distance, bookPlaces) + " € ");
 
       function discount(prix, bookPlaces) {
-        if(bookPlaces === 1)
-        {
+        if (bookPlaces === 1) {
           return prix - ((prix / 100) * 5);
         }
-        if(bookPlaces === 2)
-        {
+        if (bookPlaces === 2) {
           return prix - ((prix / 100) * 10);
         }
-        if(bookPlaces === 3)
-        {
+        if (bookPlaces === 3) {
           return prix - ((prix / 100) * 15);
         }
-        if(bookPlaces === 4)
-        {
-          return prix - ((prix/100) * 20);
-        }
-        else {
+        if (bookPlaces === 4) {
+          return prix - ((prix / 100) * 20);
+        } else {
           console.log("Erreur trop ou pas assez de clients dans le véhicule");
         }
       }
+    }
+  });*/
 
+/*-----------------------------------11---------------------------------------------------------------------------- */
+app.get('/paypal', function(req,res){
+  User.getPrice(function(err, result) {
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      console.log(result.rows[0]);
+      const tmpResultprice = result.rows[0];
+      //console.log(result.rows[0]);
+      let objJson = {
+        "prix": tmpResultprice.prix
+      };
+      res.json(objJson);
     }
   });
 });
