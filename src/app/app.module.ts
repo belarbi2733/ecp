@@ -59,7 +59,7 @@ import { MesTrajComponent } from './reservations/mes-traj/mes-traj.component';
 import { MesColisComponent } from './reservations/mes-colis/mes-colis.component';
 import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component';
 import { Navbar2Component } from './navbar2/navbar2.component';
-//import { RouteData } from './searchFolder/map/map.interface';
+// import { RouteData } from './searchFolder/map/map.interface';
 import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
 import { MailingService } from './services/mailing.service';
 import { PaypalComponent } from './paypal/paypal.component';
@@ -75,7 +75,7 @@ import {InscrService} from './services/singleComponentServices/inscr.service';
 import {AddColisService} from './services/singleComponentServices/add-colis.service';
 import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
 import { ServerconfigService } from './serverconfig.service';
-
+import {PaypalService} from './services/paypal.service';
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -185,7 +185,8 @@ const appRoutes: Routes = [
     MesTournService,
     AdminListUtService,
     AddtrajetService,
-    ServerconfigService
+    ServerconfigService,
+    PaypalService
   ],
   bootstrap: [AppComponent]
 })
