@@ -49,11 +49,6 @@ function recordtrajet(data: Trajet) {
 
 }
 
-
-
-  console.log(JSON.stringify(data));
-
-}
 @Component({
   selector: 'app-add-trajet',
   templateUrl: './add-trajet.component.html',
