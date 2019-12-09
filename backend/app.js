@@ -390,6 +390,9 @@ app.get('/paypal', function(req,res){
       }
 
       let prixfinal = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
+      prixfinal = prixfinal.toString(10);
+      console.log(typeof prixfinal  );
+      console.log(prixfinal);
      let objJson = {
        "prix": prixfinal
      };
