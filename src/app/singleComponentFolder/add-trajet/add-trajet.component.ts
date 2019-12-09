@@ -12,6 +12,8 @@ import { ServerconfigService} from '../../serverconfig.service';
 declare let L;
 declare let tomtom: any;
 declare let document:any;
+var dep : string;
+var arr : string;
 //var addtrajetservice : AddtrajetService;
 
 
@@ -21,7 +23,10 @@ var inscription: Trajet = {
   distanceinmeters: '',
   delaytraffic: '',
   departance : '',
-  arrival : ''
+  arrival : '',
+  departanceaddress:'',
+  arrivaladdress: ''
+
 };
 
 var iter =0;
@@ -35,6 +40,8 @@ function recordtrajet (data: Trajet){
   data.delaytraffic = routetrajet[0].delaytraffic;
   data.departance = routetrajet[0].departance;
   data.arrival = routetrajet[0].arrival;
+  data.departanceaddress = routetrajet[0].departanceaddress;
+  data.arrivaladdress = routetrajet[0].arrivaladdress;
   console.log(JSON.stringify(data)); 
   //AddTrajetComponent.addtrajet();
   //addtrajet(data);
@@ -71,9 +78,9 @@ export class AddTrajetComponent implements OnInit {
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
     // Set TomTom keys
-    tomtom.key('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
-    tomtom.routingKey('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
-    tomtom.searchKey('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
+    tomtom.key('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
+    tomtom.routingKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
+    tomtom.searchKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
     
     
     var formOptions = {
@@ -84,7 +91,7 @@ export class AddTrajetComponent implements OnInit {
     var listScrollHandler = null;
     
     const map = tomtom.L.map('map', {
-    key: 'fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR',
+    key: '2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7',
     basePath: '/assets/sdktool/sdk',
     center: [ 50.8504500, 4.3487800 ],
     zoom: 10,
@@ -95,8 +102,9 @@ export class AddTrajetComponent implements OnInit {
 
 
     
-    
     var routeInputs = tomtom.routeInputs().addTo(map);
+    //
+
     var form = document.getElementById('form');
     var batchRoutingControl = tomtom.foldable(formOptions).addTo(map).addContent(form);
     window.addEventListener('resize', function() {
@@ -123,11 +131,36 @@ export class AddTrajetComponent implements OnInit {
     var arrivalOrDeparture = document.querySelector('select#type');
     var submitButton = document.querySelector('input[type=submit]');
     var routePoints;
+    
     routeInputs.on(routeInputs.Events.LocationsFound, function(event) {
+      
     if (!event.points[0] || !event.points[1]) {
       routePoints = null;
     } else {
       routePoints = event.points;
+
+        tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
+            .go(function(response) {
+                if (response && response.address && response.address.freeformAddress) {
+                  console.log(JSON.stringify(response.address.freeformAddress));
+                  dep = response.address.freeformAddress;
+                } else {
+                    
+                }
+                
+            });
+        tomtom.reverseGeocode({position: [routePoints[1].lat, routePoints[1].lon]})
+            .go(function(resp) {
+                if (resp && resp.address && resp.address.freeformAddress) {
+                  console.log(JSON.stringify(resp.address.freeformAddress));
+                  arr = resp.address.freeformAddress;
+                } else {
+                    
+                }
+                
+            });
+  
+
     }
     submitButton.disabled = !routePoints;
     });
@@ -534,14 +567,18 @@ export class AddTrajetComponent implements OnInit {
     }).map(function(record) {
     
       if (iter <1){
-    
-          routetrajet.push(  {
+          
+        routetrajet.push(  {
           "departuretime" : record.summary.departureTime,
           "traveltimeinseconds" : record.summary.travelTimeInSeconds,
           "distanceinmeters" : record.summary.lengthInMeters,
           "delaytraffic" : record.summary.liveTrafficIncidentsTravelTimeInSeconds -record.summary.noTrafficTravelTimeInSeconds,
           "departance" : record.geometry.coordinates[1],
-          "arrival" : record.geometry.coordinates[record.geometry.coordinates.length - 1]}); //premier élément de route geometry = coordonnées de départ, dernier = arrivée;
+          "arrival" : record.geometry.coordinates[record.geometry.coordinates.length - 1],
+          "departanceaddress" : dep,
+          "arrivaladdress" : arr
+        },
+          ); //premier élément de route geometry = coordonnées de départ, dernier = arrivée;
           
           
           //AddColis(colis);
