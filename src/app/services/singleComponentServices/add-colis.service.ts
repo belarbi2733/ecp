@@ -10,7 +10,6 @@ export class AddColisService {
   url = this.servUrl.nodeUrl;
 
   addColis(data: DataColis) {
-    console.log('CC');
     this.http.post(`${this.url}/addColis`, data)
       .subscribe(
         res => {

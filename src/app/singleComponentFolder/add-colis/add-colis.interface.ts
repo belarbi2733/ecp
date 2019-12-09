@@ -8,6 +8,6 @@ export interface DataColis {
     delaytraffic: string;
     departure: string;
     arrival: string;
-    departureaddress: string;
-    arrivaladdress: string
+    departureAddress: string;
+    arrivalAddress: string;
   }

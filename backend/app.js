@@ -8,6 +8,8 @@ let Voiture = require('./voiture');
 let Tournee = require('./tournee');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
+let _ = require('underscore');
+let Math = require('mathjs');
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -101,6 +103,7 @@ app.post('/auth/getId', function (req,res) {
 
 /*----------------------------4----------------------------------------------------------------------------------- */
 
+//On ajoute un colis, puis on va recup son id qui a été incrémenter pour pouvoir générer le trajet découlant de ce colis
 
 app.post('/addColis', function (req, res) {
   Colis.addColis(req.body,function(err,result){
@@ -110,15 +113,24 @@ app.post('/addColis', function (req, res) {
       console.log('Erreur add');
     }
     else {
-      Colis.generateTrajet(req.body, req.body.depart, req.body.arrivee, function (err2, result2){
+      Colis.getIdColisByIdUser(req.body, function (err2, result2) {
+        console.log(result2.rows[0]);
         if(err2) {
           res.status(400).json(err2);
-          console.log('Erreur generate');
-        }
-        else {
-          res.json(result);
+          console.log('Erreur getIdColis');
+        } else {
+          Colis.generateTrajet(req.body, result2.rows[0].id, function (err3, result3){  //result.rows[0].id ===> idColis
+            if(err3) {
+              res.status(400).json(err3);
+              console.log('Erreur generate');
+            }
+            else {
+              res.json(result);
+            }
+          });
         }
       });
+
     }
   });
 });
@@ -159,7 +171,7 @@ app.post('/mes-tourn', function(req,res) {
         "nbre_pass": tmpResult2.heure_depart
       };
       //console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
-      res.json(objJson);
+      res.json(objJson2);
     }
   });
 });
@@ -481,20 +493,78 @@ app.post('/vehicule/getData' , function (req,res) {
   });
   });*/
 
-app.get('/adminDashBoard/getNbreUsers', function(req,res) {
+/*app.get('/adminDashBoard/getNbreUsers', function(req,res) {
   console.log('Request');
   User.getAllUser(function (err, result) {
     console.log(result);
     if (err) {
       res.status(400).json(err);
-      console.log('Marie tes chiante');
     } else {
       res.json(result.rows.length);
     }
   });
-});
+});*/
 /*--------------------------------------------------------------------------------------------------------------- */
 
+app.post('/matchDriverTrajet', function(req,res) {
+  console.log(req.body);
+  Trajet.getAllTrajet(function (err,result) {
+    if(err) {
+      res.status(400).json(err);
+      console.log('Error 1');
+    }
+    else
+    {
+      if(result.rows.length) {
+        let arrayTrajet = [];
+        let arrayColis = [];
+        _.each(result.rows, function(one) { // bibliothèque underscore _     //Pour chaque trajet, check
+          //console.log(req.body); (from Tomtom)
+          //console.log('Coucou : ' + JSON.stringify(one));  // (from DB)
+          Trajet.findTrajetAroundRayon(req.body,one,5, function (err2, result2) {  //req.body => search
+            if(err2) {
+              // res.status(400).json(err2);
+              //console.log('Error 2');
+              console.log(err2);
+            }
+            else {
+              if (result2.rows.length) {
+
+                //Calcul de la distance entre le conducteur et le colis/trajet (en long et lat) en kms
+                /*let longitude1 = req.body.departure[0] * Math.PI / 180;
+                let longitude2 = one.depart_x * Math.PI / 180;
+
+                let latitude1 = req.body.departure[1] * Math.PI / 180;
+                let latitude2 = one.depart_y * Math.PI / 180;
+
+                const R = 6371;
+
+                let dist = R * Math.acos(Math.cos(latitude1) * Math.cos(latitude2) *
+                  Math.cos(longitude2 - longitude1) + Math.sin(latitude1) *
+                  Math.sin(latitude2));
+
+                console.log('dist : ' + dist);*/
+
+                if(one.id_colis) {
+                  //Séquence si c'est un colis
+
+                  // arrayColis.push({one.id}:[dist,1,req.body.departure[1],req.body.departure[0],req.body.arrival[1],req.body.arrival[0]]);
+                  console.log('Colis : ' + one.id_colis + ' id : ' + one.id);
+                } else {
+                  //Séquence si c'est un trajet
+                  console.log('Trajet : ' + one.id);
+                }
+              }
+            }
+          });
+        });
+      }
+      else {
+        res.json(null);
+      }
+    }
+  });
+});
 
 //Script nodemailer
 app.use(cors({origin: "*"}));
