@@ -37,7 +37,8 @@ let Trajet = {
   calcPrixTraj: function(callback)
   {
     console.log("Calcul du Prix du trajet");
-    return db.query('SELECT book_places, distance FROM trajet',callback);
+    // return db.query('SELECT book_places, distance FROM trajet',callback);
+    return db.query('SELECT book_places, distance FROM trajet', callback);
   }
 };
 

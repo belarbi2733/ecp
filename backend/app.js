@@ -307,14 +307,14 @@ app.get('/admin-list-ut', function(req,res) {
     }
     else {
       const tmpResultUser = result.rows[0];
-      //console.log(result.rows[0]);
-      let objJson = {
+      console.log(result.rows);
+      /*let objJson = {
         "nom": tmpResultUser.nom,
         "prenom": tmpResultUser.prenom,
         "id": tmpResultUser.id
-      };
+      };*/
 
-      res.json(objJson);
+      res.json(result.rows);
      // console.log(result.rowCount);
      /* console.log(result.row);*/
      /* for(let i=0; i < result.rowCount ; i++)
@@ -337,30 +337,39 @@ app.get('/admin-list-ut', function(req,res) {
 /*-----------------------------------11---------------------------------------------------------------------------- */
 
 
-/*app.get('/paypal', function(req,res){
-  // Trajet.calcPrixTraj(function(err,result){
+app.get('/paypal', function(req,res){
+   Trajet.calcPrixTraj(function(err,result){
     if(err) {
       console.log("Erreur dans le calcul du prix. Les données de la base de donnée ne sont pas chargées");
     }
 
     else {
+    }
       let prixCarb = 1.4;
       let consoVoit = 4.5;
       //  const tmpResultPrix = result.rows[0];
-      /!* let distance = tmpResultPrix.distance;
-       let bookPlaces = tmpResultPrix.book_places;*!/
-      let bookPlaces = 2;
-      let distance = 100;
+      /* let distance = tmpResultPrix.distance;
+       let bookPlaces = tmpResultPrix.book_places;*/
+
+      /*let distance = 100;*/
+     // console.log(result.rows[0]);
+      // let distance = new Number (parseInt(result.rows[0],10));
+     const tmpResultPrix = result.rows[0];
+     let distance = tmpResultPrix.distance;
+     let bookPlaces = tmpResultPrix.book_places;
+/*
+      console.log(distance);
+     console.log(typeof distance);
+*/
 
       function prixTraj(a, b, c, d) {
         let e = ((c * b) / 100) * a;
-
-        e = discount(e, d);
-        return e;
+        console.log('Prix plein : ' + e);
+        return discount(e,d);
 
       }
 
-      console.log(prixTraj(prixCarb, consoVoit, distance, bookPlaces) + " € ");
+     console.log('Prix discount : ' + prixTraj(prixCarb, consoVoit, distance, bookPlaces) + " € ");
 
       function discount(prix, bookPlaces) {
         if (bookPlaces === 1) {
@@ -377,18 +386,25 @@ app.get('/admin-list-ut', function(req,res) {
         } else {
           console.log("Erreur trop ou pas assez de clients dans le véhicule");
         }
+
       }
-    }
-  });*/
+
+      let prixfinal = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
+     let objJson = {
+       "prix": prixfinal
+     };
+     res.json(objJson);
+    });
+  });
 
 /*-----------------------------------11---------------------------------------------------------------------------- */
-app.get('/paypal', function(req,res){
+/*app.get('/paypal', function(req,res){
   User.getPrice(function(err, result) {
     if (err) {
       res.status(400).json(err);
     } else {
-      console.log(result.rows[0]);
-      const tmpResultprice = result.rows[0];
+      console.log(result.rows[1]);
+      const tmpResultprice = result.rows[1];
       //console.log(result.rows[0]);
       let objJson = {
         "prix": tmpResultprice.prix
@@ -396,7 +412,7 @@ app.get('/paypal', function(req,res){
       res.json(objJson);
     }
   });
-});
+});*/
 
 app.post('/vehicule/update', function(req,res) {
   console.log(req.body);
