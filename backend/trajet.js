@@ -9,6 +9,8 @@ let Trajet = {
       [trajet.idUser, trajet.departuretime, trajet.distanceinmeters, trajet.departance[0], trajet.departance[1], trajet.arrival[0], trajet.arrival[1], 1], callback);
   },
 
+
+
   // updateTrajet: function(Trajet, callback)
   // {
   //   console.log("Update trajet en cours...");
@@ -26,10 +28,18 @@ let Trajet = {
     return db.query('SELECT * FROM trajet', callback);
   },
 
+  getPrice: function(callback)
+  {
+    console.log("getPrice : ");
+    console.log("test");
+    return db.query('SELECT prix FROM trajet ');
+
+  },
   calcPrixTraj: function(callback)
   {
     console.log("Calcul du Prix du trajet");
-    return db.query('SELECT book_places, distance FROM trajet',callback);
+    // return db.query('SELECT book_places, distance FROM trajet',callback);
+    return db.query('SELECT book_places, distance FROM trajet', callback);
   }
 };
 

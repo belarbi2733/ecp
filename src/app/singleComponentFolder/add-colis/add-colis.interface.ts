@@ -6,6 +6,8 @@ export interface DataColis {
     traveltimeinseconds: string;
     distanceinmeters: string;
     delaytraffic: string;
-    departance: string;
+    departure: string;
     arrival: string;
+    departureaddress: string;
+    arrivaladdress: string
   }
