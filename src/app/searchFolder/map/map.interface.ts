@@ -4,5 +4,7 @@ export interface Driver {
     distance: string;
     trafficdelay: string;
     routegeometry: string;
+    departanceaddress: string;
+    arrivaladdress: string
 }
   
