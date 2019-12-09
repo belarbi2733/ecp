@@ -279,7 +279,6 @@ export class AddColisComponent implements OnInit {
           .then(updateListElements)
           .then(clickFirstListItem)
           .then(unlockBatchRequests, handleBatchRequestError);
-
       } catch (err) {
         handleBatchRequestError(err);
       }
@@ -326,10 +325,6 @@ export class AddColisComponent implements OnInit {
       delay.innerHTML = result.delay ? formatDiff(result.delay) : '--';
       live.innerHTML = result.liveTraffic ? formatDiff(result.liveTraffic) : '--';
       noTraffic.innerHTML = result.noTraffic ? formatDiff(result.noTraffic) : '--';
-
-
-
-
     }
     let route;
     function drawRoute(result) {
@@ -554,6 +549,7 @@ export class AddColisComponent implements OnInit {
         if (iter < 1) {
 
           routecolis.push(  {
+
             "departuretime" : record.summary.departureTime,
             "traveltimeinseconds" : record.summary.travelTimeInSeconds,
             "distanceinmeters" : record.summary.lengthInMeters,
@@ -611,6 +607,11 @@ export class AddColisComponent implements OnInit {
         results: results.map(attachColorAndRatio(min, max))
       };
     }
+
+    function sendDataToService(service: AddColisService) {
+      service.addColis(inscription);
+    }
+
     function mergeData(previous) {
       return function(current) {
         let results = current.results;

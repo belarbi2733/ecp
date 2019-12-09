@@ -76,10 +76,10 @@ import {InscrService} from './services/singleComponentServices/inscr.service';
 import {AddColisService} from './services/singleComponentServices/add-colis.service';
 import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
 import { ServerconfigService } from './serverconfig.service';
+import { PaypalService } from './services/paypal.service';
 import { AdminpayComponent } from './adminFolder/adminpay/adminpay.component';
 import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
-import {UserStatService} from './services/adminServices/userstat.service';
-
+import { UserStatService } from './services/adminServices/userstat.service';
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -194,6 +194,7 @@ const appRoutes: Routes = [
     AdminListUtService,
     AddtrajetService,
     ServerconfigService,
+    PaypalService,
     UserStatService
   ],
   bootstrap: [AppComponent]

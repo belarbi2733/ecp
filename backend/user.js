@@ -2,7 +2,16 @@ let db = require("./db.js");
 
 let Utilisateur = {
 
-    addUtilisateur: function(utilisateur, callback)
+  getPrice: function(callback)
+  {
+    console.log("getPrice : ");
+    console.log("test");
+    return db.query('SELECT prix FROM trajet ', callback);
+
+  },
+
+
+  addUtilisateur: function(utilisateur, callback)
     {
       console.log("Insert user en cours...");
       db.query('INSERT INTO utilisateur (mail,password,statut) VALUES ($1, $2, $3)', [utilisateur.body.adresse_mail, utilisateur.body.mot_passe,1], callback);
