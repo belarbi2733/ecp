@@ -8,6 +8,8 @@ import { ServerconfigService } from 'src/app/serverconfig.service';
 declare let L;
 declare let tomtom: any;
 declare let document:any;
+var dep : string;
+var arr : string;
 var driverinfo = [];
 
 var iter =0;
@@ -16,13 +18,18 @@ var inscrire : Driver = {
     time: '',
     distance: '',
     trafficdelay: '',
-    routegeometry: ''}
+    routegeometry: '',
+    departanceaddress:'',
+    arrivaladdress: ''}
+
 function recorddriver(data:Driver){
   data.departuretime = driverinfo[0].departuretime;
   data.time = driverinfo[0].traveltimeinseconds;
   data.distance = driverinfo[0].distance;
   data.trafficdelay = driverinfo[0].delaytraffic;
   data.routegeometry= driverinfo[0].routegeometry;
+  data.departanceaddress = driverinfo[0].departanceaddress;
+  data.arrivaladdress = driverinfo[0].arrivaladdress;
   console.log(JSON.stringify(data));
   
 
@@ -52,9 +59,9 @@ export class MapComponent implements OnInit {
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
     // Set TomTom keys
-    tomtom.key('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
-    tomtom.routingKey('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
-    tomtom.searchKey('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
+    tomtom.key('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
+    tomtom.routingKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
+    tomtom.searchKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
 
     
     var formOptions = {
@@ -65,7 +72,7 @@ export class MapComponent implements OnInit {
     var listScrollHandler = null;
 
       const map = tomtom.L.map('map', {
-        key: 'fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR',
+        key: '2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7',
         basePath: '/assets/sdktool/sdk',
         center: [ 52.360306, 4.876935 ],
         zoom: 15,
@@ -104,6 +111,26 @@ routeInputs.on(routeInputs.Events.LocationsFound, function(event) {
         routePoints = null;
     } else {
         routePoints = event.points;
+        tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
+            .go(function(response) {
+                if (response && response.address && response.address.freeformAddress) {
+                  console.log(JSON.stringify(response.address.freeformAddress));
+                  dep = response.address.freeformAddress;
+                } else {
+                    
+                }
+                
+            });
+        tomtom.reverseGeocode({position: [routePoints[1].lat, routePoints[1].lon]})
+            .go(function(resp) {
+                if (resp && resp.address && resp.address.freeformAddress) {
+                  console.log(JSON.stringify(resp.address.freeformAddress));
+                  arr = resp.address.freeformAddress;
+                } else {
+                    
+                }
+                
+            });
     }
     submitButton.disabled = !routePoints;
 });
@@ -506,20 +533,14 @@ function prepareData(data) {
 
         if (iter <1){
 
-            /*
-            donnee.departuretime = record.summary.departureTime ;
-            this.donnee.time = record.summary.travelTimeInSeconds ;
-            this.donnee.distance = record.summary.lengthInMeters ;
-            this.donnee.trafficdelay = record.summary.liveTrafficIncidentsTravelTimeInSeconds -record.summary.noTrafficTravelTimeInSeconds ;
-           
-            this.DriverService.inscription(donnee);
-            //console.log(donnee.time);
-            */
             driverinfo.push( {"departuretime" : record.summary.departureTime,
             "traveltimeinseconds" : record.summary.travelTimeInSeconds,
             "distanceinmeters" : record.summary.lengthInMeters,
             "delaytraffic" : record.summary.liveTrafficIncidentsTravelTimeInSeconds -record.summary.noTrafficTravelTimeInSeconds,
-            "routegeometry" : record.geometry});//premier élément de route geometry = coordonnées de départ, dernier = arrivée;
+            "routegeometry" : record.geometry,
+            "departanceaddress" : dep,
+            "arrivaladdress" : arr
+        });//premier élément de route geometry = coordonnées de départ, dernier = arrivée;
             
         
             
