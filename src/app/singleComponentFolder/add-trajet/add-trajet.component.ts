@@ -22,9 +22,9 @@ var inscription: Trajet = {
   traveltimeinseconds : '',
   distanceinmeters: '',
   delaytraffic: '',
-  departance : '',
+  departure : '',
   arrival : '',
-  departanceaddress:'',
+  departureaddress:'',
   arrivaladdress: ''
 
 };
@@ -38,9 +38,9 @@ function recordtrajet (data: Trajet){
   data.traveltimeinseconds = routetrajet[0].traveltimeinseconds;
   data.distanceinmeters = routetrajet[0].distanceinmeters;
   data.delaytraffic = routetrajet[0].delaytraffic;
-  data.departance = routetrajet[0].departance;
+  data.departure = routetrajet[0].departure;
   data.arrival = routetrajet[0].arrival;
-  data.departanceaddress = routetrajet[0].departanceaddress;
+  data.departureaddress = routetrajet[0].departureaddress;
   data.arrivaladdress = routetrajet[0].arrivaladdress;
   console.log(JSON.stringify(data)); 
   //AddTrajetComponent.addtrajet();
@@ -573,9 +573,9 @@ export class AddTrajetComponent implements OnInit {
           "traveltimeinseconds" : record.summary.travelTimeInSeconds,
           "distanceinmeters" : record.summary.lengthInMeters,
           "delaytraffic" : record.summary.liveTrafficIncidentsTravelTimeInSeconds -record.summary.noTrafficTravelTimeInSeconds,
-          "departance" : record.geometry.coordinates[1],
+          "departure" : record.geometry.coordinates[1],
           "arrival" : record.geometry.coordinates[record.geometry.coordinates.length - 1],
-          "departanceaddress" : dep,
+          "departureaddress" : dep,
           "arrivaladdress" : arr
         },
           ); //premier élément de route geometry = coordonnées de départ, dernier = arrivée;

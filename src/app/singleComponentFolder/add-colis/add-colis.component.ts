@@ -21,9 +21,9 @@ let inscription: DataColis = {
   traveltimeinseconds : '',
   distanceinmeters: '',
   delaytraffic: '',
-  departance : '',
+  departure : '',
   arrival : '',
-  departanceaddress:'',
+  departureaddress:'',
   arrivaladdress: ''
 };
 
@@ -38,9 +38,9 @@ function recordcolis(data: DataColis) {
   data.traveltimeinseconds = routecolis[1].traveltimeinseconds;
   data.distanceinmeters = routecolis[1].distanceinmeters;
   data.delaytraffic = routecolis[1].delaytraffic;
-  data.departance = routecolis[1].departance;
+  data.departure = routecolis[1].departure;
   data.arrival = routecolis[1].arrival;
-  data.departanceaddress = routecolis[1].departanceaddress;
+  data.departureaddress = routecolis[1].departureaddress;
   data.arrivaladdress = routecolis[1].arrivaladdress;
 
   console.log(JSON.stringify(data));
@@ -558,9 +558,9 @@ export class AddColisComponent implements OnInit {
             "traveltimeinseconds" : record.summary.travelTimeInSeconds,
             "distanceinmeters" : record.summary.lengthInMeters,
             "delaytraffic" : record.summary.liveTrafficIncidentsTravelTimeInSeconds - record.summary.noTrafficTravelTimeInSeconds,
-            "departance" : record.geometry.coordinates[1],
+            "departure" : record.geometry.coordinates[1],
             "arrival" : record.geometry.coordinates[record.geometry.coordinates.length - 1],
-            "departanceaddress" : dep,
+            "departureeaddress" : dep,
             "arrivaladdress" : arr}); // premier élément de route geometry = coordonnées de départ, dernier = arrivée;
 
 
