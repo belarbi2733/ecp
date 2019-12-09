@@ -127,11 +127,12 @@ app.post('/addColis', function (req, res) {
 
 
 app.post('/addtrajet' , function (req, res) {
-  Trajet.addTrajet(req, function(err,result) {
-    // console.log(req.body);
+  Trajet.addTrajet(req.body,function(err,result){
+    console.log(req.body);
     console.log(result);
     if(err) {
       res.status(400).json(err);
+      console.log(err);
     }
     else
     {
@@ -161,8 +162,6 @@ app.post('/mes-tourn', function(req,res) {
       res.json(objJson);
     }
   });
-
-
 });
 
 /*----------------------------7----------------------------------------------------------------------------------- */
@@ -478,6 +477,18 @@ app.post('/vehicule/getData' , function (req,res) {
   });
   });*/
 
+app.get('/adminDashBoard/getNbreUsers', function(req,res) {
+  console.log('Request');
+  User.getAllUser(function (err, result) {
+    console.log(result);
+    if (err) {
+      res.status(400).json(err);
+      console.log('Marie tes chiante');
+    } else {
+      res.json(result.rows.length);
+    }
+  });
+});
 /*--------------------------------------------------------------------------------------------------------------- */
 
 

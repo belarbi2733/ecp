@@ -18,8 +18,9 @@
         <div *ngIf="trajetStatus"><p>&#9989;</p></div>
       </td>
       <td>
-        <a routerLink="/messagerie" routerLinkActive="active"> <input type="button" value="Ouvrir la messagerie" /></a>
-        <ng-template #popContent>
+         <a routerLink="/messagerie" routerLinkActive="active"> <input type="button" value="Ouvrir la messagerie" /></a>
+        <!-- Pour avoir le popover -->
+        <!--<ng-template #popContent>
             <button class='btn btn-success' (click)='rembours()'>Confirmer </button>
         </ng-template>
         <button type="button" placement="right"
@@ -32,7 +33,10 @@
         <button type="button" placement="right"
         [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr de vouloir payer le chauffeur?" [autoClose]="false">
         Payer le chauffeur
-        </button>
+        </button> -->
+
+        <a href="https://www.paypal.com" target="_blank"> <input type="button" value="Rembourser le passager"> </a>
+        <a href="https://www.paypal.com" target="_blank"> <input type="button" value="Payer le chauffeur"> </a>
       </td>
     </tr>
   </tbody>
