@@ -25,7 +25,10 @@ export class AuthComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.authStatus + ' et ' + this.adminStatus);
+    // console.log(this.authStatus + ' et ' + this.adminStatus);
+    if (this.authStatus) { // Si on arrive connecté sur la page d'authentification => on a cliqué sur déconnexion et donc on se déco direct
+      this.onSignOut();
+    }
   }
 
   onSignIn(validationStatus: boolean) {

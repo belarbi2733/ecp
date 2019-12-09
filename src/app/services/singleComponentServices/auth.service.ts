@@ -13,7 +13,7 @@ export class AuthService {
     if (localStorage.length !== 0) {
       this.isAuth = JSON.parse(localStorage.getItem('isAuth')).isAuth;
       this.isAdmin = JSON.parse(localStorage.getItem('isAdmin')).isAdmin;
-      console.log(this.isAuth + ' et 2 ' + this.isAdmin);
+      // console.log(this.isAuth + ' et 2 ' + this.isAdmin);
     } else {
       this.isAuth = false;
       this.isAdmin = false;

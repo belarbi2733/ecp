@@ -25,12 +25,14 @@
         <a class="nav-link" routerLink="/add-colis" routerLinkActive="active">Proposer un colis</a>
         <a class="nav-link" routerLink="/searchTrajConduct" routerLinkActive="active">Rechercher</a>
         <a class="nav-link" *ngIf=seeAdmin() routerLink="/admin" routerLinkActive="active">Page Administrateur</a>
-        <a class="nav-link" routerLink="/auth" routerLinkActive="active">Connexion</a>   
-        <a class="nav-link" routerLink="/inscrire" routerLinkActive="active">S'inscrire</a>
         <a class="nav-link" routerLink="/profile" routerLinkActive="active">Profil</a>
         <a class="nav-link" routerLink="/mes-traj" routerLinkActive="active">Mes réservations</a>
         <a class="nav-link" routerLink="/messagerie" routerLinkActive="active">Messagerie</a>
         <a class="nav-link" routerLink="/payements" routerLinkActive="active">Payements</a>
+        <br>
+        <a class="nav-link" *ngIf=!seeAuth() routerLink="/auth" routerLinkActive="active">Connexion</a>
+        <a class="nav-link" *ngIf=!seeAuth() routerLink="/inscrire" routerLinkActive="active">S'inscrire</a>
+        <a class="nav-link" *ngIf=seeAuth() routerLink="/auth" routerLinkActive="active">Déconnexion</a>
     </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -69,7 +71,7 @@
     <!-- /#page-content-wrapper -->
 
   </div>
-  
+
   <!-- <div class="container-fluid">
         <h1 class="mt-4">Simple Sidebar</h1>
         <p>The starting state of the menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will change.</p>

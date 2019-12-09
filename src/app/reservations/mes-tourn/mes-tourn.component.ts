@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {DispListTraj} from '../../adminFolder/admin-list-traj/dispadmintraj.interface';
 import {MesTournService} from '../../services/mestourn.service';
+import {PaypalInterface} from '../../paypal/paypal.interface';
+import {PaypalService} from '../../services/paypal.service';
 
 @Component({
   selector: 'app-mes-tourn',
@@ -16,7 +18,10 @@ export class MesTournComponent implements OnInit {
     nbrePlaces: null
   };
   error: string;
-  constructor(private mesTournService: MesTournService) {
+  paypalInterface: PaypalInterface = {
+    prix: ''
+  };
+  constructor(private paypalService: PaypalService, private mesTournService: MesTournService) {
   }
 
   ngOnInit() {
@@ -27,6 +32,13 @@ export class MesTournComponent implements OnInit {
         this.mesTournInfos.arrivee = dataTraj.arrivee;
         this.mesTournInfos.nbrePlaces = dataTraj.nbrePlaces;
         console.log(this.mesTournInfos);
+      })
+      .catch(() => {
+        console.log('Error');
+      });
+    this.paypalService.getPricePaypal(this.paypalInterface)
+      .then((paypalInterface: PaypalInterface) => {
+        this.paypalInterface.prix = paypalInterface.prix;
       })
       .catch(() => {
         console.log('Error');

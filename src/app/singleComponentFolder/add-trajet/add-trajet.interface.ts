@@ -1,4 +1,5 @@
 export interface Trajet {
+  idUser: number;
   departuretime: string;
   traveltimeinseconds: string;
   distanceinmeters: string;
@@ -8,3 +9,4 @@ export interface Trajet {
   departureaddress: string;
   arrivaladdress: string
 }
+
