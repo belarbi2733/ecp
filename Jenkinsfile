@@ -18,6 +18,10 @@ pipeline {
         bat 'npm install supertest'
         bat 'npm install angular'
         bat 'npm install express'
+        bat 'npm install tslint'
+        bat 'npm install -g @angular/cli'
+        bat 'npm install jasmine'
+        
       }
     }
      
