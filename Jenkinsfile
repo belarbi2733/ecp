@@ -25,6 +25,12 @@ pipeline {
       }
     }
      
+    stage('ng') {
+      steps {
+        bat 'ng serve'
+        
+      }
+    }
     stage('Test') {
       steps {
          bat 'npm test'
