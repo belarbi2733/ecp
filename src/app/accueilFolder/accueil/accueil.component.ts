@@ -21,7 +21,7 @@ export class AccueilComponent implements OnInit {
       const idJson = {id: -1};
       localStorage.setItem('idUser', JSON.stringify(idJson)); // Stockage de idUser par défaut dans localstorage
     }
-    console.log(localStorage);
+    // console.log(localStorage);
   }
 
 }

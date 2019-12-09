@@ -5,6 +5,7 @@ import {AddColisService} from '../../services/singleComponentServices/add-colis.
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import { ColisComponent } from 'src/app/accueilFolder/colis/colis.component';
+import { ServerconfigService} from '../../serverconfig.service';
 // import { FormGroup, FormBuilder } from '@angular/forms';
 declare let L;
 declare let tomtom: any;
@@ -40,19 +41,6 @@ function recordcolis(data: DataColis) {
   // addColis(data);
 }
 
-/*function addColis(data: DataColis) {
-  console.log('CC' + JSON.stringify(data));
-  http.post(`${this.url}/addColis`, data)
-    .subscribe(
-      res => {
-        console.log(res);
-        router.navigate(['accueil']);
-      },
-      err => {
-        console.log('Erreur avec ajout colis:' , err);
-      }
-    );
-}*/
 
 @Component({
   selector: 'app-add-colis',
@@ -65,39 +53,21 @@ export class AddColisComponent implements OnInit {
   nom = '';
   volume = '';
 
-  constructor() { }
+  constructor(private router: Router, public http : HttpClient,private rurl: ServerconfigService) { }
 
   save() {
 
     // console.log(this.nom);
     // console.log(this.volume);
     routecolis.push({nom : this.nom, volume : this.volume});
-    // console.log(JSON.stringify(routecolis));
-    // Send values to your DB
-    // bite(inscription);
   }
 
-  /*
-    inscrire(data: DataColis) {
-      this.router.navigate(['accueil']);
-      console.log('adresse mail: ' + data.nom);
-      console.log('mot de passe: ' + data.volume);
-      this.http.post(`http://localhost:8080/`, data)
-        .subscribe(
-          res => {
-            console.log(res);
-          },
-          err => {
-            console.log('Error occured:' , err);
-          }
-        );
-    }
-  */
 
   ngOnInit() {
 
-// this.bite(this.inscription);
-// let co = this.http.get(`http://localhost:8080/`);
+    const https = this.http;
+    const routeur = this.router;
+    const url = this.rurl.nodeUrl;
 
 // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
@@ -283,7 +253,6 @@ export class AddColisComponent implements OnInit {
           .then(updateListElements)
           .then(clickFirstListItem)
           .then(unlockBatchRequests, handleBatchRequestError);
-
       } catch (err) {
         handleBatchRequestError(err);
       }
@@ -330,10 +299,6 @@ export class AddColisComponent implements OnInit {
       delay.innerHTML = result.delay ? formatDiff(result.delay) : '--';
       live.innerHTML = result.liveTraffic ? formatDiff(result.liveTraffic) : '--';
       noTraffic.innerHTML = result.noTraffic ? formatDiff(result.noTraffic) : '--';
-
-
-
-
     }
     let route;
     function drawRoute(result) {
@@ -544,12 +509,6 @@ export class AddColisComponent implements OnInit {
       };
     }
 
-    /*function AddColis(data: DataColis){
-      data.nom = routecolis[0].nom;
-      data.volume = routecolis[0].volume;
-      console.log(JSON.stringify(data))
-    };*/
-
     function prepareData(data) {
       const results = data.filter(function(record) {
         return typeof record.error === 'undefined';
@@ -569,13 +528,23 @@ export class AddColisComponent implements OnInit {
             distanceinmeters : record.summary.lengthInMeters,
             delaytraffic : record.summary.liveTrafficIncidentsTravelTimeInSeconds - record.summary.noTrafficTravelTimeInSeconds,
             departance : record.geometry.coordinates[1],
+            // tslint:disable-next-line:max-line-length
             arrival : record.geometry.coordinates[record.geometry.coordinates.length - 1]}); // premier élément de route geometry = coordonnées de départ, dernier = arrivée;
-
 
           // AddColis(colis);
           // console.log(JSON.stringify(routecolis));
           // console.log(JSON.stringify(routecolis[0].nom));
           recordcolis(inscription);
+          https.post(`${url}/addColis`, inscription)
+          .subscribe(
+            res => {
+             console.log(res);
+             routeur.navigate(['accueil']);
+           },
+            err => {
+             console.log('Erreur avec ajout colis:' , err);
+            }
+          );
           // AddColisComponent.bite(AddColisComponent.inscription);
 
 
@@ -609,6 +578,11 @@ export class AddColisComponent implements OnInit {
         results: results.map(attachColorAndRatio(min, max))
       };
     }
+
+    function sendDataToService(service: AddColisService) {
+      service.addColis(inscription);
+    }
+
     function mergeData(previous) {
       return function(current) {
         let results = current.results;

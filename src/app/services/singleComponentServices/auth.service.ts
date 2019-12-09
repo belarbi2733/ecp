@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import {DataAuth} from '../../singleComponentFolder/auth/auth.interface';
 import {ServerconfigService} from '../../serverconfig.service';
 
@@ -14,7 +13,7 @@ export class AuthService {
     if (localStorage.length !== 0) {
       this.isAuth = JSON.parse(localStorage.getItem('isAuth')).isAuth;
       this.isAdmin = JSON.parse(localStorage.getItem('isAdmin')).isAdmin;
-      console.log(this.isAuth + ' et 2 ' + this.isAdmin);
+      // console.log(this.isAuth + ' et 2 ' + this.isAdmin);
     } else {
       this.isAuth = false;
       this.isAdmin = false;
