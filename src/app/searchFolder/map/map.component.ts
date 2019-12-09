@@ -7,36 +7,39 @@ import {DriverService} from './map.service';
 import { ServerconfigService } from 'src/app/serverconfig.service';
 declare let L;
 declare let tomtom: any;
-declare let document:any;
-var dep : string;
-var arr : string;
-var driverinfo = [];
+declare let document: any;
+let dep: string;
+let arr: string;
+const driverinfo = [];
 
-var iter =0;
-var inscrire : Driver = {
+let iter = 0;
+const driver: Driver = {
     departuretime: '',
     time: '',
     distance: '',
     trafficdelay: '',
-    routegeometry: '',
-    departanceaddress:'',
-    arrivaladdress: ''}
+    departure: '',
+    arrival: '',
+    departureAddress: '',
+    arrivalAddress: ''};
 
-function recorddriver(data:Driver){
+function recordDriver(data: Driver) {
   data.departuretime = driverinfo[0].departuretime;
   data.time = driverinfo[0].traveltimeinseconds;
   data.distance = driverinfo[0].distance;
   data.trafficdelay = driverinfo[0].delaytraffic;
-  data.routegeometry= driverinfo[0].routegeometry;
-  data.departanceaddress = driverinfo[0].departanceaddress;
-  data.arrivaladdress = driverinfo[0].arrivaladdress;
+  data.departure = driverinfo[0].routegeometry.coordinates[0];
+  data.arrival = driverinfo[0].routegeometry.coordinates[driverinfo[0].routegeometry.coordinates.length - 1];
+  // acces au dernier element => longueur - 1
+  data.departureAddress = driverinfo[0].departureAddress;
+  data.arrivalAddress = driverinfo[0].arrivalAddress;
   console.log(JSON.stringify(data));
-  
 
-  //console.log(JSON.stringify(data));
+
+  // console.log(JSON.stringify(data));
 
 }
-//var iteration = 0;
+// var iteration = 0;
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -48,14 +51,12 @@ function recorddriver(data:Driver){
 @Injectable()
 export class MapComponent implements OnInit {
 
-    
+
     dataNode: Driver[];
-    constructor(private inscrService: DriverService, private router: Router, private http: HttpClient, private rurl: ServerconfigService) {
+    constructor(private driverService: DriverService) {
       }
   ngOnInit() {
-    const https = this.http;
-    const routeur = this.router;
-    const url = this.rurl.nodeUrl;
+    const service = this.driverService;
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
     // Set TomTom keys
@@ -63,26 +64,26 @@ export class MapComponent implements OnInit {
     tomtom.routingKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
     tomtom.searchKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
 
-    
-    var formOptions = {
+
+    const formOptions = {
         closeOnMapClick: false,
         position: 'topleft',
         title: null
     };
-    var listScrollHandler = null;
+    let listScrollHandler = null;
 
-      const map = tomtom.L.map('map', {
+    const map = tomtom.L.map('map', {
         key: '2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7',
         basePath: '/assets/sdktool/sdk',
         center: [ 52.360306, 4.876935 ],
         zoom: 15,
         source : 'vector'
       });
-      
-      var routeInputs = tomtom.routeInputs().addTo(map);
-var form = document.getElementById('form');
-var batchRoutingControl = tomtom.foldable(formOptions).addTo(map).addContent(form);
-window.addEventListener('resize', function() {
+
+    const routeInputs = tomtom.routeInputs().addTo(map);
+    const form = document.getElementById('form');
+    const batchRoutingControl = tomtom.foldable(formOptions).addTo(map).addContent(form);
+    window.addEventListener('resize', function() {
     batchRoutingControl.unfold();
     if (listScrollHandler) {
         // run after css animation
@@ -90,23 +91,23 @@ window.addEventListener('resize', function() {
     }
 });
 // let's move this to the bottom of topright
-map.zoomControl.setPosition('topright');
+    map.zoomControl.setPosition('topright');
 // fill datepicker with current time...
-var timepicker = document.querySelector('#date');
-//(<HTMLElement>document.querySelector('#date')).style.display = 'none';
-timepicker.setAttribute('min', new Date().toISOString());
-var offset = new Date().getTimezoneOffset();
-var fallback = timepicker.type === 'text';
-if (fallback) {
+    const timepicker = document.querySelector('#date');
+// (<HTMLElement>document.querySelector('#date')).style.display = 'none';
+    timepicker.setAttribute('min', new Date().toISOString());
+    const offset = new Date().getTimezoneOffset();
+    const fallback = timepicker.type === 'text';
+    if (fallback) {
     // no support for datetime-locale, let's show a warning message
     form.classList.add('fallback');
 }
 // let's add 15 minutes from now to give user some time to fill the form
-setDate(new Date(new Date().getTime() + 15 * 60 * 1000));
-var arrivalOrDeparture = document.querySelector('select#type');
-var submitButton = document.querySelector('input[type=submit]');
-var routePoints;
-routeInputs.on(routeInputs.Events.LocationsFound, function(event) {
+    setDate(new Date(new Date().getTime() + 15 * 60 * 1000));
+    const arrivalOrDeparture = document.querySelector('select#type');
+    const submitButton = document.querySelector('input[type=submit]');
+    let routePoints;
+    routeInputs.on(routeInputs.Events.LocationsFound, function(event) {
     if (!event.points[0] || !event.points[1]) {
         routePoints = null;
     } else {
@@ -114,41 +115,35 @@ routeInputs.on(routeInputs.Events.LocationsFound, function(event) {
         tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
             .go(function(response) {
                 if (response && response.address && response.address.freeformAddress) {
-                  console.log(JSON.stringify(response.address.freeformAddress));
+                  // console.log(JSON.stringify(response.address.freeformAddress));
                   dep = response.address.freeformAddress;
-                } else {
-                    
                 }
-                
             });
         tomtom.reverseGeocode({position: [routePoints[1].lat, routePoints[1].lon]})
             .go(function(resp) {
                 if (resp && resp.address && resp.address.freeformAddress) {
-                  console.log(JSON.stringify(resp.address.freeformAddress));
+                  // console.log(JSON.stringify(resp.address.freeformAddress));
                   arr = resp.address.freeformAddress;
-                } else {
-                    
                 }
-                
             });
     }
     submitButton.disabled = !routePoints;
 });
 // add submit handler to form
-submitButton.addEventListener('click', function() {
+    submitButton.addEventListener('click', function() {
     this.setAttribute('disabled', 'disabled');
     request(getDate());
 });
-var batchRequestsLock = null;
-function unlockBatchRequests() {
+    let batchRequestsLock = null;
+    function unlockBatchRequests() {
     batchRequestsLock = null;
     submitButton.removeAttribute('disabled');
 }
-function PagingError() {
+    function PagingError() {
     this.message = 'Form submitted while next page request';
 }
-PagingError.prototype = new Error;
-function handleBatchRequestError(err) {
+    PagingError.prototype = new Error;
+    function handleBatchRequestError(err) {
     if (err instanceof PagingError) {
         // handling race condition, nothing wrong happened
         return;
@@ -158,9 +153,9 @@ function handleBatchRequestError(err) {
     showError(getOrCreateList());
     unlockBatchRequests();
 }
-var persistentRoute;
-function clickFirstListItem() {
-    var firstListItem = batchRoutingControl.container.querySelector('.item');
+    let persistentRoute;
+    function clickFirstListItem() {
+    const firstListItem = batchRoutingControl.container.querySelector('.item');
     clearRoutes();
     if (firstListItem) {
         firstListItem.click();
@@ -169,36 +164,36 @@ function clickFirstListItem() {
         map.fitBounds(persistentRoute.getBounds(), {padding: [5, 5]});
     }
 }
-var expandVisibleRows = function(items, firstVisible, lastVisible) {
-    
+    const expandVisibleRows = function(items, firstVisible, lastVisible) {
+
     items.forEach(function(item, index) {
         if (lastVisible < index || index < firstVisible) {
             item.classList.remove('visible');
         } else {
             item.classList.add('visible');
         }
-    
+
     });
 
 };
-function updateScrollEvent(data) {
+    function updateScrollEvent(data) {
 
-    var results = data.results;
+    const results = data.results;
 
-    var list = batchRoutingControl.container.querySelector('ol');
-    var items = Array.apply(null, list.querySelectorAll('li.item'));
-    var cellHeight = 30;
-    var lastVisible;
-    var firstVisible;
-    
+    const list = batchRoutingControl.container.querySelector('ol');
+    const items = Array.apply(null, list.querySelectorAll('li.item'));
+    const cellHeight = 30;
+    let lastVisible;
+    let firstVisible;
+
     list.removeEventListener('scroll', listScrollHandler);
     listScrollHandler = function() {
         firstVisible = Math.min(Math.ceil(list.scrollTop / cellHeight) - 1, results.length);
         lastVisible = Math.max(firstVisible + Math.floor(list.clientHeight / cellHeight) + 1, 0);
-        var limit = results.length / 2;
+        const limit = results.length / 2;
         if (lastVisible >= limit && results.length) {
-            var lastResult = results[results.length - 1];
-            var time = arrivalOrDeparture.value === 'depart at' ? lastResult.from : lastResult.to;
+            const lastResult = results[results.length - 1];
+            const time = arrivalOrDeparture.value === 'depart at' ? lastResult.from : lastResult.to;
             requestNextPage(time, data);
         }
         expandVisibleRows(items, firstVisible, lastVisible);
@@ -209,13 +204,13 @@ function updateScrollEvent(data) {
     return data;
 
 }
-function requestNextPage(date, previousData) {
+    function requestNextPage(date, previousData) {
     if (batchRequestsLock) {
         return;
     }
     batchRequestsLock = 'page';
     try {
-        
+
         batch(timeSeries(date))
             .then(function(data) {
                 // batchRequestsLock can be changed in the meantime
@@ -231,13 +226,13 @@ function requestNextPage(date, previousData) {
             .then(updateScrollEvent)
             .then(updateListElements)
             .then(unlockBatchRequests, handleBatchRequestError);
-        
+
     } catch (err) {
         handleBatchRequestError(err);
     }
 }
 // Create a new request
-function request(date) {
+    function request(date) {
     if (batchRequestsLock === 'submit') {
         // we don't care if there's another page downloaded
         return;
@@ -262,41 +257,41 @@ function request(date) {
         handleBatchRequestError(err);
     }
 }
-function mapTimeToRoutingElement(time) {
-    var format = 'yyyy-mm-dd hh:mm';
-    var result = {
+    function mapTimeToRoutingElement(time) {
+    const format = 'yyyy-mm-dd hh:mm';
+    const result = {
         traffic: true,
         locations: routePoints,
         computeTravelTimeFor: 'all'
     };
-    var param = arrivalOrDeparture.value === 'depart at' ? 'departAt' : 'arriveAt';
+    const param = arrivalOrDeparture.value === 'depart at' ? 'departAt' : 'arriveAt';
     result[param] = formatDate(time).slice(0, format.length).replace('T', ' ');
     return result;
 }
 // generate time series for batch query
-function timeSeries(start) {
-    var milisInMinute = 60 * 1000;
-    var minutes = 15;
-    var timesPerHour = 60 / minutes;
-    var hours = 6;
-    var numberOfResults = timesPerHour * hours;
+    function timeSeries(start) {
+    const milisInMinute = 60 * 1000;
+    const minutes = 15;
+    const timesPerHour = 60 / minutes;
+    const hours = 6;
+    const numberOfResults = timesPerHour * hours;
     return Array.apply(null, Array(numberOfResults))
         .reduce(function(accumulator) {
-            var i = accumulator.length - 1;
-            var previous = accumulator[i];
-            var current = new Date(previous.getTime() + minutes * milisInMinute);
+            const i = accumulator.length - 1;
+            const previous = accumulator[i];
+            const current = new Date(previous.getTime() + minutes * milisInMinute);
             return accumulator.concat([current]);
         }, [new Date(start)])
         .map(mapTimeToRoutingElement);
 }
-function showDetails(result) {
-    var from = batchRoutingControl.container.querySelector('.details .from-value');
-    var to = batchRoutingControl.container.querySelector('.details .to-value');
-    var distance = batchRoutingControl.container.querySelector('.details .distance-value');
-    var time = batchRoutingControl.container.querySelector('.details .time-value');
-    var delay = batchRoutingControl.container.querySelector('.details .delay-value');
-    var live = batchRoutingControl.container.querySelector('.details .live-value');
-    var noTraffic = batchRoutingControl.container.querySelector('.details .without-traffic-value');
+    function showDetails(result) {
+    const from = batchRoutingControl.container.querySelector('.details .from-value');
+    const to = batchRoutingControl.container.querySelector('.details .to-value');
+    const distance = batchRoutingControl.container.querySelector('.details .distance-value');
+    const time = batchRoutingControl.container.querySelector('.details .time-value');
+    const delay = batchRoutingControl.container.querySelector('.details .delay-value');
+    const live = batchRoutingControl.container.querySelector('.details .live-value');
+    const noTraffic = batchRoutingControl.container.querySelector('.details .without-traffic-value');
     from.innerHTML = result.from ? formatTime(result.from) : '--';
     to.innerHTML = result.to ? formatTime(result.to) : '--';
     distance.innerHTML = result.distance ? formatDistance(result.distance) : '--';
@@ -305,12 +300,12 @@ function showDetails(result) {
     live.innerHTML = result.liveTraffic ? formatDiff(result.liveTraffic) : '--';
     noTraffic.innerHTML = result.noTraffic ? formatDiff(result.noTraffic) : '--';
 
-    
+
 
 
 }
-var route;
-function drawRoute(result) {
+    let route;
+    function drawRoute(result) {
     if (route) {
         map.removeLayer(route);
     }
@@ -319,8 +314,8 @@ function drawRoute(result) {
     }
     route = tomtom.L.geoJson(result.route, {color: result.color}).addTo(map);
 }
-function onRowClick(result) {
-    var previous = batchRoutingControl.container.querySelector('.item.active');
+    function onRowClick(result) {
+    const previous = batchRoutingControl.container.querySelector('.item.active');
     if (previous) {
         previous.classList.remove('active');
     }
@@ -340,11 +335,11 @@ function onRowClick(result) {
         .on('mouseover', showDetails.bind(null, result))
         .on('mouseout', showDetails);
 }
-function onRowMouseOver(result) {
+    function onRowMouseOver(result) {
     drawRoute(result);
     showDetails(result);
 }
-function clearRoutes() {
+    function clearRoutes() {
     if (route) {
         map.removeLayer(route);
     }
@@ -352,8 +347,8 @@ function clearRoutes() {
         map.removeLayer(persistentRoute);
     }
 }
-function getOrCreateList() {
-    var list = batchRoutingControl.container.querySelector('ol');
+    function getOrCreateList() {
+    let list = batchRoutingControl.container.querySelector('ol');
     if (list) {
         return list;
     }
@@ -363,38 +358,38 @@ function getOrCreateList() {
     batchRoutingControl.addContent(createDetails());
     return list;
 }
-function createRow(list) {
-    var element = tomtom.L.DomUtil.create('li', 'item', list);
+    function createRow(list) {
+    const element = tomtom.L.DomUtil.create('li', 'item', list);
     tomtom.L.DomUtil.create('span', 'from', element);
     tomtom.L.DomUtil.create('span', 'date', element);
-    var barContainer = tomtom.L.DomUtil.create('div', 'bar-container', element);
-    var bar = tomtom.L.DomUtil.create('div', 'bar', barContainer);
+    const barContainer = tomtom.L.DomUtil.create('div', 'bar-container', element);
+    const bar = tomtom.L.DomUtil.create('div', 'bar', barContainer);
     tomtom.L.DomUtil.create('span', 'diff', bar);
     tomtom.L.DomUtil.create('span', 'to', element);
     return element;
 }
-function createHeader() {
-    var header = tomtom.L.DomUtil.create('div', 'header');
-    var depart = tomtom.L.DomUtil.create('span', null, header);
-    var delay = tomtom.L.DomUtil.create('span', null, header);
-    var arrive = tomtom.L.DomUtil.create('span', null, header);
+    function createHeader() {
+    const header = tomtom.L.DomUtil.create('div', 'header');
+    const depart = tomtom.L.DomUtil.create('span', null, header);
+    const delay = tomtom.L.DomUtil.create('span', null, header);
+    const arrive = tomtom.L.DomUtil.create('span', null, header);
     depart.innerHTML = 'Departure';
     delay.innerHTML = 'Delay';
     arrive.innerHTML = 'Arrive';
     return header;
 }
-function createDetails() {
-    var details = tomtom.L.DomUtil.create('div', 'details');
-    var left = L.DomUtil.create('span', 'left column', details);
-    var mid = L.DomUtil.create('span', 'mid column', details);
-    var right = L.DomUtil.create('span', 'right column', details);
-    var travelTimeLabel = L.DomUtil.create('span', 'details-label travel-label', left);
-    var liveTrafficLabel = L.DomUtil.create('span', 'details-label live-label', left);
-    var withoutTrafficLabel = L.DomUtil.create('span', 'details-label without-traffic-label', left);
-    var distanceLabel = L.DomUtil.create('span', 'details-label distance-label', mid);
-    var trafficDelayLabel = L.DomUtil.create('span', 'details-label delay-label', mid);
-    var departLabel = L.DomUtil.create('span', 'details-label from-label', right);
-    var arriveLabel = L.DomUtil.create('span', 'details-label to-label', right);
+    function createDetails() {
+    const details = tomtom.L.DomUtil.create('div', 'details');
+    const left = L.DomUtil.create('span', 'left column', details);
+    const mid = L.DomUtil.create('span', 'mid column', details);
+    const right = L.DomUtil.create('span', 'right column', details);
+    const travelTimeLabel = L.DomUtil.create('span', 'details-label travel-label', left);
+    const liveTrafficLabel = L.DomUtil.create('span', 'details-label live-label', left);
+    const withoutTrafficLabel = L.DomUtil.create('span', 'details-label without-traffic-label', left);
+    const distanceLabel = L.DomUtil.create('span', 'details-label distance-label', mid);
+    const trafficDelayLabel = L.DomUtil.create('span', 'details-label delay-label', mid);
+    const departLabel = L.DomUtil.create('span', 'details-label from-label', right);
+    const arriveLabel = L.DomUtil.create('span', 'details-label to-label', right);
     liveTrafficLabel.innerHTML = '<span>live traffic:</span>';
     withoutTrafficLabel.innerHTML = '<span>without traffic:</span>';
     trafficDelayLabel.innerHTML = '<span>traffic delay:</span>';
@@ -402,13 +397,13 @@ function createDetails() {
     departLabel.innerHTML = '<span>depart at:</span>';
     travelTimeLabel.innerHTML = '<span>travel time:</span>';
     arriveLabel.innerHTML = '<span>arrive at:</span>';
-    var travelTimeValue = L.DomUtil.create('span', 'time-value', travelTimeLabel);
-    var liveTrafficValue = L.DomUtil.create('span', 'live-value', liveTrafficLabel);
-    var withoutTrafficValue = L.DomUtil.create('span', 'without-traffic-value', withoutTrafficLabel);
-    var delayValue = L.DomUtil.create('span', 'delay-value', trafficDelayLabel);
-    var distanceValue = L.DomUtil.create('span', 'distance-value', distanceLabel);
-    var fromValue = L.DomUtil.create('span', 'from-value', departLabel);
-    var toValue = L.DomUtil.create('span', 'to-value', arriveLabel);
+    const travelTimeValue = L.DomUtil.create('span', 'time-value', travelTimeLabel);
+    const liveTrafficValue = L.DomUtil.create('span', 'live-value', liveTrafficLabel);
+    const withoutTrafficValue = L.DomUtil.create('span', 'without-traffic-value', withoutTrafficLabel);
+    const delayValue = L.DomUtil.create('span', 'delay-value', trafficDelayLabel);
+    const distanceValue = L.DomUtil.create('span', 'distance-value', distanceLabel);
+    const fromValue = L.DomUtil.create('span', 'from-value', departLabel);
+    const toValue = L.DomUtil.create('span', 'to-value', arriveLabel);
     travelTimeValue.innerHTML = '--';
     liveTrafficValue.innerHTML = '--';
     withoutTrafficValue.innerHTML = '--';
@@ -422,74 +417,74 @@ function createDetails() {
 
 
 
-function showError(list) {
+    function showError(list) {
     list.classList.add('empty', 'error');
 }
-function hideError(list) {
+    function hideError(list) {
     list.classList.remove('error');
 }
-function showLoader(list) {
+    function showLoader(list) {
     list.classList.remove('empty');
     batchRoutingControl.unfold();
 }
-function hideLoader(list) {
+    function hideLoader(list) {
     list.classList.add('empty');
     batchRoutingControl.unfold();
 }
-function clearList() {
-    var list = getOrCreateList();
-    var children = list.querySelectorAll('li.item');
+    function clearList() {
+    const list = getOrCreateList();
+    const children = list.querySelectorAll('li.item');
     Array.prototype.forEach.call(children, removeNode);
     hideError(list);
     showLoader(list);
 }
-function createItems(data) {
-    var list = getOrCreateList();
-    var results = data.results;
+    function createItems(data) {
+    const list = getOrCreateList();
+    const results = data.results;
     if (!results.length) {
         hideLoader(list);
         return data;
     }
-    for (var i = list.childElementCount; i < results.length; i += 1) {
+    for (let i = list.childElementCount; i < results.length; i += 1) {
         createRow(list);
     }
     return data;
 }
-function removeNode(node) {
+    function removeNode(node) {
     while (node.firstElementChild) {
         removeNode(node.firstElementChild);
     }
     node.parentElement.removeChild(node);
 }
-var listItemsEventHandlers = {
+    const listItemsEventHandlers = {
     mouseover: [],
     mouseout: [],
     click: []
 };
-function updateHandler(element, event, index, handler) {
+    function updateHandler(element, event, index, handler) {
     if (index in listItemsEventHandlers[event]) {
         element.removeEventListener(event, listItemsEventHandlers[event][index]);
     }
     listItemsEventHandlers[event][index] = handler;
     element.addEventListener(event, handler);
 }
-function updateListElements(data) {
-    var items = batchRoutingControl.container.querySelectorAll('ol li.item');
-    var results = data.results;
-    for (var i = 0; i < results.length; i += 1) {
-        var element = items[i];
-        var result = results[i];
-        var from = element.querySelector('.from');
-        var date = element.querySelector('.date');
-        var bar = element.querySelector('.bar');
-        var to = element.querySelector('.to');
+    function updateListElements(data) {
+    const items = batchRoutingControl.container.querySelectorAll('ol li.item');
+    const results = data.results;
+    for (let i = 0; i < results.length; i += 1) {
+        const element = items[i];
+        const result = results[i];
+        const from = element.querySelector('.from');
+        const date = element.querySelector('.date');
+        const bar = element.querySelector('.bar');
+        const to = element.querySelector('.to');
 
         from.innerHTML = formatTime(result.from);
         to.innerHTML = formatTime(result.to);
         date.classList.add('hidden');
         if (i - 1 in results) {
-            var previous = results[i - 1];
-            var previousDate = new Date(previous.from);
+            const previous = results[i - 1];
+            const previousDate = new Date(previous.from);
             previousDate.setDate(previousDate.getDate() + 1);
             if (previousDate.getDate() === result.from.getDate()) {
                 date.innerHTML = result.from.toDateString();
@@ -503,15 +498,15 @@ function updateListElements(data) {
         updateHandler(element, 'mouseover', i, onRowMouseOver.bind(element, result));
     }
 }
-function batch(request) {
+    function batch(request) {
     return tomtom.routing(request).go();
 }
-function attachColorAndRatio(min, max) {
-    var HUE = 71, LIGHTNESS = 36;
+    function attachColorAndRatio(min, max) {
+    const HUE = 71, LIGHTNESS = 36;
     return function(result) {
-        var ratio = (result.time - min * 0.99) / (max - min * 0.99);
-        var hue = HUE * (1 - Math.pow(ratio, 3));
-        var light = LIGHTNESS + 20 * ratio;
+        const ratio = (result.time - min * 0.99) / (max - min * 0.99);
+        const hue = HUE * (1 - Math.pow(ratio, 3));
+        const light = LIGHTNESS + 20 * ratio;
         result.color = 'hsl(' + Math.round(hue) + ', 91%, ' + light + '%)';
         result.ratio = ratio;
         return result;
@@ -520,47 +515,38 @@ function attachColorAndRatio(min, max) {
 
 
 
-function prepareData(data) {
-    var results = data.filter(function(record) {
+    function prepareData(data) {
+    const results = data.filter(function(record) {
         return typeof record.error === 'undefined';
     }).map(function(record) {
-        var feature = record.features[0];
+        const feature = record.features[0];
         return {
             summary: feature.properties.summary,
             geometry: feature.geometry
         };
     }).map(function(record) {
 
-        if (iter <1){
+        if (iter < 1) {
 
-            driverinfo.push( {"departuretime" : record.summary.departureTime,
-            "traveltimeinseconds" : record.summary.travelTimeInSeconds,
-            "distanceinmeters" : record.summary.lengthInMeters,
-            "delaytraffic" : record.summary.liveTrafficIncidentsTravelTimeInSeconds -record.summary.noTrafficTravelTimeInSeconds,
-            "routegeometry" : record.geometry,
-            "departanceaddress" : dep,
-            "arrivaladdress" : arr
-        });//premier élément de route geometry = coordonnées de départ, dernier = arrivée;
-            
-        
-            
-            
-            //console.log(driverinfo);
-            //console.log(JSON.stringify(record.geometry));
+            driverinfo.push( {departuretime : record.summary.departureTime,
+            traveltimeinseconds : record.summary.travelTimeInSeconds,
+            distanceinmeters : record.summary.lengthInMeters,
+            delaytraffic : record.summary.liveTrafficIncidentsTravelTimeInSeconds - record.summary.noTrafficTravelTimeInSeconds,
+            routegeometry : record.geometry,
+            departureAddress : dep,
+            arrivalAddress : arr
+        }); // premier élément de route geometry = coordonnées de départ, dernier = arrivée;
 
-            recorddriver(inscrire);
-            https.post(`${url}/addDriver`, inscrire)
-            .subscribe(
-                res => {
-                    console.log(res);
-                    routeur.navigate(['accueil']);
-                },
-                err => {
-                    console.log('Erreur avec ajout driver:' , err);
-                }
-            );
 
-            iter = iter + 1; //comme ça ne stocke que pour le temps demander
+
+
+            console.log(driverinfo);
+            // console.log(JSON.stringify(record.geometry));
+
+            recordDriver(driver);
+            service.matchDriverTrajetforTournee(driver);
+
+            iter = iter + 1; // comme ça ne stocke que pour le temps demander
         }
 
         return {
@@ -573,24 +559,24 @@ function prepareData(data) {
             time: record.summary.travelTimeInSeconds,
             route: record.geometry
         };
-        
+
     });
-    var times = results.map(function(record) {
+    const times = results.map(function(record) {
         return record.time;
     });
-    var min = Math.min.apply(Math, times);
-    var max = Math.max.apply(Math, times);
+    const min = Math.min.apply(Math, times);
+    const max = Math.max.apply(Math, times);
     return {
-        min: min,
-        max: max,
+        min,
+        max,
         results: results.map(attachColorAndRatio(min, max))
     };
 }
-function mergeData(previous) {
+    function mergeData(previous) {
     return function(current) {
-        var results = current.results;
-        var max = current.max;
-        var min = current.min;
+        let results = current.results;
+        let max = current.max;
+        let min = current.min;
         if (previous) {
             if (typeof previous.max !== 'undefined') {
                 max = Math.max(previous.max, max);
@@ -603,44 +589,44 @@ function mergeData(previous) {
             }
         }
         results = results.map(attachColorAndRatio(min, max));
-        var data = {
-            results: results,
-            min: min,
-            max: max
+        const data = {
+            results,
+            min,
+            max
         };
         return data;
     };
 }
-function pad(num) {
+    function pad(num) {
     return (num >= 10 ? '' : '0') + String(num);
 }
-function getDate() {
+    function getDate() {
     if (fallback) {
         return new Date(timepicker.value.replace(/-/g, '/'));
     }
     return new Date(timepicker.valueAsNumber + offset * 60 * 1000);
 }
-function setDate(date) {
-    var now = formatDate(date || new Date());
+    function setDate(date) {
+    const now = formatDate(date || new Date());
     timepicker.setAttribute('value', fallback ? now.replace('T', ' ') : now);
 }
-function formatDistance(meters) {
-    var kilometer = 1000;
-    var kilometers = Math.round(100 * meters / kilometer) / 100;
-    var result = Math.floor(meters % kilometer) + ' m';
+    function formatDistance(meters) {
+    const kilometer = 1000;
+    const kilometers = Math.round(100 * meters / kilometer) / 100;
+    let result = Math.floor(meters % kilometer) + ' m';
     if (kilometers >= 1) {
         result = kilometers + ' km ';
     }
     return result;
 }
-function formatDiff(seconds) {
-    var min = 60;
-    var hour = min * 60;
-    var day = hour * 24;
-    var days = Math.floor(seconds / day);
-    var hours = Math.floor((seconds % day) / hour);
-    var minutes = Math.floor((seconds % hour) / min);
-    var result = Math.floor(seconds % min) + 's';
+    function formatDiff(seconds) {
+    const min = 60;
+    const hour = min * 60;
+    const day = hour * 24;
+    const days = Math.floor(seconds / day);
+    const hours = Math.floor((seconds % day) / hour);
+    const minutes = Math.floor((seconds % hour) / min);
+    let result = Math.floor(seconds % min) + 's';
     if (minutes) {
         result = minutes + 'm ' + result;
     }
@@ -652,10 +638,10 @@ function formatDiff(seconds) {
     }
     return result;
 }
-function formatTime(date) {
+    function formatTime(date) {
     return pad(date.getHours()) + ':' + pad(date.getMinutes());
 }
-function formatDate(date) {
+    function formatDate(date) {
     return date.getFullYear() +
         '-' + pad(date.getMonth() + 1) +
         '-' + pad(date.getDate()) +
@@ -667,3 +653,4 @@ function formatDate(date) {
 
 
 }
+

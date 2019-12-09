@@ -5,11 +5,11 @@ import {Injectable} from '@angular/core';
 declare let L;
 declare let tomtom: any;
 declare let document: any;
-var dep : string;
-var arr : string;
+let dep: string;
+let arr: string;
 
 
-let inscription: DataColis = {
+const inscription: DataColis = {
   idUser: null,
   nom: '',
   volume: '',
@@ -19,8 +19,8 @@ let inscription: DataColis = {
   delaytraffic: '',
   departure : '',
   arrival : '',
-  departureaddress:'',
-  arrivaladdress: ''
+  departureAddress: '',
+  arrivalAddress: ''
 };
 
 let iter = 0;
@@ -36,8 +36,8 @@ function recordcolis(data: DataColis) {
   data.delaytraffic = routecolis[1].delaytraffic;
   data.departure = routecolis[1].departure;
   data.arrival = routecolis[1].arrival;
-  data.departureaddress = routecolis[1].departureaddress;
-  data.arrivaladdress = routecolis[1].arrivaladdress;
+  data.departureAddress = routecolis[1].departureAddress;
+  data.arrivalAddress = routecolis[1].arrivalAddress;
 
   console.log(JSON.stringify(data));
   // addColis(data);
@@ -134,9 +134,9 @@ export class AddColisComponent implements OnInit {
                   console.log(JSON.stringify(response.address.freeformAddress));
                   dep = response.address.freeformAddress;
                 } else {
-                    
+
                 }
-                
+
             });
         tomtom.reverseGeocode({position: [routePoints[1].lat, routePoints[1].lon]})
             .go(function(resp) {
@@ -144,9 +144,9 @@ export class AddColisComponent implements OnInit {
                   console.log(JSON.stringify(resp.address.freeformAddress));
                   arr = resp.address.freeformAddress;
                 } else {
-                    
+
                 }
-                
+
             });
       }
       submitButton.disabled = !routePoints;
@@ -546,14 +546,14 @@ export class AddColisComponent implements OnInit {
 
           routecolis.push(  {
 
-            "departuretime" : record.summary.departureTime,
-            "traveltimeinseconds" : record.summary.travelTimeInSeconds,
-            "distanceinmeters" : record.summary.lengthInMeters,
-            "delaytraffic" : record.summary.liveTrafficIncidentsTravelTimeInSeconds - record.summary.noTrafficTravelTimeInSeconds,
-            "departure" : record.geometry.coordinates[1],
-            "arrival" : record.geometry.coordinates[record.geometry.coordinates.length - 1],
-            "departureeaddress" : dep,
-            "arrivaladdress" : arr}); // premier élément de route geometry = coordonnées de départ, dernier = arrivée;
+            departuretime : record.summary.departureTime,
+            traveltimeinseconds : record.summary.travelTimeInSeconds,
+            distanceinmeters : record.summary.lengthInMeters,
+            delaytraffic : record.summary.liveTrafficIncidentsTravelTimeInSeconds - record.summary.noTrafficTravelTimeInSeconds,
+            departure : record.geometry.coordinates[1],
+            arrival : record.geometry.coordinates[record.geometry.coordinates.length - 1],
+            departureAddress : dep,
+            arrivalAddress : arr}); // premier élément de route geometry = coordonnées de départ, dernier = arrivée;
 
 
           // AddColis(colis);

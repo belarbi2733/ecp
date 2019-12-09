@@ -3,8 +3,8 @@ export interface Driver {
     time: string;
     distance: string;
     trafficdelay: string;
-    routegeometry: string;
-    departanceaddress: string;
-    arrivaladdress: string
+    departure: string;
+    arrival: string;
+    departureAddress: string;
+    arrivalAddress: string;
 }
-  

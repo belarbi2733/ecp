@@ -9,20 +9,17 @@ let Colis = {
       [colis.idUser, colis.nom, colis.volume], callback);
   },
 
-  removeColis: function(colis, choixIdColis,  callback)
-  {
-    return db.query('DELETE FROM colis WHERE colis.id = choixIdColis', callback);
+  getIdColisByIdUser: function(colis, callback) {
+    console.log("Get IdColis By IdUser and NomColis");
+    console.log(colis.idUser,colis.nom);
+    return db.query('SELECT id FROM colis WHERE id_user = $1 AND nom = $2 AND dimension = $3',
+      [colis.idUser, colis.nom, colis.volume] , callback);
   },
 
-  getColis: function(colis, choixIdColis, callback)
-  {
-    return db.query('SELECT * FROM colis WHERE colis.id = choixIdColis', callback);
-  },
-
-  generateTrajet: function(colis, depart, arrivee, callback) {
+  generateTrajet: function(colis, idColis, callback) {
     console.log("Generate Trajet en cours...");
-    return db.query('INSERT INTO trajet (id_user, id_colis, departure_time, distance, depart_x, depart_y, arrivee_x, arrivee_y, book_places) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)',
-      [colis.idUser,1,colis.departuretime,colis.distanceinmeters,colis.departance[0],colis.departance[1],colis.arrival[0],colis.arrival[1],0],
+    return db.query('INSERT INTO trajet (id_user, id_colis, departure_time, distance, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)',
+      [colis.idUser,idColis,colis.departuretime,colis.distanceinmeters,colis.departureAddress,colis.arrivalAddress,colis.departure[0],colis.departure[1],colis.arrival[0],colis.arrival[1],false,0],
       callback);
   }
 };
