@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
-import {PaypalInterface} from './paypal.interface';
-import {PaypalService} from '../services/paypal.service';
+import { PaypalInterface } from './paypal.interface';
+import { PaypalService } from '../services/paypal.service';
 
 
 @Component({
@@ -10,20 +10,17 @@ import {PaypalService} from '../services/paypal.service';
   styleUrls: ['./paypal.component.css']
 })
  export class PaypalComponent implements OnInit {
+
   public payPalConfig?: IPayPalConfig;
-  prix: '22';
 
   paypalInterface: PaypalInterface = {
     prix: ''
   };
+
   constructor(private paypalService: PaypalService) {
   }
 
-
    ngOnInit(): void {
-     this.initConfig();
-   }
-   private initConfig(): void {
      this.paypalService.getPricePaypal(this.paypalInterface)
        .then((paypalInterface: PaypalInterface) => {
          this.paypalInterface.prix = paypalInterface.prix;
@@ -31,6 +28,11 @@ import {PaypalService} from '../services/paypal.service';
        .catch(() => {
          console.log('Error');
        });
+
+     this.initConfig();
+   }
+
+   private initConfig(): void {
      this.payPalConfig = {
      currency: 'EUR',
      clientId: 'AXHTZO11HV_dLhnyDxxlsRiYHWaWFIB4HL9gmHHavzx13IPXvQNSiJWcNCRQQESic_-H-CLOFc0NW0Qq',
@@ -40,11 +42,11 @@ import {PaypalService} from '../services/paypal.service';
          {
            amount: {
              currency_code: 'EUR',
-             value: this.prix,
+             value: this.paypalInterface.prix,
              breakdown: {
                item_total: {
                  currency_code: 'EUR',
-                 value: this.prix
+                 value: this.paypalInterface.prix
                }
              }
            },
@@ -55,7 +57,7 @@ import {PaypalService} from '../services/paypal.service';
                category: 'DIGITAL_GOODS',
                unit_amount: {
                  currency_code: 'EUR',
-                 value: this.prix,
+                 value: this.paypalInterface.prix,
                },
              }
            ]
