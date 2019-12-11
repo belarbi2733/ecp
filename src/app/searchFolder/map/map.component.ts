@@ -13,7 +13,8 @@ let arr: string;
 const driverinfo = [];
 
 let iter = 0;
-const driver: Driver = {
+let driver: Driver = {
+    idUser: null,
     departuretime: '',
     time: '',
     distance: '',
@@ -52,9 +53,9 @@ function recordDriver(data: Driver) {
 export class MapComponent implements OnInit {
 
 
-    dataNode: Driver[];
-    constructor(private driverService: DriverService) {
-      }
+  constructor(private driverService: DriverService) {
+      driver.idUser = JSON.parse(localStorage.getItem('idUser')).id; }
+
   ngOnInit() {
     const service = this.driverService;
     // Define your product name and version

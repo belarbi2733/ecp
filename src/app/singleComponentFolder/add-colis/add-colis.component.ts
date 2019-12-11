@@ -9,7 +9,7 @@ let dep: string;
 let arr: string;
 
 
-const inscription: DataColis = {
+let dataColis: DataColis = {
   idUser: null,
   nom: '',
   volume: '',
@@ -56,7 +56,7 @@ export class AddColisComponent implements OnInit {
   volume = '';
 
   constructor(private addColisService: AddColisService) {
-    inscription.idUser = JSON.parse(localStorage.getItem('idUser')).id;
+    dataColis.idUser = JSON.parse(localStorage.getItem('idUser')).id;
   }
 
   save() {
@@ -131,7 +131,7 @@ export class AddColisComponent implements OnInit {
         tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
             .go(function(response) {
                 if (response && response.address && response.address.freeformAddress) {
-                  console.log(JSON.stringify(response.address.freeformAddress));
+                  //console.log(JSON.stringify(response.address.freeformAddress));
                   dep = response.address.freeformAddress;
                 } else {
 
@@ -141,7 +141,7 @@ export class AddColisComponent implements OnInit {
         tomtom.reverseGeocode({position: [routePoints[1].lat, routePoints[1].lon]})
             .go(function(resp) {
                 if (resp && resp.address && resp.address.freeformAddress) {
-                  console.log(JSON.stringify(resp.address.freeformAddress));
+                  //console.log(JSON.stringify(resp.address.freeformAddress));
                   arr = resp.address.freeformAddress;
                 } else {
 
@@ -559,8 +559,8 @@ export class AddColisComponent implements OnInit {
           // AddColis(colis);
           // console.log(JSON.stringify(routecolis));
           // console.log(JSON.stringify(routecolis[0].nom));
-          recordcolis(inscription);
-          service.addColis(inscription);
+          recordcolis(dataColis);
+          service.addColis(dataColis);
 
 
           iter = iter + 1; // comme ça ne stocke que pour le temps demander
@@ -595,7 +595,7 @@ export class AddColisComponent implements OnInit {
     }
 
     function sendDataToService(service: AddColisService) {
-      service.addColis(inscription);
+      service.addColis(dataColis);
     }
 
     function mergeData(previous) {
