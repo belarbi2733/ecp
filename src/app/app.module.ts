@@ -13,6 +13,7 @@ import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './searchFolder/map/map.service';
 
+
 // import { NavbarModule, WavesModule, ButtonsModule } from 'angular-bootstrap-md'
 
 // components
@@ -75,7 +76,10 @@ import {InscrService} from './services/singleComponentServices/inscr.service';
 import {AddColisService} from './services/singleComponentServices/add-colis.service';
 import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
 import { ServerconfigService } from './serverconfig.service';
-import {PaypalService} from './services/paypal.service';
+import { PaypalService } from './services/paypal.service';
+import { AdminpayComponent } from './adminFolder/adminpay/adminpay.component';
+import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
+import { UserStatService } from './services/adminServices/userstat.service';
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -97,7 +101,9 @@ const appRoutes: Routes = [
   { path: 'admin-list-ut', canActivate: [AdminGuard], component: AdminListUtComponent },
   { path: 'admin-list-traj', canActivate: [AdminGuard], component: AdminListTrajComponent },
   { path: 'info-traj', canActivate: [AuthGuard], component: InfoTrajComponent },
+  { path: 'info-cond', canActivate: [AuthGuard], component: InfoCondComponent },
   { path: 'admin-rembours', canActivate: [AdminGuard], component: AdminRemboursComponent },
+  { path: 'adminpay', canActivate: [AdminGuard], component: AdminpayComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
   { path: '', component: AccueilComponent },
@@ -155,7 +161,9 @@ const appRoutes: Routes = [
     MesColisComponent,
     MesTournComponent,
     Navbar2Component,
-    AdmintableComponent
+    AdmintableComponent,
+    AdminpayComponent,
+    InfoCondComponent
   ],
   imports: [
     BrowserModule,
@@ -186,7 +194,8 @@ const appRoutes: Routes = [
     AdminListUtService,
     AddtrajetService,
     ServerconfigService,
-    PaypalService
+    PaypalService,
+    UserStatService
   ],
   bootstrap: [AppComponent]
 })
