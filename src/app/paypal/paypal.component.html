@@ -1,18 +1,28 @@
-<table class = "table col-12">
-  <thead>
-  <tr>
-    <th scope="col">Prix</th>
+<div class="container">
+  <br>
+  
+  <table class = "table col-12">
+    <thead>
+      <tr>
+        <th scope="col">Départ</th>
+        <th scope="col">Arrivée</th>
+        <th scope="col">Nom du conducteur</th>
+        <th scope="col">Prix</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{{paypalInterface.prix}}</td>
+      </tr>
+    </tbody>
+  </table>
 
-    <th scope="col"></th>
-  </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>{{paypalInterface.prix}}</td>
-    </tr>
-  </tbody>
-</table>
+  <br>
 
-<br>
-
-<ngx-paypal [config]="payPalConfig"></ngx-paypal>
+  <div class="center-div">
+    <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+  </div>
+</div>
