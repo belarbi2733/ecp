@@ -16,12 +16,5 @@ export class AdminRemboursComponent implements OnInit {
   ngOnInit() {
   }
 
-  rembours(){
-
-  }
-
-  payer(){
-
-  }
 
 }

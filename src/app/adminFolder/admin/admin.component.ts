@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
+import {UserStatService} from '../../services/adminServices/userstat.service';
 
 @Component({
   selector: 'app-admin',
@@ -8,11 +9,13 @@ import { Color, Label } from 'ng2-charts';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-  exemplStat = 25;
+  nbreUsersStat = null;
 
-  constructor() { }
+  constructor(private userStatService: UserStatService) { }
 
   ngOnInit() {
+    console.log(this.userStatService.getNbreUsers());
+    this.nbreUsersStat = this.userStatService.getNbreUsers();
   }
 
 }
