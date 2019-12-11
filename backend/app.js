@@ -508,59 +508,65 @@ app.post('/vehicule/getData' , function (req,res) {
 
 app.post('/matchDriverTrajet', function(req,res) {
   console.log(req.body);
-  Trajet.getAllTrajet(function (err,result) {
+  Voiture.getDataVoitureById(req.body.idUser, function (err, result) {
     if(err) {
       res.status(400).json(err);
       console.log('Error 1');
-    }
-    else
-    {
+    } else {
       if(result.rows.length) {
-        let arrayTrajet = [];
-        let arrayColis = [];
-        _.each(result.rows, function(one) { // bibliothèque underscore _     //Pour chaque trajet, check
-          //console.log(req.body); (from Tomtom)
-          //console.log('Coucou : ' + JSON.stringify(one));  // (from DB)
-          Trajet.findTrajetAroundRayon(req.body,one,5, function (err2, result2) {  //req.body => search
-            if(err2) {
-              // res.status(400).json(err2);
-              //console.log('Error 2');
-              console.log(err2);
+        Trajet.getAllTrajet(function (err2,result2) {
+          if(err2) {
+            res.status(400).json(err2);
+            console.log('Error 2');
+          }
+          else
+          {
+            if(result2.rows.length) {
+              const search = req.body;
+              let arrayTrajet = {"chauffeur":[result.rows[0].nbre_places-1,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
+              let arrayColis = {"chauffeur":[result.rows[0].coffre,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
+
+
+              _.each(result2.rows, function(one) { // bibliothèque underscore _     //Pour chaque trajet, check
+                //console.log(req.body); (from Tomtom)
+                //console.log('Coucou : ' + JSON.stringify(one));  // (from DB)
+                Trajet.findTrajetAroundRayon(req.body,one,5, function (err3, result3) {  //req.body => search
+                  if(err3) {
+                    // res.status(400).json(err3);
+                    //console.log('Error 3');
+                    console.log(err3);
+                  }
+                  else {
+                    if (result3.rows.length) {
+
+                      let dist = distance(req.body.departure[1],req.body.departure[0],one.depart_y,one.depart_x);
+                      // console.log(dist);
+
+                      if(one.id_colis) {
+                        //Séquence si c'est un colis
+                        let strIdColis = "Colis " + one.id_colis;
+                        // arrayColis.add({"Colis": [dist,one.depart_y,one.depart_x,one.arrivee_y,one.arrivee_x]});
+                        console.log('Colis : ' + one.id_colis + ' id : ' + one.id);
+                      } else {
+                        //Séquence si c'est un trajet
+                        let strIdTrajet = "Colis " + one.id_colis;
+                        // arrayColis.add({"Colis": [dist,one.depart_y,one.depart_x,one.arrivee_y,one.arrivee_x]});
+                        console.log('Trajet : ' + one.id);
+                      }
+                      console.log(JSON.stringify(arrayColis));
+                      console.log(JSON.stringify(arrayTrajet));
+                    }
+                  }
+                });
+              });
             }
             else {
-              if (result2.rows.length) {
-
-                //Calcul de la distance entre le conducteur et le colis/trajet (en long et lat) en kms
-                /*let longitude1 = req.body.departure[0] * Math.PI / 180;
-                let longitude2 = one.depart_x * Math.PI / 180;
-
-                let latitude1 = req.body.departure[1] * Math.PI / 180;
-                let latitude2 = one.depart_y * Math.PI / 180;
-
-                const R = 6371;
-
-                let dist = R * Math.acos(Math.cos(latitude1) * Math.cos(latitude2) *
-                  Math.cos(longitude2 - longitude1) + Math.sin(latitude1) *
-                  Math.sin(latitude2));
-
-                console.log('dist : ' + dist);*/
-
-                if(one.id_colis) {
-                  //Séquence si c'est un colis
-
-                  // arrayColis.push({one.id}:[dist,1,req.body.departure[1],req.body.departure[0],req.body.arrival[1],req.body.arrival[0]]);
-                  console.log('Colis : ' + one.id_colis + ' id : ' + one.id);
-                } else {
-                  //Séquence si c'est un trajet
-                  console.log('Trajet : ' + one.id);
-                }
-              }
+              res.json(null);
             }
-          });
+          }
         });
-      }
-      else {
-        res.json(null);
+      } else {
+        res.json(false);
       }
     }
   });
@@ -641,3 +647,27 @@ app.listen(port, ()=>{
 //     }
 //     res.end();
 // });
+
+
+
+// Source : https://www.1formatik.com/2417/comment-calculer-distance-latitude-longitude-javascript
+function distance(lat1, lon1, lat2, lon2) {
+  if ((lat1 == lat2) && (lon1 == lon2)) {
+    return 0;
+  }
+  else {
+    let radlat1 = Math.pi * lat1/180;
+    let radlat2 = Math.pi * lat2/180;
+    let theta = lon1-lon2;
+    let radtheta = Math.pi * theta/180;
+    let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
+    }
+    dist = Math.acos(dist);
+    dist = dist * 180/Math.pi;
+    dist = dist * 60 * 1.1515;
+    dist = dist * 1.609344;
+    return dist;
+  }
+}
