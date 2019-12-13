@@ -14,6 +14,8 @@ import { PaypalService } from '../services/paypal.service';
   public payPalConfig?: IPayPalConfig;
 
   paypalInterface: PaypalInterface = {
+    idUser: 1,
+    idTournee: 1,
     prix: ''
   };
 
@@ -79,6 +81,8 @@ import { PaypalService } from '../services/paypal.service';
      },
      onClientAuthorization: (data) => {
        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+       //Ajouter le status "Payé par le passager"
+       this.paypalService.statusPayPass(this.paypalInterface);
      },
      onCancel: (data, actions) => {
        console.log('OnCancel', data, actions);

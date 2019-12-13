@@ -14,7 +14,7 @@ let Utilisateur = {
   addUtilisateur: function(utilisateur, callback)
     {
       console.log("Insert user en cours...");
-      db.query('INSERT INTO utilisateur (mail,password,statut) VALUES ($1, $2, $3)', [utilisateur.body.adresse_mail, utilisateur.body.mot_passe,1], callback);
+      db.query('INSERT INTO utilisateur (mail,password,statut) VALUES ($1, $2, $3)', [utilisateur.body.adresse_mail, utilisateur.body.mot_passe,0], callback);
     },
 
     updateUtilisateur: function(utilisateur, callback)
