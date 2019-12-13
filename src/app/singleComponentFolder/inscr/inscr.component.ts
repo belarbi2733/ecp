@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DataInscription} from './inscr.interface';
 import { Injectable } from '@angular/core';
 import { InscrService } from '../../services/singleComponentServices/inscr.service';
+import { MailingService } from 'src/app/services/mailing.service';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class InscrComponent implements OnInit {
   };
 
   error: string;
-  constructor(private inscrService: InscrService) {
+  constructor(private inscrService: InscrService, private mailServ: MailingService) {
   }
   ngOnInit() {
   }
@@ -35,6 +36,9 @@ export class InscrComponent implements OnInit {
       if (data.mot_passe === data.verification_mot_passe) {
         this.error = '';
         this.inscrService.inscription(data);
+        this.mailServ.sendMailValid(this.inscription.adresse_mail).subscribe((response)=>{
+          console.log(response);
+        });
       } else {
         this.error = 'Les mots de passe ne correspondent pas !';
       }

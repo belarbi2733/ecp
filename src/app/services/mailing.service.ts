@@ -16,4 +16,13 @@ constructor(private _httpmail : HttpClient, private url:ServerconfigService) { }
     // let callUrl = this.mailServiceUrl+'/${subject}/${mail}/${content}';
     // return this._httpmail.get(callUrl);
   }
-} 
+
+  sendMailValid(mail){
+    let mailValidServiceUrl = this.url.nodeUrl+'/sendmail/inscription';
+    let parameters = new HttpParams().set('mail', mail);
+    // console.log(subject, mail, content);
+    return this._httpmail.get(mailValidServiceUrl, {params : parameters, responseType : 'text'});
+    // let callUrl = this.mailServiceUrl+'/${subject}/${mail}/${content}';
+    // return this._httpmail.get(callUrl);
+  }
+}

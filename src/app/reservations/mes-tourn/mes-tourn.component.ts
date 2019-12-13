@@ -19,6 +19,8 @@ export class MesTournComponent implements OnInit {
   };
   error: string;
   paypalInterface: PaypalInterface = {
+    idUser: 1,
+    idTournee: 1,
     prix: ''
   };
   constructor(private paypalService: PaypalService, private mesTournService: MesTournService) {

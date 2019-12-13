@@ -22,4 +22,17 @@ export class PaypalService {
         );
     });
   }
+
+  statusPayPass(data: PaypalInterface){
+    this.http.post(`${this.url}/paypalStatus`, data)
+      .subscribe(
+        res => {
+          console.log(res);
+          this.router.navigate(['accueil']);
+        },
+        err => {
+          console.log('Error occured:' , err);
+        }
+      );
+  }
 }

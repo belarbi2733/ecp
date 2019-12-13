@@ -35,11 +35,18 @@ let Trajet = {
     return db.query('SELECT prix FROM trajet ');
 
   },
+
   calcPrixTraj: function(callback)
   {
     console.log("Calcul du Prix du trajet");
     // return db.query('SELECT book_places, distance FROM trajet',callback);
     return db.query('SELECT book_places, distance FROM trajet', callback);
+  },
+
+  changeStatusTraj: function(trajet, callback)
+  {
+    console.log("Changement du statut du trajet");
+    return db.query('UPDATE trajet SET statut = $1 WHERE id_user = $2 AND id_tournee = $3', [true, trajet.idUser, trajet.idTournee], callback);
   }
 };
 

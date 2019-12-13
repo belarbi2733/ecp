@@ -9,6 +9,8 @@ import {PaypalService} from '../../services/paypal.service';
 })
 export class MesColisComponent implements OnInit {
   paypalInterface: PaypalInterface = {
+    idUser: 1,
+    idTournee: 1,
     prix: ''
   };
   constructor(private paypalService: PaypalService) { }
