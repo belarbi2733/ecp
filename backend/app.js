@@ -36,6 +36,7 @@ app.use(bodyParser.json());
 10: adminListUt
 11: calcPrixTraj
 12: calcRating
+13: VehiculeUpdate
 */
 
 
@@ -411,7 +412,7 @@ app.get('/paypal', function(req,res){
     });
   });
 
-/*-----------------------------------11---------------------------------------------------------------------------- */
+/*-----------------------------------12---------------------------------------------------------------------------- */
 /* Ici on calcul le nouveau rating depuis la page d'input rating et on stock la moyenne dans la db*/
 /*Il ne faut pas oublier de renvoyer l'Id de la personne à qui on donne une note*/
 app.post('/rating', function(req,res) {
@@ -436,7 +437,7 @@ app.post('/rating', function(req,res) {
 });
 
 
-/*-----------------------------------12---------------------------------------------------------------------------- */
+/*-----------------------------------13---------------------------------------------------------------------------- */
 
 
 app.post('/vehicule/update', function(req,res) {
