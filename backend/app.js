@@ -35,6 +35,7 @@ app.use(bodyParser.json());
 9: admin-list-traj
 10: adminListUt
 11: calcPrixTraj
+12: calcRating
 */
 
 
@@ -265,7 +266,7 @@ app.post('/pref/getPref' , function (req,res) {
     }
   });
 });
-
+/*
 app.post('/rating' , function (req,res) {
   console.log(req.body);
   User.getDataById(req.body.idUser, function(err, result) {
@@ -278,13 +279,13 @@ app.post('/rating' , function (req,res) {
       const tmpResult = result.rows[0];
       console.log(result.rows[0]);
       let objJson = {      // Je crée cet objet objJson pour restructurer les variables de result.rows et aussi pour éviter d'envoyer des données sensibles contenu dans result.rows comme le mot de passe
-        "currentRate": tmpResult.note,
+        "currentRate": tmpResult.avr_rating,
       };
       //console.log(JSON.stringify(objJson));
       res.json(objJson);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
     }
   });
-});
+});*/
 
 
 /*-----------------------------9---------------------------------------------------------------------------------- */
@@ -402,7 +403,6 @@ app.get('/paypal', function(req,res){
 
       let prixfinal = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
       prixfinal = prixfinal.toFixed(2);
-      console.log(typeof prixfinal);
       console.log(prixfinal);
      let objJson = {
        "prix": prixfinal
@@ -412,21 +412,32 @@ app.get('/paypal', function(req,res){
   });
 
 /*-----------------------------------11---------------------------------------------------------------------------- */
-/*app.get('/paypal', function(req,res){
-  User.getPrice(function(err, result) {
+/* Ici on calcul le nouveau rating depuis la page d'input rating et on stock la moyenne dans la db*/
+/*Il ne faut pas oublier de renvoyer l'Id de la personne à qui on donne une note*/
+app.post('/rating', function(req,res) {
+  User.getAllUser(function (err, result) {
     if (err) {
       res.status(400).json(err);
     } else {
-      console.log(result.rows[1]);
-      const tmpResultprice = result.rows[1];
-      //console.log(result.rows[0]);
-      let objJson = {
-        "prix": tmpResultprice.prix
-      };
-      res.json(objJson);
+      const tmpResultRating = result.rows[0];
+      let rateAvr = tmpResultRating.avr_rating;
+      let nbrNote = tmpResultRating.nbr_ratings;
+      let newNote = 100; /* Init NewNote*/
+      let newRating = ((rateAvr * nbrNote) + newNote) / (nbrNote + 1); /* On multiplie la moyenne par le nombre de vote total pour avoir la somme des votes , on ajoute le nouveau et on divise par nbre de vote +1 */
+      tmpResultRating.nbr_ratings = nbrNote +1;
+      newRating = newRating.toFixed(2);
+      console.log(newRating + '/5 ');
+      tmpResultRating.avr_rating = newRating;
+      tmpResultRating.avr_rating = newRating;
+      console.log(tmpResultRating);
+      User.updateUtilisateur(tmpResultRating);
     }
-  });
-});*/
+})
+});
+
+
+/*-----------------------------------12---------------------------------------------------------------------------- */
+
 
 app.post('/vehicule/update', function(req,res) {
   console.log(req.body);
