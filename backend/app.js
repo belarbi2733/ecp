@@ -360,20 +360,10 @@ app.get('/paypal', function(req,res){
     }
       let prixCarb = 1.4;
       let consoVoit = 4.5;
-      //  const tmpResultPrix = result.rows[0];
-      /* let distance = tmpResultPrix.distance;
-       let bookPlaces = tmpResultPrix.book_places;*/
-
-      /*let distance = 100;*/
-     // console.log(result.rows[0]);
-      // let distance = new Number (parseInt(result.rows[0],10));
      const tmpResultPrix = result.rows[0];
      let distance = tmpResultPrix.distance;
      let bookPlaces = tmpResultPrix.book_places;
-/*
-      console.log(distance);
-     console.log(typeof distance);
-*/
+
 
       function prixTraj(a, b, c, d) {
         let e = ((c * b) / 100) * a;
@@ -416,22 +406,22 @@ app.get('/paypal', function(req,res){
 /* Ici on calcul le nouveau rating depuis la page d'input rating et on stock la moyenne dans la db*/
 /*Il ne faut pas oublier de renvoyer l'Id de la personne à qui on donne une note*/
 app.post('/rating', function(req,res) {
-  User.getAllUser(function (err, result) {
+  User.getDataById(req.body.idUser,function (err, result) {
     if (err) {
       res.status(400).json(err);
     } else {
       const tmpResultRating = result.rows[0];
       let rateAvr = tmpResultRating.avr_rating;
       let nbrNote = tmpResultRating.nbr_ratings;
-      let newNote = 2; /* Init NewNote*/
+      let newNote = 4; /* Init NewNote*/
       let newRating = ((rateAvr * nbrNote) + newNote) / (nbrNote + 1); /* On multiplie la moyenne par le nombre de vote total pour avoir la somme des votes , on ajoute le nouveau et on divise par nbre de vote +1 */
       tmpResultRating.nbr_ratings = nbrNote +1;
       newRating = newRating.toFixed(2);
       console.log(newRating + '/5 ');
       tmpResultRating.avr_rating = newRating;
       tmpResultRating.avr_rating = newRating;
-      console.log(tmpResultRating);
       User.updateUtilisateur(tmpResultRating);
+      res.json(tmpResultRating.avr_rating);
     }
 })
 });
