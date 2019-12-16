@@ -5,14 +5,30 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {DriverService} from './map.service';
 import { ServerconfigService } from 'src/app/serverconfig.service';
+import {parcour} from './tourne.json';
+
+var routeOnMapView : any;
+var endparcour : any;
 declare let L;
 declare let tomtom: any;
 declare let document: any;
 let dep: string;
 let arr: string;
 const driverinfo = [];
+let iter2 = 0;
+let iter : number;
 
-let iter = 0;
+var iterons = 0 ;
+var cle;
+    for (cle in parcour[0]){
+        iterons ++ ;
+        window["Object"+iterons] = new tomtom.routeOnMap({
+            serviceOptions: {
+                traffic: false
+            }
+        })
+    }
+
 let driver: Driver = {
     idUser: null,
     departuretime: '',
@@ -53,10 +69,20 @@ function recordDriver(data: Driver) {
 export class MapComponent implements OnInit {
 
 
-  constructor(private driverService: DriverService) {
-      driver.idUser = JSON.parse(localStorage.getItem('idUser')).id; }
+  constructor(private driverService: DriverService, private httpclient: HttpClient) {
+      driver.idUser = JSON.parse(localStorage.getItem('idUser')).id;
+      
+       }
 
+      
   ngOnInit() {
+    
+    
+
+    var jsontour = this.httpclient.get("src/assets/tourne.json");
+    //console.log (JSON.stringify(jsontour)); 
+    console.log(typeof (parcour[0]));
+    
     const service = this.driverService;
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
@@ -65,6 +91,18 @@ export class MapComponent implements OnInit {
     tomtom.routingKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
     tomtom.searchKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
 
+    routeOnMapView = new tomtom.routeOnMap({
+        serviceOptions: {
+            bindPopups,
+            traffic: false
+        }
+    })
+    endparcour = new tomtom.routeOnMap({
+        serviceOptions: {
+            bindPopups,
+            traffic: false
+        }
+    })
 
     const formOptions = {
         closeOnMapClick: false,
@@ -90,7 +128,24 @@ export class MapComponent implements OnInit {
         // run after css animation
         setTimeout(listScrollHandler, 250);
     }
-});
+}); 
+
+    function buildPopupMessage(summary) {
+        return [
+            'Distance: ' + tomtom.unitFormatConverter.formatDistance(summary.lengthInMeters),
+            'Estimated travel time: ' + tomtom.unitFormatConverter.formatTime(summary.travelTimeInSeconds),
+            'Traffic delay: ' + tomtom.unitFormatConverter.formatTime(summary.trafficDelayInSeconds)
+        ].join('<br/>');
+    }
+    function bindPopups(feature, layer) {
+        layer.on('mouseover', function(e) {
+            L.popup()
+                .setLatLng(e.latlng)
+                .setContent(buildPopupMessage(feature.properties.summary))
+                .openOn(map);
+        });
+}
+    
 // let's move this to the bottom of topright
     map.zoomControl.setPosition('topright');
 // fill datepicker with current time...
@@ -112,6 +167,8 @@ export class MapComponent implements OnInit {
     if (!event.points[0] || !event.points[1]) {
         routePoints = null;
     } else {
+        iter2 ++;
+        iter = 0;
         routePoints = event.points;
         tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
             .go(function(response) {
@@ -206,6 +263,7 @@ export class MapComponent implements OnInit {
 
 }
     function requestNextPage(date, previousData) {
+        
     if (batchRequestsLock) {
         return;
     }
@@ -234,12 +292,68 @@ export class MapComponent implements OnInit {
 }
 // Create a new request
     function request(date) {
+        
+        //L.clear();
+        //////////////////////////////
     if (batchRequestsLock === 'submit') {
         // we don't care if there's another page downloaded
         return;
     }
     batchRequestsLock = 'submit';
     try {
+    if (iter = 10){
+        console.log(dep)
+    var key;
+    var it = 0;
+    var ite = 1;
+    var rou;
+    //tomtom.routeOnMapView.clear();
+    if (iter2 > 0){
+        if (typeof routeOnMapView !== 'undefined' && typeof endparcour !== 'undefined'){
+        routeOnMapView.clear();
+        endparcour.clear();
+    for (key in parcour[0]){
+        it ++ ;
+        console.log(it);
+        window["Object"+it].clear();
+        
+        }}}
+    
+        routeOnMapView.addTo(map).draw([{lat: routePoints[0].lat, lng: routePoints[0].lon}, {lat: parcour[0]['colis1'][0], lng: parcour[0]['colis1'][1]}]);
+        
+    let tmp : string;
+    let tmp1 : string;
+    it = 0;
+    for (key in parcour[0]){
+        it ++ ;
+        ite ++;
+        
+        tmp = "colis"+it;
+        tmp1 = "colis"+ite;
+        //console.log (tmp);
+        if (typeof parcour[0][tmp1] !== 'undefined') {
+            // variable is undefined
+            
+        
+    
+        //tmp = ''+ parcour[0][tmp][0]+ ':'+ parcour[0][tmp][1];
+        
+        //var lat1 : number;
+        //lat1 = parcour[0][tmp][0];
+        
+        
+        //console.log (JSON.stringify (parcour[0][tmp][0]));
+        
+        window["Object"+it].addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: parcour[0][tmp1][0], lng: parcour[0][tmp1][1]}]);
+        }
+        //rou = tomtom.L.geoJson(tmp).addTo(map);
+    }       ////
+    
+    endparcour.addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: routePoints[1].lat, lng: routePoints[1].lon}]);
+
+}
+
+    ///////////////////////////////////////////////
         clearList();
         batch(timeSeries(date))
             .then(function(data) {
@@ -313,6 +427,8 @@ export class MapComponent implements OnInit {
     if (!result || !result.route) {
         return;
     }
+    //console.log (JSON.stringify(result.route));
+    console.log (typeof(result.route));
     route = tomtom.L.geoJson(result.route, {color: result.color}).addTo(map);
 }
     function onRowClick(result) {
@@ -526,7 +642,7 @@ export class MapComponent implements OnInit {
             geometry: feature.geometry
         };
     }).map(function(record) {
-
+        iter = iter + 1;
         if (iter < 1) {
 
             driverinfo.push( {departuretime : record.summary.departureTime,
@@ -547,7 +663,7 @@ export class MapComponent implements OnInit {
             recordDriver(driver);
             service.matchDriverTrajetforTournee(driver);
 
-            iter = iter + 1; // comme ça ne stocke que pour le temps demander
+             // comme ça ne stocke que pour le temps demander
         }
 
         return {
