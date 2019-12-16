@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {DataInscription} from './inscr.interface';
+import { DataInscription } from './inscr.interface';
 import { Injectable } from '@angular/core';
 import { InscrService } from '../../services/singleComponentServices/inscr.service';
 import { MailingService } from 'src/app/services/mailing.service';

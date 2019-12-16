@@ -1,0 +1,13 @@
+<div class="container content">
+  <h3>Page de validation de l'inscription</h3>
+
+  <div class="form-group">
+    <label for="adresse_mail">Adresse avec laquelle vous vous êtes incrit :</label>
+    <input name="adresse_mail" type="email" id="adresse_mail" #adresse_mail="ngModel" placeholder="Adresse mail" [(ngModel)]="lienInscription.adresse_mail" class="form-control">
+  </div>
+  <button class="btn btn-success" (click)="valider(lienInscription)">
+    Valider l'inscription
+  </button>
+
+  <label>{{error}}</label>
+</div>

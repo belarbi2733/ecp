@@ -2,19 +2,23 @@ let db = require("./db.js");
 
 let Utilisateur = {
 
-  getPrice: function(callback)
-  {
-    console.log("getPrice : ");
-    console.log("test");
-    return db.query('SELECT prix FROM trajet ', callback);
+    getPrice: function(callback)
+    {
+      console.log("getPrice : ");
+      console.log("test");
+      return db.query('SELECT prix FROM trajet ', callback);
+    },
 
-  },
-
-
-  addUtilisateur: function(utilisateur, callback)
+    addUtilisateur: function(utilisateur, callback)
     {
       console.log("Insert user en cours...");
       db.query('INSERT INTO utilisateur (mail,password,statut) VALUES ($1, $2, $3)', [utilisateur.body.adresse_mail, utilisateur.body.mot_passe,0], callback);
+    },
+
+    changeStatusUser: function(utilisateur, callback)
+    {
+      console.log("Changement du statut de l'utilisateur");
+      return db.query('UPDATE utilisateur SET statut = $1 WHERE mail = $2', [1, utilisateur.mail], callback);
     },
 
     updateUtilisateur: function(utilisateur, callback)
