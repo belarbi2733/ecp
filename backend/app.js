@@ -524,17 +524,21 @@ app.post('/vehicule/getData' , function (req,res) {
   });
   });*/
 
-/*app.get('/adminDashBoard/getNbreUsers', function(req,res) {
+app.get('/adminDashBoard/getNbreUsers', function(req,res) {
   console.log('Request');
   User.getAllUser(function (err, result) {
     console.log(result);
     if (err) {
       res.status(400).json(err);
     } else {
-      res.json(result.rows.length);
+      let objJson = {
+        "nbreUsersStat": result.rows.length
+      };
+      console.log(objJson)
+      res.json(objJson);
     }
   });
-});*/
+});
 /*--------------------------------------------------------------------------------------------------------------- */
 
 app.post('/matchDriverTrajet', function(req,res) {

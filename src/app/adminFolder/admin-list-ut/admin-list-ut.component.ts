@@ -5,7 +5,7 @@ import {AdminListUtInterface} from './admin-list-ut.interface';
 @Component({
   selector: 'app-admin-list-ut',
   templateUrl: './admin-list-ut.component.html',
-  styleUrls: ['./admin-list-ut.component.css']
+  styleUrls: ['./admin-list-ut.component.css','../../app.component.css']
 })
 
 export class AdminListUtComponent implements OnInit {

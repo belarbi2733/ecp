@@ -7,7 +7,7 @@ import { LienInscrService } from '../../services/singleComponentServices/lien-in
 @Component({
   selector: 'app-lien-inscr',
   templateUrl: './lien-inscr.component.html',
-  styleUrls: ['./lien-inscr.component.css']
+  styleUrls: ['./lien-inscr.component.css','../../app.component.css']
 })
 
 @Injectable()

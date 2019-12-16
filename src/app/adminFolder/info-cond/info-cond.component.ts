@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-info-cond',
   templateUrl: './info-cond.component.html',
-  styleUrls: ['./info-cond.component.css']
+  styleUrls: ['./info-cond.component.css','../../app.component.css']
 })
 export class InfoCondComponent implements OnInit {
 

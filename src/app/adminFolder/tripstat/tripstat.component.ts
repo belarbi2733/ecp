@@ -5,7 +5,7 @@ import { Label, Color } from 'ng2-charts';
 @Component({
   selector: 'app-tripstat',
   templateUrl: './tripstat.component.html',
-  styleUrls: ['./tripstat.component.css']
+  styleUrls: ['./tripstat.component.css','../../app.component.css']
 })
 export class TripstatComponent implements OnInit {
   public lineChartData: ChartDataSets[]= [

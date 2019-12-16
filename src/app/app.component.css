@@ -3,11 +3,12 @@
 /* button , .btn {font: 50% Arial;} */
 .btn {
 
-    border: white solid 1.5px;
-    background-color: rgb(20, 20, 20);
-    opacity: 0.8;
-    color:white;
-    height: auto;
+  border: white solid 1.5px;
+  background-color: rgb(20, 20, 20);
+  /* background-color: 	#5DBCD2; */
+  opacity: 0.8;
+  color:white;
+  height: auto;
 }
 
 .content {
@@ -49,9 +50,7 @@ app-navbar2{
     min-height: 100%;
     flex-direction: column;
 }
-  
+
 .Site-content {
     flex: 1;
 }
-
-
