@@ -73,6 +73,7 @@ import {DataTrajService} from './services/admin-list-traj.service';
 import {MesTournService} from './services/mestourn.service';
 import {AdminListUtService} from './services/admin-list-user.service';
 import {InscrService} from './services/singleComponentServices/inscr.service';
+import { LienInscrService } from './services/singleComponentServices/lien-inscr.service';
 import {AddColisService} from './services/singleComponentServices/add-colis.service';
 import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
 import { ServerconfigService } from './serverconfig.service';
@@ -80,6 +81,7 @@ import { PaypalService } from './services/paypal.service';
 import { AdminpayComponent } from './adminFolder/adminpay/adminpay.component';
 import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
 import { UserStatService } from './services/adminServices/userstat.service';
+import { LienInscrComponent } from './singleComponentFolder/lien-inscr/lien-inscr.component';
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -106,6 +108,7 @@ const appRoutes: Routes = [
   { path: 'adminpay', canActivate: [AdminGuard], component: AdminpayComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
+  { path: 'lien-inscrire', component: LienInscrComponent },
   { path: '', component: AccueilComponent },
   { path: '**', component: FourOhFourComponent },
   { path: 'map', canActivate: [DriverService], component: MapComponent },
@@ -163,7 +166,8 @@ const appRoutes: Routes = [
     Navbar2Component,
     AdmintableComponent,
     AdminpayComponent,
-    InfoCondComponent
+    InfoCondComponent,
+    LienInscrComponent
   ],
   imports: [
     BrowserModule,
@@ -182,6 +186,7 @@ const appRoutes: Routes = [
     DriverService,
     MailingService,
     InscrService,
+    LienInscrService,
     AddColisService,
     AddtrajetService,
     PersonalDataService,

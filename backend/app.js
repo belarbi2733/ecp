@@ -54,6 +54,21 @@ app.post('/inscription',function (req, res) {
   });
 });
 
+/*-------------------------1------------------------------------------------------------------------------------ */
+
+app.post('/inscriptionLien', function(req,res){
+  User.changeStatusUser(req.body, function(err,result){
+    console.log(req.body);
+    if(err) {
+      console.log("Erreur dans le changement de statut");
+    }
+    else {
+    console.log(result);
+    res.json(result);
+  }
+  });
+});
+
 /*--------------------------2------------------------------------------------------------------------------------- */
 
 
@@ -411,6 +426,22 @@ app.get('/paypal', function(req,res){
     });
   });
 
+  /*-----------------------------------11---------------------------------------------------------------------------- */
+
+
+  app.post('/paypalStatus', function(req,res){
+    Trajet.changeStatusTraj(req.body, function(err,result){
+      console.log(req.body);
+      if(err) {
+        console.log("Erreur dans le changement de statut");
+      }
+      else {
+      console.log(result);
+      res.json(result);
+    }
+    });
+  });
+
 /*-----------------------------------11---------------------------------------------------------------------------- */
 /*app.get('/paypal', function(req,res){
   User.getPrice(function(err, result) {
@@ -599,17 +630,59 @@ app.get('/sendmail/contact', (req, res) => {
         host: "smtp.mailtrap.io",
         port: 2525,
         auth: {
-          user: "e005c016d0db91",
-          pass: "5e24274bd11a0a"
+          user: "ba66617b8bc037",
+          pass: "1f888b1d7df487"
+        }
+    });
+
+    // setup email data with unicode symbols
+    let mailOptions = {
+      from: req.query['mail'], // sender address
+      to: 'farid-f33@live.be', // list of receivers
+      subject: req.query['subject'], // Subject line
+      text: 'Nouvelle demande de contacte reçue :', // plain text body
+      html: output // html body
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }else{
+          console.log('Message sent: %s', info.messageId);
+          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+          res.send(output);
+        }
+
+    });
+});
+
+app.get('/sendmail/inscription', (req, res) => {
+    let mail = req.query['mail'];
+    const output = `
+      <p>Veuillez confirmer votre inscription</p>
+      <h3>Email avec lequel vous vous être inscrit : </h3>
+      <p>Email: ${mail}</p>
+      <h3>Lien pour valider votre inscription : </h3>
+      <a href="https://www.facebook.com/">Lien vers la page de validation</a>
+    `;
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+        //SMTP SERVER INFO
+        host: "smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+          user: "ba66617b8bc037",
+          pass: "1f888b1d7df487"
         }
     });
 
     // setup email data with unicode symbols
     let mailOptions = {
       from: 'farid-f33@live.be', // sender address
-      to: 'farid-f32@msn.com', // list of receivers
-      subject: req.params.subject, // Subject line
-      text: 'Nouvelle demande de contacte reçue :', // plain text body
+      to: req.query['mail'], // list of receivers
+      subject: 'Lien de validation pour linscription', // Subject line
+      text: 'Lien de validation pour linscription : ', // plain text body
       html: output // html body
     };
 
