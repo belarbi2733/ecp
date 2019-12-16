@@ -52,6 +52,21 @@ app.post('/inscription',function (req, res) {
   });
 });
 
+/*-------------------------1------------------------------------------------------------------------------------ */
+
+app.post('/inscriptionLien', function(req,res){
+  User.changeStatusUser(req.body, function(err,result){
+    console.log(req.body);
+    if(err) {
+      console.log("Erreur dans le changement de statut");
+    }
+    else {
+    console.log(result);
+    res.json(result);
+  }
+  });
+});
+
 /*--------------------------2------------------------------------------------------------------------------------- */
 
 
@@ -535,16 +550,16 @@ app.get('/sendmail/contact', (req, res) => {
         host: "smtp.mailtrap.io",
         port: 2525,
         auth: {
-          user: "e005c016d0db91",
-          pass: "5e24274bd11a0a"
+          user: "cda30d71cd3a23",
+          pass: "a7d2d8732d6bcf"
         }
     });
 
     // setup email data with unicode symbols
     let mailOptions = {
-      from: 'farid-f33@live.be', // sender address
-      to: req.params.mail, // list of receivers
-      subject: req.params.subject, // Subject line
+      from: req.query['mail'], // sender address
+      to: 'farid-f33@live.be', // list of receivers
+      subject: req.query['subject'], // Subject line
       text: 'Nouvelle demande de contacte reçue :', // plain text body
       html: output // html body
     };
@@ -569,7 +584,7 @@ app.get('/sendmail/inscription', (req, res) => {
       <h3>Email avec lequel vous vous être inscrit : </h3>
       <p>Email: ${mail}</p>
       <h3>Lien pour valider votre inscription : </h3>
-      <a></a>
+      <a href="https://www.facebook.com/">Lien vers la page de validation</a>
     `;
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
@@ -577,15 +592,15 @@ app.get('/sendmail/inscription', (req, res) => {
         host: "smtp.mailtrap.io",
         port: 2525,
         auth: {
-          user: "e005c016d0db91",
-          pass: "5e24274bd11a0a"
+          user: "cda30d71cd3a23",
+          pass: "a7d2d8732d6bcf"
         }
     });
 
     // setup email data with unicode symbols
     let mailOptions = {
       from: 'farid-f33@live.be', // sender address
-      to: req.params.mail, // list of receivers
+      to: req.query['mail'], // list of receivers
       subject: 'Lien de validation pour linscription', // Subject line
       text: 'Lien de validation pour linscription : ', // plain text body
       html: output // html body
