@@ -550,8 +550,8 @@ app.get('/sendmail/contact', (req, res) => {
         host: "smtp.mailtrap.io",
         port: 2525,
         auth: {
-          user: "cda30d71cd3a23",
-          pass: "a7d2d8732d6bcf"
+          user: "ba66617b8bc037",
+          pass: "1f888b1d7df487"
         }
     });
 
@@ -592,8 +592,8 @@ app.get('/sendmail/inscription', (req, res) => {
         host: "smtp.mailtrap.io",
         port: 2525,
         auth: {
-          user: "cda30d71cd3a23",
-          pass: "a7d2d8732d6bcf"
+          user: "ba66617b8bc037",
+          pass: "1f888b1d7df487"
         }
     });
 

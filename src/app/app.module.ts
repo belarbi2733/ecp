@@ -73,6 +73,7 @@ import {DataTrajService} from './services/admin-list-traj.service';
 import {MesTournService} from './services/mestourn.service';
 import {AdminListUtService} from './services/admin-list-user.service';
 import {InscrService} from './services/singleComponentServices/inscr.service';
+import { LienInscrService } from './services/singleComponentServices/lien-inscr.service';
 import {AddColisService} from './services/singleComponentServices/add-colis.service';
 import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
 import { ServerconfigService } from './serverconfig.service';
@@ -185,6 +186,7 @@ const appRoutes: Routes = [
     DriverService,
     MailingService,
     InscrService,
+    LienInscrService,
     AddColisService,
     AddtrajetService,
     PersonalDataService,

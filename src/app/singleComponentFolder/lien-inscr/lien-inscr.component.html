@@ -4,10 +4,14 @@
   <div class="form-group">
     <label for="adresse_mail">Adresse avec laquelle vous vous êtes incrit :</label>
     <input name="adresse_mail" type="email" id="adresse_mail" #adresse_mail="ngModel" placeholder="Adresse mail" [(ngModel)]="lienInscription.adresse_mail" class="form-control">
+    <label for="valid_adresse_mail"> </label>
+    <input name="valid_adresse_mail" type="email" id="valid_adresse_mail" #valid_adresse_mail="ngModel" placeholder="Validation de l'adresse mail" [(ngModel)]="lienInscription.valid_adresse_mail" class="form-control">
   </div>
   <button class="btn btn-success" (click)="valider(lienInscription)">
     Valider l'inscription
   </button>
 
+  <br>
+  <br>
   <label>{{error}}</label>
 </div>

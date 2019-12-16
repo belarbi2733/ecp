@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { ServerconfigService} from '../../serverconfig.service';
+import { ServerconfigService } from '../../serverconfig.service';
 import { DataInscription } from '../../singleComponentFolder/inscr/inscr.interface';
 
 @Injectable()
