@@ -4,6 +4,9 @@ export interface Trajet {
   traveltimeinseconds: string;
   distanceinmeters: string;
   delaytraffic: string;
-  departance: string;
+  departure: string;
   arrival: string;
+  departureAddress: string;
+  arrivalAddress: string;
 }
+
