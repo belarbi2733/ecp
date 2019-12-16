@@ -111,17 +111,20 @@ app.post('/addColis', function (req, res) {
     if(err) {
       res.status(400).json(err);
       console.log('Erreur add');
+      console.log(err);
     }
     else {
       Colis.getIdColisByIdUser(req.body, function (err2, result2) {
-        console.log(result2.rows[0]);
+        //console.log(result2.rows[0]);
         if(err2) {
           res.status(400).json(err2);
           console.log('Erreur getIdColis');
+          console.log(err2);
         } else {
           Colis.generateTrajet(req.body, result2.rows[0].id, function (err3, result3){  //result.rows[0].id ===> idColis
             if(err3) {
               res.status(400).json(err3);
+              console.log(err3);
               console.log('Erreur generate');
             }
             else {
@@ -352,9 +355,7 @@ app.get('/paypal', function(req,res){
    Trajet.calcPrixTraj(function(err,result){
     if(err) {
       console.log("Erreur dans le calcul du prix. Les données de la base de donnée ne sont pas chargées");
-    }
-
-    else {
+    } else {
     }
       let prixCarb = 1.4;
       let consoVoit = 4.5;
@@ -365,49 +366,53 @@ app.get('/paypal', function(req,res){
       /*let distance = 100;*/
      // console.log(result.rows[0]);
       // let distance = new Number (parseInt(result.rows[0],10));
-     const tmpResultPrix = result.rows[0];
-     let distance = tmpResultPrix.distance;
-     let bookPlaces = tmpResultPrix.book_places;
-/*
-      console.log(distance);
-     console.log(typeof distance);
-*/
+     if(result.rows.length) {
+       const tmpResultPrix = result.rows[0];
+       let distance = tmpResultPrix.distance;
+       let bookPlaces = tmpResultPrix.book_places;
 
-      function prixTraj(a, b, c, d) {
-        let e = ((c * b) / 100) * a;
-        console.log('Prix plein : ' + e);
-        return discount(e,d);
+       function prixTraj(a, b, c, d) {
+         let e = ((c * b) / 100) * a;
+         console.log('Prix plein : ' + e);
+         return discount(e, d);
 
-      }
+       }
 
-     console.log('Prix discount : ' + prixTraj(prixCarb, consoVoit, distance, bookPlaces) + " € ");
+       console.log('Prix discount : ' + prixTraj(prixCarb, consoVoit, distance, bookPlaces) + " € ");
 
-      function discount(prix, bookPlaces) {
-        if (bookPlaces === 1) {
-          return prix - ((prix / 100) * 5);
-        }
-        if (bookPlaces === 2) {
-          return prix - ((prix / 100) * 10);
-        }
-        if (bookPlaces === 3) {
-          return prix - ((prix / 100) * 15);
-        }
-        if (bookPlaces === 4) {
-          return prix - ((prix / 100) * 20);
-        } else {
-          console.log("Erreur trop ou pas assez de clients dans le véhicule");
-        }
+       function discount(prix, bookPlaces) {
+         if (bookPlaces === 0) {
+           console.log('Prix : Cest un colis');
+           return prix;
+         }
+         if (bookPlaces === 1) {
+           return prix - ((prix / 100) * 5);
+         }
+         if (bookPlaces === 2) {
+           return prix - ((prix / 100) * 10);
+         }
+         if (bookPlaces === 3) {
+           return prix - ((prix / 100) * 15);
+         }
+         if (bookPlaces === 4) {
+           return prix - ((prix / 100) * 20);
+         } else {
+           console.log("Erreur trop ou pas assez de clients dans le véhicule");
+         }
+       }
 
-      }
-
-      let prixfinal = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
-      prixfinal = prixfinal.toFixed(2);
-      console.log(typeof prixfinal);
-      console.log(prixfinal);
-     let objJson = {
-       "prix": prixfinal
-     };
-     res.json(objJson);
+       let prixfinal = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
+       prixfinal = prixfinal.toFixed(2);
+       console.log(typeof prixfinal);
+       console.log(prixfinal);
+       let objJson = {
+         "prix": prixfinal
+       };
+       res.json(objJson);
+     }
+     else {
+       res.json(null);
+     }
     });
   });
 
@@ -444,6 +449,7 @@ app.post('/vehicule/update', function(req,res) {
 app.post('/vehicule/getData' , function (req,res) {
   // console.log(req.body);
   Voiture.getDataVoitureById(req.body.idUser, function(err, result) {
+    // console.log(result);
     // console.log(req.body);
     if(err) {
       res.status(400).json(err);
@@ -455,7 +461,7 @@ app.post('/vehicule/getData' , function (req,res) {
         let objJson = {      // Je crée cet objet objJson pour restructurer les variables de result.rows et aussi pour éviter d'envoyer des données sensibles contenu dans result.rows comme le mot de passe
           "marque": tmpResult.nom_marque,
           "modele": tmpResult.nom_modele,
-          "sieges": tmpResult.nbre_places,
+          // "sieges": tmpResult.nbre_places,
           "volumeCoffre": tmpResult.coffre,
 
         };
@@ -511,53 +517,95 @@ app.post('/matchDriverTrajet', function(req,res) {
   Voiture.getDataVoitureById(req.body.idUser, function (err, result) {
     if(err) {
       res.status(400).json(err);
-      console.log('Error 1');
+      console.log('Error 1 on Find Trajet');
     } else {
       if(result.rows.length) {
         Trajet.getAllTrajet(function (err2,result2) {
           if(err2) {
             res.status(400).json(err2);
-            console.log('Error 2');
+            console.log('Error 2 on Find Trajet');
           }
           else
           {
             if(result2.rows.length) {
               const search = req.body;
-              let arrayTrajet = {"chauffeur":[result.rows[0].nbre_places-1,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
-              let arrayColis = {"chauffeur":[result.rows[0].coffre,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
 
+              let arrayColis = [{
+                chauffeur: '',
+                places: result.rows[0].coffre,
+                latDepart: search.departure[1],
+                longDepart: search.departure[0],
+                latArrivee: search.arrival[1],
+                longArrivee: search.arrival[1]
+              }];
 
-              _.each(result2.rows, function(one) { // bibliothèque underscore _     //Pour chaque trajet, check
-                //console.log(req.body); (from Tomtom)
-                //console.log('Coucou : ' + JSON.stringify(one));  // (from DB)
-                Trajet.findTrajetAroundRayon(req.body,one,5, function (err3, result3) {  //req.body => search
-                  if(err3) {
-                    // res.status(400).json(err3);
-                    //console.log('Error 3');
-                    console.log(err3);
-                  }
-                  else {
-                    if (result3.rows.length) {
+              let arrayTrajet = [{
+                chauffeur: '',
+                places: search.nbrePlaces,
+                latDepart: search.departure[1],
+                longDepart: search.departure[0],
+                latArrivee: search.arrival[1],
+                longArrivee: search.arrival[1]
+              }];
 
-                      let dist = distance(req.body.departure[1],req.body.departure[0],one.depart_y,one.depart_x);
-                      // console.log(dist);
+              Colis.getAllColis(function (err3, result3) {
+                if (err3) {
+                  res.status(400).json(err3);
+                  console.log('Error 3 on Mini Trajet');
+                  console.log(err3);
+                  return -1;
+                } else {
+                  _.each(result2.rows, function (one) { // bibliothèque underscore _     //Pour chaque trajet, check
 
-                      if(one.id_colis) {
-                        //Séquence si c'est un colis
-                        let strIdColis = "Colis " + one.id_colis;
-                        // arrayColis.add({"Colis": [dist,one.depart_y,one.depart_x,one.arrivee_y,one.arrivee_x]});
-                        console.log('Colis : ' + one.id_colis + ' id : ' + one.id);
+                    Trajet.findTrajetAroundRayon(req.body, one, 10, function (err4, result4) {  //req.body => search
+                      if (err4) {
+                        res.status(400).json(err4);
+                        console.log('Error 4 on Find Trajet');
+                        console.log(err4);
+                        return -1;
                       } else {
-                        //Séquence si c'est un trajet
-                        let strIdTrajet = "Colis " + one.id_colis;
-                        // arrayColis.add({"Colis": [dist,one.depart_y,one.depart_x,one.arrivee_y,one.arrivee_x]});
-                        console.log('Trajet : ' + one.id);
+                        if (result4.rows.length) {
+
+                          let dist = distance(req.body.departure[1],req.body.departure[0],one.depart_y,one.depart_x);
+
+                          if(one.id_colis) {
+                            //Séquence si c'est un colis
+                            arrayColis.push({
+                              idColis: one.id_colis,
+                              distance: dist,
+                              volume: result3.rows[one.id_colis-1].volume,  // On va chercher le volume de l'id_colis correspondant
+                              prix: one.prix,
+                              latDepart: one.depart_y,
+                              longDepart: one.depart_x,
+                              latArrivee: one.arrivee_y,
+                              longArrivee: one.arrivee_x
+                            });
+                            //console.log(JSON.stringify(arrayColis));
+                            console.log('Colis : ' + one.id_colis + ' id : ' + one.id);
+
+                          } else {
+                            //Séquence si c'est un trajet
+                            arrayTrajet.push({
+                              idTrajet: one.id,
+                              distance: dist,
+                              volume: 1,
+                              prix: one.prix,
+                              latDepart: one.depart_y,
+                              longDepart: one.depart_x,
+                              latArrivee: one.arrivee_y,
+                              longArrivee: one.arrivee_x
+                            });
+                            // console.log(JSON.stringify(arrayTrajet));
+                            console.log('Trajet : ' + one.id);
+                          }
+                        }
                       }
-                      console.log(JSON.stringify(arrayColis));
-                      console.log(JSON.stringify(arrayTrajet));
-                    }
-                  }
-                });
+                      console.log('Colis' + JSON.stringify(arrayColis));
+                      console.log('Trajet' + JSON.stringify(arrayTrajet));
+                      const objJson = arrayColis + arrayTrajet;
+                    });
+                  });
+                }
               });
             }
             else {
@@ -567,6 +615,120 @@ app.post('/matchDriverTrajet', function(req,res) {
         });
       } else {
         res.json(false);
+        console.log('pas de voiture');
+      }
+    }
+  });
+});
+
+app.post('/miniTrajet', function(req,res) {
+
+  console.log(req.body);
+  Voiture.getDataVoitureById(req.body.idUser, function (err, result) {
+    if(err) {
+      res.status(400).json(err);
+      console.log('Error 1 on Mini Trajet');
+    } else {
+      if(result.rows.length) {
+        Trajet.getAllTrajet(function (err2,result2) {
+          if(err2) {
+            res.status(400).json(err2);
+            console.log('Error 2 on Mini Trajet');
+          }
+          else
+          {
+            if(result2.rows.length) {
+              const search = req.body;
+
+              let arrayMiniColis = [{
+                chauffeur: '',
+                places: result.rows[0].coffre,
+                latDepart: search.departure[1],
+                longDepart: search.departure[0],
+                latArrivee: search.arrival[1],
+                longArrivee: search.arrival[1]
+              }];
+
+              let arrayMiniTrajet = [{
+                chauffeur: '',
+                places: search.nbrePlaces,
+                latDepart: search.departure[1],
+                longDepart: search.departure[0],
+                latArrivee: search.arrival[1],
+                longArrivee: search.arrival[1]
+              }];
+
+
+              Colis.getAllColis(function (err3, result3) {
+                if (err3) {
+                  res.status(400).json(err3);
+                  console.log('Error 3 on Mini Trajet');
+                  console.log(err3);
+                  return -1;
+                } else {
+                  _.each(result2.rows, function(one) { // bibliothèque underscore _     //Pour chaque trajet, check
+
+                    Trajet.findMiniTrajet(req.body,one,100, function (err4, result4) {  //req.body => search
+                      if(err4) {
+                        res.status(400).json(err4);
+                        console.log('Error 4 on Mini Trajet');
+                        console.log(err4);
+                        return -1;
+                      }
+                      else {
+                        if (result4.rows.length) {
+
+                          let dist = distance(req.body.departure[1],req.body.departure[0],one.depart_y,one.depart_x);
+
+                          if(one.id_colis) {
+                            //Séquence si c'est un colis
+                            arrayMiniColis.push({
+                              idColis: one.id_colis,
+                              distance: dist,
+                              volume: result3.rows[one.id_colis-1].volume,  // On va chercher le volume de l'id_colis correspondant
+                              prix: one.prix,
+                              latDepart: one.depart_y,
+                              longDepart: one.depart_x,
+                              latArrivee: one.arrivee_y,
+                              longArrivee: one.arrivee_x
+                            });
+                            //console.log(JSON.stringify(arrayMiniColis));
+                            console.log('Mini Colis : ' + one.id_colis + ' id : ' + one.id);
+
+                          } else {
+                            //Séquence si c'est un trajet
+                            arrayMiniTrajet.push({
+                              idTrajet: one.id,
+                              distance: dist,
+                              volume: 1,
+                              prix: one.prix,
+                              latDepart: one.depart_y,
+                              longDepart: one.depart_x,
+                              latArrivee: one.arrivee_y,
+                              longArrivee: one.arrivee_x
+                            });
+                            // console.log(JSON.stringify(arrayMiniTrajet));
+                            console.log('Mini Trajet : ' + one.id);
+                          }
+                        }
+                      }
+
+                      console.log('Mini Colis' + JSON.stringify(arrayMiniColis));
+                      console.log('Mini Trajet' + JSON.stringify(arrayMiniTrajet));
+                      const objJsonMini = arrayMiniColis + arrayMiniTrajet;
+                    });
+                  });
+                }
+              });
+            }
+            else {
+              res.json(null);
+            }
+          }
+        });
+      } else {
+        res.json(false);
+        console.log('pas de voiture');
       }
     }
   });
