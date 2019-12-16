@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "http-server": "^0.12.0",
     "jquery": "^3.4.1",
+    "mathjs": "^6.2.5",
     "ng2-charts": "^2.3.0",
     "ngx-paypal": "^5.0.0",
     "nodemailer": "^6.3.1",
@@ -36,6 +37,7 @@
     "rxjs": "~6.4.0",
     "rxjs-compat": "^6.5.3",
     "tslib": "^1.10.0",
+    "underscore": "^1.9.1",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
@@ -46,6 +48,7 @@
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
+    "Math": "0.0.1-security",
     "codelyzer": "^5.0.0",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
