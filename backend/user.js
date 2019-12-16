@@ -38,7 +38,7 @@ let Utilisateur = {
     checkPasswordByMail: function(utilisateur, callback)
     {
       console.log("checkPassword : " + utilisateur.mail);
-      return db.query('SELECT password FROM utilisateur WHERE mail = $1', [utilisateur.mail],callback);
+      return db.query('SELECT password, statut FROM utilisateur WHERE mail = $1', [utilisateur.mail], callback);
     },
 
     getIdUtilisateurByMail: function(mail, callback)
