@@ -23,8 +23,8 @@ let inscription: Trajet = {
   departure : '',
   arrival : '',
   departureAddress: '',
-  arrivalAddress: ''
-
+  arrivalAddress: '',
+  places: null
 };
 
 let iter = 0;
@@ -33,16 +33,16 @@ const routetrajet = []  ; // stocke les informations sur le trajet conducteur
 
 function recordtrajet(data: Trajet) {
 
-  data.departuretime = routetrajet[0].departuretime;
-  data.traveltimeinseconds = routetrajet[0].traveltimeinseconds;
-  data.distanceinmeters = routetrajet[0].distanceinmeters;
-  data.delaytraffic = routetrajet[0].delaytraffic;
-  data.departure = routetrajet[0].departure;
-  data.arrival = routetrajet[0].arrival;
-  data.departureAddress = routetrajet[0].departureAddress;
-  data.arrivalAddress = routetrajet[0].arrivalAddress;
+  data.places = routetrajet[0].places;
+  data.departuretime = routetrajet[1].departuretime;
+  data.traveltimeinseconds = routetrajet[1].traveltimeinseconds;
+  data.distanceinmeters = routetrajet[1].distanceinmeters;
+  data.delaytraffic = routetrajet[1].delaytraffic;
+  data.departure = routetrajet[1].departure;
+  data.arrival = routetrajet[1].arrival;
+  data.departureAddress = routetrajet[1].departureAddress;
+  data.arrivalAddress = routetrajet[1].arrivalAddress;
   console.log(JSON.stringify(data));
-
 }
 
 @Component({
@@ -54,8 +54,16 @@ function recordtrajet(data: Trajet) {
 @Injectable()
 export class AddTrajetComponent implements OnInit {
 
+  bookPlaces = null;
+
   constructor(private addtrajetservice: AddtrajetService) {
     inscription.idUser = JSON.parse(localStorage.getItem('idUser')).id;
+  }
+
+  save() {
+    // console.log(this.nom);
+    // console.log(this.volume);
+    routetrajet.push({places : this.bookPlaces});
   }
 
   ngOnInit() {
@@ -599,6 +607,7 @@ export class AddTrajetComponent implements OnInit {
           // console.log(JSON.stringify(routecolis));
           // console.log(JSON.stringify(routecolis[0].nom));
 
+        // console.log(JSON.stringify(routetrajet));
         recordtrajet(inscription);
         service.addtrajet(inscription);
 
