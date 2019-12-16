@@ -375,8 +375,12 @@ app.get('/paypal', function(req,res){
      console.log('Prix discount : ' + prixTraj(prixCarb, consoVoit, distance, bookPlaces) + " € ");
 
       function discount(prix, bookPlaces) {
+        if(bookPlaces === 0 )
+        {
+          return prix;
+        }
         if (bookPlaces === 1) {
-          return prix - ((prix / 100) * 5);
+          return prix;
         }
         if (bookPlaces === 2) {
           return prix - ((prix / 100) * 10);
