@@ -15,6 +15,7 @@ const driverinfo = [];
 let iter = 0;
 let driver: Driver = {
     idUser: null,
+    nbrePlaces: null,
     departuretime: '',
     time: '',
     distance: '',
@@ -25,15 +26,16 @@ let driver: Driver = {
     arrivalAddress: ''};
 
 function recordDriver(data: Driver) {
-  data.departuretime = driverinfo[0].departuretime;
-  data.time = driverinfo[0].traveltimeinseconds;
-  data.distance = driverinfo[0].distance;
-  data.trafficdelay = driverinfo[0].delaytraffic;
-  data.departure = driverinfo[0].routegeometry.coordinates[0];
-  data.arrival = driverinfo[0].routegeometry.coordinates[driverinfo[0].routegeometry.coordinates.length - 1];
+  data.nbrePlaces = driverinfo[0].nbrePlaces;
+  data.departuretime = driverinfo[1].departuretime;
+  data.time = driverinfo[1].traveltimeinseconds;
+  data.distance = driverinfo[1].distance;
+  data.trafficdelay = driverinfo[1].delaytraffic;
+  data.departure = driverinfo[1].routegeometry.coordinates[0];
+  data.arrival = driverinfo[1].routegeometry.coordinates[driverinfo[1].routegeometry.coordinates.length - 1];
   // acces au dernier element => longueur - 1
-  data.departureAddress = driverinfo[0].departureAddress;
-  data.arrivalAddress = driverinfo[0].arrivalAddress;
+  data.departureAddress = driverinfo[1].departureAddress;
+  data.arrivalAddress = driverinfo[1].arrivalAddress;
   console.log(JSON.stringify(data));
 
 
@@ -52,9 +54,17 @@ function recordDriver(data: Driver) {
 @Injectable()
 export class MapComponent implements OnInit {
 
+  nbrePlaces = '';
 
   constructor(private driverService: DriverService) {
       driver.idUser = JSON.parse(localStorage.getItem('idUser')).id; }
+
+  save() {
+
+    // console.log(this.nom);
+    // console.log(this.volume);
+    driverinfo.push({nbrePlaces : this.nbrePlaces});
+  }
 
   ngOnInit() {
     const service = this.driverService;
@@ -143,7 +153,7 @@ export class MapComponent implements OnInit {
     function PagingError() {
     this.message = 'Form submitted while next page request';
 }
-    PagingError.prototype = new Error;
+    PagingError.prototype = new Error();
     function handleBatchRequestError(err) {
     if (err instanceof PagingError) {
         // handling race condition, nothing wrong happened
@@ -546,6 +556,7 @@ export class MapComponent implements OnInit {
 
             recordDriver(driver);
             service.matchDriverTrajetforTournee(driver);
+            service.findMiniTrajet(driver);
 
             iter = iter + 1; // comme ça ne stocke que pour le temps demander
         }
