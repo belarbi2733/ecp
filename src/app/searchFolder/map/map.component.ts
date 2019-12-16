@@ -60,7 +60,7 @@ function recordDriver(data: Driver) {
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css'],
+  styleUrls: ['./map.component.css','../../app.component.css'],
   encapsulation : ViewEncapsulation.None
 })
 
@@ -770,4 +770,3 @@ export class MapComponent implements OnInit {
 
 
 }
-

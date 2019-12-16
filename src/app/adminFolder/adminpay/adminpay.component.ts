@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-adminpay',
   templateUrl: './adminpay.component.html',
-  styleUrls: ['./adminpay.component.css']
+  styleUrls: ['./adminpay.component.css','../../app.component.css']
 })
 export class AdminpayComponent implements OnInit {
 
@@ -13,7 +13,7 @@ export class AdminpayComponent implements OnInit {
   }
 
   PayementEffect(){
-    
+
   }
 
 }

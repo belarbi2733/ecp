@@ -5,7 +5,7 @@ import { Color, Label } from 'ng2-charts';
 @Component({
   selector: 'app-parcelstat',
   templateUrl: './parcelstat.component.html',
-  styleUrls: ['./parcelstat.component.css']
+  styleUrls: ['./parcelstat.component.css','../../app.component.css']
 })
 export class ParcelstatComponent implements OnInit {
   public lastParcel = [

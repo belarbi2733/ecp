@@ -4,7 +4,7 @@ import { AuthService } from '../services/singleComponentServices/auth.service';
 @Component({
   selector: 'app-navbar2',
   templateUrl: './navbar2.component.html',
-  styleUrls: ['./navbar2.component.css']
+  styleUrls: ['./navbar2.component.css','../app.component.css']
 })
 export class Navbar2Component implements OnInit {
   private isCollapsed = true;
