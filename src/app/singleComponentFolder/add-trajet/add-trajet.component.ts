@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Component, OnInit} from '@angular/core';
 import { Trajet } from './add-trajet.interface';
 import {AddtrajetService} from '../../services/singleComponentServices/addtrajet.service';
-import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import { ServerconfigService} from '../../serverconfig.service';
-// import { FormGroup, FormBuilder } from '@angular/forms';
 
 declare let L;
 declare let tomtom: any;
+
 declare let document: any;
+let dep: string;
+let arr: string;
+// var addtrajetservice : AddtrajetService;
+
 
 
 let inscription: Trajet = {
@@ -18,25 +20,31 @@ let inscription: Trajet = {
   traveltimeinseconds : '',
   distanceinmeters: '',
   delaytraffic: '',
-  departance : '',
-  arrival : ''
+  departure : '',
+  arrival : '',
+  departureAddress: '',
+  arrivalAddress: ''
+
 };
 
 let iter = 0;
 // var iteration = 0;
-let routetrajet = []  ; // stocke les informations sur le trajet conducteur
+const routetrajet = []  ; // stocke les informations sur le trajet conducteur
+
 function recordtrajet(data: Trajet) {
 
   data.departuretime = routetrajet[0].departuretime;
   data.traveltimeinseconds = routetrajet[0].traveltimeinseconds;
   data.distanceinmeters = routetrajet[0].distanceinmeters;
   data.delaytraffic = routetrajet[0].delaytraffic;
-  data.departance = routetrajet[0].departance;
+  data.departure = routetrajet[0].departure;
   data.arrival = routetrajet[0].arrival;
-
+  data.departureAddress = routetrajet[0].departureAddress;
+  data.arrivalAddress = routetrajet[0].arrivalAddress;
   console.log(JSON.stringify(data));
 
 }
+
 @Component({
   selector: 'app-add-trajet',
   templateUrl: './add-trajet.component.html',
@@ -46,27 +54,23 @@ function recordtrajet(data: Trajet) {
 @Injectable()
 export class AddTrajetComponent implements OnInit {
 
-  constructor(private router: Router, private addtrajetservice: AddtrajetService, public http: HttpClient, private servUrl: ServerconfigService) {
+  constructor(private addtrajetservice: AddtrajetService) {
     inscription.idUser = JSON.parse(localStorage.getItem('idUser')).id;
   }
 
-
   ngOnInit() {
-
-    // let addtraj :AddTrajetComponent;
-    const https = this.http;
-    const routeur = this.router;
-    const url = this.servUrl.nodeUrl;
+    const service = this.addtrajetservice; // Pour pouvoir utiliser le service dans les functions;
 
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
     // Set TomTom keys
-    tomtom.key('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
-    tomtom.routingKey('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
-    tomtom.searchKey('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
+    tomtom.key('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
+    tomtom.routingKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
+    tomtom.searchKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
 
 
-    let formOptions = {
+    const formOptions = {
+
       closeOnMapClick: false,
       position: 'topleft',
       title: null
@@ -74,16 +78,20 @@ export class AddTrajetComponent implements OnInit {
     let listScrollHandler = null;
 
     const map = tomtom.L.map('map', {
-      key: 'fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR',
-      basePath: '/assets/sdktool/sdk',
-      center: [50.8504500, 4.3487800],
-      zoom: 10,
-      source: 'vector'
+    key: '2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7',
+    basePath: '/assets/sdktool/sdk',
+    center: [ 50.8504500, 4.3487800 ],
+    zoom: 10,
+    source : 'vector'
+
     });
 
-    let routeInputs = tomtom.routeInputs().addTo(map);
-    let form = document.getElementById('form');
-    let batchRoutingControl = tomtom.foldable(formOptions).addTo(map).addContent(form);
+    const routeInputs = tomtom.routeInputs().addTo(map);
+    //
+
+    const form = document.getElementById('form');
+    const batchRoutingControl = tomtom.foldable(formOptions).addTo(map).addContent(form);
+
     window.addEventListener('resize', function() {
       batchRoutingControl.unfold();
       if (listScrollHandler) {
@@ -94,27 +102,54 @@ export class AddTrajetComponent implements OnInit {
     // let's move this to the bottom of topright
     map.zoomControl.setPosition('topright');
     // fill datepicker with current time...
-    let timepicker = document.querySelector('#date');
+    const timepicker = document.querySelector('#date');
     // (<HTMLElement>document.querySelector('#date')).style.display = 'none';
     timepicker.setAttribute('min', new Date().toISOString());
-    let offset = new Date().getTimezoneOffset();
-    let fallback = timepicker.type === 'text';
+    const offset = new Date().getTimezoneOffset();
+    const fallback = timepicker.type === 'text';
     if (fallback) {
       // no support for datetime-locale, let's show a warning message
       form.classList.add('fallback');
     }
     // let's add 15 minutes from now to give user some time to fill the form
     setDate(new Date(new Date().getTime() + 10 * 60 * 1000));
-    let arrivalOrDeparture = document.querySelector('select#type');
-    let submitButton = document.querySelector('input[type=submit]');
+
+    const arrivalOrDeparture = document.querySelector('select#type');
+    const submitButton = document.querySelector('input[type=submit]');
     let routePoints;
+
     routeInputs.on(routeInputs.Events.LocationsFound, function(event) {
-      if (!event.points[0] || !event.points[1]) {
-        routePoints = null;
-      } else {
-        routePoints = event.points;
-      }
-      submitButton.disabled = !routePoints;
+
+    if (!event.points[0] || !event.points[1]) {
+      routePoints = null;
+    } else {
+      routePoints = event.points;
+
+      tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
+            .go(function(response) {
+                if (response && response.address && response.address.freeformAddress) {
+                  // console.log(JSON.stringify(response.address.freeformAddress));
+                  dep = response.address.freeformAddress;
+                } else {
+
+                }
+
+            });
+      tomtom.reverseGeocode({position: [routePoints[1].lat, routePoints[1].lon]})
+            .go(function(resp) {
+                if (resp && resp.address && resp.address.freeformAddress) {
+                  // console.log(JSON.stringify(resp.address.freeformAddress));
+                  arr = resp.address.freeformAddress;
+                } else {
+
+                }
+
+            });
+
+
+    }
+    submitButton.disabled = !routePoints;
+
     });
 
     // add submit handler to form
@@ -150,7 +185,7 @@ export class AddTrajetComponent implements OnInit {
     let persistentRoute;
 
     function clickFirstListItem() {
-      let firstListItem = batchRoutingControl.container.querySelector('.item');
+      const firstListItem = batchRoutingControl.container.querySelector('.item');
       clearRoutes();
       if (firstListItem) {
         firstListItem.click();
@@ -160,7 +195,7 @@ export class AddTrajetComponent implements OnInit {
       }
     }
 
-    let expandVisibleRows = function(items, firstVisible, lastVisible) {
+    const expandVisibleRows = function(items, firstVisible, lastVisible) {
 
       items.forEach(function(item, index) {
         if (lastVisible < index || index < firstVisible) {
@@ -175,11 +210,11 @@ export class AddTrajetComponent implements OnInit {
 
     function updateScrollEvent(data) {
 
-      let results = data.results;
+      const results = data.results;
 
-      let list = batchRoutingControl.container.querySelector('ol');
-      let items = Array.apply(null, list.querySelectorAll('li.item'));
-      let cellHeight = 30;
+      const list = batchRoutingControl.container.querySelector('ol');
+      const items = Array.apply(null, list.querySelectorAll('li.item'));
+      const cellHeight = 30;
       let lastVisible;
       let firstVisible;
 
@@ -187,10 +222,10 @@ export class AddTrajetComponent implements OnInit {
       listScrollHandler = function() {
         firstVisible = Math.min(Math.ceil(list.scrollTop / cellHeight) - 1, results.length);
         lastVisible = Math.max(firstVisible + Math.floor(list.clientHeight / cellHeight) + 1, 0);
-        let limit = results.length / 2;
+        const limit = results.length / 2;
         if (lastVisible >= limit && results.length) {
-          let lastResult = results[results.length - 1];
-          let time = arrivalOrDeparture.value === 'depart at' ? lastResult.from : lastResult.to;
+          const lastResult = results[results.length - 1];
+          const time = arrivalOrDeparture.value === 'depart at' ? lastResult.from : lastResult.to;
           requestNextPage(time, data);
         }
         expandVisibleRows(items, firstVisible, lastVisible);
@@ -259,42 +294,42 @@ export class AddTrajetComponent implements OnInit {
     }
 
     function mapTimeToRoutingElement(time) {
-      let format = 'yyyy-mm-dd hh:mm';
-      let result = {
+      const format = 'yyyy-mm-dd hh:mm';
+      const result = {
         traffic: true,
         locations: routePoints,
         computeTravelTimeFor: 'all'
       };
-      let param = arrivalOrDeparture.value === 'depart at' ? 'departAt' : 'arriveAt';
+      const param = arrivalOrDeparture.value === 'depart at' ? 'departAt' : 'arriveAt';
       result[param] = formatDate(time).slice(0, format.length).replace('T', ' ');
       return result;
     }
 
     // generate time series for batch query
     function timeSeries(start) {
-      let milisInMinute = 60 * 1000;
-      let minutes = 15;
-      let timesPerHour = 60 / minutes;
-      let hours = 6;
-      let numberOfResults = timesPerHour * hours;
+      const milisInMinute = 60 * 1000;
+      const minutes = 15;
+      const timesPerHour = 60 / minutes;
+      const hours = 6;
+      const numberOfResults = timesPerHour * hours;
       return Array.apply(null, Array(numberOfResults))
         .reduce(function(accumulator) {
-          let i = accumulator.length - 1;
-          let previous = accumulator[i];
-          let current = new Date(previous.getTime() + minutes * milisInMinute);
+          const i = accumulator.length - 1;
+          const previous = accumulator[i];
+          const current = new Date(previous.getTime() + minutes * milisInMinute);
           return accumulator.concat([current]);
         }, [new Date(start)])
         .map(mapTimeToRoutingElement);
     }
 
     function showDetails(result) {
-      let from = batchRoutingControl.container.querySelector('.details .from-value');
-      let to = batchRoutingControl.container.querySelector('.details .to-value');
-      let distance = batchRoutingControl.container.querySelector('.details .distance-value');
-      let time = batchRoutingControl.container.querySelector('.details .time-value');
-      let delay = batchRoutingControl.container.querySelector('.details .delay-value');
-      let live = batchRoutingControl.container.querySelector('.details .live-value');
-      let noTraffic = batchRoutingControl.container.querySelector('.details .without-traffic-value');
+      const from = batchRoutingControl.container.querySelector('.details .from-value');
+      const to = batchRoutingControl.container.querySelector('.details .to-value');
+      const distance = batchRoutingControl.container.querySelector('.details .distance-value');
+      const time = batchRoutingControl.container.querySelector('.details .time-value');
+      const delay = batchRoutingControl.container.querySelector('.details .delay-value');
+      const live = batchRoutingControl.container.querySelector('.details .live-value');
+      const noTraffic = batchRoutingControl.container.querySelector('.details .without-traffic-value');
       from.innerHTML = result.from ? formatTime(result.from) : '--';
       to.innerHTML = result.to ? formatTime(result.to) : '--';
       distance.innerHTML = result.distance ? formatDistance(result.distance) : '--';
@@ -317,7 +352,7 @@ export class AddTrajetComponent implements OnInit {
     }
 
     function onRowClick(result) {
-      let previous = batchRoutingControl.container.querySelector('.item.active');
+      const previous = batchRoutingControl.container.querySelector('.item.active');
       if (previous) {
         previous.classList.remove('active');
       }
@@ -365,21 +400,21 @@ export class AddTrajetComponent implements OnInit {
     }
 
     function createRow(list) {
-      let element = tomtom.L.DomUtil.create('li', 'item', list);
+      const element = tomtom.L.DomUtil.create('li', 'item', list);
       tomtom.L.DomUtil.create('span', 'from', element);
       tomtom.L.DomUtil.create('span', 'date', element);
-      let barContainer = tomtom.L.DomUtil.create('div', 'bar-container', element);
-      let bar = tomtom.L.DomUtil.create('div', 'bar', barContainer);
+      const barContainer = tomtom.L.DomUtil.create('div', 'bar-container', element);
+      const bar = tomtom.L.DomUtil.create('div', 'bar', barContainer);
       tomtom.L.DomUtil.create('span', 'diff', bar);
       tomtom.L.DomUtil.create('span', 'to', element);
       return element;
     }
 
     function createHeader() {
-      let header = tomtom.L.DomUtil.create('div', 'header');
-      let depart = tomtom.L.DomUtil.create('span', null, header);
-      let delay = tomtom.L.DomUtil.create('span', null, header);
-      let arrive = tomtom.L.DomUtil.create('span', null, header);
+      const header = tomtom.L.DomUtil.create('div', 'header');
+      const depart = tomtom.L.DomUtil.create('span', null, header);
+      const delay = tomtom.L.DomUtil.create('span', null, header);
+      const arrive = tomtom.L.DomUtil.create('span', null, header);
       depart.innerHTML = 'Departure';
       delay.innerHTML = 'Delay';
       arrive.innerHTML = 'Arrive';
@@ -387,17 +422,17 @@ export class AddTrajetComponent implements OnInit {
     }
 
     function createDetails() {
-      let details = tomtom.L.DomUtil.create('div', 'details');
-      let left = L.DomUtil.create('span', 'left column', details);
-      let mid = L.DomUtil.create('span', 'mid column', details);
-      let right = L.DomUtil.create('span', 'right column', details);
-      let travelTimeLabel = L.DomUtil.create('span', 'details-label travel-label', left);
-      let liveTrafficLabel = L.DomUtil.create('span', 'details-label live-label', left);
-      let withoutTrafficLabel = L.DomUtil.create('span', 'details-label without-traffic-label', left);
-      let distanceLabel = L.DomUtil.create('span', 'details-label distance-label', mid);
-      let trafficDelayLabel = L.DomUtil.create('span', 'details-label delay-label', mid);
-      let departLabel = L.DomUtil.create('span', 'details-label from-label', right);
-      let arriveLabel = L.DomUtil.create('span', 'details-label to-label', right);
+      const details = tomtom.L.DomUtil.create('div', 'details');
+      const left = L.DomUtil.create('span', 'left column', details);
+      const mid = L.DomUtil.create('span', 'mid column', details);
+      const right = L.DomUtil.create('span', 'right column', details);
+      const travelTimeLabel = L.DomUtil.create('span', 'details-label travel-label', left);
+      const liveTrafficLabel = L.DomUtil.create('span', 'details-label live-label', left);
+      const withoutTrafficLabel = L.DomUtil.create('span', 'details-label without-traffic-label', left);
+      const distanceLabel = L.DomUtil.create('span', 'details-label distance-label', mid);
+      const trafficDelayLabel = L.DomUtil.create('span', 'details-label delay-label', mid);
+      const departLabel = L.DomUtil.create('span', 'details-label from-label', right);
+      const arriveLabel = L.DomUtil.create('span', 'details-label to-label', right);
       liveTrafficLabel.innerHTML = '<span>live traffic:</span>';
       withoutTrafficLabel.innerHTML = '<span>without traffic:</span>';
       trafficDelayLabel.innerHTML = '<span>traffic delay:</span>';
@@ -405,13 +440,13 @@ export class AddTrajetComponent implements OnInit {
       departLabel.innerHTML = '<span>depart at:</span>';
       travelTimeLabel.innerHTML = '<span>travel time:</span>';
       arriveLabel.innerHTML = '<span>arrive at:</span>';
-      let travelTimeValue = L.DomUtil.create('span', 'time-value', travelTimeLabel);
-      let liveTrafficValue = L.DomUtil.create('span', 'live-value', liveTrafficLabel);
-      let withoutTrafficValue = L.DomUtil.create('span', 'without-traffic-value', withoutTrafficLabel);
-      let delayValue = L.DomUtil.create('span', 'delay-value', trafficDelayLabel);
-      let distanceValue = L.DomUtil.create('span', 'distance-value', distanceLabel);
-      let fromValue = L.DomUtil.create('span', 'from-value', departLabel);
-      let toValue = L.DomUtil.create('span', 'to-value', arriveLabel);
+      const travelTimeValue = L.DomUtil.create('span', 'time-value', travelTimeLabel);
+      const liveTrafficValue = L.DomUtil.create('span', 'live-value', liveTrafficLabel);
+      const withoutTrafficValue = L.DomUtil.create('span', 'without-traffic-value', withoutTrafficLabel);
+      const delayValue = L.DomUtil.create('span', 'delay-value', trafficDelayLabel);
+      const distanceValue = L.DomUtil.create('span', 'distance-value', distanceLabel);
+      const fromValue = L.DomUtil.create('span', 'from-value', departLabel);
+      const toValue = L.DomUtil.create('span', 'to-value', arriveLabel);
       travelTimeValue.innerHTML = '--';
       liveTrafficValue.innerHTML = '--';
       withoutTrafficValue.innerHTML = '--';
@@ -442,16 +477,16 @@ export class AddTrajetComponent implements OnInit {
     }
 
     function clearList() {
-      let list = getOrCreateList();
-      let children = list.querySelectorAll('li.item');
+      const list = getOrCreateList();
+      const children = list.querySelectorAll('li.item');
       Array.prototype.forEach.call(children, removeNode);
       hideError(list);
       showLoader(list);
     }
 
     function createItems(data) {
-      let list = getOrCreateList();
-      let results = data.results;
+      const list = getOrCreateList();
+      const results = data.results;
       if (!results.length) {
         hideLoader(list);
         return data;
@@ -469,7 +504,7 @@ export class AddTrajetComponent implements OnInit {
       node.parentElement.removeChild(node);
     }
 
-    let listItemsEventHandlers = {
+    const listItemsEventHandlers = {
       mouseover: [],
       mouseout: [],
       click: []
@@ -484,22 +519,22 @@ export class AddTrajetComponent implements OnInit {
     }
 
     function updateListElements(data) {
-      let items = batchRoutingControl.container.querySelectorAll('ol li.item');
-      let results = data.results;
+      const items = batchRoutingControl.container.querySelectorAll('ol li.item');
+      const results = data.results;
       for (let i = 0; i < results.length; i += 1) {
-        let element = items[i];
-        let result = results[i];
-        let from = element.querySelector('.from');
-        let date = element.querySelector('.date');
-        let bar = element.querySelector('.bar');
-        let to = element.querySelector('.to');
+        const element = items[i];
+        const result = results[i];
+        const from = element.querySelector('.from');
+        const date = element.querySelector('.date');
+        const bar = element.querySelector('.bar');
+        const to = element.querySelector('.to');
 
         from.innerHTML = formatTime(result.from);
         to.innerHTML = formatTime(result.to);
         date.classList.add('hidden');
         if (i - 1 in results) {
-          let previous = results[i - 1];
-          let previousDate = new Date(previous.from);
+          const previous = results[i - 1];
+          const previousDate = new Date(previous.from);
           previousDate.setDate(previousDate.getDate() + 1);
           if (previousDate.getDate() === result.from.getDate()) {
             date.innerHTML = result.from.toDateString();
@@ -519,11 +554,12 @@ export class AddTrajetComponent implements OnInit {
     }
 
     function attachColorAndRatio(min, max) {
-      let HUE = 71, LIGHTNESS = 36;
+      const HUE = 71;
+      const LIGHTNESS = 36;
       return function(result) {
-        let ratio = (result.time - min * 0.99) / (max - min * 0.99);
-        let hue = HUE * (1 - Math.pow(ratio, 3));
-        let light = LIGHTNESS + 20 * ratio;
+        const ratio = (result.time - min * 0.99) / (max - min * 0.99);
+        const hue = HUE * (1 - Math.pow(ratio, 3));
+        const light = LIGHTNESS + 20 * ratio;
         result.color = 'hsl(' + Math.round(hue) + ', 91%, ' + light + '%)';
         result.ratio = ratio;
         return result;
@@ -533,52 +569,46 @@ export class AddTrajetComponent implements OnInit {
 
     function prepareData(data) {
 
-      var results = data.filter(function(record) {
+      const results = data.filter(function(record) {
         return typeof record.error === 'undefined';
       }).map(function(record) {
-        var feature = record.features[0];
+        const feature = record.features[0];
         return {
           summary: feature.properties.summary,
           geometry: feature.geometry
-        };
-      }).map(function(record) {
 
-        if (iter < 1) {
+      };
+    }).map(function(record) {
 
-          routetrajet.push({
-            departuretime: record.summary.departureTime,
-            traveltimeinseconds: record.summary.travelTimeInSeconds,
-            distanceinmeters: record.summary.lengthInMeters,
-            delaytraffic: record.summary.liveTrafficIncidentsTravelTimeInSeconds - record.summary.noTrafficTravelTimeInSeconds,
-            departance: record.geometry.coordinates[1],
-            arrival: record.geometry.coordinates[record.geometry.coordinates.length - 1]
-          }); // premier élément de route geometry = coordonnées de départ, dernier = arrivée
+      if (iter < 1) {
+
+        routetrajet.push(  {
+          departuretime : record.summary.departureTime,
+          traveltimeinseconds : record.summary.travelTimeInSeconds,
+          distanceinmeters : record.summary.lengthInMeters,
+          delaytraffic : record.summary.liveTrafficIncidentsTravelTimeInSeconds - record.summary.noTrafficTravelTimeInSeconds,
+          departure : record.geometry.coordinates[1],
+          arrival : record.geometry.coordinates[record.geometry.coordinates.length - 1],
+          departureAddress : dep,
+          arrivalAddress : arr
+        },
+          ); // premier élément de route geometry = coordonnées de départ, dernier = arrivée;
+
 
           // AddColis(colis);
           // console.log(JSON.stringify(routecolis));
           // console.log(JSON.stringify(routecolis[0].nom));
-          recordtrajet(inscription);
-          //addtraj.addtrajet(inscription);
 
-          https.post(`${url}/addtrajet`, inscription)
-            .subscribe(
-              res => {
-                routeur.navigate(['accueil']);
-                console.log(res);
-              },
-              err => {
-                console.log('Error occured:', err);
-              }
-            );
-          //AddColisComponent.bite(AddColisComponent.inscription);
+        recordtrajet(inscription);
+        service.addtrajet(inscription);
 
 
-          iter = iter + 1; //comme ça ne stocke que pour le temps demander
+        iter = iter + 1; // comme ça ne stocke que pour le temps demander
 
 
         }
 
-        return {
+      return {
           from: new Date(record.summary.departureTime),
           to: new Date(record.summary.arrivalTime),
           liveTraffic: record.summary.liveTrafficIncidentsTravelTimeInSeconds,
@@ -592,11 +622,11 @@ export class AddTrajetComponent implements OnInit {
       });
 
 
-      let times = results.map(function(record) {
+      const times = results.map(function(record) {
         return record.time;
       });
-      let min = Math.min.apply(Math, times);
-      let max = Math.max.apply(Math, times);
+      const min = Math.min.apply(Math, times);
+      const max = Math.max.apply(Math, times);
       return {
         min,
         max,
@@ -621,7 +651,7 @@ export class AddTrajetComponent implements OnInit {
           }
         }
         results = results.map(attachColorAndRatio(min, max));
-        let data = {
+        const data = {
           results,
           min,
           max
@@ -642,13 +672,13 @@ export class AddTrajetComponent implements OnInit {
     }
 
     function setDate(date) {
-      let now = formatDate(date || new Date());
+      const now = formatDate(date || new Date());
       timepicker.setAttribute('value', fallback ? now.replace('T', ' ') : now);
     }
 
     function formatDistance(meters) {
-      let kilometer = 1000;
-      let kilometers = Math.round(100 * meters / kilometer) / 100;
+      const kilometer = 1000;
+      const kilometers = Math.round(100 * meters / kilometer) / 100;
       let result = Math.floor(meters % kilometer) + ' m';
       if (kilometers >= 1) {
         result = kilometers + ' km ';
@@ -657,12 +687,12 @@ export class AddTrajetComponent implements OnInit {
     }
 
     function formatDiff(seconds) {
-      let min = 60;
-      let hour = min * 60;
-      let day = hour * 24;
-      let days = Math.floor(seconds / day);
-      let hours = Math.floor((seconds % day) / hour);
-      let minutes = Math.floor((seconds % hour) / min);
+      const min = 60;
+      const hour = min * 60;
+      const day = hour * 24;
+      const days = Math.floor(seconds / day);
+      const hours = Math.floor((seconds % day) / hour);
+      const minutes = Math.floor((seconds % hour) / min);
       let result = Math.floor(seconds % min) + 's';
       if (minutes) {
         result = minutes + 'm ' + result;
