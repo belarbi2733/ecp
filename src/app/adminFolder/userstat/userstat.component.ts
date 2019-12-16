@@ -5,7 +5,7 @@ import { Color, Label } from 'ng2-charts';
 @Component({
   selector: 'app-userstat',
   templateUrl: './userstat.component.html',
-  styleUrls: ['./userstat.component.css']
+  styleUrls: ['./userstat.component.css','../../app.component.css']
 })
 export class UserstatComponent implements OnInit {
   public graphData = {

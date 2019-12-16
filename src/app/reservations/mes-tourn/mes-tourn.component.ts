@@ -7,7 +7,7 @@ import {PaypalService} from '../../services/paypal.service';
 @Component({
   selector: 'app-mes-tourn',
   templateUrl: './mes-tourn.component.html',
-  styleUrls: ['./mes-tourn.component.css']
+  styleUrls: ['./mes-tourn.component.css','../../app.component.css']
 })
 export class MesTournComponent implements OnInit {
 

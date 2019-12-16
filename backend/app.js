@@ -81,7 +81,7 @@ app.post('/auth/checkPassword', function (req,res) {
       console.log("Erreur in checkPassword");
     } else {
       if(result.rows.length !== 0) { // Check si il y a le mail dans la database
-        if (result.rows[0].password === req.body.password) { //Check si les mots de passes correspondent
+        if (result.rows[0].password === req.body.password && result.rows[0].statut===1) { //Check si les mots de passes correspondent
           res.json(true);
         }
         else {
@@ -524,17 +524,21 @@ app.post('/vehicule/getData' , function (req,res) {
   });
   });*/
 
-/*app.get('/adminDashBoard/getNbreUsers', function(req,res) {
+app.get('/adminDashBoard/getNbreUsers', function(req,res) {
   console.log('Request');
   User.getAllUser(function (err, result) {
     console.log(result);
     if (err) {
       res.status(400).json(err);
     } else {
-      res.json(result.rows.length);
+      let objJson = {
+        "nbreUsersStat": result.rows.length
+      };
+      console.log(objJson)
+      res.json(objJson);
     }
   });
-});*/
+});
 /*--------------------------------------------------------------------------------------------------------------- */
 
 app.post('/matchDriverTrajet', function(req,res) {
