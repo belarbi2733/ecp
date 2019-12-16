@@ -81,7 +81,7 @@ app.post('/auth/checkPassword', function (req,res) {
       console.log("Erreur in checkPassword");
     } else {
       if(result.rows.length !== 0) { // Check si il y a le mail dans la database
-        if (result.rows[0].password === req.body.password) { //Check si les mots de passes correspondent
+        if (result.rows[0].password === req.body.password && result.rows[0].statut===1) { //Check si les mots de passes correspondent
           res.json(true);
         }
         else {
