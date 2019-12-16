@@ -13,7 +13,7 @@ export class RatingComponent implements OnInit {
   rating: RatingInterface = {
     idUser: null,
     currentRate: null,
-    commentaires: ['Coucou', 'C est moi', 'Attention les commentaires ne sont pas fonctionnels ! '],
+    commentaires: ['lorem ipsum' , 'lorem ipsum', 'lorem ipsum'],
   };
 
 
