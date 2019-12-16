@@ -21,8 +21,9 @@ let Utilisateur = {
     {
       console.log("Update user en cours...");
       console.log(utilisateur.avr_rating);
-      db.query('UPDATE utilisateur SET nom = $1,prenom = $2,telephone = $3, mail = $4, sexe = $5, date_naiss = $6, descr = $7 , avr_rating = $8 WHERE id = 2',
-        [utilisateur.nom,utilisateur.prenom,utilisateur.tel,utilisateur.mail,utilisateur.sexe,utilisateur.date_naiss,utilisateur.description,utilisateur.avr_rating],
+      console.log(utilisateur.nbr_ratings);
+      db.query('UPDATE utilisateur SET nom = $1,prenom = $2,telephone = $3, mail = $4, sexe = $5, date_naiss = $6, descr = $7 , avr_rating = $8 , nbr_ratings = $9 WHERE id = $10',
+        [utilisateur.nom,utilisateur.prenom,utilisateur.tel,utilisateur.mail,utilisateur.sexe,utilisateur.date_naiss,utilisateur.description,utilisateur.avr_rating, utilisateur.nbr_ratings, utilisateur.id],
         callback);
     },
 

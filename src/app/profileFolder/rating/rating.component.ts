@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RatingInterface } from './rating.interface';
 import { RatingService } from '../../services/profileServices/rating.service';
+import {PaypalInterface} from '../../paypal/paypal.interface';
 
 @Component({
   selector: 'app-rating',
@@ -22,9 +23,8 @@ export class RatingComponent implements OnInit {
 
   ngOnInit() {
     this.ratingService.getRatingById(this.rating)
-      .then((dataUser: RatingInterface) => {
-        this.rating.currentRate = dataUser.currentRate;
-        // console.log(this.rating.currentRate);
+      .then((dataUser: number) => {
+        this.rating.currentRate = dataUser;
       })
       .catch( () => {
         console.log('Error in getRatingById');
