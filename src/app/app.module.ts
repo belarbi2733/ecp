@@ -6,6 +6,7 @@ import { ChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPayPalModule } from 'ngx-paypal';
+
 // services
 import { AuthGuard } from './services/singleComponentServices/auth-guard.service';
 import { AdminGuard } from './services/singleComponentServices/admin-guard.service';
