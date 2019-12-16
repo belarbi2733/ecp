@@ -1,26 +1,26 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { DataColis } from './add-colis.interface';
 import {AddColisService} from '../../services/singleComponentServices/add-colis.service';
-import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import { ColisComponent } from 'src/app/accueilFolder/colis/colis.component';
-import { ServerconfigService} from '../../serverconfig.service';
-// import { FormGroup, FormBuilder } from '@angular/forms';
 declare let L;
 declare let tomtom: any;
 declare let document: any;
+let dep: string;
+let arr: string;
 
 
-let inscription: DataColis = {
+let dataColis: DataColis = {
+  idUser: null,
   nom: '',
   volume: '',
   departuretime : '',
   traveltimeinseconds : '',
   distanceinmeters: '',
   delaytraffic: '',
-  departance : '',
-  arrival : ''
+  departure : '',
+  arrival : '',
+  departureAddress: '',
+  arrivalAddress: ''
 };
 
 let iter = 0;
@@ -34,8 +34,10 @@ function recordcolis(data: DataColis) {
   data.traveltimeinseconds = routecolis[1].traveltimeinseconds;
   data.distanceinmeters = routecolis[1].distanceinmeters;
   data.delaytraffic = routecolis[1].delaytraffic;
-  data.departance = routecolis[1].departance;
+  data.departure = routecolis[1].departure;
   data.arrival = routecolis[1].arrival;
+  data.departureAddress = routecolis[1].departureAddress;
+  data.arrivalAddress = routecolis[1].arrivalAddress;
 
   console.log(JSON.stringify(data));
   // addColis(data);
@@ -53,7 +55,9 @@ export class AddColisComponent implements OnInit {
   nom = '';
   volume = '';
 
-  constructor(private router: Router, public http : HttpClient,private rurl: ServerconfigService) { }
+  constructor(private addColisService: AddColisService) {
+    dataColis.idUser = JSON.parse(localStorage.getItem('idUser')).id;
+  }
 
   save() {
 
@@ -65,16 +69,14 @@ export class AddColisComponent implements OnInit {
 
   ngOnInit() {
 
-    const https = this.http;
-    const routeur = this.router;
-    const url = this.rurl.nodeUrl;
+    const service = this.addColisService;
 
 // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
 // Set TomTom keys
-    tomtom.key('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
-    tomtom.routingKey('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
-    tomtom.searchKey('fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR');
+    tomtom.key('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
+    tomtom.routingKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
+    tomtom.searchKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
 
 
     const formOptions = {
@@ -85,7 +87,7 @@ export class AddColisComponent implements OnInit {
     let listScrollHandler = null;
 
     const map = tomtom.L.map('map', {
-      key: 'fA5Nk02Fi28EjXN7rH39YW4AOrqrGVnR',
+      key: '2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7',
       basePath: '/assets/sdktool/sdk',
       center: [ 50.8504500, 4.3487800 ],
       zoom: 10,
@@ -126,6 +128,26 @@ export class AddColisComponent implements OnInit {
         routePoints = null;
       } else {
         routePoints = event.points;
+        tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
+            .go(function(response) {
+                if (response && response.address && response.address.freeformAddress) {
+                  //console.log(JSON.stringify(response.address.freeformAddress));
+                  dep = response.address.freeformAddress;
+                } else {
+
+                }
+
+            });
+        tomtom.reverseGeocode({position: [routePoints[1].lat, routePoints[1].lon]})
+            .go(function(resp) {
+                if (resp && resp.address && resp.address.freeformAddress) {
+                  //console.log(JSON.stringify(resp.address.freeformAddress));
+                  arr = resp.address.freeformAddress;
+                } else {
+
+                }
+
+            });
       }
       submitButton.disabled = !routePoints;
     });
@@ -523,29 +545,22 @@ export class AddColisComponent implements OnInit {
         if (iter < 1) {
 
           routecolis.push(  {
+
             departuretime : record.summary.departureTime,
             traveltimeinseconds : record.summary.travelTimeInSeconds,
             distanceinmeters : record.summary.lengthInMeters,
             delaytraffic : record.summary.liveTrafficIncidentsTravelTimeInSeconds - record.summary.noTrafficTravelTimeInSeconds,
-            departance : record.geometry.coordinates[1],
-            // tslint:disable-next-line:max-line-length
-            arrival : record.geometry.coordinates[record.geometry.coordinates.length - 1]}); // premier élément de route geometry = coordonnées de départ, dernier = arrivée;
+            departure : record.geometry.coordinates[1],
+            arrival : record.geometry.coordinates[record.geometry.coordinates.length - 1],
+            departureAddress : dep,
+            arrivalAddress : arr}); // premier élément de route geometry = coordonnées de départ, dernier = arrivée;
+
 
           // AddColis(colis);
           // console.log(JSON.stringify(routecolis));
           // console.log(JSON.stringify(routecolis[0].nom));
-          recordcolis(inscription);
-          https.post(`${url}/addColis`, inscription)
-          .subscribe(
-            res => {
-             console.log(res);
-             routeur.navigate(['accueil']);
-           },
-            err => {
-             console.log('Erreur avec ajout colis:' , err);
-            }
-          );
-          // AddColisComponent.bite(AddColisComponent.inscription);
+          recordcolis(dataColis);
+          service.addColis(dataColis);
 
 
           iter = iter + 1; // comme ça ne stocke que pour le temps demander
@@ -580,7 +595,7 @@ export class AddColisComponent implements OnInit {
     }
 
     function sendDataToService(service: AddColisService) {
-      service.addColis(inscription);
+      service.addColis(dataColis);
     }
 
     function mergeData(previous) {
