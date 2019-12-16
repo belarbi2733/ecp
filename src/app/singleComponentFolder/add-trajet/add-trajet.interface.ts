@@ -8,5 +8,6 @@ export interface Trajet {
   arrival: string;
   departureAddress: string;
   arrivalAddress: string;
+  places: number;
 }
 
