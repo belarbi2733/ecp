@@ -321,13 +321,13 @@ app.get('/admin-list-ut', function(req,res) {
     else {
       const tmpResultUser = result.rows[0];
       console.log(result.rows);
-      /*let objJson = {
+      let objJson = {
         "nom": tmpResultUser.nom,
         "prenom": tmpResultUser.prenom,
         "id": tmpResultUser.id
-      };*/
+      };
 
-      res.json(result.rows);
+      res.json(objJson);
      // console.log(result.rowCount);
      /* console.log(result.row);*/
      /* for(let i=0; i < result.rowCount ; i++)
@@ -423,7 +423,7 @@ app.post('/rating', function(req,res) {
       const tmpResultRating = result.rows[0];
       let rateAvr = tmpResultRating.avr_rating;
       let nbrNote = tmpResultRating.nbr_ratings;
-      let newNote = 100; /* Init NewNote*/
+      let newNote = 2; /* Init NewNote*/
       let newRating = ((rateAvr * nbrNote) + newNote) / (nbrNote + 1); /* On multiplie la moyenne par le nombre de vote total pour avoir la somme des votes , on ajoute le nouveau et on divise par nbre de vote +1 */
       tmpResultRating.nbr_ratings = nbrNote +1;
       newRating = newRating.toFixed(2);

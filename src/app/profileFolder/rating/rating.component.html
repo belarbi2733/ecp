@@ -3,11 +3,14 @@
 <h4>Rating</h4>
 <ng-template #t let-fill="fill">
   <span class="star" [class.full]="fill === 100">
-    <span class="fa fa-star"></span>
+    <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
   </span>
 </ng-template>
 <!--<ngb-rating max=5 readonly=true [starTemplate]="t" [rate]="rating.currentRate"></ngb-rating>-->
-<ngb-rating max=5 readonly=true [starTemplate]="t" [rate]="rating.currentRate"></ngb-rating>
+<ngb-rating max=5 readonly=true [starTemplate]="t" [rate]=2.75></ngb-rating>
+
+
+
 <h4>Commentaires</h4>
 <p>{{rating.commentaires[0] }}</p>
 <p>{{rating.commentaires[1]}}</p>
