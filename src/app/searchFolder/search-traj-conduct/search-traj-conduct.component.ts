@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-search-traj-conduct',
   templateUrl: './search-traj-conduct.component.html',
-  styleUrls: ['./search-traj-conduct.component.css']
+  styleUrls: ['./search-traj-conduct.component.css','../../app.component.css']
 })
 export class SearchTrajConductComponent implements OnInit {
 

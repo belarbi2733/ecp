@@ -5,7 +5,7 @@ import { RatingService } from '../../services/profileServices/rating.service';
 @Component({
   selector: 'app-rating',
   templateUrl: './rating.component.html',
-  styleUrls: ['./rating.component.css']
+  styleUrls: ['./rating.component.css','../../app.component.css']
 })
 export class RatingComponent implements OnInit {
 

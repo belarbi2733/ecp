@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-admin-rembours',
   templateUrl: './admin-rembours.component.html',
-  styleUrls: ['./admin-rembours.component.css']
+  styleUrls: ['./admin-rembours.component.css','../../app.component.css']
 })
 export class AdminRemboursComponent implements OnInit {
 
