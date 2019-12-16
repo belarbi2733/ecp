@@ -23,4 +23,17 @@ export class DriverService {
         }
       );
   }
+
+  findMiniTrajet(data: Driver) {
+    return this.http.post(`${this.url}/miniTrajet`, data)
+      .subscribe(
+        res => {
+          console.log(res);
+          // this.router.navigate(['accueil']);
+        },
+        err => {
+          console.log('Error occured:' , err);
+        }
+      );
+  }
 }
