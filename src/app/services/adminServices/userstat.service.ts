@@ -9,17 +9,21 @@ export class UserStatService {
 
   url = this.servUrl.nodeUrl;
 
-  getNbreUsers() {
-   this.http.get(`${this.url}/adminDashBoard/getNbreUsers`)
-      .subscribe(
-        res => {
-          console.log('Marie tes bonne xD');
-          console.log(res);
-        },
-        err => {
-          console.log('Error occured:' , err);
-          console.log('Marie tes chiante');
-        }
-      );
+  getNbreUsers(data) {
+    return new Promise((resolve, reject) => {
+      this.http.get(`${this.url}/adminDashBoard/getNbreUsers`, data)
+        .subscribe(
+          res => {
+            console.log('Marie tes bonne xD');
+            console.log(res);
+            resolve(res);
+          },
+          err => {
+            console.log('Error occured:' , err);
+            console.log('Marie tes chiante');
+            reject();
+          }
+        );
+    });
   }
 }

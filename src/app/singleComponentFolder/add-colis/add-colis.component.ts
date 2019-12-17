@@ -558,7 +558,6 @@ export class AddColisComponent implements OnInit {
 
           // AddColis(colis);
           // console.log(JSON.stringify(routecolis));
-          // console.log(JSON.stringify(routecolis[0].nom));
           recordcolis(dataColis);
           service.addColis(dataColis);
 

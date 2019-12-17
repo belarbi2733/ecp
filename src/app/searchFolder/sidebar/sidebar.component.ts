@@ -6,13 +6,15 @@ var tour ;
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  styleUrls: ['./sidebar.component.css','../../app.component.css']
 })
 export class SidebarComponent implements OnInit {
+
   alternative = alternative ;
   products: any = [];
   constructor(private trajetserver : TrajetService) {  }
   
+
   ngOnInit() {
     tour = this.trajetserver.getConfig();
     console.log(JSON.stringify(tour));

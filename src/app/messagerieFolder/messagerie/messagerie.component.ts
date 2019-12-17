@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-messagerie',
   templateUrl: './messagerie.component.html',
-  styleUrls: ['./messagerie.component.css']
+  styleUrls: ['./messagerie.component.css','../../app.component.css']
 })
 export class MessagerieComponent implements OnInit {
 

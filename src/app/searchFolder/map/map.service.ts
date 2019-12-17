@@ -12,7 +12,7 @@ export class DriverService {
   url = this.servUrl.nodeUrl;
 
   matchDriverTrajetforTournee(data: Driver) {
-    return this.http.post(`${this.url}/matchDriverTrajet`, data)
+    this.http.post(`${this.url}/matchDriverTrajet`, data)
       .subscribe(
         res => {
           console.log(res);
@@ -22,5 +22,32 @@ export class DriverService {
           console.log('Error occured:' , err);
         }
       );
+  }
+
+  findMiniTrajet(data: Driver) {
+    this.http.post(`${this.url}/miniTrajet`, data)
+      .subscribe(
+        res => {
+          console.log(res);
+          // this.router.navigate(['accueil']);
+        },
+        err => {
+          console.log('Error occured:' , err);
+        }
+      );
+  }
+
+  setupVoiture(data: Driver) {
+    return new Promise((resolve, reject) => {
+      this.http.post(`${this.url}/setupVoiture`, data)
+        .subscribe(
+          res => {
+            resolve(res);
+          },
+          err => {
+            reject(err);
+          }
+        );
+    });
   }
 }

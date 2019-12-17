@@ -5,7 +5,7 @@ import { Color, Label } from 'ng2-charts';
 @Component({
   selector: 'app-loginstat',
   templateUrl: './loginstat.component.html',
-  styleUrls: ['./loginstat.component.css']
+  styleUrls: ['./loginstat.component.css','../../app.component.css']
 })
 export class LoginstatComponent implements OnInit {
 
