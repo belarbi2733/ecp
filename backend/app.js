@@ -541,7 +541,7 @@ app.get('/adminDashBoard/getNbreUsers', function(req,res) {
       let objJson = {
         "nbreUsersStat": result.rows.length
       };
-      console.log(objJson)
+      console.log(objJson);
       res.json(objJson);
     }
   });
@@ -567,21 +567,24 @@ app.post('/matchDriverTrajet', function(req,res) {
               const search = req.body;
 
               let arrayColis = [{
-                idChauffeur: req.body.idUser,
+                idChauffeur: search.idUser,
                 places: result.rows[0].coffre,
+                detourMax: req.body.detourMax,
                 latDepart: search.departure[1],
                 longDepart: search.departure[0],
                 latArrivee: search.arrival[1],
-                longArrivee: search.arrival[1]
+                longArrivee: search.arrival[0]
               }];
 
               let arrayTrajet = [{
-                idChauffeur: req.body.idUser,
+                idChauffeur: search.idUser,
                 places: search.nbrePlaces,
+                detourMax: search.detourMax,
                 latDepart: search.departure[1],
                 longDepart: search.departure[0],
                 latArrivee: search.arrival[1],
-                longArrivee: search.arrival[1]
+                longArrivee: search.arrival[0],
+                coffre: result.rows[0].coffre
               }];
 
               Colis.getAllColis(function (err3, result3) {
@@ -617,7 +620,7 @@ app.post('/matchDriverTrajet', function(req,res) {
                               longArrivee: one.arrivee_x
                             });
                             //console.log(JSON.stringify(arrayColis));
-                            console.log('Colis : ' + one.id_colis + ' id : ' + one.id);
+                            //console.log('Colis : ' + one.id_colis + ' id : ' + one.id);
 
                           } else {
                             //Séquence si c'est un trajet
@@ -629,10 +632,11 @@ app.post('/matchDriverTrajet', function(req,res) {
                               latDepart: one.depart_y,
                               longDepart: one.depart_x,
                               latArrivee: one.arrivee_y,
-                              longArrivee: one.arrivee_x
+                              longArrivee: one.arrivee_x,
+                              volumeBagage: 0
                             });
                             // console.log(JSON.stringify(arrayTrajet));
-                            console.log('Trajet : ' + one.id);
+                            //console.log('Trajet : ' + one.id);
                           }
                         }
                       }
@@ -683,7 +687,7 @@ app.post('/miniTrajet', function(req,res) {
                 latDepart: search.departure[1],
                 longDepart: search.departure[0],
                 latArrivee: search.arrival[1],
-                longArrivee: search.arrival[1]
+                longArrivee: search.arrival[0]
               }];
 
               let arrayMiniTrajet = [{
@@ -692,7 +696,7 @@ app.post('/miniTrajet', function(req,res) {
                 latDepart: search.departure[1],
                 longDepart: search.departure[0],
                 latArrivee: search.arrival[1],
-                longArrivee: search.arrival[1]
+                longArrivee: search.arrival[0]
               }];
 
 
@@ -730,7 +734,7 @@ app.post('/miniTrajet', function(req,res) {
                               longArrivee: one.arrivee_x
                             });
                             //console.log(JSON.stringify(arrayMiniColis));
-                            console.log('Mini Colis : ' + one.id_colis + ' id : ' + one.id);
+                            //console.log('Mini Colis : ' + one.id_colis + ' id : ' + one.id);
 
                           } else {
                             //Séquence si c'est un trajet
@@ -745,13 +749,13 @@ app.post('/miniTrajet', function(req,res) {
                               longArrivee: one.arrivee_x
                             });
                             // console.log(JSON.stringify(arrayMiniTrajet));
-                            console.log('Mini Trajet : ' + one.id);
+                            //console.log('Mini Trajet : ' + one.id);
                           }
                         }
                       }
 
-                      console.log('Mini Colis' + JSON.stringify(arrayMiniColis));
-                      console.log('Mini Trajet' + JSON.stringify(arrayMiniTrajet));
+                      //console.log('Mini Colis' + JSON.stringify(arrayMiniColis));
+                      //console.log('Mini Trajet' + JSON.stringify(arrayMiniTrajet));
                       const objJsonMini = arrayMiniColis + arrayMiniTrajet;
 
                     });

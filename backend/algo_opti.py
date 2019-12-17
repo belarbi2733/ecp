@@ -6,6 +6,7 @@ import numpy as np
 import json
 #from pyeasyga import pyeasyga
 import math
+import sys
 
 
 Choisi=[] # vecteur qui va contenier les colis
@@ -13,8 +14,10 @@ data_genetique_sac = [] #données pour l'algorithme genetique
 
 #lecture du fichier Json et construction de la matrice qu'on utilisera. pour les colis
 
-with open('/Users/Nicolas/PhpstormProjects/ecpfinal/Algo/newjson.json', 'r') as json_data:
-  donneejson = json.load(json_data)
+#with open('/Users/Nicolas/PhpstormProjects/ecpfinal/Algo/newjson.json', 'r') as json_data:
+  #donneejson = json.load(json_data)
+
+djson = json.loads(sys.argv[1])
 
 # le nombre de colis
 tailleMatriceColis = len(donneejson) - 1
@@ -165,9 +168,9 @@ def matriceVC(taken):
 
     voyageurCommerce1[1][0]=0
     #
-    print M_Enregistrement
+    #print M_Enregistrement
     outputData = voyageurCommerce1  #matrice de distance avec 0 en diagonale
-    print outputData
+    #print outputData
     return outputData,M_Enregistrement
 
 
@@ -325,6 +328,7 @@ def enregistrement(optimal_tour_src,M_Enregistrement):
     # on enregistre l'ordre de parcours des colis dans le dossier test.json
     with open('./test.json', 'w') as f:
         json.dump(dic, f, indent=4)
+        print dic
 
     return dic
 
@@ -363,7 +367,7 @@ def SAD():
     if tailleMatriceColis < 12:
 
         solution_sac = SadExact()
-        print "exacte : ", solution_sac
+        #print "exacte : ", solution_sac
 
     else:
         for i in range(1, tailleMatriceColis + 1):
@@ -378,7 +382,7 @@ def SAD():
         #ga.run()  # run the GA
         #solution_sac = ga.best_individual()[1]
 
-        print "genetique : ", solution_sac
+        #print "genetique : ", solution_sac
 
     return solution_sac
 
@@ -458,16 +462,16 @@ def BestWithDetour(chosen, detourMax):
 
         # while distnaceParcourue > detourMax :
         # il y a un keep à faire
-        print("-----------colisPris1", colisPris)
+        #print("-----------colisPris1", colisPris)
         BTR = BestToRemove(colisPris)
-        print("***********btr", BTR[1])
+        #print("***********btr", BTR[1])
         trajetOptimal = BTR[0]
         distanceParcourue = BTR[1]
-        print("-----------distanceParcourue1", distanceParcourue)
+        #print("-----------distanceParcourue1", distanceParcourue)
         colisPris = BTR[2]
         pris = trajetOptimal
-        print("-----------colisPris2", colisPris)
-        print("-----------distanceParcourue", distanceParcourue)
+        #print("-----------colisPris2", colisPris)
+        #print("-----------distanceParcourue", distanceParcourue)
 
 
 
@@ -505,19 +509,19 @@ if __name__ == '__main__':
     choisi=SAD()
 
     matrice_tsp = matriceVC(choisi)
-    print "matrice :",  inputData
+    #print "matrice :",  inputData
 
 
-    print "----------------"
+    #print "----------------"
     #print travel(matriceVC(choisi)[0])
 
-    print "**************"
+    #print "**************"
     maximumDetour = 500
 
     p = BestWithDetour(choisi[:], maximumDetour)
     enregistrement(p[0], matrice_tsp[1])
 
-    print p
+    #print p
     #print "matrice_tsp" ,matrice_tsp
     #print travel(matrice_tsp[0])
 

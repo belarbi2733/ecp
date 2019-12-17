@@ -2,7 +2,7 @@
 let Python = {
 
   runPy: function(data) {
-    const directory = './test.py';  //Path of python file
+    const directory = './algo_opti.py';  //Path of python file
     console.log(typeof(data));
 
     const {spawn}= require('child_process');
@@ -20,7 +20,7 @@ let Python = {
       console.log(`childstdout: \t ${data}`)
     });
     child.stdout.on('data', (data)=>{
-      console.log(`response is : ${data}`);
+      console.log('response is :' + data);
     });
 
     child.stderr.on('data', (data)=>{
