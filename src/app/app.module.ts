@@ -7,6 +7,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPayPalModule } from 'ngx-paypal';
 
+
 // services
 import { AuthGuard } from './services/singleComponentServices/auth-guard.service';
 import { AdminGuard } from './services/singleComponentServices/admin-guard.service';
@@ -61,6 +62,8 @@ import { MesTrajComponent } from './reservations/mes-traj/mes-traj.component';
 import { MesColisComponent } from './reservations/mes-colis/mes-colis.component';
 import { MesTournComponent } from './reservations/mes-tourn/mes-tourn.component';
 import { Navbar2Component } from './navbar2/navbar2.component';
+
+
 // import { RouteData } from './searchFolder/map/map.interface';
 import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
 import { MailingService } from './services/mailing.service';
@@ -99,7 +102,7 @@ const appRoutes: Routes = [
   { path: 'payements', canActivate: [AuthGuard], component: PaymentsComponent },
   { path: 'paypal', canActivate: [AuthGuard], component: PaypalComponent },
   { path: 'admin', canActivate: [AdminGuard], component: AdminComponent },
-  { path: 'admin-list-ut', canActivate: [AdminGuard], component: AdminListUtComponent },
+  { path: 'admin-list-ut', canActivate: [AdminGuard], component: AdminListUtComponent},
   { path: 'admin-list-traj', canActivate: [AdminGuard], component: AdminListTrajComponent },
   { path: 'info-traj', canActivate: [AuthGuard], component: InfoTrajComponent },
   { path: 'info-cond', canActivate: [AuthGuard], component: InfoCondComponent },
@@ -164,7 +167,7 @@ const appRoutes: Routes = [
     Navbar2Component,
     AdmintableComponent,
     AdminpayComponent,
-    InfoCondComponent
+    InfoCondComponent,
   ],
   imports: [
     BrowserModule,

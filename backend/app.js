@@ -319,7 +319,7 @@ app.get('/admin-list-ut', function(req,res) {
       res.status(400).json(err);
     }
     else {
-      const tmpResultUser = result.rows[0];
+      const tmpResultUser = result.rows;
       console.log(result.rows);
       let objJson = {
         "nom": tmpResultUser.nom,
@@ -327,22 +327,8 @@ app.get('/admin-list-ut', function(req,res) {
         "id": tmpResultUser.id
       };
 
-      res.json(objJson);
-     // console.log(result.rowCount);
-     /* console.log(result.row);*/
-     /* for(let i=0; i < result.rowCount ; i++)
-      {
-      const tmpResultUser = result.rows[0];
-      //console.log(result.rows[0]);
-      let objJson = {
-        "nom": tmpResultUser.nom,
-        "prenom": tmpResultUser.prenom,
-        "id": tmpResultUser.id
-      };
+      res.json(result.rows);
 
-      }*/
-      //console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
-     /* res.json(objJson);*/
     }
   });
 });
