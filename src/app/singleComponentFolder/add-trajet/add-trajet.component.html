@@ -7,8 +7,9 @@
                 <option selected="selected">depart at</option>
             </select>
             <input id="date" type="datetime-local" pattern="\d{4}-\d{2}-\d{2} [0-1]?\d:[0-6]\d" />
+            <input id="nom" type="text" name="bookPlaces" placeholder="Nombre de places réservées" [(ngModel)]="bookPlaces" />
             <small class="warning">insert a date in format yyyy-MM-dd hh:mm</small>
-            <input type="submit" value="Submit" disabled="disabled" />
+            <input type="submit" value="Submit" disabled="disabled" (click)="save()"/>
         </form>
         <div id="map" class="use-all-space"></div>
     </div>

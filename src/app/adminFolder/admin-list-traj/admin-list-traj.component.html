@@ -9,39 +9,21 @@
    <!--   <th scope="col">Heure et date d'arrivée</th> -->
       <th scope="col">Point d'arrivée</th>
       <th scope="col">Nom du conducteur</th>
+      <th scope="col">Nombre de places</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>1</td>
-      <td>Ath</td>
-      <td>Mons</td>
-      <td>Thomas</td>
-      <td>
-        <a routerLink="/info-traj" routerLinkActive="active"> <input type="button" value="Plus d'info" /></a>
-        <a routerLink="/messagerie" routerLinkActive="active"> <input type="button" value="Ouvrir la messagerie" /></a>
-      </td>
-    </tr>
 
     <tr>
       <td>{{adminListTraj.idUser}}</td>
       <td>{{adminListTraj.depart}}</td>
       <td>{{adminListTraj.arrivee}}</td>
+      <td>nom conducteur</td>
       <td>{{adminListTraj.nbrePlaces}}</td>
       <td>
-        <a routerLink="/info-traj" routerLinkActive="active"> <input type="button" value="Plus d'info" /></a>
-        <a routerLink="/messagerie" routerLinkActive="active"> <input type="button" value="Ouvrir la messagerie" /></a>
+        <a routerLink="/info-traj" routerLinkActive="active"> <button class="btn">Plus d'info </button></a>
+        <a routerLink="/messagerie" routerLinkActive="active"> <button class="btn">Messagerie </button></a>
       </td>
     </tr>
- <!--   <tr>
-      <input type="text" class="form-control" id="depart" aria-describedby="depart" placeholder="depart" [(ngModel)]="adminListTraj.depart">
-
-
-      <td>
-        <a routerLink="/info-traj" routerLinkActive="active"> <input type="button" value="Plus d'info" /></a>
-        <a routerLink="/messagerie" routerLinkActive="active"> <input type="button" value="Ouvrir la messagerie" /></a>
-      </td>
-
-    </tr>-->
   </tbody>
 </table>

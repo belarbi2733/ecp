@@ -5,7 +5,7 @@ import {PaypalService} from '../../services/paypal.service';
 @Component({
   selector: 'app-mes-colis',
   templateUrl: './mes-colis.component.html',
-  styleUrls: ['./mes-colis.component.css']
+  styleUrls: ['./mes-colis.component.css','../../app.component.css']
 })
 export class MesColisComponent implements OnInit {
   paypalInterface: PaypalInterface = {

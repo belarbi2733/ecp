@@ -14,7 +14,7 @@ export class VehicleComponent implements OnInit {
     idUser: null,
     marque: '',
     modele: '',
-    sieges: 1,
+    // sieges: 1,
     volumeCoffre: null,
   };
 
