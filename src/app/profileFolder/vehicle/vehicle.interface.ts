@@ -3,6 +3,5 @@ export interface DataVehicle {
   marque: string;
   modele: string;
   // sieges: number;
-  volumeCoffrestring: string;
-
+  volumeCoffre: number;
 }
