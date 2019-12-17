@@ -6,21 +6,26 @@
   <!-- <label for="carModele">Modèle</label> -->
   <input type="text" class="form-control" id="model" aria-describedby="model" placeholder="Modèle du véhicule" [(ngModel)]="vehicule.modele">
 
-  <!--
-  <label>Nombre de sièges</label>
-  <select class="form-control" id="places" [(ngModel)]="vehicule.sieges">>
-    <option>1</option>
-    <option>2</option>
-    <option>3</option>
-    <option>4</option>
-    <option>5</option>
-    <option>6</option>
-    <option>7</option>
-    <option>8</option>
-  </select>
-  <br>-->
-  <input type="number" class="form-control" id="volume" aria-describedby="volume" placeholder="Volume approximatif du coffre en litres" [(ngModel)]="vehicule.volumeCoffre">
+  
+  <label>Volume du coffre: </label> 
   <br>
+   <span>Veillez à sélectionner un volume légèrement inférieur à la réalité!</span>
+   <br>
+  <select type="number" class="form-control" id="volume" aria-describedby="volume"  [(ngModel)]="vehicule.volumeCoffre">
+    <option value="200">Mini Citadine ~ 200L</option>
+    <option value="300">Citadine ~ 300L</option>
+    <option value="400">Compactes ~ 400L</option>
+    <option value="500">Berlines ~ 500L</option>
+    <option value="350">Break petit coffre ~ 350L</option>
+    <option value="450">Break moyen coffre ~ 450L</option>
+    <option value="600">Break grand coffre ~ 600L</option>
+    <option value="700">Monospace grand coffre ~ 700L</option>
+    <option value="700">SUV/Crossover grand coffre ~ 700L</option>
+    <option value="250">Coupés / cabriolets ~ 250L</option>
+  </select>
+  <br>
+  <!-- <input type="number" class="form-control" id="volume" aria-describedby="volume" placeholder="Volume approximatif du coffre en litres" [(ngModel)]="vehicule.volumeCoffre">
+  <br> -->
   <button class="btn" (click)="updateVehicule(vehicule)">
     Modifier vos informations
   </button>
