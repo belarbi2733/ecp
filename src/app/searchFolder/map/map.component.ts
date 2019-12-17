@@ -86,12 +86,12 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
 
-    this.driverService.setupVoiture(driver).then(
+    /*this.driverService.setupVoiture(driver).then(
       (statutVoiture: boolean) => {
         this.statutVoiture = statutVoiture;
         console.log(this.statutVoiture);
       }
-    );
+    );*/
 
     const jsontour = this.httpclient.get('src/assets/tourne.json');
     // console.log (JSON.stringify(jsontour));
@@ -312,60 +312,61 @@ export class MapComponent implements OnInit {
       if (batchRequestsLock === 'submit') {
         // we don't care if there's another page downloaded
         return;
-      }
-      batchRequestsLock = 'submit';
-      try {
-        if (iter = 10) {
-          console.log(dep);
-          let key;
-          let it = 0;
-          let ite = 1;
-          // tomtom.routeOnMapView.clear();
-          if (iter2 > 0) {
-            if (typeof routeOnMapView !== 'undefined' && typeof endparcour !== 'undefined') {
-              routeOnMapView.clear();
-              endparcour.clear();
-              for (key in parcour[0]) {
-                it ++ ;
-                console.log(it);
-                window['Object' + it].clear();
-
-              }}}
-
-          routeOnMapView.addTo(map).draw([{lat: routePoints[0].lat, lng: routePoints[0].lon},
-            {lat: parcour[0].colis1[0], lng: parcour[0].colis1[1]}]);
-
-          let tmp: string;
-          let tmp1: string;
-          it = 0;
-          for (key in parcour[0]) {
-            it ++ ;
-            ite ++;
-
-            tmp = 'colis' + it;
-            tmp1 = 'colis' + ite;
-            // console.log (tmp);
-            if (typeof parcour[0][tmp1] !== 'undefined') {
-              // variable is undefined
-
-
-
-              // tmp = ''+ parcour[0][tmp][0]+ ':'+ parcour[0][tmp][1];
-
-              // var lat1 : number;
-              // lat1 = parcour[0][tmp][0];
-
-
-              // console.log (JSON.stringify (parcour[0][tmp][0]));
-
-              window['Object' + it].addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]},
-                {lat: parcour[0][tmp1][0], lng: parcour[0][tmp1][1]}]);
-            }
-            // rou = tomtom.L.geoJson(tmp).addTo(map);
-          }       ////
-          endparcour.addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]},
-            {lat: routePoints[1].lat, lng: routePoints[1].lon}]);
+    }
+    batchRequestsLock = 'submit';
+    try {
+    //if (iter = 10){
+        //console.log(dep)
+    var key;
+    var it = 0;
+    var ite = 1;
+    var rou;
+    //tomtom.routeOnMapView.clear();
+    if (iter2 > 0){
+        if (typeof routeOnMapView !== 'undefined' && typeof endparcour !== 'undefined'){
+        routeOnMapView.clear();
+        endparcour.clear();
+    for (key in parcour[0]){
+        it ++ ;
+        //console.log(it);
+        window["Object"+it].clear();
+        
+        }}}
+    
+        routeOnMapView.addTo(map).draw([{lat: routePoints[0].lat, lng: routePoints[0].lon}, {lat: parcour[0]['colis1'][0], lng: parcour[0]['colis1'][1]}]);
+        
+    let tmp : string;
+    let tmp1 : string;
+    it = 0;
+    for (key in parcour[0]){
+        it ++ ;
+        ite ++;
+        
+        tmp = "colis"+it;
+        tmp1 = "colis"+ite;
+        //console.log (tmp);
+        if (typeof parcour[0][tmp1] !== 'undefined') {
+            // variable is undefined
+            
+        
+    
+        //tmp = ''+ parcour[0][tmp][0]+ ':'+ parcour[0][tmp][1];
+        
+        //var lat1 : number;
+        //lat1 = parcour[0][tmp][0];
+        
+        
+        //console.log (JSON.stringify (parcour[0][tmp][0]));
+        
+            window["Object"+it].addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: parcour[0][tmp1][0], lng: parcour[0][tmp1][1]}]);
         }
+        //rou = tomtom.L.geoJson(tmp).addTo(map);
+    }       ////
+    
+    endparcour.addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: routePoints[1].lat, lng: routePoints[1].lon}]);
+
+//}
+
 
         ///////////////////////////////////////////////
         clearList();
@@ -655,9 +656,12 @@ export class MapComponent implements OnInit {
           summary: feature.properties.summary,
           geometry: feature.geometry
         };
-      }).map(function(record) {
+    }).map(function(record) {
+        
+        //console.log (iter);
+
         iter = iter + 1;
-        if (iter < 1) {
+        if (iter < 2) {
 
           driverinfo.push( {departuretime : record.summary.departureTime,
             traveltimeinseconds : record.summary.travelTimeInSeconds,
@@ -692,8 +696,11 @@ export class MapComponent implements OnInit {
           route: record.geometry
         };
 
-      });
-      const times = results.map(function(record) {
+
+    });
+    
+    const times = results.map(function(record) {
+
         return record.time;
       });
       const min = Math.min.apply(Math, times);
