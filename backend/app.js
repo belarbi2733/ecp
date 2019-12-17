@@ -319,15 +319,20 @@ app.get('/admin-list-ut', function(req,res) {
       res.status(400).json(err);
     }
     else {
-      const tmpResultUser = result.rows;
-      console.log(result.rows);
-      let objJson = {
-        "nom": tmpResultUser.nom,
-        "prenom": tmpResultUser.prenom,
-        "id": tmpResultUser.id
-      };
+      let arrayUser = [];
+      const tmpResultUser = result.rows[0];
+      for (let i = 0; i < result.rows.length ; i++ )
+      {
 
-      res.json(result.rows);
+        arrayUser.push({
+          nom : result.rows[i].nom,
+          prenom : result.rows[i].prenom,
+          id: result.rows[i].id
+        });
+      }
+      console.log(arrayUser);
+
+      res.json(arrayUser);
 
     }
   });
