@@ -10,26 +10,23 @@ pipeline {
         git 'https://github.com/GreatToubib/ecp'
       }
     }
-        
-    stage('Install dependencies') {
-      steps {
-        bat 'npm install'
-        bat 'npm install --save-dev jest'
-        bat 'npm install supertest'
-        bat 'npm install angular'
-        bat 'npm install express'
-        bat 'npm install tslint'
-        bat 'npm install -g @angular/cli'
-        bat 'npm install jasmine'
-        
+    stage('Preinstall') {
+        steps {
+          sh 'NOVE_ENV=prod'
+          sh 'npm install @angular/cli @angular/compiler-cli @angular-devkit/build-angular typescript'
+        }
       }
-    }
-     
-    stage('ng') {
-      steps {
-        bat 'npm test'
-         bat 'npm run test'
+      stage('Install') {
+        steps {
+          sh 'npm install'
+        }
       }
-    }   
+      stage('Build') {
+        steps {
+          // sh 'npm run build'  
+          sh 'npm run ng -- build --prod'
+        }
+      }
+    
   }
 }
