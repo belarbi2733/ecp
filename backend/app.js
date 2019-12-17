@@ -311,7 +311,6 @@ app.get('/admin-list-traj', function(req,res){
 
 /*-----------------------------------10---------------------------------------------------------------------------- */
 
-
 app.get('/admin-list-ut', function(req,res) {
   User.getAllUser(function(err, result) {
     if(err) {
@@ -332,10 +331,10 @@ app.get('/admin-list-ut', function(req,res) {
       console.log(arrayUser);
       res.json(arrayUser);
 
+
     }
   });
 });
-
 
 /*-----------------------------------11---------------------------------------------------------------------------- */
 
@@ -375,12 +374,8 @@ app.get('/paypal', function(req,res){
      console.log('Prix discount : ' + prixTraj(prixCarb, consoVoit, distance, bookPlaces) + " € ");
 
       function discount(prix, bookPlaces) {
-        if(bookPlaces === 0 )
-        {
-          return prix;
-        }
         if (bookPlaces === 1) {
-          return prix;
+          return prix - ((prix / 100) * 5);
         }
         if (bookPlaces === 2) {
           return prix - ((prix / 100) * 10);
@@ -398,6 +393,7 @@ app.get('/paypal', function(req,res){
 
       let prixfinal = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
       prixfinal = prixfinal.toFixed(2);
+      console.log(typeof prixfinal);
       console.log(prixfinal);
      let objJson = {
        "prix": prixfinal
@@ -425,19 +421,7 @@ app.get('/paypal', function(req,res){
 /*-----------------------------------11---------------------------------------------------------------------------- */
 /*app.get('/paypal', function(req,res){
   User.getPrice(function(err, result) {
-    if (err) {
-      res.status(400).json(err);
-    } else {
-      console.log(result.rows[1]);
-      const tmpResultprice = result.rows[1];
-      //console.log(result.rows[0]);
-      let objJson = {
-        "prix": tmpResultprice.prix
-      };
-      res.json(objJson);
-    }
-  });
-});*/
+
 
 app.post('/vehicule/update', function(req,res) {
   console.log(req.body);

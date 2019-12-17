@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {AdminListUtService} from '../../services/admin-list-user.service';
 import {AdminListUtInterface} from './admin-list-ut.interface';
 
-
 @Component({
   selector: 'app-admin-list-ut',
   templateUrl: './admin-list-ut.component.html',
   styleUrls: ['./admin-list-ut.component.css']
 })
-
 
 export class AdminListUtComponent implements OnInit {
   adminListUtInterface: AdminListUtInterface = {
