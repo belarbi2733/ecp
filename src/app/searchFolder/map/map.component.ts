@@ -266,7 +266,7 @@ export class MapComponent implements OnInit {
         if (lastVisible >= limit && results.length) {
           const lastResult = results[results.length - 1];
           const time = arrivalOrDeparture.value === 'depart at' ? lastResult.from : lastResult.to;
-          requestNextPage(time, data);
+          //requestNextPage(time, data);
         }
         expandVisibleRows(items, firstVisible, lastVisible);
       };
@@ -277,13 +277,15 @@ export class MapComponent implements OnInit {
 
     }
     function requestNextPage(date, previousData) {
-
+      
+      
       if (batchRequestsLock) {
         return;
       }
       batchRequestsLock = 'page';
+      if (iter < 2) {
       try {
-
+        
         batch(timeSeries(date))
           .then(function(data) {
             // batchRequestsLock can be changed in the meantime
@@ -298,15 +300,17 @@ export class MapComponent implements OnInit {
           .then(createItems)
           .then(updateScrollEvent)
           .then(updateListElements)
-          .then(unlockBatchRequests, handleBatchRequestError);
+          //.then(unlockBatchRequests, handleBatchRequestError);
 
       } catch (err) {
         handleBatchRequestError(err);
       }
-    }
+    }}
+
 // Create a new request
     function request(date) {
-
+      console.log (iter);
+      
       // L.clear();
       //////////////////////////////
       if (batchRequestsLock === 'submit') {
@@ -314,6 +318,7 @@ export class MapComponent implements OnInit {
         return;
     }
     batchRequestsLock = 'submit';
+    if (iter < 2) {
     try {
     //if (iter = 10){
         //console.log(dep)
@@ -370,7 +375,7 @@ export class MapComponent implements OnInit {
 
         ///////////////////////////////////////////////
         clearList();
-        batch(timeSeries(date))
+        batch(timeSeries (date))
           .then(function(data) {
             // handle the data here
             // we have this fake handler just for the docs purpose
@@ -386,7 +391,7 @@ export class MapComponent implements OnInit {
       } catch (err) {
         handleBatchRequestError(err);
       }
-    }
+    }}
     function mapTimeToRoutingElement(time) {
       const format = 'yyyy-mm-dd hh:mm';
       const result = {
@@ -404,7 +409,7 @@ export class MapComponent implements OnInit {
       const minutes = 15;
       const timesPerHour = 60 / minutes;
       const hours = 6;
-      const numberOfResults = timesPerHour * hours;
+      const numberOfResults = 0;
       return Array.apply(null, Array(numberOfResults))
         .reduce(function(accumulator) {
           const i = accumulator.length - 1;
@@ -573,6 +578,7 @@ export class MapComponent implements OnInit {
     function createItems(data) {
       const list = getOrCreateList();
       const results = data.results;
+      
       if (!results.length) {
         hideLoader(list);
         return data;
@@ -680,8 +686,8 @@ export class MapComponent implements OnInit {
 
           recordDriver(driver);
           service.matchDriverTrajetforTournee(driver);
-          service.findMiniTrajet(driver);
-
+          //service.findMiniTrajet(driver);
+          
           // comme ça ne stocke que pour le temps demander
         }
 
