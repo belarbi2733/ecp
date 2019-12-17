@@ -769,6 +769,21 @@ app.post('/miniTrajet', function(req,res) {
   });
 });
 
+app.post('/setupVoiture', function(req,res){
+  Voiture.getDataVoitureById(req.body.idUser, function (err, result){
+    if(err) {
+      res.status(400).json(err);
+      console.log('Error in getVoiture Setup');
+    } else {
+      if(result.rows.length === 1) {
+        res.json(true);
+      } else {
+        res.json(false);
+      }
+    }
+  });
+});
+
 //Script nodemailer
 app.use(cors({origin: "*"}));
 app.use(bodyParser.json({type : '*/*'}));
