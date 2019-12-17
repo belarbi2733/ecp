@@ -12,7 +12,7 @@ pipeline {
     }
     stage('Preinstall') {
         steps {
-          bat 'NOVE_ENV=prod'
+          
           bat 'npm install @angular/cli @angular/compiler-cli @angular-devkit/build-angular typescript'
         }
       }
