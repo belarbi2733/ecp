@@ -38,16 +38,11 @@
         <li *ngFor="let id of adminListUtInterface ">{{ adminListUtInterface.id }}</li>
         <li *ngFor="let name of adminListUtInterface ">{{ adminListUtInterface.nom}}</li>
         <li *ngFor="let prenom of adminListUtInterface ">{{ adminListUtInterface.prenom}}</li>
-      </ul>-->
+  </ul>-->
 
- <!-- <h1>Utilisateurs</h1>
-  <div *ngFor="let row of adminListUtInterface| keyvalue">
-    {{ row | json}}
-    {{row.value}}
-  </div>-->
-
-
-  <p>Object</p>
+ <!-- <ul>
+    <li *ngFor="let test of arrayut">{{ test.name }}</li>
+  </ul>-->
   <div *ngFor="let item of adminListUtInterface | keyvalue">
     {{ item | json}}
     {{item.key}}:{{item.value}}

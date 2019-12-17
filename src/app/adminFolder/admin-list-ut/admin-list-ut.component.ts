@@ -27,12 +27,15 @@ ngOnInit() {
         this.adminListUtInterface.nom = adminListUtInterface.nom;
         this.adminListUtInterface.prenom = adminListUtInterface.prenom;
         this.adminListUtInterface.id = adminListUtInterface.id;*/
-
     this.adminListUtService.getAllUser(this.adminListUtInterface)
       .then((adminListUtInterface: AdminListUtInterface) => {
         this.adminListUtInterface = adminListUtInterface;
-        JSON.stringify(this.adminListUtInterface);
-        console.log(JSON.stringify(this.adminListUtInterface));
+       /* console.log(JSON.stringify(this.adminListUtInterface));*/
+        // tslint:disable-next-line:forin
+      /*  for (const i in this.adminListUtInterface) {
+          this.arrayut.push([i, this.adminListUtInterface [i]]);
+        }
+        console.log(this.arrayut);*/
       })
       .catch(() => {
         console.log('Error in getUserDataById');
