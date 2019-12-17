@@ -49,7 +49,7 @@ export class PersonalDataComponent implements OnInit {
     } else {
       console.log('Update Perso');
       this.personalDataService.updatePersonalData(data);
-      this.error = 'Les changements ont bien été enregistrés :)';
+      this.error = 'Les changements ont bien été enregistrés';
     }
   }
 
