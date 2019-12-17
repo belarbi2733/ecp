@@ -86,12 +86,12 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
 
-    this.driverService.setupVoiture(driver).then(
+    /*this.driverService.setupVoiture(driver).then(
       (statutVoiture: boolean) => {
         this.statutVoiture = statutVoiture;
-        console.log(this.statutVoiture);
+        // console.log(this.statutVoiture);
       }
-    );
+    );*/
 
     const jsontour = this.httpclient.get('src/assets/tourne.json');
     // console.log (JSON.stringify(jsontour));
@@ -676,7 +676,7 @@ export class MapComponent implements OnInit {
 
           recordDriver(driver);
           service.matchDriverTrajetforTournee(driver);
-          service.findMiniTrajet(driver);
+          // service.findMiniTrajet(driver);
 
           // comme ça ne stocke que pour le temps demander
         }

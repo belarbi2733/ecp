@@ -8,8 +8,8 @@
             </select>
             <input id="date" type="datetime-local" pattern="\d{4}-\d{2}-\d{2} [0-1]?\d:[0-6]\d" /><input id="nom" type="text" name="nom" placeholder="Nombres de places dispo" [(ngModel)]="nbrePlaces" />
             <small class="warning">insert a date in format yyyy-MM-dd hh:mm</small>
-            <input type="submit" value="Submit" *ngIf=seeSubmit() disabled="disabled" (click)="save()"/>
-            <label *ngIf=!seeSubmit()>Vous n'avez pas de voiture enregistrée ! Impossible de réaliser une recherche</label>
+            <input type="submit" value="Submit" disabled="disabled" (click)="save()"/>
+            <!--<label *ngIf=!seeSubmit()>Vous n'avez pas de voiture enregistrée ! Impossible de réaliser une recherche</label>-->
         </form>
         <div id="map" class="use-all-space"></div>
     </div>
