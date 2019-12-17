@@ -275,13 +275,17 @@ app.post('/rating' , function (req,res) {
     }
     else
     {
-      const tmpResult = result.rows[0];
+      const userData = result.rows[0];
       console.log(result.rows[0]);
-      let objJson = {      // Je crée cet objet objJson pour restructurer les variables de result.rows et aussi pour éviter d'envoyer des données sensibles contenu dans result.rows comme le mot de passe
-        "currentRate": tmpResult.note,
-      };
-      //console.log(JSON.stringify(objJson));
-      res.json(objJson);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
+      let newNote = 3;
+      let avrRating = userData.avr_rating;
+      let nbrratings = userData.nbr_ratings;
+
+      let newRating = ((avrRating*nbrratings)+newNote)/(nbrratings+1);
+
+      newRating = newRating.toFixed(2);
+
+      res.json(newRating);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
     }
   });
 });
