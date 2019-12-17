@@ -2,9 +2,9 @@
 
 <div class="container content">
   <div class="row">
-    <div class="col-sm-3">
+    <div class="col-6 col-lg-3">
       <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Nombre d'utilisateurs: <span style="font-weight: bold;">{{adminInterface.nbreUsersStat}}</span></div>
+        <div class="card-header">Utilisateurs: <span style="font-weight: bold;">{{adminInterface.nbreUsersStat}}</span></div>
 
         <div class="card-body">
 
@@ -12,65 +12,64 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-6 col-lg-3">
       <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Colis enregistrés</div>
+        <div class="card-header">Colis enregistrés: </div>
         <div class="card-body">
           <!-- <h4 class="card-title">Statistiques sur le nombre de colis</h4> -->
           <app-parcelstat></app-parcelstat>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-6 col-lg-3">
       <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Passagers enregistrés</div>
+        <div class="card-header">Passagers enregistrés: </div>
         <div class="card-body">
           <!-- <h4 class="card-title">Statistiques sur le nombre de trajet</h4> -->
           <app-tripstat></app-tripstat>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-6 col-lg-3">
       <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Nombre de Conducteurs</div>
-        <div class="card-body">
-          <!-- <h4 class="card-title">Statistiques sur le nombre d'inscrit</h4> -->
-          <app-loginstat></app-loginstat>
-        </div>
-      </div>
-  </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-3">
-      <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Demandes de remboursement</div>
+        <div class="card-header">Conducteurs: </div>
         <div class="card-body">
           <!-- <h4 class="card-title">Statistiques sur le nombre d'inscrit</h4> -->
           <app-loginstat></app-loginstat>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
+  
+    <div class="col-6 col-lg-3">
       <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Passagers transportés</div>
+        <div class="card-header" style="font-size: 12px;">Demandes de remboursement: </div>
+        <div class="card-body">
+          <!-- <h4 class="card-title">Statistiques sur le nombre d'inscrit</h4> -->
+          <app-loginstat></app-loginstat>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="card text-white bg-secondary mb-3">
+        <div class="card-header">trajets effectués: </div>
         <div class="card-body">
           <!-- <h4 class="card-title">Nombre de trajet enregistrés</h4> -->
           <app-tripstat></app-tripstat>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-6 col-lg-3">
       <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Colis livrés</div>
+        <div class="card-header">Colis livrés: </div>
         <div class="card-body">
           <!-- <h4 class="card-title">Nombre de colis parmis les trajets enregistrés</h4> -->
           <app-tripstat></app-tripstat>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
+    <div class="col-6 col-lg-3">
       <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Remboursements effectués</div>
+        <div class="card-header"  style="font-size: 12px;">Remboursements effectués: </div>
         <div class="card-body">
           <!-- <h4 class="card-title">Nombre de tournées effectuées</h4> -->
           <app-tripstat></app-tripstat>
