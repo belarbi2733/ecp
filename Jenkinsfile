@@ -12,19 +12,19 @@ pipeline {
     }
     stage('Preinstall') {
         steps {
-          sh 'NOVE_ENV=prod'
-          sh 'npm install @angular/cli @angular/compiler-cli @angular-devkit/build-angular typescript'
+          bat 'NOVE_ENV=prod'
+          bat 'npm install @angular/cli @angular/compiler-cli @angular-devkit/build-angular typescript'
         }
       }
       stage('Install') {
         steps {
-          sh 'npm install'
+          bat 'npm install'
         }
       }
       stage('Build') {
         steps {
           // sh 'npm run build'  
-          sh 'npm run ng -- build --prod'
+          bat 'npm run ng -- build --prod'
         }
       }
     
