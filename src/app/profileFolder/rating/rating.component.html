@@ -1,13 +1,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<h4>Rating</h4>
 <ng-template #t let-fill="fill">
   <span class="star" [class.full]="fill === 100">
-    <span class="fa fa-star"></span>
+    <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
   </span>
 </ng-template>
-<ngb-rating max=5 readonly=true [starTemplate]="t" [rate]="rating.currentRate"></ngb-rating>
-<!-- <h4>Commentaires</h4>
-<p>{{rating.commentaires[0] }}</p>
-<p>{{rating.commentaires[1]}}</p>
-<p>{{rating.commentaires[2]}}</p> -->
+
+<ngb-rating [(rate)]="rating.currentRate" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
+
+<h2>Current Rating : {{rating.currentRate}}</h2>
+
+
+
