@@ -301,8 +301,8 @@ export class MapComponent implements OnInit {
     }
     batchRequestsLock = 'submit';
     try {
-    if (iter = 10){
-        console.log(dep)
+    //if (iter = 10){
+        //console.log(dep)
     var key;
     var it = 0;
     var ite = 1;
@@ -314,7 +314,7 @@ export class MapComponent implements OnInit {
         endparcour.clear();
     for (key in parcour[0]){
         it ++ ;
-        console.log(it);
+        //console.log(it);
         window["Object"+it].clear();
         
         }}}
@@ -344,14 +344,14 @@ export class MapComponent implements OnInit {
         
         //console.log (JSON.stringify (parcour[0][tmp][0]));
         
-        window["Object"+it].addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: parcour[0][tmp1][0], lng: parcour[0][tmp1][1]}]);
+            window["Object"+it].addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: parcour[0][tmp1][0], lng: parcour[0][tmp1][1]}]);
         }
         //rou = tomtom.L.geoJson(tmp).addTo(map);
     }       ////
     
     endparcour.addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: routePoints[1].lat, lng: routePoints[1].lon}]);
 
-}
+//}
 
     ///////////////////////////////////////////////
         clearList();
@@ -642,8 +642,10 @@ export class MapComponent implements OnInit {
             geometry: feature.geometry
         };
     }).map(function(record) {
+        
+        //console.log (iter);
         iter = iter + 1;
-        if (iter < 1) {
+        if (iter < 2) {
 
             driverinfo.push( {departuretime : record.summary.departureTime,
             traveltimeinseconds : record.summary.travelTimeInSeconds,
@@ -678,6 +680,7 @@ export class MapComponent implements OnInit {
         };
 
     });
+    
     const times = results.map(function(record) {
         return record.time;
     });
