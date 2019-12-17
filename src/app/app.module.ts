@@ -12,6 +12,7 @@ import { AdminGuard } from './services/singleComponentServices/admin-guard.servi
 import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './searchFolder/map/map.service';
+import { TrajetService} from './searchFolder/sidebar/trajet';
 
 
 // import { NavbarModule, WavesModule, ButtonsModule } from 'angular-bootstrap-md'
@@ -200,7 +201,8 @@ const appRoutes: Routes = [
     AddtrajetService,
     ServerconfigService,
     PaypalService,
-    UserStatService
+    UserStatService,
+    TrajetService
   ],
   bootstrap: [AppComponent]
 })
