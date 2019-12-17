@@ -31,7 +31,8 @@ ngOnInit() {
     this.adminListUtService.getAllUser(this.adminListUtInterface)
       .then((adminListUtInterface: AdminListUtInterface) => {
         this.adminListUtInterface = adminListUtInterface;
-        console.log(adminListUtInterface);
+        JSON.stringify(this.adminListUtInterface);
+        console.log(JSON.stringify(this.adminListUtInterface));
       })
       .catch(() => {
         console.log('Error in getUserDataById');

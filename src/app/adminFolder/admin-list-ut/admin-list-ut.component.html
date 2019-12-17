@@ -3,21 +3,22 @@
 <table class = "table col-12">
   <thead>
     <tr>
-      <th scope="col">ID</th>
+      <th scope="col" >ID</th>
       <th scope="col">Nom</th>
       <th scope="col">Prénom</th>
 
       <th scope="col"></th>
     </tr>
+
   </thead>
   <tbody>
 
 
-    <tr>
+  <!--  <tr>
       <td>{{adminListUtInterface.id}}</td>
       <td>{{adminListUtInterface.nom}}</td>
       <td>{{adminListUtInterface.prenom}}</td>
-      <!--<td>{{adminListUtInterface}}</td>-->
+      &lt;!&ndash;<td>{{adminListUtInterface}}</td>&ndash;&gt;
       <td>
         <a routerLink="/profile" routerLinkActive="active"><input type="button" value="Voir le profil" /></a>
         <a routerLink="/messagerie" routerLinkActive="active"><input type="button" value="Ouvrir une messagerie" /></a>
@@ -30,7 +31,28 @@
         </button>
       </td>
 
-    </tr>
+    </tr>-->
 
+<!--
+      <ul>
+        <li *ngFor="let id of adminListUtInterface ">{{ adminListUtInterface.id }}</li>
+        <li *ngFor="let name of adminListUtInterface ">{{ adminListUtInterface.nom}}</li>
+        <li *ngFor="let prenom of adminListUtInterface ">{{ adminListUtInterface.prenom}}</li>
+      </ul>-->
+
+ <!-- <h1>Utilisateurs</h1>
+  <div *ngFor="let row of adminListUtInterface| keyvalue">
+    {{ row | json}}
+    {{row.value}}
+  </div>-->
+
+
+  <p>Object</p>
+  <div *ngFor="let item of adminListUtInterface | keyvalue">
+    {{ item | json}}
+    {{item.key}}:{{item.value}}
+  </div>
   </tbody>
 </table>
+
+
