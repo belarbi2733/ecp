@@ -426,7 +426,7 @@ app.get('/paypal', function(req,res){
 /*-----------------------------------11---------------------------------------------------------------------------- */
 /*app.get('/paypal', function(req,res){
   User.getPrice(function(err, result) {
-
+*/
 
 app.post('/vehicule/update', function(req,res) {
   console.log(req.body);
