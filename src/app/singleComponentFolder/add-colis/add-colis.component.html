@@ -8,7 +8,20 @@
               </select>
               <input id="date" type="datetime-local" pattern="\d{4}-\d{2}-\d{2} [0-1]?\d:[0-6]\d" />
               <input id="nom" type="text" name="nom" placeholder="Nom du colis" [(ngModel)]="nom" />
-              <input id="volume"type="number" name="volume" placeholder="Volume" [(ngModel)]="volume" />
+
+              <label>Volume du coffre: </label>
+                <small>Veillez à sélectionner un volume légèrement inférieur à la réalité!</small>
+                <select type="number" name ="volume" id="volume" aria-describedby="volume"  [(ngModel)]="volume">
+
+                    <option value="40" selected="selected">S ~ bagage de cabine </option>
+                    <option value="70">M ~ 50 à 70 L </option>
+                    <option value="90">L ~ 70 à 90 L </option>
+                    <option value="120">XL ~ 90 à 120 L </option>
+                    <option value="150">Maximum: XXL - 150L </option>
+                </select>
+                <br>
+
+              <!-- <input id="volume"type="text" name="volume" placeholder="Volume" [(ngModel)]="volume" /> -->
               <small class="warning">insert a date in format yyyy-MM-dd hh:mm</small>
               <input type="submit" value="Submit" disabled="disabled" (click)="save()"/>
           </form>

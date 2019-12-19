@@ -24,8 +24,13 @@
   <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="Adresse mail" [(ngModel)]="personalInfos.mail">
 
   <!-- <label for="userTel">Numéro de téléphone : {{ userTel }}</label> -->
-  <input type="tel" class="form-control" id="phone" aria-describedby="phone" name="phone" pattern="[0-9]{10}" placeholder="Téléphone" [(ngModel)]="personalInfos.tel">
+  <input type="tel" class="form-control" id="phone" aria-describedby="phone" name="phone" pattern="[0]{1}[0-9]{3} [0-9]{6}" placeholder="Téléphone" [(ngModel)]="personalInfos.tel" required>
   <!-- <small class="form-text text-muted">Format: 0123456789</small> -->
+  <small>Format: 0492 123456</small>
+
+  <br>
+  <br>
+
 
   <!-- <label for="userDate">Date de naissance : {{ userDate }}</label> -->
   <input type="date" class="form-control" id="date" aria-describedby="date" placeholder="Date de naissance" [(ngModel)]="personalInfos.date_naiss">
