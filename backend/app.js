@@ -10,7 +10,7 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 let _ = require('underscore');
 let Math = require('mathjs');
-let Python = require('./processes');
+let Python = require('./test/processes');
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -566,9 +566,39 @@ app.post('/matchDriverTrajet', function(req,res) {
             if(result2.rows.length) {
               const search = req.body;
 
-              let arrayColis = [{
+              let colisJson = {};
+              let trajetJson = {};
+              let i = 0;
+              let j = 0;
+              let jsonKeyColis = 'chauffeur';
+              let jsonKeyTrajet = 'chauffeur';
+
+              colisJson[jsonKeyColis] = [
+                search.idUser,
+                result.rows[0].coffre,
+                search.detourMax,
+                search.departure[1],
+                search.departure[0],
+                search.arrival[1],
+                search.arrival[0]
+              ];
+              i++;
+
+              trajetJson[jsonKeyTrajet] = [
+                search.idUser,
+                search.nbrePlaces,
+                search.detourMax,
+                search.departure[1],
+                search.departure[0],
+                search.arrival[1],
+                search.arrival[0],
+                result.rows[0].coffre,
+              ];
+              j++;
+
+              /*let arrayColis = [{
                 idChauffeur: search.idUser,
-                places: result.rows[0].coffre,
+                volume: result.rows[0].coffre,
                 detourMax: req.body.detourMax,
                 latDepart: search.departure[1],
                 longDepart: search.departure[0],
@@ -585,7 +615,7 @@ app.post('/matchDriverTrajet', function(req,res) {
                 latArrivee: search.arrival[1],
                 longArrivee: search.arrival[0],
                 coffre: result.rows[0].coffre
-              }];
+              }];*/
 
               Colis.getAllColis(function (err3, result3) {
                 if (err3) {
@@ -609,7 +639,21 @@ app.post('/matchDriverTrajet', function(req,res) {
 
                           if(one.id_colis) {
                             //Séquence si c'est un colis
-                            arrayColis.push({
+                            jsonKeyColis = 'colis' + i;
+
+                            colisJson[jsonKeyColis] = [
+                              one.id_colis,
+                              dist,
+                              result3.rows[one.id_colis-1].volume,  // On va chercher le volume de l'id_colis correspondant
+                              one.prix,
+                              one.depart_y,
+                              one.depart_x,
+                              one.arrivee_y,
+                              one.arrivee_x
+                            ];
+                            i++;
+
+                            /*arrayColis.push({
                               idColis: one.id_colis,
                               distance: dist,
                               volume: result3.rows[one.id_colis-1].volume,  // On va chercher le volume de l'id_colis correspondant
@@ -618,13 +662,29 @@ app.post('/matchDriverTrajet', function(req,res) {
                               longDepart: one.depart_x,
                               latArrivee: one.arrivee_y,
                               longArrivee: one.arrivee_x
-                            });
+                            });*/
                             //console.log(JSON.stringify(arrayColis));
                             //console.log('Colis : ' + one.id_colis + ' id : ' + one.id);
 
                           } else {
                             //Séquence si c'est un trajet
-                            arrayTrajet.push({
+
+                            jsonKeyTrajet = 'trajet' + j;
+
+                            trajetJson[jsonKeyTrajet] = [
+                              one.id,
+                              dist,
+                              1,
+                              one.prix,
+                              one.depart_y,
+                              one.depart_x,
+                              one.arrivee_y,
+                              one.arrivee_x,
+                              0
+                            ];
+                            j++;
+
+                            /*arrayTrajet.push({
                               idTrajet: one.id,
                               distance: dist,
                               volume: 1,
@@ -634,16 +694,18 @@ app.post('/matchDriverTrajet', function(req,res) {
                               latArrivee: one.arrivee_y,
                               longArrivee: one.arrivee_x,
                               volumeBagage: 0
-                            });
+                            });*/
                             // console.log(JSON.stringify(arrayTrajet));
                             //console.log('Trajet : ' + one.id);
                           }
                         }
                       }
-                      console.log('Colis' + JSON.stringify(arrayColis));
-                      console.log('Trajet' + JSON.stringify(arrayTrajet));
-                      const objJson = arrayColis + arrayTrajet;
-                      Python.runPy(objJson);
+                      //console.log('Colis' + JSON.stringify(arrayColis));
+                      //console.log('Trajet' + JSON.stringify(arrayTrajet));
+                      //const objJson = arrayColis + arrayTrajet;
+                      console.log('Colis' + JSON.stringify(colisJson));
+                      console.log('Trajet' + JSON.stringify(trajetJson));
+                      Python.runPy(colisJson);
                     });
                   });
                 }

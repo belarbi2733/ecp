@@ -1,11 +1,13 @@
 
+const {spawn}= require('child_process');
+
 let Python = {
 
   runPy: function(data) {
-    const directory = './algo_opti.py';  //Path of python file
-    console.log(typeof(data));
 
-    const {spawn}= require('child_process');
+    const directory = 'test.py';  //Path of python file
+    // console.log(typeof(data));
+
     const child = spawn('python', [directory, `${JSON.stringify(data)}`]);
     child.on('exit', (code)=>{
       console.log('child process exited with' +
@@ -20,7 +22,7 @@ let Python = {
       console.log(`childstdout: \t ${data}`)
     });
     child.stdout.on('data', (data)=>{
-      console.log('response is :' + data);
+      console.log('response is :' + JSON.stringify(data));
     });
 
     child.stderr.on('data', (data)=>{
@@ -29,15 +31,5 @@ let Python = {
   }
 };
 
-/*json={
-    "chauffeur":[50,"7000 Mons","75007 paris"],
-    "colis1":[70, 31, 50.4537,3.9608,48.8583,2.2945],
-    "colis2":[20,10,25,130,1,1],
-    "colis3":[39,20,45,145,1,1],
-    "colis4":[37, 19, 50.4613,3.9325,48.8738,2.29504],
-    "colis5":[7,4,50,102,1,2],
-    "colis6":[5,3,33,111,1,2],
-    "colis7":[10,6,37,138,1,2]
-    };
-*/
+
 module.exports = Python;
