@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {DispListTraj} from '../../adminFolder/admin-list-traj/dispadmintraj.interface';
+import {DispListTraj} from '../../adminFolder/admin-list-traj/admin-list-traj.interface';
 import {MesTournService} from '../../services/mestourn.service';
 import {PaypalInterface} from '../../paypal/paypal.interface';
 import {PaypalService} from '../../services/paypal.service';
@@ -7,7 +7,7 @@ import {PaypalService} from '../../services/paypal.service';
 @Component({
   selector: 'app-mes-tourn',
   templateUrl: './mes-tourn.component.html',
-  styleUrls: ['./mes-tourn.component.css','../../app.component.css']
+  styleUrls: ['./mes-tourn.component.css', '../../app.component.css']
 })
 export class MesTournComponent implements OnInit {
 
