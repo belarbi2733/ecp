@@ -512,6 +512,7 @@ app.post('/matchDriverTrajet', function(req,res) {
     if(err) {
       res.status(400).json(err);
       console.log('Error 1');
+      console.log(err);
     } else {
       if(result.rows.length) {
         Trajet.getAllTrajet(function (err2,result2) {
