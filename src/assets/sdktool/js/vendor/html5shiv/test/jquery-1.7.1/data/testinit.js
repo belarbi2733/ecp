@@ -61,11 +61,11 @@ if ( document.createEvent ) {
 /**
  * Add random number to url to stop IE from caching
  *
- * @example url("data/test.html")
- * @result "data/test.html?10538358428943"
+ * @example url("data/algoRun.html")
+ * @result "data/algoRun.html?10538358428943"
  *
- * @example url("data/test.php?foo=bar")
- * @result "data/test.php?foo=bar&10538358345554"
+ * @example url("data/algoRun.php?foo=bar")
+ * @result "data/algoRun.php?foo=bar&10538358345554"
  */
 function url(value) {
 	return value + (/\?/.test(value) ? "&" : "?") + new Date().getTime() + "" + parseInt(Math.random()*100000);
@@ -73,7 +73,7 @@ function url(value) {
 
 (function () {
 	// Store the old counts so that we only assert on tests that have actually leaked,
-	// instead of asserting every time a test has leaked sometime in the past
+	// instead of asserting every time a algoRun has leaked sometime in the past
 	var oldCacheLength = 0,
 		oldFragmentsLength = 0,
 		oldTimersLength = 0,
@@ -99,8 +99,8 @@ function url(value) {
 			++fragmentsLength;
 		}
 
-		// Because QUnit doesn't have a mechanism for retrieving the number of expected assertions for a test,
-		// if we unconditionally assert any of these, the test will fail with too many assertions :|
+		// Because QUnit doesn't have a mechanism for retrieving the number of expected assertions for a algoRun,
+		// if we unconditionally assert any of these, the algoRun will fail with too many assertions :|
 		if ( cacheLength !== oldCacheLength ) {
 			equal( cacheLength, oldCacheLength, "No unit tests leak memory in jQuery.cache" );
 			oldCacheLength = cacheLength;

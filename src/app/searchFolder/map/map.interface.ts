@@ -1,6 +1,7 @@
 export interface Driver {
     idUser: number;
     nbrePlaces: number;
+    detourMax: number;
     departuretime: string;
     time: string;
     distance: string;

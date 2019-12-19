@@ -91,7 +91,7 @@
             controlLabel.setAttribute('class', 'label--geometries-zoom');
             var control = document.createElement('input');
             control.type = 'range';
-            control.id = 'test-zoom';
+            control.id = 'algoRun-zoom';
             control.min = 0;
             control.max = 22;
             control.step = 1;
@@ -217,7 +217,7 @@
             }
         }
 
-        var control = document.getElementById('test-zoom');
+        var control = document.getElementById('algoRun-zoom');
 
         function getGeometry(result) {
             var shouldFitToMarkers = true;

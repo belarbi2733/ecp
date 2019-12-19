@@ -38,7 +38,7 @@ var envTest = function(name, fn, frames){
 			initIframes();
 		}
 	});
-	
+
 };
 
 QUnit.reset = function() {
@@ -51,8 +51,8 @@ QUnit.reset = function() {
 var initIframes = function(){
 	if(testEnv.length > 1){return;}
 	testEnv[0].fixture = $('#qunit-fixture').html();
-	
-	$('iframe.test-frame').each(function(){
+
+	$('iframe.algoRun-frame').each(function(){
 		var win = this.contentWindow;
 		if($('#qunit-fixture', win.document).length){
 			testEnv.push({
@@ -82,30 +82,30 @@ envTest("display block tests", function(env){
 
 }, ['default', 'disableMethodsBefore']);
 
-envTest("test html5.createElement/html5.createDocumentFragment", function(env){
+envTest("algoRun html5.createElement/html5.createDocumentFragment", function(env){
 	var doc5 = html5;
 	if(env.html5){
 		doc5 = env.html5;
 		env.html5.shivMethods = false;
 	}
 	html5.shivMethods = false;
-	
+
 	var fragDiv =  doc5.createElement('div', env.doc);
 	var frag = doc5.createDocumentFragment(env.doc);
 	var markText = "with these words highlighted";
 	var div = $( doc5.createElement('div', env.doc) ).html('<section><article><mark>s</mark></article>?</section>').appendTo(env.doc.getElementById('qunit-fixture'));
-	
+
 	fragDiv.innerHTML = '<section>This native javascript sentence is in a green box <mark>'+markText+'</mark>?</section>';
-	
+
 	frag.appendChild(fragDiv);
 	fragDiv.innerHTML += '<article>This native javascript sentence is also in a green box <mark>'+markText+'</mark>?</article>';
-	
+
 	env.doc.getElementById('qunit-fixture').appendChild(frag);
-	
+
 	equals($('section article > mark', div).length, 1, "found mark in section > article");
 	equals($('section > mark', fragDiv).html(), markText, "innerHTML getter equals innerHTML setter");
 	equals($('article', fragDiv).css('borderTopWidth'), '2px', "article has a 2px border");
-	
+
 	if(env.html5){
 		env.html5.shivMethods = env.initialShivMethods;
 	}
@@ -115,12 +115,12 @@ envTest("test html5.createElement/html5.createDocumentFragment", function(env){
 
 if(!html5.supportsUnknownElements){
 
-	envTest("config shivMethods test", function(env){
+	envTest("config shivMethods algoRun", function(env){
 		var div = $('<div/>', env.doc).html('<section><article><mark></mark></article>?</section>').appendTo(env.doc.getElementById('qunit-fixture'));
 		equals($('section article > mark', div).length, (env.html5.shivMethods) ? 1 : 0, "found/no found mark in section > article");
 	}, ['default', 'disableMethodsBefore', 'disableMethodsAfter']);
-	
-	envTest("config shivCSS test", function(env){
+
+	envTest("config shivCSS algoRun", function(env){
 		$.each(blockElements, function(i, elem){
 			equals($(elem, env.doc).css('display'), 'inline', elem +" has display: inline if unshived");
 		});
@@ -132,7 +132,7 @@ if(!html5.supportsUnknownElements){
 	}, ['disableCSS']);
 }
 
-envTest("config add elements test", function(env){
+envTest("config add elements algoRun", function(env){
 	var value = $.trim($('abcxyz', env.doc).html());
 	ok((html5.supportsUnknownElements || env.html5.elements.indexOf('abcxyz') !== -1) ? value : !value, "unknownelement has one/none div inside: "+ value);
 }, ['default', 'disableMethodsBefore', 'addUnknownBefore', 'addUnknownAfter']);
@@ -140,10 +140,10 @@ envTest("config add elements test", function(env){
 envTest("parsing tests", function(env){
 	$.each(blockElements, function(i, elem){
 		equals($(elem +' div.inside', env.doc).length, 1, elem +" has a div inside");
-	});	
+	});
 }, ['default', 'disableMethodsBefore']);
 
-envTest("style test", function(env){
+envTest("style algoRun", function(env){
 	var article = $('article', env.doc);
 	equals(article.css('borderTopWidth'), '2px', "article has a 2px border");
 }, ['default', 'disableMethodsBefore']);
@@ -152,20 +152,20 @@ if (!html5.supportsUnknownElements) {
 	envTest("shiv different document", function(env){
 		var markText = "with these words highlighted3";
 		var markup = '<section><article>This jQuery 1.6.4 sentence is in a green box <mark>' + markText + '</mark></article>?</section>';
-		
+
 		var div = $('<div/>', env.doc).html(markup).appendTo(env.doc.getElementById('qunit-fixture'));
 		equals($('section article > mark', div).length, 0, "document is not shived");
-		
+
 		html5.shivDocument(env.doc);
-		
+
 		div = $('<div/>', env.doc).html(markup).appendTo(env.doc.getElementById('qunit-fixture'));
 		equals($('section article > mark', div).length, 1, "document is shived");
 		equals($('article', div).css('borderTopWidth'), '2px', "article has a 2px border");
-		
+
 	}, ['noEmbed']);
 }
-	
-envTest("createElement/innerHTML test", function(env){
+
+envTest("createElement/innerHTML algoRun", function(env){
 	shivTests(
 		function(){
 			var div = env.doc.createElement('div');
@@ -179,7 +179,7 @@ envTest("createElement/innerHTML test", function(env){
 	);
 }, ['default', 'disableMethodsBefore']);
 
-envTest("createElement/createDocumentFragment/innerHTML test", function(env){
+envTest("createElement/createDocumentFragment/innerHTML algoRun", function(env){
 	shivTests(
 		function(){
 			var div = env.doc.createElement('div');
@@ -197,20 +197,20 @@ envTest("createElement/createDocumentFragment/innerHTML test", function(env){
 }, ['default', 'disableMethodsBefore']);
 
 
-envTest("createDocumentFragment/cloneNode/innerHTML test", function(env){
+envTest("createDocumentFragment/cloneNode/innerHTML algoRun", function(env){
 	shivTests(
 		function(){
 			var frag = env.doc.createDocumentFragment();
 			var fragDiv = env.doc.createElement('div');
-			
+
 			var markText = "with these words highlighted2";
 			var fragDivClone;
 			frag.appendChild(fragDiv);
-			
+
 			fragDiv.innerHTML = '<div><article>This native javascript sentence is also in a green box <mark>'+markText+'</mark>?</article></div>';
-			
+
 			fragDivClone = fragDiv.cloneNode(true);
-			
+
 			env.doc.getElementById('qunit-fixture').appendChild(fragDivClone);
 			equals($('mark', env.doc).html(), markText, "innerHTML getter equals innerHTML setter");
 		},
@@ -218,7 +218,7 @@ envTest("createDocumentFragment/cloneNode/innerHTML test", function(env){
 	);
 }, ['default', 'addUnknownAfter']);
 
-test("form test", function() {
+test("form algoRun", function() {
 	shivTests(
 		function(){
 			var form = document.createElement('form');
@@ -227,7 +227,7 @@ test("form test", function() {
 			var button = document.createElement('button');
 			var option = document.createElement('option');
 			var markText = "with these words highlighted2";
-			
+
 			form.setAttribute('action', 'some/path');
 			form.setAttribute('name', 'formName');
 			form.target = '_blank';
@@ -235,16 +235,16 @@ test("form test", function() {
 			option.value = '1.value';
 			button.setAttribute('type', 'submit');
 			input.type = 'submit';
-			
+
 			form.innerHTML = '<article>This native javascript sentence is also in a green box <mark>'+markText+'</mark>?</article>';
-			
-			
+
+
 			form.appendChild(select);
 			form.appendChild(button);
 			form.appendChild(input);
-			
-			
-			
+
+
+
 			if(select.add){
 				try {
 					select.add(option);
@@ -255,7 +255,7 @@ test("form test", function() {
 				select.appendChild(option);
 			}
 			document.getElementById('qunit-fixture').appendChild(form);
-			
+
 			equals($('select option', form).val(), '1.value', "select has one option with value");
 			equals($('article > mark', form).html(), markText, "innerHTML getter equals innerHTML setter");
 			equals($('article', form).css('borderTopWidth'), '2px', "article has a 2px border");
@@ -263,7 +263,7 @@ test("form test", function() {
 	);
 });
 
-envTest("jQuery test", function(env){
+envTest("jQuery algoRun", function(env){
 	shivTests(
 		function(){
 			var markText = "with these words highlighted3";

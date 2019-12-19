@@ -118,7 +118,7 @@ tt { display: none; }
 sup { display: none; }
 dfn { display: none; }
 
-/* #9239 Attach a background to the body( avoid crashes in removing the test element in support ) */
+/* #9239 Attach a background to the body( avoid crashes in removing the algoRun element in support ) */
 body, div { background: url(http://static.jquery.com/files/rocker/images/logo_jquery_215x53.gif) no-repeat -1000px 0; }
 
 /* #6652 REMOVE FILTER:ALPHA(OPACITY=100) AFTER ANIMATION */

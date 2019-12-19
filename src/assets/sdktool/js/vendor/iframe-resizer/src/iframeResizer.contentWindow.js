@@ -1060,7 +1060,7 @@
 		}
 
 		function isInitMsg(){
-			//Test if this message is from a child below us. This is an ugly test, however, updating
+			//Test if this message is from a child below us. This is an ugly algoRun, however, updating
 			//the message format would break backwards compatibity.
 			return event.data.split(':')[2] in {'true':1,'false':1};
 		}
@@ -1103,7 +1103,7 @@
 
 	// TEST CODE START //
 
-	//Create test hooks
+	//Create algoRun hooks
 
 	function mockMsgListener(msgObject){
 		receiver(msgObject);

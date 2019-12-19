@@ -32,6 +32,7 @@ for (cle in parcour[0]) {
 let driver: Driver = {
   idUser: null,
   nbrePlaces: null,
+  detourMax: null,
   departuretime: '',
   time: '',
   distance: '',
@@ -43,6 +44,7 @@ let driver: Driver = {
 
 function recordDriver(data: Driver) {
   data.nbrePlaces = driverinfo[0].nbrePlaces;
+  data.detourMax = driverinfo[0].detourMax;
   data.departuretime = driverinfo[1].departuretime;
   data.time = driverinfo[1].traveltimeinseconds;
   data.distance = driverinfo[1].distance;
@@ -70,7 +72,8 @@ function recordDriver(data: Driver) {
 @Injectable()
 export class MapComponent implements OnInit {
 
-  nbrePlaces = '';
+  nbrePlaces = null;
+  detour = null;
   statutVoiture = false;
 
   constructor(private driverService: DriverService, private httpclient: HttpClient) {
@@ -81,7 +84,7 @@ export class MapComponent implements OnInit {
 
     // console.log(this.nom);
     // console.log(this.volume);
-    driverinfo.push({nbrePlaces : this.nbrePlaces});
+    driverinfo.push({nbrePlaces : this.nbrePlaces, detourMax: this.detour});
   }
 
   ngOnInit() {
@@ -95,7 +98,7 @@ export class MapComponent implements OnInit {
 
     const jsontour = this.httpclient.get('src/assets/tourne.json');
     // console.log (JSON.stringify(jsontour));
-    console.log(typeof (parcour[0]));
+    // console.log(typeof (parcour[0]));
 
     const service = this.driverService;
     // Define your product name and version
@@ -266,7 +269,7 @@ export class MapComponent implements OnInit {
         if (lastVisible >= limit && results.length) {
           const lastResult = results[results.length - 1];
           const time = arrivalOrDeparture.value === 'depart at' ? lastResult.from : lastResult.to;
-          requestNextPage(time, data);
+          //requestNextPage(time, data);
         }
         expandVisibleRows(items, firstVisible, lastVisible);
       };
@@ -278,10 +281,12 @@ export class MapComponent implements OnInit {
     }
     function requestNextPage(date, previousData) {
 
+
       if (batchRequestsLock) {
         return;
       }
       batchRequestsLock = 'page';
+      if (iter < 2) {
       try {
 
         batch(timeSeries(date))
@@ -298,14 +303,16 @@ export class MapComponent implements OnInit {
           .then(createItems)
           .then(updateScrollEvent)
           .then(updateListElements)
-          .then(unlockBatchRequests, handleBatchRequestError);
+          //.then(unlockBatchRequests, handleBatchRequestError);
 
       } catch (err) {
         handleBatchRequestError(err);
       }
-    }
+    }}
+
 // Create a new request
     function request(date) {
+      console.log (iter);
 
       // L.clear();
       //////////////////////////////
@@ -314,6 +321,7 @@ export class MapComponent implements OnInit {
         return;
     }
     batchRequestsLock = 'submit';
+    if (iter < 2) {
     try {
     //if (iter = 10){
         //console.log(dep)
@@ -330,39 +338,39 @@ export class MapComponent implements OnInit {
         it ++ ;
         //console.log(it);
         window["Object"+it].clear();
-        
+
         }}}
-    
+
         routeOnMapView.addTo(map).draw([{lat: routePoints[0].lat, lng: routePoints[0].lon}, {lat: parcour[0]['colis1'][0], lng: parcour[0]['colis1'][1]}]);
-        
+
     let tmp : string;
     let tmp1 : string;
     it = 0;
     for (key in parcour[0]){
         it ++ ;
         ite ++;
-        
+
         tmp = "colis"+it;
         tmp1 = "colis"+ite;
         //console.log (tmp);
         if (typeof parcour[0][tmp1] !== 'undefined') {
             // variable is undefined
-            
-        
-    
+
+
+
         //tmp = ''+ parcour[0][tmp][0]+ ':'+ parcour[0][tmp][1];
-        
+
         //var lat1 : number;
         //lat1 = parcour[0][tmp][0];
-        
-        
+
+
         //console.log (JSON.stringify (parcour[0][tmp][0]));
-        
+
             window["Object"+it].addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: parcour[0][tmp1][0], lng: parcour[0][tmp1][1]}]);
         }
         //rou = tomtom.L.geoJson(tmp).addTo(map);
     }       ////
-    
+
     endparcour.addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: routePoints[1].lat, lng: routePoints[1].lon}]);
 
 //}
@@ -370,7 +378,7 @@ export class MapComponent implements OnInit {
 
         ///////////////////////////////////////////////
         clearList();
-        batch(timeSeries(date))
+        batch(timeSeries (date))
           .then(function(data) {
             // handle the data here
             // we have this fake handler just for the docs purpose
@@ -386,7 +394,7 @@ export class MapComponent implements OnInit {
       } catch (err) {
         handleBatchRequestError(err);
       }
-    }
+    }}
     function mapTimeToRoutingElement(time) {
       const format = 'yyyy-mm-dd hh:mm';
       const result = {
@@ -404,7 +412,7 @@ export class MapComponent implements OnInit {
       const minutes = 15;
       const timesPerHour = 60 / minutes;
       const hours = 6;
-      const numberOfResults = timesPerHour * hours;
+      const numberOfResults = 0;
       return Array.apply(null, Array(numberOfResults))
         .reduce(function(accumulator) {
           const i = accumulator.length - 1;
@@ -443,7 +451,7 @@ export class MapComponent implements OnInit {
         return;
       }
       // console.log (JSON.stringify(result.route));
-      console.log (typeof(result.route));
+      // console.log (typeof(result.route));
       route = tomtom.L.geoJson(result.route, {color: result.color}).addTo(map);
     }
     function onRowClick(result) {
@@ -573,6 +581,7 @@ export class MapComponent implements OnInit {
     function createItems(data) {
       const list = getOrCreateList();
       const results = data.results;
+
       if (!results.length) {
         hideLoader(list);
         return data;
@@ -656,10 +665,7 @@ export class MapComponent implements OnInit {
           summary: feature.properties.summary,
           geometry: feature.geometry
         };
-    }).map(function(record) {
-        
-        //console.log (iter);
-
+      }).map(function(record) {
         iter = iter + 1;
         if (iter < 2) {
 
@@ -680,7 +686,7 @@ export class MapComponent implements OnInit {
 
           recordDriver(driver);
           service.matchDriverTrajetforTournee(driver);
-          service.findMiniTrajet(driver);
+          //service.findMiniTrajet(driver);
 
           // comme ça ne stocke que pour le temps demander
         }
@@ -696,11 +702,8 @@ export class MapComponent implements OnInit {
           route: record.geometry
         };
 
-
-    });
-    
-    const times = results.map(function(record) {
-
+      });
+      const times = results.map(function(record) {
         return record.time;
       });
       const min = Math.min.apply(Math, times);

@@ -230,7 +230,7 @@
 		}
 
 		function isMessageFromMetaParent(){
-			//Test if this message is from a parent above us. This is an ugly test, however, updating
+			//Test if this message is from a parent above us. This is an ugly algoRun, however, updating
 			//the message format would break backwards compatibity.
 			var retCode = messageData.type in {'true':1,'false':1,'undefined':1};
 
@@ -648,7 +648,7 @@
 		}
 
 		function chkAndSend(){
-			if(iframe && 'contentWindow' in iframe && (null !== iframe.contentWindow)){ //Null test for PhantomJS
+			if(iframe && 'contentWindow' in iframe && (null !== iframe.contentWindow)){ //Null algoRun for PhantomJS
 				postMessageToIFrame();
 			} else {
 				iFrameNotFound();
