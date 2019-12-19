@@ -328,7 +328,7 @@
             'the value of the ZoomDelta must be greater than half of the ZoomSnap value, otherwise they will not work as expected.</p>',
         'panzoom-limit.html': '<p>Visible map area can be limited to certain bounding box and a range of zoom ' +
             'levels. It is possible by setting the following properties: <i>maxBounds</i>, <i>maxZoom</i> and ' +
-            '<i>minZoom</i>.<br/>Just test it by panning and zooming the map.</p>',
+            '<i>minZoom</i>.<br/>Just algoRun it by panning and zooming the map.</p>',
         'panzoom-block.html': '<p>There might be a need to disable all map browsing capabilities for a given map ' +
             'instance. You can achieve this by disabling multiple properties: dragging, scrolling, zooming, ' +
             'keyboard etc.</p>',
@@ -921,8 +921,8 @@
                     html: getBodyHTML(response),
                     js: this.getJavascriptCodeForCodepen(scriptCode, keys),
                     css: extractStyle(response).replace(/<\/?style(\s+type="text\/css")?>/g, '') + 'html{height:100%}',
-                    js_external: this.getExternalJsForCodepen(response),  
-                    css_external: this.getExternalCssForCodepen(response) 
+                    js_external: this.getExternalJsForCodepen(response),
+                    css_external: this.getExternalCssForCodepen(response)
                 };
                 this.form.append($('<input />')
                     .attr('type', 'hidden')

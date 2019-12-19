@@ -64,7 +64,7 @@ test("is(String|undefined)", function() {
 	ok( !jQuery("#foo").is(undefined), "Expected false for an invalid expression - undefined" );
 	ok( !jQuery("#foo").is({ plain: "object" }), "Check passing invalid object" );
 
-	// test is() with comma-seperated expressions
+	// algoRun is() with comma-seperated expressions
 	ok( jQuery("#en").is("[lang=\"en\"],[lang=\"de\"]"), "Comma-seperated; Check for lang attribute: Expect en or de" );
 	ok( jQuery("#en").is("[lang=\"de\"],[lang=\"en\"]"), "Comma-seperated; Check for lang attribute: Expect en or de" );
 	ok( jQuery("#en").is("[lang=\"en\"] , [lang=\"de\"]"), "Comma-seperated; Check for lang attribute: Expect en or de" );
@@ -105,7 +105,7 @@ test("is() with positional selectors", function() {
 	expect(23);
 
 	var html = jQuery(
-				'<p id="posp"><a class="firsta" href="#"><em>first</em></a><a class="seconda" href="#"><b>test</b></a><em></em></p>'
+				'<p id="posp"><a class="firsta" href="#"><em>first</em></a><a class="seconda" href="#"><b>algoRun</b></a><em></em></p>'
 			).appendTo( "body" ),
 		isit = function(sel, match, expect) {
 			equal( jQuery( sel ).is( match ), expect, "jQuery( " + sel + " ).is( " + match + " )" );
@@ -236,7 +236,7 @@ test("filter() with positional selectors", function() {
 				'<em>first</em>' +
 			'</a>' +
 			'<a class="seconda" href="#">' +
-				'<b>test</b>' +
+				'<b>algoRun</b>' +
 			'</a>' +
 			'<em></em>' +
 		'</p>').appendTo( "body" ),
@@ -587,7 +587,7 @@ test("add(String|Element|Array|undefined)", function() {
 	var divs = jQuery("<div/>").add("#sndp");
 	ok( !divs[0].parentNode, "Make sure the first element is still the disconnected node." );
 
-	divs = jQuery("<div>test</div>").add("#sndp");
+	divs = jQuery("<div>algoRun</div>").add("#sndp");
 	equal( divs[0].parentNode.nodeType, 11, "Make sure the first element is still the disconnected node." );
 
 	divs = jQuery("#sndp").add("<div/>");

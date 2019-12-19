@@ -68,12 +68,12 @@
 </script>
 <script>
 
-	console.log(document.getElementById('test').innerHTML);
+	console.log(document.getElementById('algoRun').innerHTML);
 
 	test("t.js tests", function() {
 
 		var div = document.createElement('div');
-		var template = new t(document.getElementById('test').innerHTML);
+		var template = new t(document.getElementById('algoRun').innerHTML);
 		div.innerHTML = template.render({
 			greeting: "Welcome!",
 			user: {

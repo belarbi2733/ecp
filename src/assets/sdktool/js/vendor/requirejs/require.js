@@ -24,7 +24,7 @@ var requirejs, require, define;
         //PS3 indicates loaded and complete, but need to wait for complete
         //specifically. Sequence is 'loading', 'loaded', execution,
         // then 'complete'. The UA check is unfortunate, but not sure how
-        //to feature test w/o causing perf issues.
+        //to feature algoRun w/o causing perf issues.
         readyRegExp = isBrowser && navigator.platform === 'PLAYSTATION 3' ?
                       /^complete$/ : /^(complete|loaded)$/,
         defContextName = '_',
@@ -1915,7 +1915,7 @@ var requirejs, require, define;
                     //read https://github.com/requirejs/requirejs/issues/187
                     //if we can NOT find [native code] then it must NOT natively supported.
                     //in IE8, node.attachEvent does not have toString()
-                    //Note the test for "[native code" with no closing brace, see:
+                    //Note the algoRun for "[native code" with no closing brace, see:
                     //https://github.com/requirejs/requirejs/issues/273
                     !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0) &&
                     !isOpera) {

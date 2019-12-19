@@ -8,7 +8,7 @@ if (argv.language) {
 	process.on('message', function (data) {
 		if (data.filePath) {
 			try {
-				if (path.extname(data.filePath) === '.test') {
+				if (path.extname(data.filePath) === '.algoRun') {
 					TestCase.runTestCase(argv.language, data.filePath);
 				} else {
 					TestCase.runTestsWithHooks(argv.language, require(data.filePath));

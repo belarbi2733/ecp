@@ -330,7 +330,7 @@ jQuery.extend( {
 
 	isEmptyObject: function( obj ) {
 
-		
+
 		// See https://github.com/eslint/eslint/issues/6125
 		var name;
 
@@ -1121,7 +1121,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 	// Support: IE<10
 	// Check if getElementById returns elements by name
 	// The broken getElementById methods don't pick up programmatically-set names,
-	// so use a roundabout getElementsByName test
+	// so use a roundabout getElementsByName algoRun
 	support.getById = assert(function( el ) {
 		docElem.appendChild( el ).id = expando;
 		return !document.getElementsByName || !document.getElementsByName( expando ).length;
@@ -1241,7 +1241,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		// Regex strategy adopted from Diego Perini
 		assert(function( el ) {
 			// Select is set to empty string on purpose
-			// This is to test IE's treatment of not explicitly
+			// This is to algoRun IE's treatment of not explicitly
 			// setting a boolean content attribute,
 			// since its presence should be enough
 			// https://bugs.jquery.com/ticket/12359
@@ -1251,7 +1251,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 			// Support: IE8, Opera 11-12.16
 			// Nothing should be selected when empty strings follow ^= or $= or *=
-			// The test attribute must be unknown in Opera but "safe" for WinRT
+			// The algoRun attribute must be unknown in Opera but "safe" for WinRT
 			// https://msdn.microsoft.com/en-us/library/ie/hh465388.aspx#attribute_section
 			if ( el.querySelectorAll("[msallowcapture^='']").length ) {
 				rbuggyQSA.push( "[*^$]=" + whitespace + "*(?:''|\"\")" );
@@ -5590,12 +5590,12 @@ jQuery.fn.extend( {
 
 var
 
-	
+
 
 	// See https://github.com/eslint/eslint/issues/3229
 	rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([a-z][^\/\0>\x20\t\r\n\f]*)[^>]*)\/>/gi,
 
-	
+
 
 	// Support: IE <=10 - 11, Edge 12 - 13 only
 	// In IE/Edge using regex groups here causes severe slowdowns.
@@ -6216,7 +6216,7 @@ function addGetHookIf( conditionFn, hookFn ) {
 				return;
 			}
 
-			// Hook needed; redefine it so that the support test is not executed again.
+			// Hook needed; redefine it so that the support algoRun is not executed again.
 			return ( this.get = hookFn ).apply( this, arguments );
 		}
 	};
@@ -7000,11 +7000,11 @@ function defaultPrefilter( elem, props, opts ) {
 				showHide( [ elem ], true );
 			}
 
-			
+
 
 			anim.done( function() {
 
-			
+
 
 				// The final step of a "hide" animation is actually hiding the element
 				if ( !hidden ) {
@@ -7737,7 +7737,7 @@ if ( !support.optSelected ) {
 	jQuery.propHooks.selected = {
 		get: function( elem ) {
 
-			
+
 
 			var parent = elem.parentNode;
 			if ( parent && parent.parentNode ) {
@@ -7747,7 +7747,7 @@ if ( !support.optSelected ) {
 		},
 		set: function( elem ) {
 
-			
+
 
 			var parent = elem.parentNode;
 			if ( parent ) {
@@ -8105,7 +8105,7 @@ jQuery.extend( {
 				while ( i-- ) {
 					option = options[ i ];
 
-					
+
 
 					if ( option.selected =
 						jQuery.inArray( jQuery.valHooks.option.get( option ), values ) > -1
@@ -8113,7 +8113,7 @@ jQuery.extend( {
 						optionSet = true;
 					}
 
-					
+
 				}
 
 				// Force browsers to behave consistently when non-matching value is set

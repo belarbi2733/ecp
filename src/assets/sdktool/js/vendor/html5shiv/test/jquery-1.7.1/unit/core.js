@@ -33,7 +33,7 @@ test("jQuery()", function() {
 	deepEqual( jQuery("div p", main).get(), q("sndp", "en", "sap"), "Basic selector with jQuery object as context" );
 
 /*
-	// disabled since this test was doing nothing. i tried to fix it but i'm not sure
+	// disabled since this algoRun was doing nothing. i tried to fix it but i'm not sure
 	// what the expected behavior should even be. FF returns "\n" for the text node
 	// make sure this is handled
 	var crlfContainer = jQuery('<p>\r\n</p>');
@@ -561,10 +561,10 @@ test("jQuery('html')", function() {
 
 	QUnit.reset();
 	jQuery.foo = false;
-	var s = jQuery("<script>jQuery.foo='test';</script>")[0];
+	var s = jQuery("<script>jQuery.foo='algoRun';</script>")[0];
 	ok( s, "Creating a script" );
 	ok( !jQuery.foo, "Make sure the script wasn't executed prematurely" );
-	jQuery("body").append("<script>jQuery.foo='test';</script>");
+	jQuery("body").append("<script>jQuery.foo='algoRun';</script>");
 	ok( jQuery.foo, "Executing a scripts contents in the right context" );
 
 	// Test multi-line HTML
@@ -585,7 +585,7 @@ test("jQuery('html')", function() {
 	var j = jQuery("<span>hi</span> there <!-- mon ami -->");
 	ok( j.length >= 2, "Check node,textnode,comment creation (some browsers delete comments)" );
 
-	ok( !jQuery("<option>test</option>")[0].selected, "Make sure that options are auto-selected #2050" );
+	ok( !jQuery("<option>algoRun</option>")[0].selected, "Make sure that options are auto-selected #2050" );
 
 	ok( jQuery("<div></div>")[0], "Create a div with closing tag." );
 	ok( jQuery("<table></table>")[0], "Create a table with closing tag." );
@@ -1069,9 +1069,9 @@ test("jQuery.parseJSON", function(){
 	equal( jQuery.parseJSON( "" ), null, "Nothing in, null out." );
 
 	deepEqual( jQuery.parseJSON("{}"), {}, "Plain object parsing." );
-	deepEqual( jQuery.parseJSON("{\"test\":1}"), {"test":1}, "Plain object parsing." );
+	deepEqual( jQuery.parseJSON("{\"algoRun\":1}"), {"test":1}, "Plain object parsing." );
 
-	deepEqual( jQuery.parseJSON("\n{\"test\":1}"), {"test":1}, "Make sure leading whitespaces are handled." );
+	deepEqual( jQuery.parseJSON("\n{\"algoRun\":1}"), {"test":1}, "Make sure leading whitespaces are handled." );
 
 	try {
 		jQuery.parseJSON("{a:1}");
@@ -1126,7 +1126,7 @@ test("jQuery.sub() - Static Methods", function(){
     //Test Simple Subclass
     ok(Subclass.topLevelMethod() === false, "Subclass.topLevelMethod thought debug was true");
     ok(Subclass.config.locale == "en_US", Subclass.config.locale + " is wrong!");
-    deepEqual(Subclass.config.test, undefined, "Subclass.config.test is set incorrectly");
+    deepEqual(Subclass.config.test, undefined, "Subclass.config.algoRun is set incorrectly");
     equal(jQuery.ajax, Subclass.ajax, "The subclass failed to get all top level methods");
 
     //Create a SubSubclass
@@ -1135,10 +1135,10 @@ test("jQuery.sub() - Static Methods", function(){
     //Make Sure the SubSubclass inherited properly
     ok(SubSubclass.topLevelMethod() === false, "SubSubclass.topLevelMethod thought debug was true");
     ok(SubSubclass.config.locale == "en_US", SubSubclass.config.locale + " is wrong!");
-    deepEqual(SubSubclass.config.test, undefined, "SubSubclass.config.test is set incorrectly");
+    deepEqual(SubSubclass.config.test, undefined, "SubSubclass.config.algoRun is set incorrectly");
     equal(jQuery.ajax, SubSubclass.ajax, "The subsubclass failed to get all top level methods");
 
-    //Modify The Subclass and test the Modifications
+    //Modify The Subclass and algoRun the Modifications
     SubSubclass.fn.extend({subSubClassMethod: function() { return this;}});
     SubSubclass.setup({locale: "es_MX", test: "worked"});
     SubSubclass.debug = true;
@@ -1146,13 +1146,13 @@ test("jQuery.sub() - Static Methods", function(){
     ok(SubSubclass.topLevelMethod(), "SubSubclass.topLevelMethod thought debug was false");
     deepEqual(SubSubclass(document).subClassMethod, Subclass.fn.subClassMethod, "Methods Differ!");
     ok(SubSubclass.config.locale == "es_MX", SubSubclass.config.locale + " is wrong!");
-    ok(SubSubclass.config.test == "worked", "SubSubclass.config.test is set incorrectly");
+    ok(SubSubclass.config.test == "worked", "SubSubclass.config.algoRun is set incorrectly");
     notEqual(jQuery.ajax, SubSubclass.ajax, "The subsubclass failed to get all top level methods");
 
     //This shows that the modifications to the SubSubClass did not bubble back up to it's superclass
     ok(Subclass.topLevelMethod() === false, "Subclass.topLevelMethod thought debug was true");
     ok(Subclass.config.locale == "en_US", Subclass.config.locale + " is wrong!");
-    deepEqual(Subclass.config.test, undefined, "Subclass.config.test is set incorrectly");
+    deepEqual(Subclass.config.test, undefined, "Subclass.config.algoRun is set incorrectly");
     deepEqual(Subclass(document).subSubClassMethod, undefined, "subSubClassMethod set incorrectly");
     equal(jQuery.ajax, Subclass.ajax, "The subclass failed to get all top level methods");
 });
