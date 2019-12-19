@@ -13,6 +13,7 @@ import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './searchFolder/map/map.service';
 import { TrajetService} from './searchFolder/sidebar/trajet';
+import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
 
 
 // import { NavbarModule, WavesModule, ButtonsModule } from 'angular-bootstrap-md'
@@ -83,6 +84,7 @@ import { AdminpayComponent } from './adminFolder/adminpay/adminpay.component';
 import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
 import { UserStatService } from './services/adminServices/userstat.service';
 import { LienInscrComponent } from './singleComponentFolder/lien-inscr/lien-inscr.component';
+import {  ConfirmationDialogComponent } from './searchFolder/validation/confirmation-dialog.component'
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -113,6 +115,7 @@ const appRoutes: Routes = [
   { path: '', component: AccueilComponent },
   { path: '**', component: FourOhFourComponent },
   { path: 'map', canActivate: [DriverService], component: MapComponent },
+  {path: 'validation', canActivate : [ConfirmationDialogService], component: ConfirmationDialogComponent}
 
 
    //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
@@ -168,7 +171,8 @@ const appRoutes: Routes = [
     AdmintableComponent,
     AdminpayComponent,
     InfoCondComponent,
-    LienInscrComponent
+    LienInscrComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -202,7 +206,8 @@ const appRoutes: Routes = [
     ServerconfigService,
     PaypalService,
     UserStatService,
-    TrajetService
+    TrajetService,
+    ConfirmationDialogService
   ],
   bootstrap: [AppComponent]
 })
