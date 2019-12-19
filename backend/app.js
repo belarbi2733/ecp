@@ -267,9 +267,32 @@ app.post('/pref/getPref' , function (req,res) {
 });
 
 app.post('/rating' , function (req,res) {
-  console.log(req.body);
   User.getDataById(req.body.idUser, function(err, result) {
-    console.log(req.body);
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      const userData = result.rows[0];
+      let newNote = 3;
+      let avrRating = userData.avr_rating;
+      let nbrRatings = userData.nbr_ratings;
+
+      let newRating = ((avrRating*nbrRatings)+newNote)/(nbrRatings+1);
+
+      newRating = newRating.toFixed(2);
+      userData.avr_rating = newRating;
+      userData.nbr_ratings = nbrRatings + 1;
+      result.rows[0] = userData ;
+      console.log(result.rows[0]);
+      User.updateUtilisateur(result.rows[0]);
+      res.json(newRating);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
+    }
+  });
+});
+
+app.post('/rating' , function (req,res) {
+  User.getDataById(req.body.idUser, function(err, result) {
     if(err) {
       res.status(400).json(err);
     }
@@ -277,19 +300,31 @@ app.post('/rating' , function (req,res) {
     {
       const userData = result.rows[0];
       console.log(result.rows[0]);
-      let newNote = 3;
+      console.log("test");
+      let newNote = 3; /* Instance new note from mobile app*/
       let avrRating = userData.avr_rating;
-      let nbrratings = userData.nbr_ratings;
+      let nbrRatings = userData.nbr_ratings;
 
-      let newRating = ((avrRating*nbrratings)+newNote)/(nbrratings+1);
+      let newRating = ((avrRating*nbrRatings)+newNote)/(nbrRatings+1);
+      console.log(newRating);
 
-      newRating = newRating.toFixed(2);
-
-      res.json(newRating);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
+      newRating = newRating.toFixed(2); /* Round the result to 2 decimal */
+      userData.avr_rating = newRating;
+      result.rows[0] = userData;
+      console.log(result.rows[0]);
+      /*User.updateUtilisateur(userData, function(err, result) {
+        if(err) {
+          res.status(400).json(err);
+        }
+        else
+        {
+          console.log("user insert");
+        }
+      });*/
+      res.json(newRating);
     }
   });
 });
-
 
 /*-----------------------------9---------------------------------------------------------------------------------- */
 
@@ -397,8 +432,6 @@ app.get('/paypal', function(req,res){
 
       let prixfinal = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
       prixfinal = prixfinal.toFixed(2);
-      console.log(typeof prixfinal);
-      console.log(prixfinal);
      let objJson = {
        "prix": prixfinal
      };
