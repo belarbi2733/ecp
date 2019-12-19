@@ -17,7 +17,8 @@ data_genetique_sac = [] #données pour l'algorithme genetique
 #with open('/Users/Nicolas/PhpstormProjects/ecpfinal/Algo/newjson.json', 'r') as json_data:
   #donneejson = json.load(json_data)
 
-djson = json.loads(sys.argv[1])
+donneejson = json.loads(sys.argv[1])
+print donneejson
 
 # le nombre de colis
 tailleMatriceColis = len(donneejson) - 1
@@ -258,7 +259,7 @@ def travel(adj_mat, src=0):
 
     tailleMTsp=np.shape(adj_mat)[0]
     if tailleMTsp == 0:
-        print ("Impossible: Pas de colis choisis")
+        #print ("Impossible: Pas de colis choisis")
         optimal_tour_src =0
         optimal_length=0
 
@@ -326,9 +327,9 @@ def enregistrement(optimal_tour_src,M_Enregistrement):
         valeur = optimal_tour_src[i]
         dic["colis" + indic] = [M_Enregistrement[3 * valeur], M_Enregistrement[3 * valeur + 1],M_Enregistrement[3 * valeur + 2]]
     # on enregistre l'ordre de parcours des colis dans le dossier test.json
-    with open('./test.json', 'w') as f:
-        json.dump(dic, f, indent=4)
-        print dic
+    #with open('./test.json', 'w') as f:
+        #json.dump(dic, f, indent=4)
+    print dic
 
     return dic
 

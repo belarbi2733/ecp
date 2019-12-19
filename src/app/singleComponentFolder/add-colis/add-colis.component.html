@@ -8,7 +8,7 @@
               </select>
               <input id="date" type="datetime-local" pattern="\d{4}-\d{2}-\d{2} [0-1]?\d:[0-6]\d" />
               <input id="nom" type="text" name="nom" placeholder="Nom du colis" [(ngModel)]="nom" />
-              <input id="volume"type="text" name="volume" placeholder="Volume" [(ngModel)]="volume" />
+              <input id="volume"type="number" name="volume" placeholder="Volume" [(ngModel)]="volume" />
               <small class="warning">insert a date in format yyyy-MM-dd hh:mm</small>
               <input type="submit" value="Submit" disabled="disabled" (click)="save()"/>
           </form>

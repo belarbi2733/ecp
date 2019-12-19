@@ -98,7 +98,7 @@ export class MapComponent implements OnInit {
 
     const jsontour = this.httpclient.get('src/assets/tourne.json');
     // console.log (JSON.stringify(jsontour));
-    //console.log(typeof (parcour[0]));
+    // console.log(typeof (parcour[0]));
 
     const service = this.driverService;
     // Define your product name and version
@@ -325,7 +325,7 @@ export class MapComponent implements OnInit {
         var ite = 1;
         var rou;
         // tomtom.routeOnMapView.clear();
-        if (iter2 > 0){
+        if (iter2 > 0) {
           if (typeof routeOnMapView !== 'undefined' && typeof endparcour !== 'undefined'){
             routeOnMapView.clear();
             endparcour.clear();
