@@ -15,15 +15,14 @@ export class AdminListUtComponent implements OnInit {
     id: null
   };
 
+
   constructor(private adminListUtService: AdminListUtService) {
   }
 
   ngOnInit() {
     this.adminListUtService.getAllUser(this.adminListUtInterface)
       .then((adminListUtInterface: AdminListUtInterface) => {
-        this.adminListUtInterface.nom = adminListUtInterface.nom;
-        this.adminListUtInterface.prenom = adminListUtInterface.prenom;
-        this.adminListUtInterface.id = adminListUtInterface.id;
+        this.adminListUtInterface = adminListUtInterface;
       })
       .catch(() => {
         console.log('Error in getUserDataById');

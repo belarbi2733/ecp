@@ -55,21 +55,6 @@ app.post('/inscription',function (req, res) {
   });
 });
 
-/*-------------------------1------------------------------------------------------------------------------------ */
-
-app.post('/inscriptionLien', function(req,res){
-  User.changeStatusUser(req.body, function(err,result){
-    console.log(req.body);
-    if(err) {
-      console.log("Erreur dans le changement de statut");
-    }
-    else {
-    console.log(result);
-    res.json(result);
-  }
-  });
-});
-
 /*--------------------------2------------------------------------------------------------------------------------- */
 
 
@@ -82,7 +67,7 @@ app.post('/auth/checkPassword', function (req,res) {
       console.log("Erreur in checkPassword");
     } else {
       if(result.rows.length !== 0) { // Check si il y a le mail dans la database
-        if (result.rows[0].password === req.body.password && result.rows[0].statut===1) { //Check si les mots de passes correspondent
+        if (result.rows[0].password === req.body.password) { //Check si les mots de passes correspondent
           res.json(true);
         }
         else {
@@ -127,20 +112,17 @@ app.post('/addColis', function (req, res) {
     if(err) {
       res.status(400).json(err);
       console.log('Erreur add');
-      console.log(err);
     }
     else {
       Colis.getIdColisByIdUser(req.body, function (err2, result2) {
-        //console.log(result2.rows[0]);
+        console.log(result2.rows[0]);
         if(err2) {
           res.status(400).json(err2);
           console.log('Erreur getIdColis');
-          console.log(err2);
         } else {
           Colis.generateTrajet(req.body, result2.rows[0].id, function (err3, result3){  //result.rows[0].id ===> idColis
             if(err3) {
               res.status(400).json(err3);
-              console.log(err3);
               console.log('Erreur generate');
             }
             else {
@@ -294,13 +276,17 @@ app.post('/rating' , function (req,res) {
     }
     else
     {
-      const tmpResult = result.rows[0];
+      const userData = result.rows[0];
       console.log(result.rows[0]);
-      let objJson = {      // Je crée cet objet objJson pour restructurer les variables de result.rows et aussi pour éviter d'envoyer des données sensibles contenu dans result.rows comme le mot de passe
-        "currentRate": tmpResult.note,
-      };
-      //console.log(JSON.stringify(objJson));
-      res.json(objJson);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
+      let newNote = 3;
+      let avrRating = userData.avr_rating;
+      let nbrratings = userData.nbr_ratings;
+
+      let newRating = ((avrRating*nbrratings)+newNote)/(nbrratings+1);
+
+      newRating = newRating.toFixed(2);
+
+      res.json(newRating);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
     }
   });
 });
@@ -336,30 +322,21 @@ app.get('/admin-list-ut', function(req,res) {
       res.status(400).json(err);
     }
     else {
+      let arrayUser = [];
       const tmpResultUser = result.rows[0];
-      console.log(result.rows);
-      /*let objJson = {
-        "nom": tmpResultUser.nom,
-        "prenom": tmpResultUser.prenom,
-        "id": tmpResultUser.id
-      };*/
-
-      res.json(result.rows);
-     // console.log(result.rowCount);
-     /* console.log(result.row);*/
-     /* for(let i=0; i < result.rowCount ; i++)
+      for (let i = 0; i < result.rows.length ; i++ )
       {
-      const tmpResultUser = result.rows[0];
-      //console.log(result.rows[0]);
-      let objJson = {
-        "nom": tmpResultUser.nom,
-        "prenom": tmpResultUser.prenom,
-        "id": tmpResultUser.id
-      };
 
-      }*/
-      //console.log(JSON.stringify(objJson)); // On convert en string pour pouvoir l'afficher
-     /* res.json(objJson);*/
+        arrayUser.push({
+          id: result.rows[i].id,
+          nom : result.rows[i].nom,
+          prenom : result.rows[i].prenom
+        });
+      }
+      console.log(arrayUser);
+      res.json(arrayUser);
+
+
     }
   });
 });
@@ -371,7 +348,9 @@ app.get('/paypal', function(req,res){
    Trajet.calcPrixTraj(function(err,result){
     if(err) {
       console.log("Erreur dans le calcul du prix. Les données de la base de donnée ne sont pas chargées");
-    } else {
+    }
+
+    else {
     }
       let prixCarb = 1.4;
       let consoVoit = 4.5;
@@ -382,53 +361,49 @@ app.get('/paypal', function(req,res){
       /*let distance = 100;*/
      // console.log(result.rows[0]);
       // let distance = new Number (parseInt(result.rows[0],10));
-     if(result.rows.length) {
-       const tmpResultPrix = result.rows[0];
-       let distance = tmpResultPrix.distance;
-       let bookPlaces = tmpResultPrix.book_places;
+     const tmpResultPrix = result.rows[0];
+     let distance = tmpResultPrix.distance;
+     let bookPlaces = tmpResultPrix.book_places;
+/*
+      console.log(distance);
+     console.log(typeof distance);
+*/
 
-       function prixTraj(a, b, c, d) {
-         let e = ((c * b) / 100) * a;
-         console.log('Prix plein : ' + e);
-         return discount(e, d);
+      function prixTraj(a, b, c, d) {
+        let e = ((c * b) / 100) * a;
+        console.log('Prix plein : ' + e);
+        return discount(e,d);
 
-       }
+      }
 
-       console.log('Prix discount : ' + prixTraj(prixCarb, consoVoit, distance, bookPlaces) + " € ");
+     console.log('Prix discount : ' + prixTraj(prixCarb, consoVoit, distance, bookPlaces) + " € ");
 
-       function discount(prix, bookPlaces) {
-         if (bookPlaces === 0) {
-           console.log('Prix : Cest un colis');
-           return prix;
-         }
-         if (bookPlaces === 1) {
-           return prix - ((prix / 100) * 5);
-         }
-         if (bookPlaces === 2) {
-           return prix - ((prix / 100) * 10);
-         }
-         if (bookPlaces === 3) {
-           return prix - ((prix / 100) * 15);
-         }
-         if (bookPlaces === 4) {
-           return prix - ((prix / 100) * 20);
-         } else {
-           console.log("Erreur trop ou pas assez de clients dans le véhicule");
-         }
-       }
+      function discount(prix, bookPlaces) {
+        if (bookPlaces === 1) {
+          return prix - ((prix / 100) * 5);
+        }
+        if (bookPlaces === 2) {
+          return prix - ((prix / 100) * 10);
+        }
+        if (bookPlaces === 3) {
+          return prix - ((prix / 100) * 15);
+        }
+        if (bookPlaces === 4) {
+          return prix - ((prix / 100) * 20);
+        } else {
+          console.log("Erreur trop ou pas assez de clients dans le véhicule");
+        }
 
-       let prixfinal = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
-       prixfinal = prixfinal.toFixed(2);
-       console.log(typeof prixfinal);
-       console.log(prixfinal);
-       let objJson = {
-         "prix": prixfinal
-       };
-       res.json(objJson);
-     }
-     else {
-       res.json(null);
-     }
+      }
+
+      let prixfinal = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
+      prixfinal = prixfinal.toFixed(2);
+      console.log(typeof prixfinal);
+      console.log(prixfinal);
+     let objJson = {
+       "prix": prixfinal
+     };
+     res.json(objJson);
     });
   });
 
@@ -451,19 +426,7 @@ app.get('/paypal', function(req,res){
 /*-----------------------------------11---------------------------------------------------------------------------- */
 /*app.get('/paypal', function(req,res){
   User.getPrice(function(err, result) {
-    if (err) {
-      res.status(400).json(err);
-    } else {
-      console.log(result.rows[1]);
-      const tmpResultprice = result.rows[1];
-      //console.log(result.rows[0]);
-      let objJson = {
-        "prix": tmpResultprice.prix
-      };
-      res.json(objJson);
-    }
-  });
-});*/
+
 
 app.post('/vehicule/update', function(req,res) {
   console.log(req.body);
@@ -481,7 +444,6 @@ app.post('/vehicule/update', function(req,res) {
 app.post('/vehicule/getData' , function (req,res) {
   // console.log(req.body);
   Voiture.getDataVoitureById(req.body.idUser, function(err, result) {
-    // console.log(result);
     // console.log(req.body);
     if(err) {
       res.status(400).json(err);
@@ -493,7 +455,7 @@ app.post('/vehicule/getData' , function (req,res) {
         let objJson = {      // Je crée cet objet objJson pour restructurer les variables de result.rows et aussi pour éviter d'envoyer des données sensibles contenu dans result.rows comme le mot de passe
           "marque": tmpResult.nom_marque,
           "modele": tmpResult.nom_modele,
-          // "sieges": tmpResult.nbre_places,
+          "sieges": tmpResult.nbre_places,
           "volumeCoffre": tmpResult.coffre,
 
         };
@@ -531,21 +493,17 @@ app.post('/vehicule/getData' , function (req,res) {
   });
   });*/
 
-app.get('/adminDashBoard/getNbreUsers', function(req,res) {
+/*app.get('/adminDashBoard/getNbreUsers', function(req,res) {
   console.log('Request');
   User.getAllUser(function (err, result) {
     console.log(result);
     if (err) {
       res.status(400).json(err);
     } else {
-      let objJson = {
-        "nbreUsersStat": result.rows.length
-      };
-      console.log(objJson);
-      res.json(objJson);
+      res.json(result.rows.length);
     }
   });
-});
+});*/
 /*--------------------------------------------------------------------------------------------------------------- */
 
 app.post('/matchDriverTrajet', function(req,res) {
@@ -553,18 +511,20 @@ app.post('/matchDriverTrajet', function(req,res) {
   Voiture.getDataVoitureById(req.body.idUser, function (err, result) {
     if(err) {
       res.status(400).json(err);
-      console.log('Error 1 on Find Trajet');
+      console.log('Error 1');
     } else {
       if(result.rows.length) {
         Trajet.getAllTrajet(function (err2,result2) {
           if(err2) {
             res.status(400).json(err2);
-            console.log('Error 2 on Find Trajet');
+            console.log('Error 2');
           }
           else
           {
             if(result2.rows.length) {
               const search = req.body;
+              let arrayTrajet = {"chauffeur":[result.rows[0].nbre_places-1,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
+              let arrayColis = {"chauffeur":[result.rows[0].coffre,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
 
               let colisJson = {};
               let trajetJson = {};
@@ -781,7 +741,8 @@ app.post('/miniTrajet', function(req,res) {
                       else {
                         if (result4.rows.length) {
 
-                          let dist = distance(req.body.departure[1],req.body.departure[0],one.depart_y,one.depart_x);
+                      let dist = distance(req.body.departure[1],req.body.departure[0],one.depart_y,one.depart_x);
+                      // console.log(dist);
 
                           if(one.id_colis) {
                             //Séquence si c'est un colis
@@ -832,22 +793,6 @@ app.post('/miniTrajet', function(req,res) {
         });
       } else {
         res.json(false);
-        console.log('pas de voiture');
-      }
-    }
-  });
-});
-
-app.post('/setupVoiture', function(req,res){
-  Voiture.getDataVoitureById(req.body.idUser, function (err, result){
-    if(err) {
-      res.status(400).json(err);
-      console.log('Error in getVoiture Setup');
-    } else {
-      if(result.rows.length === 1) {
-        res.json(true);
-      } else {
-        res.json(false);
       }
     }
   });
@@ -880,59 +825,17 @@ app.get('/sendmail/contact', (req, res) => {
         host: "smtp.mailtrap.io",
         port: 2525,
         auth: {
-          user: "ba66617b8bc037",
-          pass: "1f888b1d7df487"
-        }
-    });
-
-    // setup email data with unicode symbols
-    let mailOptions = {
-      from: req.query['mail'], // sender address
-      to: 'farid-f33@live.be', // list of receivers
-      subject: req.query['subject'], // Subject line
-      text: 'Nouvelle demande de contacte reçue :', // plain text body
-      html: output // html body
-    };
-
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }else{
-          console.log('Message sent: %s', info.messageId);
-          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-          res.send(output);
-        }
-
-    });
-});
-
-app.get('/sendmail/inscription', (req, res) => {
-    let mail = req.query['mail'];
-    const output = `
-      <p>Veuillez confirmer votre inscription</p>
-      <h3>Email avec lequel vous vous être inscrit : </h3>
-      <p>Email: ${mail}</p>
-      <h3>Lien pour valider votre inscription : </h3>
-      <a href="https://www.facebook.com/">Lien vers la page de validation</a>
-    `;
-    // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-        //SMTP SERVER INFO
-        host: "smtp.mailtrap.io",
-        port: 2525,
-        auth: {
-          user: "ba66617b8bc037",
-          pass: "1f888b1d7df487"
+          user: "e005c016d0db91",
+          pass: "5e24274bd11a0a"
         }
     });
 
     // setup email data with unicode symbols
     let mailOptions = {
       from: 'farid-f33@live.be', // sender address
-      to: req.query['mail'], // list of receivers
-      subject: 'Lien de validation pour linscription', // Subject line
-      text: 'Lien de validation pour linscription : ', // plain text body
+      to: 'farid-f32@msn.com', // list of receivers
+      subject: req.params.subject, // Subject line
+      text: 'Nouvelle demande de contacte reçue :', // plain text body
       html: output // html body
     };
 

@@ -12,24 +12,35 @@
   </thead>
   <tbody>
 
-
-    <tr>
-      <td>{{adminListUtInterface.id}}</td>
-      <td>{{adminListUtInterface.nom}}</td>
-      <td>{{adminListUtInterface.prenom}}</td>
+    <tr *ngFor="let item of adminListUtInterface">
+    
+      <td>{{item.id}}</td>
+      <td>{{item.nom}}</td>
+      <td>{{item.prenom}}</td>
       <td>
-        <a routerLink="/profile" routerLinkActive="active"><input type="button" value="Voir le profil" /></a>
-        <a routerLink="/messagerie" routerLinkActive="active"><input type="button" value="Ouvrir une messagerie" /></a>
+        <a routerLink="/profile" routerLinkActive="active"><button class="btn">Profil </button></a>
+        <a routerLink="/messagerie" routerLinkActive="active"><button class="btn">Messagerie </button></a>
         <ng-template #popContent>
 
         </ng-template>
-        <button type="button" placement="right"
+        <button class="btn"
                 [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="false">
           Suspendre
         </button>
       </td>
 
     </tr>
+ 
+<!--
+      <ul>
+        <li *ngFor="let id of adminListUtInterface ">{{ adminListUtInterface.id }}</li>
+        <li *ngFor="let name of adminListUtInterface ">{{ adminListUtInterface.nom}}</li>
+        <li *ngFor="let prenom of adminListUtInterface ">{{ adminListUtInterface.prenom}}</li>
+  </ul>-->
+
+ <!-- <ul>
+    <li *ngFor="let test of arrayut">{{ test.name }}</li>
+  </ul>-->
 
   </tbody>
 </table>
