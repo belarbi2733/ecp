@@ -21,7 +21,7 @@ define(['iframeResizerContent','jquery'], function(mockMsgListener,$) {
 
 	$(window.document.body).append('<a href="#foo" id="bar"></a>');
 
-	//test early message is ignored
+	//algoRun early message is ignored
 	mockMsgListener(createMsg('resize'));
 
 	var
@@ -31,7 +31,7 @@ define(['iframeResizerContent','jquery'], function(mockMsgListener,$) {
 		msgObject = createMsg(id+':'+childMsg),
 		win       = mockMsgListener(msgObject);
 
-    //test reset is ignored during init
+    //algoRun reset is ignored during init
 	mockMsgListener(createMsg('reset'));
 
 	window.msgCalled   = null;

@@ -37,7 +37,7 @@ module.exports = function(grunt) {
     clean: ['coverage', 'coverageLcov'],
 
     qunit: {
-      files: ['test/*.html']
+      files: ['algoRun/*.html']
     },
 
     karma: {

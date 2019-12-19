@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8"> 
+		<meta charset="utf-8">
 		<title>iFrame message passing test</title>
 		<meta name="description" content="iFrame message passing test">
 		<style>
@@ -86,7 +86,7 @@
 						}
 
 						function callMethod(methodName,val1,val2){
-							if ('parentIFrame' in window) 
+							if ('parentIFrame' in window)
 									window.parentIFrame[methodName](val1,val2);
 								else
 									warn('window.parentIFrame methods not enabled.')
@@ -116,7 +116,7 @@
 								callMethod('setAutoResize',true);
 								setTimeout(function(){
 									changeContent();
-									},500);	
+									},500);
 								break;
 							case 'size100':
 								callMethod('size',100);
@@ -135,10 +135,10 @@
 								callMethod('sendMessage',document.body.style.backgroundColor);
 								break;
 							case 'chkSendMsg':
-								callMethod('sendMessage','message: test string');
+								callMethod('sendMessage','message: algoRun string');
 								break;
 							case 'chkSendObj':
-								callMethod('sendMessage',{message: 'test object'});
+								callMethod('sendMessage',{message: 'algoRun object'});
 								break;
 							case 'chkGetId':
 								if ('parentIFrame' in window)
