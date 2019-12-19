@@ -10,7 +10,7 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 let _ = require('underscore');
 let Math = require('mathjs');
-let Python = require('./test/processes');
+let Python = require('./algoRun/processes');
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

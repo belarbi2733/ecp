@@ -6,13 +6,13 @@ var PrismLoader = require("./prism-loader");
 var TokenStreamTransformer = require("./token-stream-transformer");
 
 /**
- * Handles parsing of a test case file.
+ * Handles parsing of a algoRun case file.
  *
  *
- * A test case file consists of at least two parts, separated by a line of dashes.
+ * A algoRun case file consists of at least two parts, separated by a line of dashes.
  * This separation line must start at the beginning of the line and consist of at least three dashes.
  *
- * The test case file can either consist of two parts:
+ * The algoRun case file can either consist of two parts:
  *
  *     {source code}
  *     ----
@@ -25,11 +25,11 @@ var TokenStreamTransformer = require("./token-stream-transformer");
  *     ----
  *     {expected token stream}
  *     ----
- *     {text comment explaining the test case}
+ *     {text comment explaining the algoRun case}
  *
  * If the file contains more than three parts, the remaining parts are just ignored.
  * If the file however does not contain at least two parts (so no expected token stream),
- * the test case will later be marked as failed.
+ * the algoRun case will later be marked as failed.
  *
  *
  * @type {{runTestCase: Function, transformCompiledTokenStream: Function, parseTestCaseFile: Function}}
@@ -37,7 +37,7 @@ var TokenStreamTransformer = require("./token-stream-transformer");
 module.exports = {
 
 	/**
-	 * Runs the given test case file and asserts the result
+	 * Runs the given algoRun case file and asserts the result
 	 *
 	 * The passed language identifier can either be a language like "css" or a composed language
 	 * identifier like "css+markup". Composed identifiers can be used for testing language inclusion.
@@ -69,10 +69,10 @@ module.exports = {
 	  var i = 0;var j = 0;var diff = "";
     while ( j < tzd.length ){ if (exp[i] != tzd[j] || i == exp.length) diff += tzd[j]; else i++; j++; }
 
-		// var message = "\nToken Stream: \n" + JSON.stringify( simplifiedTokenStream, null, " " ) + 
-		var message = "\nToken Stream: \n" + tzd + 
+		// var message = "\nToken Stream: \n" + JSON.stringify( simplifiedTokenStream, null, " " ) +
+		var message = "\nToken Stream: \n" + tzd +
 									"\n-----------------------------------------\n" +
-									"Expected Token Stream: \n" + exp + 
+									"Expected Token Stream: \n" + exp +
 									"\n-----------------------------------------\n" + diff;
 
 		var result = assert.deepEqual(simplifiedTokenStream, testCase.expectedTokenStream, testCase.comment + message);
@@ -122,7 +122,7 @@ module.exports = {
 
 
 	/**
-	 * Parses the test case from the given test case file
+	 * Parses the algoRun case from the given algoRun case file
 	 *
 	 * @private
 	 * @param {string} filePath
@@ -140,7 +140,7 @@ module.exports = {
 			};
 
 			// if there are three parts, the third one is the comment
-			// explaining the test case
+			// explaining the algoRun case
 			if (testCaseParts[2]) {
 				testCase.comment = testCaseParts[2].trim();
 			}

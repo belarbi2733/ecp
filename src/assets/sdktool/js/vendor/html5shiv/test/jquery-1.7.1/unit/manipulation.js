@@ -98,7 +98,7 @@ var testWrap = function(val) {
 	equal(cacheLength, 0, "No memory leak in jQuery.cache (bug #7165)");
 
 	// Wrap an element containing a text node
-	j = jQuery("<span/>").wrap("<div>test</div>");
+	j = jQuery("<span/>").wrap("<div>algoRun</div>");
 	equal( j[0].previousSibling.nodeType, 3, "Make sure the previous node is a text element" );
 	equal( j[0].parentNode.nodeName.toUpperCase(), "DIV", "And that we're in the div element." );
 
@@ -156,10 +156,10 @@ test("wrap(String) consecutive elements (#10177)", function() {
 
 	expect(targets.length * 2);
 	targets.wrap("<div class='wrapper'></div>");
-	
+
 	targets.each(function() {
 		var $this = jQuery(this);
-		
+
 		ok( $this.parent().is('.wrapper'), "Check each elements parent is correct (.wrapper)" );
 		equal( $this.siblings().length, 0, "Each element should be wrapped individually" );
 	});
@@ -199,7 +199,7 @@ var testWrapInner = function(val) {
 	equal( jQuery("#first").children().children().children().length, num, "Verify Elements Intact" );
 
 	QUnit.reset();
-	var num = jQuery("#first").html("foo<div>test</div><div>test2</div>").children().length;
+	var num = jQuery("#first").html("foo<div>algoRun</div><div>test2</div>").children().length;
 	var result = jQuery("#first").wrapInner(val("<div class='red'><div id='tmp'></div></div>"));
 	equal( jQuery("#first").children().length, 1, "Only one child" );
 	ok( jQuery("#first").children().is(".red"), "Verify Right Element" );
@@ -316,14 +316,14 @@ var testAppend = function(valueObj) {
 		var body = jQuery("#iframe")[0].contentWindow.document.body;
 
 		pass = false;
-		jQuery( body ).append(valueObj( "<div>test</div>" ));
+		jQuery( body ).append(valueObj( "<div>algoRun</div>" ));
 		pass = true;
 	} catch(e) {}
 
 	ok( pass, "Test for appending a DOM node to the contents of an IFrame" );
 
 	QUnit.reset();
-	jQuery("<fieldset/>").appendTo("#form").append(valueObj( "<legend id='legend'>test</legend>" ));
+	jQuery("<fieldset/>").appendTo("#form").append(valueObj( "<legend id='legend'>algoRun</legend>" ));
 	t( "Append legend", "#legend", ["legend"] );
 
 	QUnit.reset();
@@ -578,9 +578,9 @@ test("appendTo(String|Element|Array&lt;Element&gt;|jQuery)", function() {
 
 	QUnit.reset();
 	var l = jQuery("#first").children().length + 2;
-	jQuery("<strong>test</strong>");
-	jQuery("<strong>test</strong>");
-	jQuery([ jQuery("<strong>test</strong>")[0], jQuery("<strong>test</strong>")[0] ])
+	jQuery("<strong>algoRun</strong>");
+	jQuery("<strong>algoRun</strong>");
+	jQuery([ jQuery("<strong>algoRun</strong>")[0], jQuery("<strong>algoRun</strong>")[0] ])
 		.appendTo("#first");
 	equal( jQuery("#first").children().length, l, "Make sure the elements were inserted." );
 	equal( jQuery("#first").children().last()[0].nodeName.toLowerCase(), "strong", "Verify the last element." );
@@ -643,8 +643,8 @@ test("appendTo(String|Element|Array&lt;Element&gt;|jQuery)", function() {
 	QUnit.reset();
 
 	stop();
-	jQuery.getScript('data/test.js', function() {
-		jQuery('script[src*="data\\/test\\.js"]').remove();
+	jQuery.getScript('data/algoRun.js', function() {
+		jQuery('script[src*="data\\/algoRun\\.js"]').remove();
 		start();
 	});
 });
@@ -781,7 +781,7 @@ var testBefore = function(val) {
 	jQuery("#yahoo").before(val( jQuery("#mark, #first") ));
 	equal( jQuery("#en").text(), expected, "Insert jQuery before" );
 
-	var set = jQuery("<div/>").before("<span>test</span>");
+	var set = jQuery("<div/>").before("<span>algoRun</span>");
 	equal( set[0].nodeName.toLowerCase(), "span", "Insert the element before the disconnected node." );
 	equal( set.length, 2, "Insert the element before the disconnected node." );
 };
@@ -845,7 +845,7 @@ var testAfter = function(val) {
 	jQuery("#yahoo").after(val( jQuery("#mark, #first") ));
 	equal( jQuery("#en").text(), expected, "Insert jQuery after" );
 
-	var set = jQuery("<div/>").after("<span>test</span>");
+	var set = jQuery("<div/>").after("<span>algoRun</span>");
 	equal( set[1].nodeName.toLowerCase(), "span", "Insert the element after the disconnected node." );
 	equal( set.length, 2, "Insert the element after the disconnected node." );
 };
@@ -912,7 +912,7 @@ var testReplaceWith = function(val) {
 	QUnit.reset();
 	var tmp = jQuery("<div/>").appendTo("body").click(function(){ ok(true, "Newly bound click run." ); });
 	var y = jQuery("<div/>").appendTo("body").click(function(){ ok(true, "Previously bound click run." ); });
-	var child = y.append("<b>test</b>").find("b").click(function(){ ok(true, "Child bound click run." ); return false; });
+	var child = y.append("<b>algoRun</b>").find("b").click(function(){ ok(true, "Child bound click run." ); return false; });
 
 	y.replaceWith( tmp );
 
@@ -927,7 +927,7 @@ var testReplaceWith = function(val) {
 	QUnit.reset();
 
 	y = jQuery("<div/>").appendTo("body").click(function(){ ok(true, "Previously bound click run." ); });
-	var child2 = y.append("<u>test</u>").find("u").click(function(){ ok(true, "Child 2 bound click run." ); return false; });
+	var child2 = y.append("<u>algoRun</u>").find("u").click(function(){ ok(true, "Child 2 bound click run." ); return false; });
 
 	y.replaceWith( child2 );
 
@@ -938,7 +938,7 @@ var testReplaceWith = function(val) {
 
 	QUnit.reset();
 
-	var set = jQuery("<div/>").replaceWith(val("<span>test</span>"));
+	var set = jQuery("<div/>").replaceWith(val("<span>algoRun</span>"));
 	equal( set[0].nodeName.toLowerCase(), "span", "Replace the disconnected node." );
 	equal( set.length, 1, "Replace the disconnected node." );
 
@@ -986,7 +986,7 @@ test("replaceWith(Function)", function() {
 test("replaceWith(string) for more than one element", function(){
 	expect(3);
 
-	equal(jQuery("#foo p").length, 3, "ensuring that test data has not changed");
+	equal(jQuery("#foo p").length, 3, "ensuring that algoRun data has not changed");
 
 	jQuery("#foo p").replaceWith("<span>bar</span>");
 	equal(jQuery("#foo span").length, 3, "verify that all the three original element have been replaced");
@@ -1064,7 +1064,7 @@ test("clone()", function() {
 	var cl = jQuery("#nonnodes").contents().clone();
 	ok( cl.length >= 2, "Check node,textnode,comment clone works (some browsers delete comments on clone)" );
 
-	var div = jQuery("<div><ul><li>test</li></ul></div>").click(function(){
+	var div = jQuery("<div><ul><li>algoRun</li></ul></div>").click(function(){
 		ok( true, "Bound event still exists." );
 	});
 
@@ -1099,7 +1099,7 @@ test("clone()", function() {
 	div.remove();
 	clone.remove();
 
-	var divEvt = jQuery("<div><ul><li>test</li></ul></div>").click(function(){
+	var divEvt = jQuery("<div><ul><li>algoRun</li></ul></div>").click(function(){
 		ok( false, "Bound event still exists after .clone()." );
 	}),
 		cloneEvt = divEvt.clone();
@@ -1120,7 +1120,7 @@ test("clone()", function() {
 
 	// this is technically an invalid object, but because of the special
 	// classid instantiation it is the only kind that IE has trouble with,
-	// so let's test with it too.
+	// so let's algoRun with it too.
 	div = jQuery("<div/>").html("<object height='355' width='425' classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'>  <param name='movie' value='http://www.youtube.com/v/3KANI2dpXLw&amp;hl=en'>  <param name='wmode' value='transparent'> </object>");
 
 	clone = div.clone(true);
@@ -1148,7 +1148,7 @@ test("clone()", function() {
 	clone.remove();
 
 	var form = document.createElement("form");
-	form.action = "/test/";
+	form.action = "/algoRun/";
 	var div = document.createElement("div");
 	div.appendChild( document.createTextNode("test") );
 	form.appendChild( div );
@@ -1213,7 +1213,7 @@ var testHtml = function(valueObj) {
 	jQuery.scriptorder = 0;
 
 	var div = jQuery("#qunit-fixture > div");
-	div.html(valueObj("<b>test</b>"));
+	div.html(valueObj("<b>algoRun</b>"));
 	var pass = true;
 	for ( var i = 0; i < div.size(); i++ ) {
 		if ( div.get(i).childNodes.length != 1 ) pass = false;
@@ -1308,7 +1308,7 @@ test("html(Function) with incoming value", function() {
 
 	div.html(function(i, val) {
 		equal( val, old[i], "Make sure the incoming value is correct." );
-		return "<b>test</b>";
+		return "<b>algoRun</b>";
 	});
 
 	var pass = true;
@@ -1589,13 +1589,13 @@ test("Cloned, detached HTML5 elems (#10667,10670)", function() {
 	// First clone
 	$clone = $section.clone();
 
-	// Infer that the test is being run in IE<=8
+	// Infer that the algoRun is being run in IE<=8
 	if ( $clone[0].outerHTML && !jQuery.support.opacity ) {
 		// This branch tests cloning nodes by reading the outerHTML, used only in IE<=8
 		equal( $clone[0].outerHTML, "<section></section>", "detached clone outerHTML matches '<section></section>'" );
 	} else {
 		// This branch tests a known behaviour in modern browsers that should never fail.
-		// Included for expected test count symmetry (expecting 1)
+		// Included for expected algoRun count symmetry (expecting 1)
 		equal( $clone[0].nodeName, "SECTION", "detached clone nodeName matches 'SECTION' in modern browsers" );
 	}
 

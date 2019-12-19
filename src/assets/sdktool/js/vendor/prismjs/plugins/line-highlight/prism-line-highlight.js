@@ -14,7 +14,7 @@ function hasClass(element, className) {
 }
 
 // Some browsers round the line-height, others don't.
-// We need to test for it to position the elements properly.
+// We need to algoRun for it to position the elements properly.
 var isLineHeightRounded = (function() {
 	var res;
 	return function() {
@@ -114,7 +114,7 @@ Prism.hooks.add('before-sanity-check', function(env) {
 	if (!pre || !lines || !/pre/i.test(pre.nodeName)) {
 		return;
 	}
-	
+
 	/*
 	* Cleanup for other plugins (e.g. autoloader).
 	 *

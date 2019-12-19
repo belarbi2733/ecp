@@ -1,4 +1,4 @@
-jQuery.noConflict(); // Allow the test to run with other libs or jQuery's.
+jQuery.noConflict(); // Allow the algoRun to run with other libs or jQuery's.
 
 // jQuery-specific QUnit.reset
 (function() {

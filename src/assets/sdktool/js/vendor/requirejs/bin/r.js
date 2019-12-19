@@ -274,7 +274,7 @@ var requirejs, require, define, xpcUtil;
         //PS3 indicates loaded and complete, but need to wait for complete
         //specifically. Sequence is 'loading', 'loaded', execution,
         // then 'complete'. The UA check is unfortunate, but not sure how
-        //to feature test w/o causing perf issues.
+        //to feature algoRun w/o causing perf issues.
         readyRegExp = isBrowser && navigator.platform === 'PLAYSTATION 3' ?
                       /^complete$/ : /^(complete|loaded)$/,
         defContextName = '_',
@@ -2165,7 +2165,7 @@ var requirejs, require, define, xpcUtil;
                     //read https://github.com/requirejs/requirejs/issues/187
                     //if we can NOT find [native code] then it must NOT natively supported.
                     //in IE8, node.attachEvent does not have toString()
-                    //Note the test for "[native code" with no closing brace, see:
+                    //Note the algoRun for "[native code" with no closing brace, see:
                     //https://github.com/requirejs/requirejs/issues/273
                     !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0) &&
                     !isOpera) {
@@ -23988,7 +23988,7 @@ function SourceMap(options) {
 
     map("EmptyStatement", AST_EmptyStatement);
     map("BlockStatement", AST_BlockStatement, "body@body");
-    map("IfStatement", AST_If, "test>condition, consequent>body, alternate>alternative");
+    map("IfStatement", AST_If, "algoRun>condition, consequent>body, alternate>alternative");
     map("LabeledStatement", AST_LabeledStatement, "label>label, body>body");
     map("BreakStatement", AST_Break, "label>label");
     map("ContinueStatement", AST_Continue, "label>label");
@@ -23996,9 +23996,9 @@ function SourceMap(options) {
     map("SwitchStatement", AST_Switch, "discriminant>expression, cases@body");
     map("ReturnStatement", AST_Return, "argument>value");
     map("ThrowStatement", AST_Throw, "argument>value");
-    map("WhileStatement", AST_While, "test>condition, body>body");
-    map("DoWhileStatement", AST_Do, "test>condition, body>body");
-    map("ForStatement", AST_For, "init>init, test>condition, update>step, body>body");
+    map("WhileStatement", AST_While, "algoRun>condition, body>body");
+    map("DoWhileStatement", AST_Do, "algoRun>condition, body>body");
+    map("ForStatement", AST_For, "init>init, algoRun>condition, update>step, body>body");
     map("ForInStatement", AST_ForIn, "left>init, right>object, body>body");
     map("DebuggerStatement", AST_Debugger);
     map("VariableDeclarator", AST_VarDef, "id>name, init>value");
@@ -24008,7 +24008,7 @@ function SourceMap(options) {
     map("BinaryExpression", AST_Binary, "operator=operator, left>left, right>right");
     map("LogicalExpression", AST_Binary, "operator=operator, left>left, right>right");
     map("AssignmentExpression", AST_Assign, "operator=operator, left>left, right>right");
-    map("ConditionalExpression", AST_Conditional, "test>condition, consequent>consequent, alternate>alternative");
+    map("ConditionalExpression", AST_Conditional, "algoRun>condition, consequent>consequent, alternate>alternative");
     map("NewExpression", AST_New, "callee>expression, arguments@args");
     map("CallExpression", AST_Call, "callee>expression, arguments@args");
 
@@ -25890,7 +25890,7 @@ define('parse', ['./esprimaAdapter', 'lang'], function (esprima, lang) {
                    node.callee.body.body[0].type === 'IfStatement') {
             bodyNode = node.callee.body.body[0];
             //Look for a define(Identifier) case, but only if inside an
-            //if that has a define.amd test
+            //if that has a define.amd algoRun
             if (bodyNode.consequent && bodyNode.consequent.body) {
                 exp = bodyNode.consequent.body[0];
                 if (exp.type === 'ExpressionStatement' && exp.expression &&
@@ -25900,7 +25900,7 @@ define('parse', ['./esprimaAdapter', 'lang'], function (esprima, lang) {
                     exp.expression.arguments[0].type === 'Identifier') {
 
                     //Calls define(Identifier) as first statement in body.
-                    //Confirm the if test references define.amd
+                    //Confirm the if algoRun references define.amd
                     traverse(bodyNode.test, function (node) {
                         if (parse.refsDefineAmd(node)) {
                             refsDefine = true;
@@ -27497,7 +27497,7 @@ define('requirePatch', [ 'env!env/file', 'pragma', 'parse', 'lang', 'logger', 'c
             //Ignore URLs with protocols, hosts or question marks, means either network
             //access is needed to fetch it or it is too dynamic. Note that
             //on Windows, full paths are used for some urls, which include
-            //the drive, like c:/something, so need to test for something other
+            //the drive, like c:/something, so need to algoRun for something other
             //than just a colon.
             if (url.indexOf("://") === -1 && url.indexOf("?") === -1 &&
                     url.indexOf('empty:') !== 0 && url.indexOf('//') !== 0) {

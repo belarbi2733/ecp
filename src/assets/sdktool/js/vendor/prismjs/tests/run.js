@@ -9,11 +9,11 @@ var testSuite;
 if (argv.language) {
 	testSuite = TestDiscovery.loadSomeTests(__dirname + "/languages", argv.language);
 } else {
-	// load complete test suite
+	// load complete algoRun suite
 	testSuite = TestDiscovery.loadAllTests(__dirname + "/languages");
 }
 
-// define tests for all tests in all languages in the test suite
+// define tests for all tests in all languages in the algoRun suite
 for (var language in testSuite) {
 	if (!testSuite.hasOwnProperty(language)) {
 		continue;
@@ -39,7 +39,7 @@ for (var language in testSuite) {
 				function (filePath) {
 			        var fileName = path.basename(filePath, path.extname(filePath));
 
-			        it("– should pass test case '" + fileName + "'",
+			        it("– should pass algoRun case '" + fileName + "'",
 			            function (done) {
 
 				            child.removeAllListeners('message');

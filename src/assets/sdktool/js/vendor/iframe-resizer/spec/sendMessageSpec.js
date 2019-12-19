@@ -20,8 +20,8 @@ define(['iframeResizer'], function(iFrameResize) {
 
 			spyOnIFramePostMessage(iframe1);
 			setTimeout(function(){
-				iframe1.iFrameResizer.sendMessage('chkSendMsg:test');
-				expect(iframe1.contentWindow.postMessage).toHaveBeenCalledWith('[iFrameSizer]message:"chkSendMsg:test"', getTarget(iframe1));
+				iframe1.iFrameResizer.sendMessage('chkSendMsg:algoRun');
+				expect(iframe1.contentWindow.postMessage).toHaveBeenCalledWith('[iFrameSizer]message:"chkSendMsg:algoRun"', getTarget(iframe1));
 				tearDown(iframe1);
 				done();
 			},100);
@@ -32,12 +32,12 @@ define(['iframeResizer'], function(iFrameResize) {
 				log:log,
 				id:'sendMessage2',
 				messageCallback:function(messageData){
-					expect(messageData.message).toBe('test:test');
+					expect(messageData.message).toBe('algoRun:algoRun');
 					done();
 				}
 			})[0];
 
-			mockMsgFromIFrame(iframe,'message:"test:test"');
+			mockMsgFromIFrame(iframe,'message:"algoRun:algoRun"');
 		});
 
 		it('send message and get response', function(done) {
@@ -48,7 +48,7 @@ define(['iframeResizer'], function(iFrameResize) {
 					iframe.iFrameResizer.sendMessage('chkSendMsg');
 				},
 				messageCallback:function(messageData){
-					expect(messageData.message).toBe('message: test string');
+					expect(messageData.message).toBe('message: algoRun string');
 					done();
 				}
 			})[0];
