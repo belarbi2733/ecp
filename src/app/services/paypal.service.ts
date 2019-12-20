@@ -8,7 +8,7 @@ export class PaypalService {
   constructor(private http: HttpClient, private router: Router) {}
   url = 'http://localhost:8081';
 
-  getPricePaypal(data){
+  getPricePaypal(data) {
     return new Promise((resolve, reject) => {
       this.http.get(`${this.url}/paypal`, data)
         .subscribe(

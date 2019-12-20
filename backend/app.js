@@ -184,6 +184,7 @@ app.post('/personalData/getDataUser', function(req,res) {
     // console.log(req.body);
     if(err) {
       res.status(400).json(err);
+      console.log(err);
     }
     else
     {
@@ -211,9 +212,10 @@ app.post('/personalData/update',function (req,res) {
   User.updateUtilisateur(req.body,function (err,result) {
     if(err) {
       res.status(400).json(err);
+      console.log(err);
     }
     else {
-      // console.log(result);
+      console.log(result);
       res.json(result);
     }
   });
@@ -380,65 +382,73 @@ app.get('/admin-list-ut', function(req,res) {
 
 
 app.get('/paypal', function(req,res){
-   Trajet.calcPrixTraj(function(err,result){
-    if(err) {
-      console.log("Erreur dans le calcul du prix. Les données de la base de donnée ne sont pas chargées");
-    }
+   Trajet.calcPrixTraj(function(err,result) {
+     if (err) {
+       console.log("Erreur dans le calcul du prix. Les données de la base de donnée ne sont pas chargées");
+     } else {
+       if (result.rows.length) {
+         let prixCarb = 1.4;
+         let consoVoit = 4.5;
+         //  const tmpResultPrix = result.rows[0];
+         /* let distance = tmpResultPrix.distance;
+          let bookPlaces = tmpResultPrix.book_places;*/
 
-    else {
-    }
-      let prixCarb = 1.4;
-      let consoVoit = 4.5;
-      //  const tmpResultPrix = result.rows[0];
-      /* let distance = tmpResultPrix.distance;
-       let bookPlaces = tmpResultPrix.book_places;*/
+         /*let distance = 100;*/
+         // console.log(result.rows[0]);
+         // let distance = new Number (parseInt(result.rows[0],10));
+         const tmpResultPrix = result.rows[0];
+         let distance = tmpResultPrix.distance;
+         let bookPlaces = tmpResultPrix.book_places;
+         /*
+               console.log(distance);
+              console.log(typeof distance);
+         */
 
-      /*let distance = 100;*/
-     // console.log(result.rows[0]);
-      // let distance = new Number (parseInt(result.rows[0],10));
-     const tmpResultPrix = result.rows[0];
-     let distance = tmpResultPrix.distance;
-     let bookPlaces = tmpResultPrix.book_places;
-/*
-      console.log(distance);
-     console.log(typeof distance);
-*/
+         function prixTraj(a, b, c, d) {
+           let e = ((c * b) / 100) * a;
+           console.log('Prix plein : ' + e);
+           return discount(e,d);
 
-      function prixTraj(a, b, c, d) {
-        let e = ((c * b) / 100) * a;
-        console.log('Prix plein : ' + e);
-        return discount(e,d);
+         }
 
-      }
+         console.log('Prix discount : ' + prixTraj(prixCarb, consoVoit, distance, bookPlaces) + " € ");
 
-     console.log('Prix discount : ' + prixTraj(prixCarb, consoVoit, distance, bookPlaces) + " € ");
+         function discount(prix, bookPlaces) {
+           if(bookPlaces == 0) {
+             return prix;
+           }
+           if (bookPlaces === 1) {
+             return prix - ((prix / 100) * 5);
+           }
+           if (bookPlaces === 2) {
+             return prix - ((prix / 100) * 10);
+           }
+           if (bookPlaces === 3) {
+             return prix - ((prix / 100) * 15);
+           }
+           if (bookPlaces === 4) {
+             return prix - ((prix / 100) * 20);
+           } else {
+             console.log("Erreur trop ou pas assez de clients dans le véhicule");
+           }
 
-      function discount(prix, bookPlaces) {
-        if (bookPlaces === 1) {
-          return prix - ((prix / 100) * 5);
-        }
-        if (bookPlaces === 2) {
-          return prix - ((prix / 100) * 10);
-        }
-        if (bookPlaces === 3) {
-          return prix - ((prix / 100) * 15);
-        }
-        if (bookPlaces === 4) {
-          return prix - ((prix / 100) * 20);
-        } else {
-          console.log("Erreur trop ou pas assez de clients dans le véhicule");
-        }
+         }
 
-      }
+         let prixfinal = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
+         prixfinal = prixfinal.toFixed(2);
+         console.log(typeof prixfinal);
+         console.log(prixfinal);
+         let objJson = {
+           "prix": prixfinal
+         };
+         res.json(objJson);
+       } else {
+          res.json(false);
+       }
+     }
+   });
+});
 
-      let prixfinal = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
-      prixfinal = prixfinal.toFixed(2);
-     let objJson = {
-       "prix": prixfinal
-     };
-     res.json(objJson);
-    });
-  });
 
   /*-----------------------------------11---------------------------------------------------------------------------- */
 
@@ -539,6 +549,11 @@ app.post('/vehicule/getData' , function (req,res) {
 });*/
 /*--------------------------------------------------------------------------------------------------------------- */
 
+/*function setTournee(idVoiture, search) {
+    Tournee.createTournee
+}*/
+
+
 app.post('/matchDriverTrajet', function(req,res) {
   console.log(req.body);
   Voiture.getDataVoitureById(req.body.idUser, function (err, result) {
@@ -557,8 +572,8 @@ app.post('/matchDriverTrajet', function(req,res) {
           {
             if(result2.rows.length) {
               const search = req.body;
-              let arrayTrajet = {"chauffeur":[result.rows[0].nbre_places-1,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
-              let arrayColis = {"chauffeur":[result.rows[0].coffre,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
+              //let arrayTrajet = {"chauffeur":[result.rows[0].nbre_places-1,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
+              //let arrayColis = {"chauffeur":[result.rows[0].coffre,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
 
               let colisJson = {};
               let trajetJson = {};
@@ -699,7 +714,17 @@ app.post('/matchDriverTrajet', function(req,res) {
                       //const objJson = arrayColis + arrayTrajet;
                       console.log('Colis' + JSON.stringify(colisJson));
                       console.log('Trajet' + JSON.stringify(trajetJson));
-                      Python.runPy(colisJson);
+                      Python.runPy(colisJson).then(
+                        Tournee.createTournee(result.rows[0].id, search, function (err5,result5) {
+                          if(err5) {
+                            console.log('err insert tournée' + err5);
+                            res.json(err5);
+                          }
+                          else {
+                            console.log(result5);
+                          }
+                        })
+                      )
                     });
                   });
                 }
@@ -931,3 +956,4 @@ function distance(lat1, lon1, lat2, lon2) {
     return dist;
   }
 }
+
