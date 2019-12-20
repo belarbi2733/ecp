@@ -7,22 +7,20 @@ import { ServerconfigService } from '../serverconfig.service';
 })
 export class MailingService {
 
-constructor(private _httpmail : HttpClient, private url:ServerconfigService) { }
-  sendMessage(subject, mail, content){
-    let mailServiceUrl = this.url.nodeUrl+'/sendmail/contact';
-    let parameters = new HttpParams().set('subject',subject).append('mail', mail).set('content', content);
-    // console.log(subject, mail, content);
-    return this._httpmail.get(mailServiceUrl, {params : parameters, responseType : 'text'});
-    // let callUrl = this.mailServiceUrl+'/${subject}/${mail}/${content}';
-    // return this._httpmail.get(callUrl);
+constructor(private http: HttpClient, private servUrl: ServerconfigService) { }
+
+  url = this.servUrl.nodeUrl;
+
+  sendMessage(subject, mail, content) {
+
+    const parameters = new HttpParams().set('subject', subject).append('mail', mail).set('content', content);
+
+    return this.http.get(`${this.url}/sendmail/contact`, {params : parameters, responseType : 'text'});
   }
 
-  sendMailValid(mail){
-    let mailValidServiceUrl = this.url.nodeUrl+'/sendmail/inscription';
-    let parameters = new HttpParams().set('mail', mail);
-    // console.log(subject, mail, content);
-    return this._httpmail.get(mailValidServiceUrl, {params : parameters, responseType : 'text'});
-    // let callUrl = this.mailServiceUrl+'/${subject}/${mail}/${content}';
-    // return this._httpmail.get(callUrl);
+  sendMailValid(mail) {
+    const parameters = new HttpParams().set('mail', mail);
+
+    return this.http.get(`${this.url}/sendmail/inscription`, {params : parameters, responseType : 'text'});
   }
 }

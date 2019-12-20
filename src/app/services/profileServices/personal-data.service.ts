@@ -10,7 +10,7 @@ export class PersonalDataService {
   url = this.servUrl.nodeUrl;
 
   updatePersonalData(data) {
-    this.http.post(`${this.url}/personalData/update`, data)
+    this.http.post(`${this.url}/profile/personalData/update`, data)
       .subscribe(
         res => {
           console.log(res);
@@ -23,7 +23,7 @@ export class PersonalDataService {
 
   getUserDataById(data) {
     return new Promise((resolve, reject) => {
-      this.http.post(`${this.url}/personalData/getDataUser`, data)
+      this.http.post(`${this.url}/profile/personalData/getDataUser`, data)
         .subscribe(
           res => {
             resolve(res);

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Driver } from './map.interface';
+import { Driver } from '../searchFolder/map/map.interface';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ServerconfigService } from 'src/app/serverconfig.service';
@@ -12,7 +12,7 @@ export class DriverService {
   url = this.servUrl.nodeUrl;
 
   matchDriverTrajetforTournee(data: Driver) {
-    this.http.post(`${this.url}/matchDriverTrajet`, data)
+    this.http.post(`${this.url}/findTrajet/matchDriverTrajet`, data)
       .subscribe(
         res => {
           console.log(res);
@@ -25,7 +25,7 @@ export class DriverService {
   }
 
   findMiniTrajet(data: Driver) {
-    this.http.post(`${this.url}/miniTrajet`, data)
+    this.http.post(`${this.url}/findTrajet/miniTrajet`, data)
       .subscribe(
         res => {
           console.log(res);

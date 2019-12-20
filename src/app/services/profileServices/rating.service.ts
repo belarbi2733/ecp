@@ -10,7 +10,7 @@ export class RatingService {
 
   getRatingById(data) {
     return new Promise((resolve, reject) => {
-      this.http.post(`${this.url}/rating`, data)
+      this.http.post(`${this.url}/profile/rating`, data)
         .subscribe(
           res => {
             resolve(res);

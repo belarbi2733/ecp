@@ -23,7 +23,7 @@ export class VehicleService {
 
   getVehicleDataById(data: DataVehicle) {
     return new Promise((resolve, reject) => {
-      this.http.post(`${this.url}/vehicule/getData`, data)
+      this.http.post(`${this.url}/vehicule/getDataByIdUser`, data)
         .subscribe(
           res => {
             resolve(res);

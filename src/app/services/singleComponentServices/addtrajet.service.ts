@@ -12,7 +12,7 @@ export class AddtrajetService {
 
 
   addtrajet(data: Trajet) {
-    this.http.post(`${this.url}/addtrajet`, data)
+    this.http.post(`${this.url}/trajet/add`, data)
       .subscribe(
         res => {
           // this.router.navigate(['accueil']);
