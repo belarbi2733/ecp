@@ -7,7 +7,7 @@ import { PaypalService } from '../services/paypal.service';
 @Component({
   selector: 'app-paypal',
   templateUrl: './paypal.component.html',
-  styleUrls: ['./paypal.component.css','../app.component.css']
+  styleUrls: ['./paypal.component.css', '../app.component.css']
 })
  export class PaypalComponent implements OnInit {
 
@@ -22,8 +22,8 @@ import { PaypalService } from '../services/paypal.service';
   constructor(private paypalService: PaypalService) {
   }
 
-   ngOnInit(): void {
-     this.paypalService.getPricePaypal(this.paypalInterface)
+   ngOnInit() {
+    this.paypalService.getPricePaypal(this.paypalInterface)
        .then((paypalInterface: PaypalInterface) => {
          this.paypalInterface.prix = paypalInterface.prix;
        })
@@ -31,7 +31,7 @@ import { PaypalService } from '../services/paypal.service';
          console.log('Error');
        });
 
-     this.initConfig();
+    this.initConfig();
    }
 
    private initConfig(): void {
