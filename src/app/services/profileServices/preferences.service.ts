@@ -10,7 +10,7 @@ export class PreferencesService {
 
   updatePref(data) {
     return new Promise((resolve, reject) => {
-      this.http.post(`${this.url}/pref/update`, data)
+      this.http.post(`${this.url}/profile/pref/update`, data)
         .subscribe(
           res => {
             console.log(res);
@@ -26,7 +26,7 @@ export class PreferencesService {
 
   getUserPrefById(data) {
     return new Promise((resolve, reject) => {
-      this.http.post(`${this.url}/pref/getPref`, data)
+      this.http.post(`${this.url}/profile/pref/getPref`, data)
         .subscribe(
           res => {
             resolve(res);

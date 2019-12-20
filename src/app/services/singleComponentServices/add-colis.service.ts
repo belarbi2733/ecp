@@ -10,7 +10,7 @@ export class AddColisService {
   url = this.servUrl.nodeUrl;
 
   addColis(data: DataColis) {
-    this.http.post(`${this.url}/addColis`, data)
+    this.http.post(`${this.url}/colis/add`, data)
       .subscribe(
         res => {
           console.log(res);

@@ -11,16 +11,14 @@ export class UserStatService {
 
   getNbreUsers(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/adminDashBoard/getNbreUsers`, data)
+      this.http.get(`${this.url}/admin/dashBoard/getNbreUsers`, data)
         .subscribe(
           res => {
-            console.log('Marie tes bonne xD');
             console.log(res);
             resolve(res);
           },
           err => {
             console.log('Error occured:' , err);
-            console.log('Marie tes chiante');
             reject();
           }
         );

@@ -11,7 +11,7 @@ import { AuthGuard } from './services/singleComponentServices/auth-guard.service
 import { AdminGuard } from './services/singleComponentServices/admin-guard.service';
 import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/singleComponentServices/auth.service';
-import { DriverService } from './searchFolder/map/map.service';
+import { DriverService } from './services/map.service';
 import { TrajetService} from './searchFolder/sidebar/trajet';
 import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
 

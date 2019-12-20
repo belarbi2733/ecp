@@ -3,8 +3,7 @@ import {Driver} from './map.interface';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {DriverService} from './map.service';
-import { ServerconfigService } from 'src/app/serverconfig.service';
+import {DriverService} from '../../services/map.service';
 import {parcour} from './tourne.json';
 
 let routeOnMapView: any;
@@ -96,7 +95,7 @@ export class MapComponent implements OnInit {
       }
     );*/
 
-    const jsontour = this.httpclient.get('src/assets/tourne.json');
+    // const jsontour = this.httpclient.get('src/assets/tourne.json');
     // console.log (JSON.stringify(jsontour));
     // console.log(typeof (parcour[0]));
 
@@ -268,8 +267,8 @@ export class MapComponent implements OnInit {
         const limit = results.length / 2;
         if (lastVisible >= limit && results.length) {
           const lastResult = results[results.length - 1];
-          const time = arrivalOrDeparture.value === 'depart at' ? lastResult.from : lastResult.to;
-          //requestNextPage(time, data);
+          // const time = arrivalOrDeparture.value === 'depart at' ? lastResult.from : lastResult.to;
+          // requestNextPage(time, data);
         }
         expandVisibleRows(items, firstVisible, lastVisible);
       };
@@ -287,28 +286,28 @@ export class MapComponent implements OnInit {
       }
       batchRequestsLock = 'page';
       if (iter < 2) {
-      try {
+        try {
 
-        batch(timeSeries(date))
-          .then(function(data) {
-            // batchRequestsLock can be changed in the meantime
-            if (batchRequestsLock === 'submit') {
-              // let's jump straight to the end of this chain
-              throw new PagingError();
-            }
-            return data;
-          })
-          .then(prepareData)
-          .then(mergeData(previousData))
-          .then(createItems)
-          .then(updateScrollEvent)
-          .then(updateListElements)
-          //.then(unlockBatchRequests, handleBatchRequestError);
+          batch(timeSeries(date))
+            .then(function(data) {
+              // batchRequestsLock can be changed in the meantime
+              if (batchRequestsLock === 'submit') {
+                // let's jump straight to the end of this chain
+                throw new PagingError();
+              }
+              return data;
+            })
+            .then(prepareData)
+            .then(mergeData(previousData))
+            .then(createItems)
+            .then(updateScrollEvent)
+            .then(updateListElements);
+          // .then(unlockBatchRequests, handleBatchRequestError);
 
-      } catch (err) {
-        handleBatchRequestError(err);
-      }
-    }}
+        } catch (err) {
+          handleBatchRequestError(err);
+        }
+      }}
 
 // Create a new request
     function request(date) {
@@ -319,82 +318,83 @@ export class MapComponent implements OnInit {
       if (batchRequestsLock === 'submit') {
         // we don't care if there's another page downloaded
         return;
-    }
-    batchRequestsLock = 'submit';
-    if (iter < 2) {
-    try {
-    //if (iter = 10){
-        //console.log(dep)
-    var key;
-    var it = 0;
-    var ite = 1;
-    var rou;
-    //tomtom.routeOnMapView.clear();
-    if (iter2 > 0){
-        if (typeof routeOnMapView !== 'undefined' && typeof endparcour !== 'undefined'){
-        routeOnMapView.clear();
-        endparcour.clear();
-    for (key in parcour[0]){
-        it ++ ;
-        //console.log(it);
-        window["Object"+it].clear();
+      }
+      batchRequestsLock = 'submit';
+      if (iter < 2) {
+        try {
+          // if (iter = 10){
+          // console.log(dep)
+          var key;
+          var it = 0;
+          var ite = 1;
+          var rou;
+          // tomtom.routeOnMapView.clear();
+          if (iter2 > 0) {
+            if (typeof routeOnMapView !== 'undefined' && typeof endparcour !== 'undefined'){
+              routeOnMapView.clear();
+              endparcour.clear();
+              for (key in parcour[0]) {
+                it ++ ;
+                // console.log(it);
+                window["Object"+it].clear();
 
-        }}}
+              }}}
 
-        routeOnMapView.addTo(map).draw([{lat: routePoints[0].lat, lng: routePoints[0].lon}, {lat: parcour[0]['colis1'][0], lng: parcour[0]['colis1'][1]}]);
+          routeOnMapView.addTo(map).draw([{lat: routePoints[0].lat, lng: routePoints[0].lon},
+            {lat: parcour[0]['colis1'][0], lng: parcour[0]['colis1'][1]}]);
 
-    let tmp : string;
-    let tmp1 : string;
-    it = 0;
-    for (key in parcour[0]){
-        it ++ ;
-        ite ++;
+          let tmp : string;
+          let tmp1 : string;
+          it = 0;
+          for (key in parcour[0]){
+            it ++ ;
+            ite ++;
 
-        tmp = "colis"+it;
-        tmp1 = "colis"+ite;
-        //console.log (tmp);
-        if (typeof parcour[0][tmp1] !== 'undefined') {
-            // variable is undefined
-
-
-
-        //tmp = ''+ parcour[0][tmp][0]+ ':'+ parcour[0][tmp][1];
-
-        //var lat1 : number;
-        //lat1 = parcour[0][tmp][0];
+            tmp = "colis"+it;
+            tmp1 = "colis"+ite;
+            //console.log (tmp);
+            if (typeof parcour[0][tmp1] !== 'undefined') {
+              // variable is undefined
 
 
-        //console.log (JSON.stringify (parcour[0][tmp][0]));
 
-            window["Object"+it].addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: parcour[0][tmp1][0], lng: parcour[0][tmp1][1]}]);
-        }
-        //rou = tomtom.L.geoJson(tmp).addTo(map);
-    }       ////
+              //tmp = ''+ parcour[0][tmp][0]+ ':'+ parcour[0][tmp][1];
 
-    endparcour.addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: routePoints[1].lat, lng: routePoints[1].lon}]);
+              //var lat1 : number;
+              //lat1 = parcour[0][tmp][0];
+
+
+              //console.log (JSON.stringify (parcour[0][tmp][0]));
+
+              window["Object"+it].addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: parcour[0][tmp1][0], lng: parcour[0][tmp1][1]}]);
+            }
+            //rou = tomtom.L.geoJson(tmp).addTo(map);
+          }       ////
+
+          endparcour.addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: routePoints[1].lat, lng: routePoints[1].lon}]);
 
 //}
 
 
-        ///////////////////////////////////////////////
-        clearList();
-        batch(timeSeries (date))
-          .then(function(data) {
-            // handle the data here
-            // we have this fake handler just for the docs purpose
-            // this is more like a no-op
-            return data;
-          })
-          .then(prepareData)
-          .then(createItems)
-          .then(updateScrollEvent)
-          .then(updateListElements)
-          .then(clickFirstListItem)
-          .then(unlockBatchRequests, handleBatchRequestError);
-      } catch (err) {
-        handleBatchRequestError(err);
-      }
-    }}
+          ///////////////////////////////////////////////
+          clearList();
+          batch(timeSeries (date))
+            .then(function(data) {
+              // handle the data here
+              // we have this fake handler just for the docs purpose
+              // this is more like a no-op
+              return data;
+            })
+            .then(prepareData)
+            .then(createItems)
+            .then(updateScrollEvent)
+            .then(updateListElements)
+            .then(clickFirstListItem)
+            .then(unlockBatchRequests, handleBatchRequestError);
+        } catch (err) {
+          handleBatchRequestError(err);
+        }
+      }}
     function mapTimeToRoutingElement(time) {
       const format = 'yyyy-mm-dd hh:mm';
       const result = {

@@ -10,7 +10,7 @@ export class PaypalService {
 
   getPricePaypal(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/paypal`, data)
+      this.http.get(`${this.url}/paypal/calculPrix`, data)
         .subscribe(
           res => {
             resolve(res);
@@ -23,8 +23,8 @@ export class PaypalService {
     });
   }
 
-  statusPayPass(data: PaypalInterface){
-    this.http.post(`${this.url}/paypalStatus`, data)
+  statusPayPass(data: PaypalInterface) {
+    this.http.post(`${this.url}/paypal/changeStatus`, data)
       .subscribe(
         res => {
           console.log(res);

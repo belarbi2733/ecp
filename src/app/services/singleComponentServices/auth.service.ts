@@ -84,7 +84,7 @@ export class AuthService {
   authentification(data: DataAuth) {
     return new Promise(
       (resolve, reject) => {
-        this.http.post(`${this.url}/auth/checkPassword`, data)
+        this.http.post(`${this.url}/login/checkPassword`, data)
           .subscribe(
             res => {
               console.log('Auth : ' + res);
@@ -108,7 +108,7 @@ export class AuthService {
   getIdForLocalStorage(data: DataAuth) {
     return new Promise((resolve, reject) => {
       console.log('getIdForLocalStorage() : ');
-      this.http.post(`${this.url}/auth/getId`, data).subscribe(
+      this.http.post(`${this.url}/login/getId`, data).subscribe(
         res => {
           resolve(res);
         },

@@ -10,7 +10,7 @@ export class MesTournService {
 
   dispTourn(data) {
     return new Promise((resolve, reject) => {
-     this.http.get(`${this.url}/mes-tourn `, data)
+     this.http.get(`${this.url}/tournee/getTourneeByIdUser `, data)
       .subscribe(
         res => {
           console.log('Test Tourn');

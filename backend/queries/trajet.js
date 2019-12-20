@@ -1,4 +1,4 @@
-let db = require("./db.js");
+let db = require("../db.js");
 let Math = require('mathjs');
 
 let Trajet = {
