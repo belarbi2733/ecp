@@ -2,9 +2,11 @@ let db = require("../db.js");
 
 let Tournee = {
 
-  createTournee: function(idVoiture, search, callback){
-    return db.query('INSERT INTO tournee (id_voiture, statut, depart_x, depart_y, arrivee_x, arrivee_y, duree, distance, heure_depart)',
-      [idVoiture,0,search.departure[0],search.departure[1],search.arrival[0],search.arrival[1],search.time,search.distance,search.departuretime],
+  createTournee: function(idVoiture, search, distance, callback){
+    distance *= 1000; //Conversion km -> m
+    distance = distance.toFixed(0);
+    return db.query('INSERT INTO tournee (id_voiture, statut, depart_x, depart_y, arrivee_x, arrivee_y, distance, heure_depart) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id',
+      [idVoiture,0,search.departure[0],search.departure[1],search.arrival[0],search.arrival[1],distance,search.departuretime],
       callback);
   },
 

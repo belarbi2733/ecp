@@ -42,8 +42,6 @@ router.post('/checkPassword', function (req,res) {
   });
 });
 
-/*--------------------------3------------------------------------------------------------------------------------- */
-
 
 router.post('/getId', function (req,res) {
   console.log('getAuth : ' + req.body.mail);
