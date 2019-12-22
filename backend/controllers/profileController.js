@@ -47,10 +47,11 @@ router.post('/personalData/update',function (req,res) {
 });
 
 router.post('/deleteAccount', function (req,res) {
-  // console.log(req.body);
+  console.log(req.body);
   User.removeUtilisateur(req.body.idUser, function (err,result) {
     if(err) {
       res.status(400).json(err);
+      console.log(err);
     }
     else {
       // console.log(result);
