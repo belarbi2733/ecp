@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpEventType } from '@angular/common/http';
+// import { HttpClient, HttpEventType } from '@angular/common/http';
+
+import { FileUploader } from 'ng2-file-upload';
+import { ToastrService } from 'ngx-toastr';
+import { FormBuilder, FormGroup } from "@angular/forms";
+
+const URL = 'http://localhost:8081/profile/upload';
 
 @Component({
   selector: 'app-photo',
@@ -8,43 +14,63 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
 })
 export class PhotoComponent implements OnInit {
 
-  ngOnInit() {
+  imageURL: string;
+  uploadForm: FormGroup;
+  idUser: number;
+  
+  public uploader: FileUploader = new FileUploader({
+    url: URL,
+    itemAlias: 'image'
+    
+  });
+
+  
+
+  constructor(public fb: FormBuilder, private toastr: ToastrService ) {
+    this.idUser = JSON.parse(localStorage.getItem('idUser')).id;
+    this.uploader.onBuildItemForm = (item, form) => {
+      form.append("id", this.idUser);
+    };
+    
+    // Reactive Form
+    this.uploadForm = this.fb.group({
+      avatar: [null],
+      name: [''],
+      id: [1]
+    })
+
   }
 
-  fileData: File = null;
-  previewUrl:any = null;
-  fileUploadProgress: string = null;
-  uploadedFilePath: string = null;
-  constructor(private http: HttpClient) { }
-  
-  fileProgress(fileInput: any) {
-        this.fileData = <File>fileInput.target.files[0];
-        this.preview();
+  ngOnInit() {
+    this.uploader.onAfterAddingFile = (file) => {
+      file.withCredentials = false;
+    };
+    this.uploader.onCompleteItem = (item: any, status: any) => {
+      console.log('Uploaded File Details:', item);
+      this.toastr.success('File successfully uploaded!');
+    };
+
+    
+
   }
-  
-  preview() {
-      // Show preview 
-      var mimeType = this.fileData.type;
-      if (mimeType.match(/image\/*/) == null) {
-        return;
-      }
-  
-      var reader = new FileReader();      
-      reader.readAsDataURL(this.fileData); 
-      reader.onload = (_event) => { 
-        this.previewUrl = reader.result; 
-      }
+
+  // Image Preview
+  showPreview(event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.uploadForm.patchValue({
+      avatar: file
+    });
+    this.uploadForm.get('avatar').updateValueAndValidity()
+
+    // File Preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imageURL = reader.result as string;
+    }
+    reader.readAsDataURL(file)
   }
-  
-  // onSubmit() {
-  //   const formData = new FormData();
-  //   formData.append('file', this.fileData);
-  //   this.http.post('url/to/your/api', formData)
-  //     .subscribe(res => {
-  //       console.log(res);
-  //       this.uploadedFilePath = res.data.filePath;
-  //       alert('SUCCESS !!');
-  //     })
-  // }
+
+
+
 
 }

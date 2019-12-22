@@ -125,4 +125,97 @@ router.post('/rating' , function (req,res) {
 });
 
 
+//////////////////////////////////////////     13 file upload profile pic   /////////////////////////////////////////////////////
+// const express = require('express'), // deja déclaré plus haut
+path = require('path'),
+cors = require('cors'), // deja déclaré
+multer = require('multer'),
+bodyParser = require('body-parser');
+
+// File upload settings  
+const PATH = './uploads';
+var path = require('path')
+let storage = multer.diskStorage({
+destination: (req, file, cb) => {
+  cb(null, PATH);
+},
+filename: (req, file, cb) => {
+
+  cb(null,Date.now() + path.extname(file.originalname) )
+  
+}
+
+});
+
+let upload = multer({
+storage: storage
+});
+
+
+
+// Express settings
+// const app = express(); // deja déclaré plus haut
+router.use(cors());
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({
+extended: false
+}));
+
+router.get('/', function (req, res) {
+res.end('File catcher');
+});
+
+// POST File
+router.post('/upload', upload.single('image'), function (req, res) {
+if (!req.file) {
+  console.log("No file is available!");
+  return res.send({
+    success: false
+  });
+
+} else {
+  console.log('File is available!');
+  let pathPhoto=req.file.filename;
+  let idUser= req.body.id;
+  console.log("idUser  ");
+  console.log(idUser);
+  // User.addPhoto(req.body.idUser, pathPhoto, function(err,result){
+    User.addPhoto(pathPhoto, idUser, function(err,result){
+    // console.log(req.body);
+    if(err) {
+      res.status(400).json(err);
+    }
+    else
+    {
+      return res.send({
+        success: true
+      })
+    }
+  })
+  
+}
+
+});
+
+// Create PORT, deja fait à la fin du fichier
+// const PORT = process.env.PORT || 8080;
+// const server = app.listen(PORT, () => {
+//   console.log('Connected to port ' + PORT)
+// })
+
+// Find 404 and hand over to error handler
+router.use((req, res, next) => {
+next(createError(404));
+});
+
+// error handler
+router.use(function (err, req, res, next) {
+console.error(err.message);
+if (!err.statusCode) err.statusCode = 500;
+res.status(err.statusCode).send(err.message);
+});
+//////////////////////////////////////fin du code file upload////////////////////////////////////////////////////////////
+
+
+
 module.exports = router;

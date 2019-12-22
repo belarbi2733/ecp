@@ -71,7 +71,15 @@ let Utilisateur = {
     updateRating: function(updateRating, callback){
     console.log("add new rating");
    /* return db.query('INSERT INTO utilisateur  WHERE id = $2 VALUES avr_rating = ($1)' , [utilisateur.body.avr_rating, utilisateur.body.id], callback);*/
-  }
+  },
+
+    addPhoto: function(pathPhoto,idUser, callback)
+    {
+      console.log("Insert photo en cours..." + idUser);
+      db.query('UPDATE utilisateur SET photo = $1 WHERE id = $2',
+      [pathPhoto,idUser],
+      callback);
+    }
 };
 
 

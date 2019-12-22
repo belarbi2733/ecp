@@ -44,3 +44,29 @@ npm install bootstrap@4.1.1 --save
 npm install --save @ng-bootstrap/ng-bootstrap   => add import {NgbModule} from '@ng-bootstrap/ng-bootstrap'; to app.module.ts
 
 
+
+### statut trajet
+
+0 créé 
+1 fait partie d'une tournée
+2 validé
+3 demande de remboursement 
+4 payé
+5 remboursé 
+
+
+### statut tournée
+
+0 
+1
+2 
+3 
+4 
+5  
+
+### statut user
+
+0 suspendu
+1 activé
+2 admin
+
