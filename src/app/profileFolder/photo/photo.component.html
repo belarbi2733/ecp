@@ -1,20 +1,26 @@
 <div class="col-md-6 offset-md-2">
-    <h3>Choose File</h3>            
-    <div class="form-group">
-        <input type="file" name="image" (change)="fileProgress($event)" />
-    </div>
-    <div *ngIf="fileUploadProgress">
-        Upload progress: {{ fileUploadProgress }}
-    </div>
-    <div class="image-preview mb-3" *ngIf="previewUrl">
-        <img [src]="previewUrl" height="300" />                 
+
+    <div class="wrapper">
+        <h2>Choisissez une photo de profil</h2>
+        
+        <div class="file-upload">
+            <input type="file" name="image" accept="image/*" ng2FileSelect [uploader]="uploader" (change)="showPreview($event)" />
+
+                <div class="imagePreview" *ngIf="imageURL && imageURL !== ''">
+                    <img [src]="imageURL" [alt]="uploadForm.value.name">
+                </div>
+
+                <div>
+                    <button type="button" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                        valider la photo de profil
+                    </button>
+                </div>
+            
+        </div>
+       
     </div>
 
-    <div class="mb-3" *ngIf="uploadedFilePath">
-        {{uploadedFilePath}}
-    </div>
-        
-    <div class="form-group">
-        <button class="btn"  (click)="onSubmit()">Valider</button>
-    </div>
+
+
+    
 </div>

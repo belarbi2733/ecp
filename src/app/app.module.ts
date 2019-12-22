@@ -16,6 +16,13 @@ import { TrajetService} from './searchFolder/sidebar/trajet';
 import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
 
 
+
+// modules for file upload ( profile pic )
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { FileSelectDirective } from 'ng2-file-upload';
+import { ReactiveFormsModule } from '@angular/forms';
+
 // import { NavbarModule, WavesModule, ButtonsModule } from 'angular-bootstrap-md'
 
 // components
@@ -172,7 +179,8 @@ const appRoutes: Routes = [
     AdminpayComponent,
     InfoCondComponent,
     LienInscrComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    FileSelectDirective
   ],
   imports: [
     BrowserModule,
@@ -181,7 +189,10 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes, { enableTracing: true }),
     ChartsModule,
     HttpClientModule,
-    NgxPayPalModule
+    NgxPayPalModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot(), // ToastrModule added
+    ReactiveFormsModule
   ],
   providers: [
     AccueilService,

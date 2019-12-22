@@ -115,6 +115,7 @@ Profile Controller    url : /profile
   - post /pref/update
   - post /pref/getPref
   - post /rating
+  - post /upload
  */
 app.use('/profile', ProfileController);
 
@@ -146,11 +147,12 @@ app.use('/paypal', PaypalController);
 
 
 
-module.exports = app;
-port = 8081;
-app.listen(port, ()=>{
-    console.log("Server started, listening to "+ port + " port");
-});
 
 
+
+// Create PORT, deja fait à la fin du fichier
+const PORT = process.env.PORT || 8081;
+const server = app.listen(PORT, () => {
+console.log('Connected to port ' + PORT)
+})
 
