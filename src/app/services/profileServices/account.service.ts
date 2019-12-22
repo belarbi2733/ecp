@@ -9,7 +9,7 @@ export class AccountService {
 
   url = this.servUrl.nodeUrl;
   deleteAccount(data) {
-    this.http.post(`${this.url}/deleteAccount`, data)
+    this.http.post(`${this.url}/profile/deleteAccount`, data)
       .subscribe(
         res => {
           console.log(res);

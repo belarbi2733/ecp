@@ -3,8 +3,7 @@ let Python = {
   runPy : function(data)
   {
     return new Promise((resolve, reject) => {
-      resolve('CC');  // resolve temporaire
-      const directory = './algoRun/algo_opti.py';
+      const directory = './algoRun/algo_passager.py';
       const child = spawn('python', [directory, `${JSON.stringify(data)}`]);
       child.on('exit', (code) => {
         console.log('child process exited with' +
@@ -19,11 +18,14 @@ let Python = {
         console.log(`childstdout: \t ${data}`)
       });
       child.stdout.on('data', (data) => {
-        console.log(`response is : ${data}`);
+        //console.log('Output Python : ');
+        console.log(`${data}`);
+        resolve(`${data}`);
       });
 
       child.stderr.on('data', (data) => {
         console.log(`childstdout: \t ${data}`)
+        reject(`${data}`);
       });
     });
   }

@@ -6,9 +6,11 @@ let Voiture = require('../queries/voiture');
 let Colis = require('../queries/colis');
 let Trajet = require('../queries/trajet');
 let Tournee = require('../queries/tournee');
+let Itineraire = require('../queries/itineraire');
 let Math = require('mathjs');
 let _ = require('underscore');
 let Python = require('../algoRun/processes');
+
 
 
 
@@ -93,9 +95,12 @@ router.post('/matchDriverTrajet', function(req,res) {
                   console.log(err3);
                   return -1;
                 } else {
+
+                  let iter = 0;
                   _.each(result2.rows, function (one) { // bibliothèque underscore _     //Pour chaque trajet, check
 
                     Trajet.findTrajetAroundRayon(req.body, one, 10, function (err4, result4) {  //req.body => search
+                      iter++;
                       if (err4) {
                         res.status(400).json(err4);
                         console.log('Error 4 on Find Trajet');
@@ -111,7 +116,7 @@ router.post('/matchDriverTrajet', function(req,res) {
                             jsonKeyColis = 'colis' + i;
 
                             colisJson[jsonKeyColis] = [
-                              one.id_colis,
+                              one.id,
                               dist,
                               result3.rows[one.id_colis-1].volume,  // On va chercher le volume de l'id_colis correspondant
                               one.prix,
@@ -138,7 +143,7 @@ router.post('/matchDriverTrajet', function(req,res) {
                           } else {
                             //Séquence si c'est un trajet
 
-                            jsonKeyTrajet = 'trajet' + j;
+                            jsonKeyTrajet = 'passager' + j;
 
                             trajetJson[jsonKeyTrajet] = [
                               one.id,
@@ -172,22 +177,16 @@ router.post('/matchDriverTrajet', function(req,res) {
                       //console.log('Colis' + JSON.stringify(arrayColis));
                       //console.log('Trajet' + JSON.stringify(arrayTrajet));
                       //const objJson = arrayColis + arrayTrajet;
-                      console.log('Colis' + JSON.stringify(colisJson));
-                      console.log('Trajet' + JSON.stringify(trajetJson));
-                      Python.runPy(colisJson)
-                        .then(()=> {
-                          /*Tournee.createTournee(result.rows[0].id, search, function (err5,result5) {
-                            if(err5) {
-                              console.log('err insert tournée' + err5);
-                              res.json(err5);
-                            }
-                            else {
-                              console.log(result5);
-                            }
-                          });*/
-                          console.log('Création de la tournée');
-                        }
-                      )
+
+                      //Quand le dernier trajet a été traité on enregistre la tournée, on ajoute l'id_tournée dans les trajets et on crée l'itinéraire
+                      if(iter === result2.rows.length) {
+                        console.log('END forLoop : Trajet iter : ' + iter + ' id : ' + one.id);
+                        setTournee(result.rows[0].id, trajetJson, search, function(data){
+                          console.log(data);
+                        });
+                      } else {
+                        console.log('Trajet iter : ' + iter + ' id : ' + one.id);
+                      }
                     });
                   });
                 }
@@ -342,8 +341,74 @@ function distance(lat1, lon1, lat2, lon2) {
   }
 }
 
-/*function setTournee(idVoiture, search) {
-    Tournee.createTournee
-}*/
+
+
+//function setTournee(idVoiture, colisJson, infosSearch, listTrajet, callback) {  // Si colis au lieu de trajet
+function setTournee(idVoiture, trajetJson, infosSearch, callback) {
+  //console.log('Colis' + JSON.stringify(colisJson));
+  console.log('Trajet' + JSON.stringify(trajetJson));
+  Python.runPy(trajetJson)
+    .then((data)=> {
+
+      // console.log('Output Python in node : ' + data);
+      const outputStr = data.replace(/'/g,'"');
+      const outputJson = JSON.parse(outputStr);
+      console.log('Output Python JSON in node : ' + JSON.stringify(data));
+
+
+      Tournee.createTournee(idVoiture, infosSearch, outputJson['tournee'][0], function (err,result) {  // outputJson['tournee'][0] => distance de la tournée
+        if(err) {
+          console.log(err);
+        }
+        else {
+          const idTournee = result.rows[0].id;
+          const nbrePassager = Object.keys(outputJson).length-1;  //Taille du json -1
+
+          Itineraire.addTrajetItineraire(idTournee, null, 1, infosSearch.departure, function (err2, result2) {
+            if (err2) {
+              console.log(err2);
+            } else {
+              //console.log(result2);
+              for (let i = 2; i < nbrePassager; i++) {
+                console.log('iter : '+ i);
+                let idTrajet = outputJson['passager' + i][0];
+                const point = [outputJson['passager' + i][2], outputJson['passager' + i][1]];  // indice 2 => longitude indice 1 => latitude
+
+                Itineraire.addTrajetItineraire(idTournee, idTrajet, i, point, function (err3, result3) {
+                  if (err3) {
+                    console.log(err3);
+                  } else {
+                    //console.log(result3);
+                    Trajet.addTrajetInTournee(idTournee, idTrajet, function (err4, result4) {
+                      if (err4) {
+                        console.log(err4);
+                      } else {
+                        //console.log(result4);
+                      }
+                    });
+                  }
+                });
+
+                if(i == nbrePassager - 2) {
+                  //Ajout du point d'arrivée de la tournée/itinéraire lors du dernier passage dans la boucle
+                  Itineraire.addTrajetItineraire(idTournee, null, nbrePassager, infosSearch.arrival, function (err4, result4) {
+                    if (err4) {
+                      console.log(err4);
+                    } else {
+                      //console.log(result4);
+                    }
+                  });
+                }
+              }
+            }
+          });
+        }
+      });
+
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+}
 
 module.exports = router;

@@ -6,15 +6,15 @@ let Trajet = {
   addTrajet: function(trajet, callback)
   {
     console.log("Insert trajet en cours...");
-    db.query('INSERT INTO trajet (id_user, departure_time, distance, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
+    return db.query('INSERT INTO trajet (id_user, departure_time, distance, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
       [trajet.idUser, trajet.departuretime, trajet.distanceinmeters, trajet.departureAddress, trajet.arrivalAddress, trajet.departure[0], trajet.departure[1], trajet.arrival[0], trajet.arrival[1],0, trajet.places], callback);
   },
 
-  // updateTrajet: function(Trajet, callback)
-  // {
-  //   console.log("Update trajet en cours...");
-  //   db.query('UPDATE trajet SET nom = $1,prenom = $2,telephone = $3, sexe = $4, date_naiss = $5, descr = $6',callback);
-  // },
+  addTrajetInTournee: function(idTournee, idTrajet, callback)
+  {
+    console.log("Update trajet en cours...");
+    return db.query('UPDATE trajet SET id_tournee = $1, statut = $2 WHERE id = $3',[idTournee,1,idTrajet], callback);
+  },
 
   getAllTrajet: function(callback){
     return db.query('SELECT * FROM trajet', callback);
