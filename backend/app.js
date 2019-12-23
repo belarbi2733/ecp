@@ -1,6 +1,5 @@
 let express = require('express');
 let app = express();
-let bodyParser = require('body-parser');
 let LoginController = require('./controllers/loginController');
 let ColisController = require('./controllers/colisController');
 let TrajetController = require('./controllers/trajetController');

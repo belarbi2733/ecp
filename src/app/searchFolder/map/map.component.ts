@@ -685,8 +685,15 @@ export class MapComponent implements OnInit {
           // console.log(JSON.stringify(record.geometry));
 
           recordDriver(driver);
-          service.matchDriverTrajetforTournee(driver);
-          //service.findMiniTrajet(driver);
+          service.matchDriverTrajetforTournee(driver)
+            .then((outputJson) => {
+            console.log(JSON.stringify(outputJson));
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+
+          // service.findMiniTrajet(driver);
 
           // comme ça ne stocke que pour le temps demander
         }

@@ -182,7 +182,8 @@ router.post('/matchDriverTrajet', function(req,res) {
                       if(iter === result2.rows.length) {
                         console.log('END forLoop : Trajet iter : ' + iter + ' id : ' + one.id);
                         setTournee(result.rows[0].id, trajetJson, search, function(data){
-                          console.log(data);
+                          console.log('Res JSON : ' + JSON.stringify(data));
+                          res.json(data);
                         });
                       } else {
                         console.log('Trajet iter : ' + iter + ' id : ' + one.id);
@@ -356,7 +357,7 @@ function setTournee(idVoiture, trajetJson, infosSearch, callback) {
       console.log('Output Python JSON in node : ' + JSON.stringify(data));
 
 
-      Tournee.createTournee(idVoiture, infosSearch, outputJson['tournee'][0], function (err,result) {  // outputJson['tournee'][0] => distance de la tournée
+      Tournee.createTournee(idVoiture, infosSearch, outputJson['parcours'][0], function (err,result) {  // outputJson['tournee'][0] => distance de la tournée
         if(err) {
           console.log(err);
         }
@@ -371,6 +372,9 @@ function setTournee(idVoiture, trajetJson, infosSearch, callback) {
               //console.log(result2);
               for (let i = 2; i < nbrePassager; i++) {
                 console.log('iter : '+ i);
+
+                // const idDriver = outputJson['parcours'][0];
+                // console.log(idDriver);
                 let idTrajet = outputJson['passager' + i][0];
                 const point = [outputJson['passager' + i][2], outputJson['passager' + i][1]];  // indice 2 => longitude indice 1 => latitude
 
@@ -396,6 +400,7 @@ function setTournee(idVoiture, trajetJson, infosSearch, callback) {
                       console.log(err4);
                     } else {
                       //console.log(result4);
+                      callback(outputJson);
                     }
                   });
                 }
