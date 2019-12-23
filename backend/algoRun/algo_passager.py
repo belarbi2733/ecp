@@ -348,7 +348,7 @@ def travel(adj_mat, src=0):
 def enregistrement(optimal_tour_src,M_Enregistrement,dist):
     taille_tsp = len(optimal_tour_src)
     dic = {}
-    dic["tournee"] = [dist]
+    dic["parcours"] = [inputData[0][2],dist]
     for i in range(0, taille_tsp - 1):
       indic = str(i + 1)
       valeur = optimal_tour_src[i]

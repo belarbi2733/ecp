@@ -12,16 +12,20 @@ export class DriverService {
   url = this.servUrl.nodeUrl;
 
   matchDriverTrajetforTournee(data: Driver) {
-    this.http.post(`${this.url}/findTrajet/matchDriverTrajet`, data)
-      .subscribe(
-        res => {
-          console.log(res);
-          // this.router.navigate(['accueil']);
-        },
-        err => {
-          console.log('Error occured:' , err);
-        }
-      );
+    return new Promise((resolve, reject) => {
+      this.http.post(`${this.url}/findTrajet/matchDriverTrajet`, data)
+        .subscribe(
+          res => {
+            console.log(res);
+            resolve(res);
+            // this.router.navigate(['accueil']);
+          },
+          err => {
+            reject(err);
+            console.log('Error occured:' , err);
+          }
+        );
+    });
   }
 
   findMiniTrajet(data: Driver) {
