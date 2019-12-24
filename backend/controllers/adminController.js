@@ -9,7 +9,8 @@ let Trajet = require('../queries/trajet');
 router.get('/list-traj', function(req,res){
   Trajet.getTrajetById(function(err,result){
     if(err) {
-      console.log("Erreur dans getTrajetById");
+      // console.log("Erreur dans getTrajetById");
+      console.error(err);
     }
 
     else {
@@ -36,6 +37,7 @@ router.get('/list-ut', function(req,res) {
   User.getAllUser(function(err, result) {
     if(err) {
       res.status(400).json(err);
+      console.error(err);
     }
     else {
       let arrayUser = [];
@@ -67,6 +69,7 @@ router.get('/list-ut', function(req,res) {
     console.log(req.body);
     if(err) {
       res.status(400).json(err);
+      console.error(err);
     }
     else
     {
@@ -91,6 +94,7 @@ router.get('/list-ut', function(req,res) {
     console.log(result);
     if (err) {
       res.status(400).json(err);
+      console.error(err);
     } else {
       res.json(result.rows.length);
     }

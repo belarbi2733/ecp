@@ -26,12 +26,10 @@
   <!-- <label for="userTel">Numéro de téléphone : {{ userTel }}</label> -->
   <input type="tel" class="form-control" id="phone" aria-describedby="phone" name="phone" pattern="[0]{1}[0-9]{3} [0-9]{6}" placeholder="Téléphone (exemple : 0492 123456)" [(ngModel)]="personalInfos.tel" required>
   <!-- <small class="form-text text-muted">Format: 0123456789</small> -->
-  <br>
-  <br>
 
 
   <!-- <label for="userDate">Date de naissance : {{ userDate }}</label> -->
-  <input type="date" class="form-control" id="date" aria-describedby="date" placeholder="Date de naissance" [(ngModel)]="personalInfos.date_naiss">
+  <input type="date" class="form-control" id="date" aria-describedby="date" placeholder="Date de naissance (exemple : 2001-01-31)" [(ngModel)]="personalInfos.date_naiss">
 
   <textarea id = "colisDescription" placeholder="Une description de vous-même (facultatif)" rows=2 [(ngModel)]="personalInfos.description" class ="form-control"></textarea>
 

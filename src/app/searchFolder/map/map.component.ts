@@ -687,7 +687,7 @@ export class MapComponent implements OnInit {
           recordDriver(driver);
           service.matchDriverTrajetforTournee(driver)
             .then((outputJson) => {
-            console.log(JSON.stringify(outputJson));
+              console.log(JSON.stringify(outputJson));
             })
             .catch((err) => {
               console.error(err);

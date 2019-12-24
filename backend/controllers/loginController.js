@@ -8,7 +8,7 @@ router.post('/inscription', function (req, res) {
   User.addUtilisateur(req,function(err,rows){
     if(err) {
       res.status(400).json(err);
-      console.log(err);
+      console.error(err);
     }
     else
     {
@@ -22,8 +22,7 @@ router.post('/checkPassword', function (req,res) {
     // console.log(req.body);
     if (err) {
       res.status(400).json(err);
-      console.log("Erreur in checkPassword");
-      console.log(err);
+      console.error(err);
     } else {
       if(result.rows.length !== 0) { // Check si il y a le mail dans la database
         if (result.rows[0].password === req.body.password) { //Check si les mots de passes correspondent
@@ -48,8 +47,7 @@ router.post('/getId', function (req,res) {
   User.getIdUtilisateurByMail(req.body.mail, function (err, result) {
     if(err) {
       res.status(400).json(err);
-      console.log("Erreur in getId");
-      console.log(err);
+      console.error(err);
     }
     else {
       if(result.rows.length !== 0) {

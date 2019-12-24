@@ -8,6 +8,7 @@ router.get('/calculPrix', function(req,res){
   Trajet.calcPrixTraj(function(err,result) {
     if (err) {
       console.log("Erreur dans le calcul du prix. Les données de la base de donnée ne sont pas chargées");
+      console.error(err);
     } else {
       if (result.rows.length) {
         let prixCarb = 1.4;
@@ -74,9 +75,10 @@ router.get('/calculPrix', function(req,res){
 
 router.post('/changeStatus', function(req,res){
   Trajet.changeStatusTraj(req.body, function(err,result){
-    console.log(req.body);
+    // console.log(req.body);
     if(err) {
       console.log("Erreur dans le changement de statut");
+      console.error(err);
     }
     else {
       console.log(result);
