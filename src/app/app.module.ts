@@ -14,7 +14,7 @@ import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './services/map.service';
 import { TrajetService} from './searchFolder/sidebar/trajet';
 import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
-
+import {MesColisService} from './services/profileServices/mes-colis.service';
 
 
 // modules for file upload ( profile pic )
@@ -218,7 +218,8 @@ const appRoutes: Routes = [
     PaypalService,
     UserStatService,
     TrajetService,
-    ConfirmationDialogService
+    ConfirmationDialogService,
+    MesColisService
   ],
   bootstrap: [AppComponent]
 })

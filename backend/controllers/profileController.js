@@ -1,3 +1,5 @@
+
+let Colis = require('../queries/colis');
 let express = require('express');
 let router = express.Router();
 let bodyParser = require('body-parser');
@@ -132,6 +134,34 @@ router.post('/rating' , function (req,res) {
       });*/
 
       res.json(Rating);
+    }
+  });
+});
+
+router.post('/mes-colis', function(req,res) {
+  Colis.getDataColisByIdUser(req.body.idUser, function(err, result) {
+    if(err) {
+      res.status(400).json(err);
+      console.error(err);
+    }
+    else {
+      let arrayUser = [];
+      for (let i = 0; i < result.rows.length ; i++ )
+      {
+
+        arrayUser.push({
+          id: result.rows[i].id,
+          nomColis : result.rows[i].nom_colis,
+          poids : result.rows[i].poids,
+          volume : result.rows[i].volume,
+          descr : result.rows[i].descr,
+          prix : result.rows[i].prix
+        });
+      }
+      console.log(arrayUser);
+      res.json(arrayUser);
+
+
     }
   });
 });
