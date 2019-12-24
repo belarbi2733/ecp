@@ -9,11 +9,11 @@ let Trajet = require('../queries/trajet');
 
 router.post('/add' , function (req, res) {
   Trajet.addTrajet(req.body,function(err,result){
-    console.log(req.body);
-    console.log(result);
+    // console.log(req.body);
+    // console.log(result);
     if(err) {
       res.status(400).json(err);
-      console.log(err);
+      console.error(err);
     }
     else
     {
