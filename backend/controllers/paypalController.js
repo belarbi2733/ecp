@@ -1,6 +1,7 @@
 let express = require('express');
 let router = express.Router();
 let bodyParser = require('body-parser');
+let Colis = require('../queries/colis');
 router.use(bodyParser.json());
 let Trajet = require('../queries/trajet');
 
@@ -39,7 +40,7 @@ router.get('/calculPrix', function(req,res){
 
         function discount(prix, bookPlaces) {
           if(bookPlaces == 0) {
-            return prix;
+            Colis.updatePrixColis(prix);
           }
           if (bookPlaces === 1) {
             return prix - ((prix / 100) * 5);
