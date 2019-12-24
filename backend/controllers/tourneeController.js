@@ -10,6 +10,7 @@ let Tournee = require('../queries/tournee');
     console.log(req.body);
     if(err) {
       res.status(400).json(err);
+      console.error(err);
     }
 
     else

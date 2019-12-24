@@ -21,14 +21,15 @@ router.post('/matchDriverTrajet', function(req,res) {
   Voiture.getDataVoitureById(req.body.idUser, function (err, result) {
     if(err) {
       res.status(400).json(err);
-      console.log('Error 1');
-      console.log(err);
+      // console.log('Error 1');
+      console.error(err);
     } else {
       if(result.rows.length) {
         Trajet.getAllTrajet(function (err2,result2) {
           if(err2) {
             res.status(400).json(err2);
-            console.log('Error 2');
+            console.error(err2);
+            // console.log('Error 2');
           }
           else
           {
@@ -91,8 +92,8 @@ router.post('/matchDriverTrajet', function(req,res) {
               Colis.getAllColis(function (err3, result3) {
                 if (err3) {
                   res.status(400).json(err3);
-                  console.log('Error 3 on Mini Trajet');
-                  console.log(err3);
+                  //console.log('Error 3');
+                  console.error(err3);
                   return -1;
                 } else {
 
@@ -103,8 +104,8 @@ router.post('/matchDriverTrajet', function(req,res) {
                       iter++;
                       if (err4) {
                         res.status(400).json(err4);
-                        console.log('Error 4 on Find Trajet');
-                        console.log(err4);
+                        //console.log('Error 4');
+                        console.error(err4);
                         return -1;
                       } else {
                         if (result4.rows.length) {
@@ -127,19 +128,6 @@ router.post('/matchDriverTrajet', function(req,res) {
                             ];
                             i++;
 
-                            /*arrayColis.push({
-                              idColis: one.id_colis,
-                              distance: dist,
-                              volume: result3.rows[one.id_colis-1].volume,  // On va chercher le volume de l'id_colis correspondant
-                              prix: one.prix,
-                              latDepart: one.depart_y,
-                              longDepart: one.depart_x,
-                              latArrivee: one.arrivee_y,
-                              longArrivee: one.arrivee_x
-                            });*/
-                            //console.log(JSON.stringify(arrayColis));
-                            //console.log('Colis : ' + one.id_colis + ' id : ' + one.id);
-
                           } else {
                             //Séquence si c'est un trajet
 
@@ -157,26 +145,11 @@ router.post('/matchDriverTrajet', function(req,res) {
                               0
                             ];
                             j++;
-
-                            /*arrayTrajet.push({
-                              idTrajet: one.id,
-                              distance: dist,
-                              volume: 1,
-                              prix: one.prix,
-                              latDepart: one.depart_y,
-                              longDepart: one.depart_x,
-                              latArrivee: one.arrivee_y,
-                              longArrivee: one.arrivee_x,
-                              volumeBagage: 0
-                            });*/
-                            // console.log(JSON.stringify(arrayTrajet));
-                            //console.log('Trajet : ' + one.id);
                           }
                         }
                       }
-                      //console.log('Colis' + JSON.stringify(arrayColis));
-                      //console.log('Trajet' + JSON.stringify(arrayTrajet));
-                      //const objJson = arrayColis + arrayTrajet;
+                      //console.log('Colis' + JSON.stringify(colisJson));
+                      //console.log('Trajet' + JSON.stringify(trajetJson));
 
                       //Quand le dernier trajet a été traité on enregistre la tournée, on ajoute l'id_tournée dans les trajets et on crée l'itinéraire
                       if(iter === result2.rows.length) {
@@ -359,7 +332,8 @@ function setTournee(idVoiture, trajetJson, infosSearch, callback) {
 
       Tournee.createTournee(idVoiture, infosSearch, outputJson['parcours'][0], function (err,result) {  // outputJson['tournee'][0] => distance de la tournée
         if(err) {
-          console.log(err);
+          res.status(400).json(err);
+          console.error(err);
         }
         else {
           const idTournee = result.rows[0].id;
@@ -367,7 +341,8 @@ function setTournee(idVoiture, trajetJson, infosSearch, callback) {
 
           Itineraire.addTrajetItineraire(idTournee, null, 1, infosSearch.departure, function (err2, result2) {
             if (err2) {
-              console.log(err2);
+              res.status(400).json(err2);
+              console.error(err2);
             } else {
               //console.log(result2);
               for (let i = 2; i < nbrePassager; i++) {
@@ -380,12 +355,16 @@ function setTournee(idVoiture, trajetJson, infosSearch, callback) {
 
                 Itineraire.addTrajetItineraire(idTournee, idTrajet, i, point, function (err3, result3) {
                   if (err3) {
-                    console.log(err3);
+                    res.status(400).json(err3);
+                    console.error(err3);
+                    return -1;
                   } else {
                     //console.log(result3);
                     Trajet.addTrajetInTournee(idTournee, idTrajet, function (err4, result4) {
                       if (err4) {
-                        console.log(err4);
+                        res.status(400).json(err4);
+                        console.error(err4);
+                        return -1;
                       } else {
                         //console.log(result4);
                       }
@@ -395,11 +374,13 @@ function setTournee(idVoiture, trajetJson, infosSearch, callback) {
 
                 if(i == nbrePassager - 2) {
                   //Ajout du point d'arrivée de la tournée/itinéraire lors du dernier passage dans la boucle
-                  Itineraire.addTrajetItineraire(idTournee, null, nbrePassager, infosSearch.arrival, function (err4, result4) {
-                    if (err4) {
-                      console.log(err4);
+                  Itineraire.addTrajetItineraire(idTournee, null, nbrePassager, infosSearch.arrival, function (err5, result5) {
+                    if (err5) {
+                      res.status(400).json(err5);
+                      console.error(err5);
+                      return -1;
                     } else {
-                      //console.log(result4);
+                      //console.log(result5);
                       callback(outputJson);
                     }
                   });
@@ -412,7 +393,7 @@ function setTournee(idVoiture, trajetJson, infosSearch, callback) {
 
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     })
 }
 
