@@ -6,10 +6,11 @@ let Voiture = require('../queries/voiture');
 
 
 router.post('/update', function(req,res) {
-  console.log(req.body);
+  // console.log(req.body);
   Voiture.addVoiture(req.body,function(err,result) {
     if(err) {
       res.status(400).json(err);
+      onsole.error(err);
     }
     else {
       console.log(result);
@@ -24,6 +25,7 @@ router.post('/getDataByIdUser' , function (req,res) {
     // console.log(req.body);
     if(err) {
       res.status(400).json(err);
+      console.error(err);
     }
     else
     {
