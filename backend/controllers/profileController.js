@@ -110,7 +110,7 @@ router.post('/rating' , function (req,res) {
 
       let newRating = ((avrRating*nbrRatings)+newNote)/(nbrRatings+1);
 
-      newRating = newRating.toFixed(2); /* Round the result to 2 decimal */
+      newRating = newRating.toFixed(1); /* Round the result to 2 decimal */
       userData.avr_rating = newRating;
       userData.nbr_ratings = nbrRatings + 1;
       console.log(result.rows[0]);
@@ -133,7 +133,7 @@ cors = require('cors'), // deja déclaré
 multer = require('multer'),
 bodyParser = require('body-parser');
 
-// File upload settings  
+// File upload settings
 const PATH = './uploads';
 var path = require('path')
 let storage = multer.diskStorage({
@@ -143,7 +143,7 @@ destination: (req, file, cb) => {
 filename: (req, file, cb) => {
 
   cb(null,Date.now() + path.extname(file.originalname) )
-  
+
 }
 
 });
@@ -193,7 +193,7 @@ if (!req.file) {
       })
     }
   })
-  
+
 }
 
 });
