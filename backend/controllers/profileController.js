@@ -104,23 +104,23 @@ router.post('/rating' , function (req,res) {
     else
     {
       let userData = result.rows[0];
-      let newNote = 2.5; /* Instance new note from mobile app*/
-      let avrRating = userData.avr_rating;
-      let nbrRatings = userData.nbr_ratings;
-
-      let newRating = ((avrRating*nbrRatings)+newNote)/(nbrRatings+1);
-
-      newRating = newRating.toFixed(1); /* Round the result to 2 decimal */
+      /*let newNote = 2.5; */
+      let Rating = userData.avr_rating;
+      /*let nbrRatings = userData.nbr_ratings;*/
+    /*  let newRating = ((avrRating*nbrRatings)+newNote)/(nbrRatings+1);*/
+     /* newRating = newRating.toFixed(1); /!* Round the result to 2 decimal *!/
       userData.avr_rating = newRating;
-      userData.nbr_ratings = nbrRatings + 1;
+      userData.nbr_ratings = nbrRatings + 1;*/
       console.log(result.rows[0]);
-      User.updateUtilisateur(userData, function(err2, result2) {
+      /*User.updateUtilisateur(userData, function(err2, result2) {
         if(err2) {
           res.status(400).json(err2);
         } else {
-          res.json(newRating);  // on peut renvoyer userData aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
+          res.json(newRating);
         }
-      });
+      });*/
+
+      res.json(Rating);
     }
   });
 });

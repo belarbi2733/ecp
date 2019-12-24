@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {DispListTraj} from '../../adminFolder/admin-list-traj/admin-list-traj.interface';
+import {AdminListTrajInterface} from '../../adminFolder/admin-list-traj/admin-list-traj.interface';
 import {MesTournService} from '../../services/mestourn.service';
 import {PaypalInterface} from '../../paypal/paypal.interface';
 import {PaypalService} from '../../services/paypal.service';
@@ -11,8 +11,8 @@ import {PaypalService} from '../../services/paypal.service';
 })
 export class MesTournComponent implements OnInit {
 
-  mesTournInfos: DispListTraj = {
-    idUser: null,
+  mesTournInfos: AdminListTrajInterface = {
+    id: null,
     depart: '',
     arrivee: '',
     nbrePlaces: null
@@ -28,8 +28,8 @@ export class MesTournComponent implements OnInit {
 
   ngOnInit() {
     this.mesTournService.dispTourn(this.mesTournInfos)
-      .then((dataTraj: DispListTraj) => {
-        this.mesTournInfos.idUser = dataTraj.idUser;
+      .then((dataTraj: AdminListTrajInterface) => {
+        this.mesTournInfos.id = dataTraj.id;
         this.mesTournInfos.depart = dataTraj.depart;
         this.mesTournInfos.arrivee = dataTraj.arrivee;
         this.mesTournInfos.nbrePlaces = dataTraj.nbrePlaces;
