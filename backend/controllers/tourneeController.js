@@ -5,9 +5,7 @@ router.use(bodyParser.json());
 let Tournee = require('../queries/tournee');
 
 
-//On ajoute un colis, puis on va recup son id qui a été incrémenter pour pouvoir générer le trajet découlant de ce colis
-
-router.post('/getTourneeByIdUser', function(req,res) {
+/*router.post('/getTourneeByIdUser', function(req,res) {
   Tournee.getDataTournee(1, function(err, result){
     console.log(req.body);
     if(err) {
@@ -26,7 +24,7 @@ router.post('/getTourneeByIdUser', function(req,res) {
       res.json(objJson);
     }
   });
-});
+});*/
 
 
 
