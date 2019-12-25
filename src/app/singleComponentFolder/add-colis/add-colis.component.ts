@@ -23,9 +23,9 @@ let dataColis: DataColis = {
   arrivalAddress: ''
 };
 
-let iter = 0;
+let iter;
 // var iteration = 0;
-const routecolis = []  ; // stocke les informations sur le trajet conducteur
+let routecolis = []  ; // stocke les informations sur le trajet conducteur
 function recordcolis(data: DataColis) {
 
   data.nom = routecolis[0].nom;
@@ -127,6 +127,8 @@ export class AddColisComponent implements OnInit {
       if (!event.points[0] || !event.points[1]) {
         routePoints = null;
       } else {
+        iter = 0;
+        routecolis = []  ;
         routePoints = event.points;
         tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
             .go(function(response) {
@@ -296,7 +298,7 @@ export class AddColisComponent implements OnInit {
       const minutes = 15;
       const timesPerHour = 60 / minutes;
       const hours = 6;
-      const numberOfResults = timesPerHour * hours;
+      const numberOfResults = 0;
       return Array.apply(null, Array(numberOfResults))
         .reduce(function(accumulator) {
           const i = accumulator.length - 1;
