@@ -6,27 +6,16 @@ import { Injectable } from '@angular/core';
 import {DriverService} from '../../services/map.service';
 import {parcour} from './tourne.json';
 
-let routeOnMapView: any;
-let endparcour: any;
+
 declare let L;
 declare let tomtom: any;
 declare let document: any;
 let dep: string;
 let arr: string;
-const driverinfo = [];
-let iter2 = 0;
-let iter: number;
+let driverinfo = [];
 
-let iterons = 0 ;
-let cle;
-for (cle in parcour[0]) {
-  iterons ++ ;
-  window['Object' + iterons] = new tomtom.routeOnMap({
-    serviceOptions: {
-      traffic: false
-    }
-  });
-}
+let iter;
+
 
 let driver: Driver = {
   idUser: null,
@@ -88,17 +77,6 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
 
-    /*this.driverService.setupVoiture(driver).then(
-      (statutVoiture: boolean) => {
-        this.statutVoiture = statutVoiture;
-        console.log(this.statutVoiture);
-      }
-    );*/
-
-    // const jsontour = this.httpclient.get('src/assets/tourne.json');
-    // console.log (JSON.stringify(jsontour));
-    // console.log(typeof (parcour[0]));
-
     const service = this.driverService;
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
@@ -107,18 +85,6 @@ export class MapComponent implements OnInit {
     tomtom.routingKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
     tomtom.searchKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
 
-    routeOnMapView = new tomtom.routeOnMap({
-      serviceOptions: {
-        bindPopups,
-        traffic: false
-      }
-    });
-    endparcour = new tomtom.routeOnMap({
-      serviceOptions: {
-        bindPopups,
-        traffic: false
-      }
-    });
 
     const formOptions = {
       closeOnMapClick: false,
@@ -183,8 +149,9 @@ export class MapComponent implements OnInit {
       if (!event.points[0] || !event.points[1]) {
         routePoints = null;
       } else {
-        iter2 ++;
+        
         iter = 0;
+        driverinfo = [];
         routePoints = event.points;
         tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
           .go(function(response) {
@@ -285,7 +252,7 @@ export class MapComponent implements OnInit {
         return;
       }
       batchRequestsLock = 'page';
-      if (iter < 2) {
+      
         try {
 
           batch(timeSeries(date))
@@ -307,7 +274,7 @@ export class MapComponent implements OnInit {
         } catch (err) {
           handleBatchRequestError(err);
         }
-      }}
+      }
 
 // Create a new request
     function request(date) {
@@ -320,62 +287,8 @@ export class MapComponent implements OnInit {
         return;
       }
       batchRequestsLock = 'submit';
-      if (iter < 2) {
+      //if (iter < 2) {
         try {
-          // if (iter = 10){
-          // console.log(dep)
-          var key;
-          var it = 0;
-          var ite = 1;
-          var rou;
-          // tomtom.routeOnMapView.clear();
-          if (iter2 > 0) {
-            if (typeof routeOnMapView !== 'undefined' && typeof endparcour !== 'undefined'){
-              routeOnMapView.clear();
-              endparcour.clear();
-              for (key in parcour[0]) {
-                it ++ ;
-                // console.log(it);
-                window["Object"+it].clear();
-
-              }}}
-
-          routeOnMapView.addTo(map).draw([{lat: routePoints[0].lat, lng: routePoints[0].lon},
-            {lat: parcour[0]['colis1'][0], lng: parcour[0]['colis1'][1]}]);
-
-          let tmp : string;
-          let tmp1 : string;
-          it = 0;
-          for (key in parcour[0]){
-            it ++ ;
-            ite ++;
-
-            tmp = "colis"+it;
-            tmp1 = "colis"+ite;
-            //console.log (tmp);
-            if (typeof parcour[0][tmp1] !== 'undefined') {
-              // variable is undefined
-
-
-
-              //tmp = ''+ parcour[0][tmp][0]+ ':'+ parcour[0][tmp][1];
-
-              //var lat1 : number;
-              //lat1 = parcour[0][tmp][0];
-
-
-              //console.log (JSON.stringify (parcour[0][tmp][0]));
-
-              window["Object"+it].addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: parcour[0][tmp1][0], lng: parcour[0][tmp1][1]}]);
-            }
-            //rou = tomtom.L.geoJson(tmp).addTo(map);
-          }       ////
-
-          endparcour.addTo(map).draw([{lat: parcour[0][tmp][0], lng: parcour[0][tmp][1]}, {lat: routePoints[1].lat, lng: routePoints[1].lon}]);
-
-//}
-
-
           ///////////////////////////////////////////////
           clearList();
           batch(timeSeries (date))
@@ -394,7 +307,7 @@ export class MapComponent implements OnInit {
         } catch (err) {
           handleBatchRequestError(err);
         }
-      }}
+      }//}
     function mapTimeToRoutingElement(time) {
       const format = 'yyyy-mm-dd hh:mm';
       const result = {
@@ -666,9 +579,10 @@ export class MapComponent implements OnInit {
           geometry: feature.geometry
         };
       }).map(function(record) {
-        iter = iter + 1;
-        if (iter < 2) {
-
+        
+        console.log(iter)
+        if (iter < 1) {
+          console.log(iter)
           driverinfo.push( {departuretime : record.summary.departureTime,
             traveltimeinseconds : record.summary.travelTimeInSeconds,
             distanceinmeters : record.summary.lengthInMeters,
@@ -687,14 +601,38 @@ export class MapComponent implements OnInit {
           recordDriver(driver);
           service.matchDriverTrajetforTournee(driver)
             .then((outputJson) => {
-              console.log(JSON.stringify(outputJson));
+              console.log(JSON.stringify(Object.keys(outputJson).length));
+              let idDriver = outputJson['parcours'][0];
+              //console.log(idDriver);
+              var cle = 0;
+              
+                for (var it = 1; it < 20; it++){
+                  if (typeof window['Route'+it] !== 'undefined') {
+                    window['Route'+it].clear();
+                    delete window['Route'+it];
+                    console.log(it);
+                  }
+                }
+              for (var i = 1; i < Object.keys(outputJson).length - 1; i++){
+              
+              
+                window['Route' + i] = new tomtom.routeOnMap({
+                  serviceOptions: {
+                    traffic: false
+                }})
+                
+                window["Route"+i].addTo(map).draw([{lat: outputJson['passager' + i][1], lng: outputJson['passager' + i][2]}, {lat: outputJson['passager' + (i+1)][1], lng: outputJson['passager' + (i+1)][2]}]);
+              }
+            
+              //let idTrajet = outputJson['passager' + i][0];
+              //const point = [outputJson['passager' + i][2], outputJson['passager' + i][1]];  // indice 2 => longitude indice 1 => latitude
             })
             .catch((err) => {
               console.error(err);
             });
 
           // service.findMiniTrajet(driver);
-
+          iter ++;
           // comme ça ne stocke que pour le temps demander
         }
 
