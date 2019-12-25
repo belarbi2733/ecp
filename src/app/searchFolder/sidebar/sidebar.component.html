@@ -1,14 +1,35 @@
-
+ <div class="container-fluid">
+  <div class="row" style="height:100vh">
+    <div class="col-2">
 <br>
-<div id="altContainer" class="list-group">
-<div class="list-grou-item">
-  <a href="#" class="list-group-item list-group-item-action active"> Alternatives disponibles</a>
-  <a *ngFor="let alt of alternative" href="#" class="list-group-item">{{alt.name}}
-    <br>
-    Distance : {{alt.distance}} km
-    <br></a>
-    
+  <div id="altContainer" class="list-group">
+    <div class="list-grou-item">
+
+  
+      <a href="#" class="list-group-item list-group-item-action active"> Création de la tournée</a>
+      <div *ngIf="alternative; else elseBlock">
+        <a *ngFor="let alt of alternative" href="#" class="list-group-item">{{alt.name}}
+        <br>
+        Distance : {{alt.distance}} km
+        <br></a>
+        <button (click)="openConfirmationDialog()" type="button" class="btn btn-primary">Confirmer Tournee</button>
+      </div>
+      <ng-template #elseBlock>
+        <a href="#" class="list-group-item">Pour créer une tournée
+        <br>
+        Veuillez d'abord Submit
+        <br></a>
+      </ng-template>
  
+    </div>
+  </div>
 </div>
-<button (click)="openConfirmationDialog()" type="button" class="btn btn-primary">Confirmer Tournee</button>
+
+<div class="col-10 bg-light">
+  <app-map (messageToEmit)="getMessage($event)"></app-map> 
+
+
+
+    </div>
+  </div>
 </div>

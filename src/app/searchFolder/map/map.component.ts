@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import {Driver} from './map.interface';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -16,7 +16,7 @@ let driverinfo = [];
 
 let iter;
 
-
+var messageToEmit : any;
 let driver: Driver = {
   idUser: null,
   nbrePlaces: null,
@@ -60,6 +60,9 @@ function recordDriver(data: Driver) {
 @Injectable()
 export class MapComponent implements OnInit {
 
+  @Output() messageToEmit = new EventEmitter<Object>();
+
+
   nbrePlaces = null;
   detour = null;
   statutVoiture = false;
@@ -73,10 +76,11 @@ export class MapComponent implements OnInit {
     // console.log(this.nom);
     // console.log(this.volume);
     driverinfo.push({nbrePlaces : this.nbrePlaces, detourMax: this.detour});
+    
   }
 
   ngOnInit() {
-
+    var what = this.messageToEmit;
     const service = this.driverService;
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
@@ -604,6 +608,7 @@ export class MapComponent implements OnInit {
               console.log(JSON.stringify(Object.keys(outputJson).length));
               let idDriver = outputJson['parcours'][0];
               //console.log(idDriver);
+              what.emit(outputJson);
               var cle = 0;
               
                 for (var it = 1; it < 20; it++){
@@ -622,6 +627,8 @@ export class MapComponent implements OnInit {
                 }})
                 
                 window["Route"+i].addTo(map).draw([{lat: outputJson['passager' + i][1], lng: outputJson['passager' + i][2]}, {lat: outputJson['passager' + (i+1)][1], lng: outputJson['passager' + (i+1)][2]}]);
+                
+                console.log (window["Route"+i]);
               }
             
               //let idTrajet = outputJson['passager' + i][0];
