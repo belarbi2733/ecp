@@ -5,6 +5,7 @@ let router = express.Router();
 let bodyParser = require('body-parser');
 router.use(bodyParser.json());
 let User = require('../queries/user');
+let Trajet = require('../queries/trajet');
 
 router.post('/personalData/getDataUser', function(req,res) {
   User.getDataById(req.body.idUser, function(err, result) {
@@ -165,6 +166,33 @@ router.post('/mes-colis', function(req,res) {
     }
   });
 });
+
+router.post('/mes-traj', function(req,res) {
+  Trajet.getDataTrajByIdUser(req.body.idUser, function(err, result) {
+    if(err) {
+      res.status(400).json(err);
+      console.error(err);
+    }
+    else {
+      let arrayUser = [];
+      for (let i = 0; i < result.rows.length ; i++ )
+      {
+
+        arrayUser.push({
+          idUser: result.rows[i].id_User,
+          heureDepart: result.rows[i].departure_time,
+          lieuArrivee: result.rows[i].depart_address,
+          lieuDepart: result.rows[i].arrivee_address,
+          prix : result.rows[i].prix,
+          status : result.rows[i].statut
+        });
+      }
+      console.log(arrayUser);
+      res.json(arrayUser);
+    }
+  });
+});
+
 
 
 //////////////////////////////////////////     13 file upload profile pic   /////////////////////////////////////////////////////

@@ -39,6 +39,11 @@ let Trajet = {
     return db.query('SELECT book_places, distance FROM trajet', callback);
   },
 
+  getDataTrajByIdUser: function(id, callback)
+  {
+    console.log('getDataTrajByIdUSer : ' + id );
+    return db.query('SELECT * FROM trajet WHERE id_user = $1', [id], callback);
+  },
 
   changeStatusTraj: function(trajet, callback)
   {
