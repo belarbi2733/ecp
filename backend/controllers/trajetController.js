@@ -18,6 +18,7 @@ router.post('/add' , function (req, res) {
     else
     {
       res.json(result);
+      
     }
   });
 });

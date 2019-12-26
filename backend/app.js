@@ -7,10 +7,9 @@ let FindController = require('./controllers/findTrajetController');
 let PaypalController = require('./controllers/paypalController');
 let TourneeController = require('./controllers/tourneeController');
 let AdminController = require('./controllers/adminController');
-let NodeMailerController = require('./controllers/nodeMailerController');
 let ProfileController = require('./controllers/profileController');
 let VoitureController = require('./controllers/voitureController');
-
+let ValidationController = require ('./controllers/nodeMailerController')
 // !!!!!!!!!! Il faut mettre votre mdp de votre database dans db.js sinon ca fonctionne pas
 
 app.use(function(req, res, next) {
@@ -127,7 +126,7 @@ NodeMailer Controller    url : /nodemailer
 
   - get /sendmail/contact
  */
-app.use('/nodeMailer', NodeMailerController);
+app.use('/validation', ValidationController);
 
 
 
