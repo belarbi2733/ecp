@@ -13,11 +13,14 @@ import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './services/map.service';
 import { ValidationService} from './searchFolder/sidebar/validation.service';
-import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
-import {MesColisService} from './services/profileServices/mes-colis.service';
+//import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
+//import {MesColisService} from './services/profileServices/mes-colis.service';
 import { ValidationTrajetService} from './validationtrajet/validationtrajet.service';
 
-
+//import { TrajetService} from './searchFolder/sidebar/trajet';
+import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service';
+import {MesColisService} from './services/profileServices/mes-colis.service';
+import {MesTrajService} from './services/profileServices/mes-traj.service';
 // modules for file upload ( profile pic )
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -224,7 +227,9 @@ const appRoutes: Routes = [
     ValidationService,
     ConfirmationDialogService,
     MesColisService,
-    ValidationTrajetService
+    ValidationTrajetService,
+    MesTrajService
+
   ],
   bootstrap: [AppComponent]
 })

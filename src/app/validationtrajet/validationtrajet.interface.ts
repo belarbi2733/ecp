@@ -1,3 +1,3 @@
 export interface ValidationTrajet {
-  idTrajet: BigInteger ;
+  idTrajet: number ;
 }
