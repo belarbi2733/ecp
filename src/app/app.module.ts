@@ -13,9 +13,9 @@ import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './services/map.service';
 import { TrajetService} from './searchFolder/sidebar/trajet';
-import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
+import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service';
 import {MesColisService} from './services/profileServices/mes-colis.service';
-
+import {MesTrajService} from './services/profileServices/mes-traj.service';
 
 // modules for file upload ( profile pic )
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -91,7 +91,7 @@ import { AdminpayComponent } from './adminFolder/adminpay/adminpay.component';
 import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
 import { UserStatService } from './services/adminServices/userstat.service';
 import { LienInscrComponent } from './singleComponentFolder/lien-inscr/lien-inscr.component';
-import {  ConfirmationDialogComponent } from './searchFolder/validation/confirmation-dialog.component'
+import {  ConfirmationDialogComponent } from './searchFolder/validation/confirmation-dialog.component';
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -219,7 +219,8 @@ const appRoutes: Routes = [
     UserStatService,
     TrajetService,
     ConfirmationDialogService,
-    MesColisService
+    MesColisService,
+    MesTrajService
   ],
   bootstrap: [AppComponent]
 })
