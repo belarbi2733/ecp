@@ -136,7 +136,7 @@ app.use('/nodeMailer', NodeMailerController);
 /*
 Paypal Controller    url : /paypal
 
-  - get /calculPrix
+  - get /getPrix
   - post /changeStatus
  */
 app.use('/paypal', PaypalController);

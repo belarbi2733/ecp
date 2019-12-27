@@ -3,11 +3,11 @@ let Math = require('mathjs');
 
 let Trajet = {
 
-  addTrajet: function(trajet, callback)
+  addTrajet: function(trajet, prix, callback)
   {
     console.log("Insert trajet en cours...");
-    return db.query('INSERT INTO trajet (id_user, departure_time, distance, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
-      [trajet.idUser, trajet.departuretime, trajet.distanceinmeters, trajet.departureAddress, trajet.arrivalAddress, trajet.departure[0], trajet.departure[1], trajet.arrival[0], trajet.arrival[1],0, trajet.places], callback);
+    return db.query('INSERT INTO trajet (id_user, departure_time, distance, prix, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12)',
+      [trajet.idUser, trajet.departuretime, trajet.distanceinmeters, prix, trajet.departureAddress, trajet.arrivalAddress, trajet.departure[0], trajet.departure[1], trajet.arrival[0], trajet.arrival[1],0, trajet.places], callback);
   },
 
   addTrajetInTournee: function(idTournee, idTrajet, callback)
@@ -26,24 +26,17 @@ let Trajet = {
     return db.query('SELECT * FROM trajet', callback);
   },
 
-  getPrice: function(callback)
+  getPrice: function(trajet, callback)
   {
     console.log("getPrice : ");
     console.log("test");
-    return db.query('SELECT prix FROM trajet ');
-
+    return db.query('SELECT prix FROM trajet WHERE id_user = $1 AND id_tournee = $2 AND statut = $3', [trajet.idUser, trajet.idTournee, 1],callback);
   },
 
-  calcPrixTraj: function(callback)
-  {
-    return db.query('SELECT book_places, distance FROM trajet', callback);
-  },
-
-
-  changeStatusTraj: function(trajet, callback)
+  changeStatusTraj: function(statut, trajet, callback)
   {
     console.log("Changement du statut du trajet");
-    return db.query('UPDATE trajet SET statut = $1 WHERE id_user = $2 AND id_tournee = $3', [true, trajet.idUser, trajet.idTournee], callback);
+    return db.query('UPDATE trajet SET statut = $1 WHERE id_user = $2 AND id_tournee = $3', [statut, trajet.idUser, trajet.idTournee], callback);
   },
 
   findTrajetAroundRayon: function(search, trajet,rayonPerimetreKms, callback) {

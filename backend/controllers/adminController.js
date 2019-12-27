@@ -14,7 +14,7 @@ router.get('/list-traj', function(req,res){
     }
 
     else {
-      const tmpResultUser2 = result.rows[0];
+      // const tmpResultUser2 = result.rows[0];
       /*  let trajObjJson = {
           "depart": tmpResultUser2.depart,
           "arrivee": tmpResultUser2.arrivee,
@@ -45,7 +45,7 @@ router.get('/list-ut', function(req,res) {
           prenom : result.rows[i].prenom
         });
       }
-      console.log(arrayUser);
+      // console.log(arrayUser);
       res.json(arrayUser);
 
 

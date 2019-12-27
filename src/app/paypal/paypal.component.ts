@@ -24,8 +24,8 @@ import { PaypalService } from '../services/paypal.service';
 
    ngOnInit() {
     this.paypalService.getPricePaypal(this.paypalInterface)
-       .then((paypalInterface: PaypalInterface) => {
-         this.paypalInterface.prix = paypalInterface.prix;
+       .then((prix: number) => {
+         this.paypalInterface.prix = prix.toString();
        })
        .catch(() => {
          console.log('Error');
@@ -81,7 +81,7 @@ import { PaypalService } from '../services/paypal.service';
      },
      onClientAuthorization: (data) => {
        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
-       //Ajouter le status "Payé par le passager"
+       // Ajouter le status "Payé par le passager"
        this.paypalService.statusPayPass(this.paypalInterface);
      },
      onCancel: (data, actions) => {
