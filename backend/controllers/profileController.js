@@ -168,7 +168,7 @@ router.post('/mes-colis', function(req,res) {
 });
 
 router.post('/mes-traj', function(req,res) {
-  Trajet.getDataTrajByIdUser(req.body.idUser, function(err, result) {
+  Trajet.getTrajetById(req.body.idUser, function(err, result) {
     if(err) {
       res.status(400).json(err);
       console.error(err);
