@@ -12,11 +12,16 @@ import { AdminGuard } from './services/singleComponentServices/admin-guard.servi
 import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './services/map.service';
-import { TrajetService} from './searchFolder/sidebar/trajet';
-import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
+import { ValidationService} from './searchFolder/sidebar/validation.service';
+// import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
+// import {MesColisService} from './services/profileServices/mes-colis.service';
+import { ValidationTrajetService} from './validationtrajet/validationtrajet.service';
+import {MesTournService} from './services/profileServices/mes-tourn.service';
 
-
-
+// import { TrajetService} from './searchFolder/sidebar/trajet';
+import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service';
+import {MesColisService} from './services/profileServices/mes-colis.service';
+import {MesTrajService} from './services/profileServices/mes-traj.service';
 // modules for file upload ( profile pic )
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -79,7 +84,6 @@ import {PreferencesService} from './services/profileServices/preferences.service
 import {RatingService} from './services/profileServices/rating.service';
 import {VehicleService} from './services/profileServices/vehicle.service';
 import {DataTrajService} from './services/admin-list-traj.service';
-import {MesTournService} from './services/mestourn.service';
 import {AdminListUtService} from './services/admin-list-user.service';
 import {InscrService} from './services/singleComponentServices/inscr.service';
 import { LienInscrService } from './services/singleComponentServices/lien-inscr.service';
@@ -91,7 +95,8 @@ import { AdminpayComponent } from './adminFolder/adminpay/adminpay.component';
 import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
 import { UserStatService } from './services/adminServices/userstat.service';
 import { LienInscrComponent } from './singleComponentFolder/lien-inscr/lien-inscr.component';
-import {  ConfirmationDialogComponent } from './searchFolder/validation/confirmation-dialog.component'
+import {  ConfirmationDialogComponent } from './searchFolder/validation/confirmation-dialog.component';
+import {ValidationTrajetComponent} from './validationtrajet/validationtrajet.component';
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -99,6 +104,7 @@ const appRoutes: Routes = [
   { path: 'accueil', component: AccueilComponent },
   { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
   { path: 'add-colis', canActivate: [AuthGuard], component: AddColisComponent },
+  { path: 'validationtrajet', canActivate: [AuthGuard], component: ValidationTrajetComponent },
   { path: 'searchTrajConduct', canActivate: [AuthGuard], component: SearchTrajConductComponent},
   { path: 'aide', component: AideComponent },
   { path: 'contact', component: ContactComponent },
@@ -180,7 +186,8 @@ const appRoutes: Routes = [
     InfoCondComponent,
     LienInscrComponent,
     ConfirmationDialogComponent,
-    FileSelectDirective
+    FileSelectDirective,
+    ValidationTrajetComponent
   ],
   imports: [
     BrowserModule,
@@ -217,8 +224,12 @@ const appRoutes: Routes = [
     ServerconfigService,
     PaypalService,
     UserStatService,
-    TrajetService,
-    ConfirmationDialogService
+    ValidationService,
+    ConfirmationDialogService,
+    MesColisService,
+    ValidationTrajetService,
+    MesTrajService,
+    MesTournService
   ],
   bootstrap: [AppComponent]
 })
