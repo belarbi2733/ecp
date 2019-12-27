@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {AdminListTrajInterface} from '../../adminFolder/admin-list-traj/admin-list-traj.interface';
-import {MesTournService} from '../../services/mestourn.service';
-import {PaypalInterface} from '../../paypal/paypal.interface';
-import {PaypalService} from '../../services/paypal.service';
+import {MesTournInterface} from '../mes-tourn/mes-tourn.interface';
+import {MesTournService} from '../../services/profileServices/mes-tourn.service';
 
 @Component({
   selector: 'app-mes-tourn',
@@ -10,40 +8,26 @@ import {PaypalService} from '../../services/paypal.service';
   styleUrls: ['./mes-tourn.component.css', '../../app.component.css']
 })
 export class MesTournComponent implements OnInit {
+  mesTournInterface: MesTournInterface = {
+    heureDepart: '',
+    lieuDepart: '',
+    lieuArrivee: '',
+    idUser: null,
+    status: null
+  };
+  constructor(private mesTournService: MesTournService) {
+    this.mesTournInterface.idUser = JSON.parse(localStorage.getItem('idUser')).id;
 
-  mesTournInfos: AdminListTrajInterface = {
-    id: null,
-    depart: '',
-    arrivee: '',
-    nbrePlaces: null
-  };
-  error: string;
-  paypalInterface: PaypalInterface = {
-    idUser: 1,
-    idTournee: 1,
-    prix: ''
-  };
-  constructor(private paypalService: PaypalService, private mesTournService: MesTournService) {
   }
 
   ngOnInit() {
-    this.mesTournService.dispTourn(this.mesTournInfos)
-      .then((dataTraj: AdminListTrajInterface) => {
-        this.mesTournInfos.id = dataTraj.id;
-        this.mesTournInfos.depart = dataTraj.depart;
-        this.mesTournInfos.arrivee = dataTraj.arrivee;
-        this.mesTournInfos.nbrePlaces = dataTraj.nbrePlaces;
-        console.log(this.mesTournInfos);
+    this.mesTournService.getMyTourn(this.mesTournInterface)
+      .then((mesTournInterface: MesTournInterface) => {
+        this.mesTournInterface = mesTournInterface;
       })
       .catch(() => {
-        console.log('Error');
+        console.log('Error in mes-trajComponent');
       });
-    this.paypalService.getPricePaypal(this.paypalInterface)
-      .then((paypalInterface: PaypalInterface) => {
-        this.paypalInterface.prix = paypalInterface.prix;
-      })
-      .catch(() => {
-        console.log('Error');
-      });
-    }
+  }
+
 }
