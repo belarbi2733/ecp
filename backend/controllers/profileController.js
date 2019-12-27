@@ -1,8 +1,12 @@
+
+let Colis = require('../queries/colis');
 let express = require('express');
 let router = express.Router();
 let bodyParser = require('body-parser');
 router.use(bodyParser.json());
 let User = require('../queries/user');
+let Trajet = require('../queries/trajet');
+let Tournee = require('../queries/tournee');
 
 router.post('/personalData/getDataUser', function(req,res) {
   User.getDataById(req.body.idUser, function(err, result) {
@@ -115,26 +119,106 @@ router.post('/rating' , function (req,res) {
     else
     {
       let userData = result.rows[0];
-      let newNote = 2.5; /* Instance new note from mobile app*/
-      let avrRating = userData.avr_rating;
-      let nbrRatings = userData.nbr_ratings;
-
-      let newRating = ((avrRating*nbrRatings)+newNote)/(nbrRatings+1);
-
-      newRating = newRating.toFixed(1); /* Round the result to 2 decimal */
+      /*let newNote = 2.5; */
+      let Rating = userData.avr_rating;
+      /*let nbrRatings = userData.nbr_ratings;*/
+    /*  let newRating = ((avrRating*nbrRatings)+newNote)/(nbrRatings+1);*/
+     /* newRating = newRating.toFixed(1); /!* Round the result to 2 decimal *!/
       userData.avr_rating = newRating;
-      userData.nbr_ratings = nbrRatings + 1;
+      userData.nbr_ratings = nbrRatings + 1;*/
       console.log(result.rows[0]);
-      User.updateUtilisateur(userData, function(err2, result2) {
+      /*User.updateUtilisateur(userData, function(err2, result2) {
         if(err2) {
           res.status(400).json(err2);
         } else {
-          res.json(newRating);  // on peut renvoyer userData aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
+          res.json(newRating);
         }
-      });
+      });*/
+
+      res.json(Rating);
     }
   });
 });
+
+router.post('/mes-colis', function(req,res) {
+  Colis.getDataColisByIdUser(req.body.idUser, function(err, result) {
+    if(err) {
+      res.status(400).json(err);
+    }
+    else {
+      let arrayUser = [];
+      for (let i = 0; i < result.rows.length ; i++ )
+      {
+
+        arrayUser.push({
+          id: result.rows[i].id,
+          nomColis : result.rows[i].nom_colis,
+          poids : result.rows[i].poids,
+          volume : result.rows[i].volume,
+          descr : result.rows[i].descr,
+          prix : result.rows[i].prix
+        });
+      }
+      console.log(arrayUser);
+      res.json(arrayUser);
+
+
+    }
+  });
+});
+
+router.post('/mes-traj', function(req,res) {
+  Trajet.getDataTrajByIdUser(req.body.idUser, function(err, result) {
+    if(err) {
+      res.status(400).json(err);
+      console.error(err);
+    }
+    else {
+      let arrayUser = [];
+      for (let i = 0; i < result.rows.length ; i++ )
+      {
+
+        arrayUser.push({
+          /*idUser: result.rows[i].id_User,*/
+          heureDepart: result.rows[i].departure_time,
+          lieuArrivee: result.rows[i].depart_address,
+          lieuDepart: result.rows[i].arrivee_address,
+          prix : result.rows[i].prix,
+          status : result.rows[i].statut
+        });
+      }
+      res.json(arrayUser);
+    }
+  });
+});
+
+
+router.post('/mes-tourn', function(req,res) {
+  Tournee.getDataTournByIdUser(req.body.idUser, function(err, result) {
+    if(err) {
+      res.status(400).json(err);
+      console.error(err);
+    }
+    else {
+      let arrayUser = [];
+      for (let i = 0; i < result.rows.length ; i++ )
+      {
+        arrayUser.push({
+          idUser: result.rows[i].id_user,
+          heureDepart: result.rows[i].heure_depart,
+          lieuArrivee: result.rows[i].depart_adresse,
+          lieuDepart: result.rows[i].arrivee_adresse,
+          status : result.rows[i].statut
+        });
+      }
+      console.log(arrayUser);
+      res.json(arrayUser);
+    }
+  });
+});
+
+
+
 
 
 //////////////////////////////////////////     13 file upload profile pic   /////////////////////////////////////////////////////

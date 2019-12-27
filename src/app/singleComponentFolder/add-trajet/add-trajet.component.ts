@@ -27,9 +27,9 @@ let inscription: Trajet = {
   places: null
 };
 
-let iter = 0;
+let iter;
 // var iteration = 0;
-const routetrajet = []  ; // stocke les informations sur le trajet conducteur
+let routetrajet = []  ; // stocke les informations sur le trajet conducteur
 
 function recordtrajet(data: Trajet) {
 
@@ -132,7 +132,8 @@ export class AddTrajetComponent implements OnInit {
       routePoints = null;
     } else {
       routePoints = event.points;
-
+      iter = 0 ;
+      routetrajet = [] ;
       tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
             .go(function(response) {
                 if (response && response.address && response.address.freeformAddress) {
@@ -589,7 +590,7 @@ export class AddTrajetComponent implements OnInit {
     }).map(function(record) {
 
       if (iter < 1) {
-
+        console.log (iter)
         routetrajet.push(  {
           departuretime : record.summary.departureTime,
           traveltimeinseconds : record.summary.travelTimeInSeconds,
@@ -607,7 +608,7 @@ export class AddTrajetComponent implements OnInit {
           // console.log(JSON.stringify(routecolis));
           // console.log(JSON.stringify(routecolis[0].nom));
 
-        // console.log(JSON.stringify(routetrajet));
+        //console.log(JSON.stringify(routetrajet));
         recordtrajet(inscription);
         service.addtrajet(inscription);
 

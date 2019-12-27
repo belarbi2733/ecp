@@ -14,15 +14,21 @@ router.get('/list-traj', function(req,res){
     }
 
     else {
-      // const tmpResultUser2 = result.rows[0];
-      /*  let trajObjJson = {
-          "depart": tmpResultUser2.depart,
-          "arrivee": tmpResultUser2.arrivee,
-          "nbre_places": tmpResultUser2.nbre_places,
-          "id": tmpResultUser2.id_user
-        };*/
-      //console.log(JSON.stringify(result.rows[0]));
-      res.json(result.rows[0]);
+      let arrayUser = [];
+      const tmpResultTrajUser = result.rows[0];
+      for (let i = 0; i < result.rows.length ; i++ )
+      {
+
+        arrayUser.push({
+          id: result.rows[i].id,
+          depart : result.rows[i].depart_address,
+          arrivee : result.rows[i].arrivee_address,
+          nbrePlaces : result.rows[i].book_places
+        });
+      }
+      console.log(arrayUser);
+      res.json(arrayUser);
+
     }
   });
 });

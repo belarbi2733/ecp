@@ -30,7 +30,15 @@ let Colis = {
 
   getAllColis: function(callback) {
     return db.query('SELECT * from colis', callback);
-  }
+  },
+
+
+  getDataColisByIdUser: function(id, callback)
+  {
+    console.log("getDataColisByIdUser: " + id);
+    return db.query('SELECT * FROM colis WHERE id_user = $1', [id], callback);
+  },
+
 };
 
 

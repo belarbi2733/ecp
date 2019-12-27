@@ -1,7 +1,7 @@
 import { Component, Input , OnInit } from '@angular/core';
 import {DataTrajService} from '../../services/admin-list-traj.service';
 import {Trajet} from '../../singleComponentFolder/add-trajet/add-trajet.interface';
-import {DispListTraj} from './admin-list-traj.interface';
+import {AdminListTrajInterface} from './admin-list-traj.interface';
 
 
 @Component({
@@ -13,11 +13,11 @@ import {DispListTraj} from './admin-list-traj.interface';
 
 
 export class AdminListTrajComponent implements OnInit {
-  adminListTraj: DispListTraj = {
-    idUser: 2,
-    depart: 'Test',
-    arrivee: 'Test',
-    nbrePlaces: 4
+  adminListTrajInterface: AdminListTrajInterface = {
+    id: null,
+    depart: '',
+    arrivee: '',
+    nbrePlaces: null
   };
 
 
@@ -29,9 +29,9 @@ export class AdminListTrajComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataTrajService.dispAdminTraj(this.adminListTraj)
-      .then((dataTrajet: Trajet) => {
-
+    this.dataTrajService.getAllTraj(this.adminListTrajInterface)
+      .then((adminListTrajInterface: AdminListTrajInterface) => {
+        this.adminListTrajInterface = adminListTrajInterface;
       })
       .catch(() => {
         console.log('Error in getUserDataById');
