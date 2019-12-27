@@ -6,6 +6,7 @@ let bodyParser = require('body-parser');
 router.use(bodyParser.json());
 let User = require('../queries/user');
 let Trajet = require('../queries/trajet');
+let Tournee = require('../queries/tournee');
 
 router.post('/personalData/getDataUser', function(req,res) {
   User.getDataById(req.body.idUser, function(err, result) {
@@ -143,7 +144,6 @@ router.post('/mes-colis', function(req,res) {
   Colis.getDataColisByIdUser(req.body.idUser, function(err, result) {
     if(err) {
       res.status(400).json(err);
-      console.error(err);
     }
     else {
       let arrayUser = [];
@@ -179,11 +179,35 @@ router.post('/mes-traj', function(req,res) {
       {
 
         arrayUser.push({
-          idUser: result.rows[i].id_User,
+          /*idUser: result.rows[i].id_User,*/
           heureDepart: result.rows[i].departure_time,
           lieuArrivee: result.rows[i].depart_address,
           lieuDepart: result.rows[i].arrivee_address,
           prix : result.rows[i].prix,
+          status : result.rows[i].statut
+        });
+      }
+      res.json(arrayUser);
+    }
+  });
+});
+
+
+router.post('/mes-tourn', function(req,res) {
+  Tournee.getDataTournByIdUser(req.body.idUser, function(err, result) {
+    if(err) {
+      res.status(400).json(err);
+      console.error(err);
+    }
+    else {
+      let arrayUser = [];
+      for (let i = 0; i < result.rows.length ; i++ )
+      {
+        arrayUser.push({
+          idUser: result.rows[i].id_user,
+          heureDepart: result.rows[i].heure_depart,
+          lieuArrivee: result.rows[i].depart_adresse,
+          lieuDepart: result.rows[i].arrivee_adresse,
           status : result.rows[i].statut
         });
       }
@@ -192,6 +216,8 @@ router.post('/mes-traj', function(req,res) {
     }
   });
 });
+
+
 
 
 

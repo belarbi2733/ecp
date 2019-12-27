@@ -1,5 +1,7 @@
-export interface  DispTourn {
-  depart: string;
-  arrivee: string;
-  nbre_pass: number;
+export interface  MesTournInterface {
+  idUser: number;
+  heureDepart: string;
+  lieuArrivee: string;
+  lieuDepart: string;
+  status: number;
 }

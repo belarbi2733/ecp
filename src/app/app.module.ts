@@ -13,11 +13,12 @@ import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './services/map.service';
 import { ValidationService} from './searchFolder/sidebar/validation.service';
-//import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
-//import {MesColisService} from './services/profileServices/mes-colis.service';
+// import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
+// import {MesColisService} from './services/profileServices/mes-colis.service';
 import { ValidationTrajetService} from './validationtrajet/validationtrajet.service';
+import {MesTournService} from './services/profileServices/mes-tourn.service';
 
-//import { TrajetService} from './searchFolder/sidebar/trajet';
+// import { TrajetService} from './searchFolder/sidebar/trajet';
 import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service';
 import {MesColisService} from './services/profileServices/mes-colis.service';
 import {MesTrajService} from './services/profileServices/mes-traj.service';
@@ -83,7 +84,6 @@ import {PreferencesService} from './services/profileServices/preferences.service
 import {RatingService} from './services/profileServices/rating.service';
 import {VehicleService} from './services/profileServices/vehicle.service';
 import {DataTrajService} from './services/admin-list-traj.service';
-import {MesTournService} from './services/mestourn.service';
 import {AdminListUtService} from './services/admin-list-user.service';
 import {InscrService} from './services/singleComponentServices/inscr.service';
 import { LienInscrService } from './services/singleComponentServices/lien-inscr.service';
@@ -96,7 +96,7 @@ import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
 import { UserStatService } from './services/adminServices/userstat.service';
 import { LienInscrComponent } from './singleComponentFolder/lien-inscr/lien-inscr.component';
 import {  ConfirmationDialogComponent } from './searchFolder/validation/confirmation-dialog.component';
-import {ValidationTrajetComponent} from './validationtrajet/validationtrajet.component'
+import {ValidationTrajetComponent} from './validationtrajet/validationtrajet.component';
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -228,8 +228,8 @@ const appRoutes: Routes = [
     ConfirmationDialogService,
     MesColisService,
     ValidationTrajetService,
-    MesTrajService
-
+    MesTrajService,
+    MesTournService
   ],
   bootstrap: [AppComponent]
 })
