@@ -10,11 +10,12 @@ import {DataPersonal} from '../personal-data/personal-data.interface';
 })
 export class VehicleComponent implements OnInit {
 
+  msg = '';
+
   vehicule: DataVehicle = {
     idUser: null,
     marque: '',
     modele: '',
-    // sieges: 1,
     volumeCoffre: null,
   };
 
@@ -25,22 +26,27 @@ export class VehicleComponent implements OnInit {
   ngOnInit() {
     this.vehiculeService.getVehicleDataById(this.vehicule)
       .then((dataUser: DataVehicle) => {
-        /*this.vehicule.marque = dataUser.marque;
-        this.vehicule.modele = dataUser.modele;
-        this.vehicule.sieges = dataUser.sieges;
-        this.vehicule.volumeCoffre = dataUser.volumeCoffre;*/
         if (dataUser !== null) {
-          this.vehicule = dataUser;
+          this.vehicule.marque = dataUser.marque;
+          this.vehicule.modele = dataUser.modele;
+          this.vehicule.volumeCoffre = dataUser.volumeCoffre;
           console.log(this.vehicule);
         }
       })
       .catch( () => {
         console.log('Error in getUserDataById');
+        this.msg = 'Erreur avec la database';
       });
   }
 
   updateVehicule(data: DataVehicle) {
-    this.vehiculeService.modifVehicule(data);
+    this.msg = '';
+    if (data.marque === '' || data.modele === '' || data.volumeCoffre === null) {
+      this.msg = 'Certains champs ne sont pas complétés !';
+    } else {
+      console.log('Update voiture');
+      this.vehiculeService.modifVehicule(data);
+      this.msg = 'La voiture a bien été enregistrée';
+    }
   }
-
 }
