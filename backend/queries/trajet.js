@@ -28,8 +28,7 @@ let Trajet = {
 
   getPrice: function(trajet, callback)
   {
-    console.log("getPrice : ");
-    console.log("test");
+    console.log("getPrice requete sql : ");
     return db.query('SELECT prix FROM trajet WHERE id_user = $1 AND id_tournee = $2 AND statut = $3', [trajet.idUser, trajet.idTournee, 1],callback);
   },
 
