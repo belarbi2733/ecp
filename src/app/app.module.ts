@@ -97,6 +97,7 @@ import { UserStatService } from './services/adminServices/userstat.service';
 import { LienInscrComponent } from './singleComponentFolder/lien-inscr/lien-inscr.component';
 import {  ConfirmationDialogComponent } from './searchFolder/validation/confirmation-dialog.component';
 import {ValidationTrajetComponent} from './validationtrajet/validationtrajet.component';
+import { PhotoService } from './services/profileServices/photo.service';
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -229,7 +230,8 @@ const appRoutes: Routes = [
     MesColisService,
     ValidationTrajetService,
     MesTrajService,
-    MesTournService
+    MesTournService,
+    PhotoService
   ],
   bootstrap: [AppComponent]
 })
