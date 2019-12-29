@@ -18,10 +18,13 @@
       <td>{{item.nom}}</td>
       <td>{{item.prenom}}</td>
       <td>
-        <a routerLink="/profile" routerLinkActive="active"><button class="btn">Profil </button></a>
+        <!-- <a routerLink="/profile" routerLinkActive="active"><button class="btn">Profil </button></a>
+        <a routerLink="['/profile', {{item.id}} ]" routerLinkActive="active"><button class="btn">Profil </button></a> -->
         <a routerLink="/messagerie" routerLinkActive="active"><button class="btn">Messagerie </button></a>
         <ng-template #popContent>
-
+            <button class="btn" onclick="">
+              Confirmer
+            </button>
         </ng-template>
         <button class="btn"
                 [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="false">
