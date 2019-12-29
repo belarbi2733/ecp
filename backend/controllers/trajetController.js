@@ -12,7 +12,7 @@ router.post('/add' , function (req, res) {
   console.log(req.body);
 
   let prixCarb = 1.4;
-  let consoVoit = 4.5;
+  let consoVoit = 6.5;
   let distance = req.body.distanceinmeters;
   let bookPlaces = req.body.places;
 
@@ -32,7 +32,7 @@ router.post('/add' , function (req, res) {
     else
     {
       res.json(result);
-      
+
     }
   });
 });
