@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { VehicleService } from '../../services/profileServices/vehicle.service';
 import {DataVehicle} from './vehicle.interface';
-import {DataPersonal} from '../personal-data/personal-data.interface';
 
 @Component({
   selector: 'app-vehicle',
