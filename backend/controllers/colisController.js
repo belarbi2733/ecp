@@ -23,7 +23,7 @@ router.post('/add', function (req, res) {
         } else {
 
           let prixCarb = 1.4;
-          let consoVoit = 4.5;
+          let consoVoit = 6.5;
           let distance = req.body.distanceinmeters;
 
           let prixFinal = prixTraj(prixCarb, consoVoit, distance);
