@@ -9,6 +9,13 @@ let Utilisateur = {
       return db.query('SELECT prix FROM trajet ', callback);
     },
 
+    selectPhoto: function(idUser, callback)
+    {
+      console.log("select Photo de l'user : ");
+      console.log("test");
+      return db.query('SELECT photo FROM utilisateur where id=$1', [idUser] ,callback);
+    },
+
     addUtilisateur: function(utilisateur, callback)
     {
       console.log("Insert user en cours...");

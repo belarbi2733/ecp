@@ -54,6 +54,26 @@ router.post('/personalData/update',function (req,res) {
   });
 });
 
+router.post('/display',function (req,res) {
+  // console.log(req.body);
+  User.selectPhoto(req.body.idUser,function (err,result) {
+    if(err) {
+      res.status(400).json(err);
+      console.error(err);
+    }
+    else {
+      if (result.rows.length) {
+        console.log(result.rows[0]);
+        res.json(result.rows[0].photo);
+      }
+      else {
+        res.json(null);
+      }
+     
+    }
+  });
+});
+
 router.post('/deleteAccount', function (req,res) {
   console.log(req.body);
   User.removeUtilisateur(req.body.idUser, function (err,result) {
@@ -229,7 +249,7 @@ multer = require('multer'),
 bodyParser = require('body-parser');
 
 // File upload settings
-const PATH = './uploads';
+const PATH = './public/uploads';
 var path = require('path')
 let storage = multer.diskStorage({
 destination: (req, file, cb) => {
