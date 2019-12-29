@@ -1,26 +1,46 @@
-<div class="col-md-6 offset-md-2">
+<div class="row">
 
-    <div class="wrapper">
-        <h2>Choisissez une photo de profil</h2>
+    <div class="col-md-5 offset-md-1">
+
+        <div class="wrapper">
+            <h4>Choisissez une photo de profil</h4>
+            
+            <div class="file-upload">
+                <input type="file" name="image" accept="image/*" ng2FileSelect [uploader]="uploader" (change)="showPreview($event)" />
+    
+                    <div class="imagePreview" *ngIf="imageURL && imageURL !== ''">
+                        <img [src]="imageURL" [alt]="uploadForm.value.name" width="100%">
+                    </div>
+    
+                    <div>
+                        <button type="button" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                            valider la photo de profil
+                        </button>
+                    </div>
+                
+            </div>
+           
+        </div>
+    
+    
+    
         
-        <div class="file-upload">
-            <input type="file" name="image" accept="image/*" ng2FileSelect [uploader]="uploader" (change)="showPreview($event)" />
+    </div>
+    
+    <div class="col-md-5 offset-md-1">
+    
+        <div class="wrapper">
+            <h4>Photo de profil actuelle</h4>
+            
+            <img class="profilePic" src="http://localhost:8081/uploads/1.PNG"  width="100%">
 
-                <div class="imagePreview" *ngIf="imageURL && imageURL !== ''">
-                    <img [src]="imageURL" [alt]="uploadForm.value.name">
-                </div>
-
-                <div>
-                    <button type="button" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-                        valider la photo de profil
-                    </button>
-                </div>
             
         </div>
-       
+    
+    
+    
+        
     </div>
 
-
-
-    
 </div>
+

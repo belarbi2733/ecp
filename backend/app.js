@@ -1,5 +1,6 @@
 let express = require('express');
 let app = express();
+let path = require('path');
 let LoginController = require('./controllers/loginController');
 let ColisController = require('./controllers/colisController');
 let TrajetController = require('./controllers/trajetController');
@@ -10,6 +11,10 @@ let AdminController = require('./controllers/adminController');
 let ProfileController = require('./controllers/profileController');
 let VoitureController = require('./controllers/voitureController');
 let ValidationController = require ('./controllers/nodeMailerController')
+
+app.use(express.static(path.join(__dirname,'/public')));
+
+
 // !!!!!!!!!! Il faut mettre votre mdp de votre database dans db.js sinon ca fonctionne pas
 
 app.use(function(req, res, next) {

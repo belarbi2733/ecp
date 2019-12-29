@@ -229,7 +229,7 @@ multer = require('multer'),
 bodyParser = require('body-parser');
 
 // File upload settings
-const PATH = './uploads';
+const PATH = './public/uploads';
 var path = require('path')
 let storage = multer.diskStorage({
 destination: (req, file, cb) => {
