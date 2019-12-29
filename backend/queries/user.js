@@ -2,13 +2,7 @@ let db = require("../db.js");
 
 let Utilisateur = {
 
-    getPrice: function(callback)
-    {
-      console.log("getPrice : ");
-      console.log("test");
-      return db.query('SELECT prix FROM trajet ', callback);
-    },
-
+  
     selectPhoto: function(idUser, callback)
     {
       console.log("select Photo de l'user : ");
