@@ -17,12 +17,12 @@ let Trajet = {
   },
 
   getAllTrajet: function(callback){
-    return db.query('SELECT * FROM trajet WHERE id_user IS NOT NULL', callback);
+    return db.query('SELECT * FROM trajet WHERE id_colis IS NULL', callback);
   },
 
   getAllTrajEffec: function(callback){
     console.log("Get All Trajet effectué");
-    return db.query('SELECT * FROM trajet WHERE statut >= $1 AND id_user IS NOT NULL', [3], callback);
+    return db.query('SELECT * FROM trajet WHERE statut >= $1 AND id_colis IS NULL', [3], callback);
   },
 
   getAllColisLivr: function(callback)
