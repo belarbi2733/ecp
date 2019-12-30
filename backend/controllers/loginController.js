@@ -25,7 +25,7 @@ router.post('/checkPassword', function (req,res) {
       console.error(err);
     } else {
       if(result.rows.length !== 0) { // Check si il y a le mail dans la database
-        if (result.rows[0].password === req.body.password && result.rows[0].statut === 1 || 2) { //Check si les mots de passes correspondent et le statut de l'utilisateur
+        if (result.rows[0].password === req.body.password && result.rows[0].statut > 0) { //Check si les mots de passes correspondent et le statut de l'utilisateur
           res.json(true);
         }
         else {
