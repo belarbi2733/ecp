@@ -22,29 +22,12 @@ export class AuthService {
 
   url = this.servUrl.nodeUrl;
 
-  signIn() {
+  signIn(data: DataAuth) {
     return new Promise(
       (resolve, reject) => {
         setTimeout(
           () => {
             this.isAuth = true;
-            this.isAdmin = false;
-            this.setUpBooleanAuth(); // Remplissage de localStorage
-            resolve();
-          }, 0
-        );
-      }
-    );
-  }
-
-  signInAdmin() {
-    return new Promise(
-      (resolve, reject) => {
-        setTimeout(
-          () => {
-            this.isAuth = true;
-            this.isAdmin = true;
-            this.setUpBooleanAuth();  // Remplissage de localStorage
             resolve();
           }, 0
         );
@@ -72,13 +55,40 @@ export class AuthService {
     );
   }
 
+  setAdmin(data: DataAuth){
+    return new Promise(
+      (resolve, reject) => {
+        this.http.post(`${this.url}/login/checkAdmin`, data)
+          .subscribe(
+            res => {
+              console.log('Check admin : ' + res);
+              if (res === true) {
+                console.log('Admin');
+                this.isAdmin = true;
+              } else {
+                if (res === false) {
+                  console.log('Pas admin');
+                  this.isAdmin = false;
+                }
+              }
+              this.setUpBooleanAuth(); // Remplissage de localStorage
+              resolve();
+            },
+            err => {
+              console.log('Error occured:' + err);
+              reject();
+            }
+          );
+      });
+  }
+
   setUpBooleanAuth() {
     const isAuthJson = {isAuth: this.isAuth};
     localStorage.setItem('isAuth', JSON.stringify(isAuthJson)); // Stockage de is Auth dans localstorage
 
     const isAdminJson = {isAdmin: this.isAdmin};
     localStorage.setItem('isAdmin', JSON.stringify(isAdminJson)); // Stockage de is Admin dans localstorage
-    console.log(localStorage);
+    console.log("localStorage : " + localStorage);
   }
 
   authentification(data: DataAuth) {
@@ -120,4 +130,3 @@ export class AuthService {
     });
   }
 }
-
