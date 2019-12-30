@@ -10,7 +10,7 @@ export class LienInscrService {
   url = this.servUrl.nodeUrl;
 
   lienInscr(data: DataLienInscription) {
-    this.http.post(`${this.url}/inscriptionLien`, data)
+    this.http.post(`${this.url}/login/inscriptionLien`, data)
       .subscribe(
         res => {
           console.log(res);
