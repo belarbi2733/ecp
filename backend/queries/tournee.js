@@ -12,6 +12,20 @@ let Tournee = {
   },
 
 
+  getAllTourn: function(callback)
+  {
+    console.log("Get All Tournees");
+    return db.query('SELECT * FROM tournee', callback);
+  },
+
+
+  getAllTournEffec: function(callback)
+  {
+    console.log("Get All Tournées effectuées");
+    return db.query('SELECT * FROM tournee WHERE statut = $1', [1], callback);
+  },
+
+
   getDataTournByIdUser: function(id, callback)
   {
     console.log('getDataTournByIdUSer : ' + id );
