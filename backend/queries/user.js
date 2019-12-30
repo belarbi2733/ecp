@@ -2,7 +2,7 @@ let db = require("../db.js");
 
 let Utilisateur = {
 
-  
+
     selectPhoto: function(idUser, callback)
     {
       console.log("select Photo de l'user : ");
@@ -67,6 +67,12 @@ let Utilisateur = {
     {
       console.log("Get All User");
       return db.query('SELECT * FROM utilisateur', callback);
+    },
+
+    getAllCond: function(callback)
+    {
+      console.log("Get All Conducteur");
+      return db.query('SELECT * FROM utilisateur WHERE statut = $1', [2], callback);
     },
 
     updateRating: function(updateRating, callback){

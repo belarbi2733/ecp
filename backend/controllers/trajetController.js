@@ -19,7 +19,7 @@ router.post('/add' , function (req, res) {
   let prixFinalParPersonne = prixTraj(prixCarb, consoVoit, distance, bookPlaces);
   console.log('Prix discount : ' + prixFinalParPersonne + " € par personne");
   let prixFinal = (prixFinalParPersonne*bookPlaces).toFixed(2); //
-  //console.log(typeof prixFinal);
+  console.log(typeof prixFinal);
   //console.log(prixFinal);
 
   Trajet.addTrajet(req.body, prixFinal,function(err,result){
