@@ -6,7 +6,7 @@ let Trajet = {
   addTrajet: function(trajet, prix, callback)
   {
     console.log("Insert trajet en cours...");
-    return db.query('INSERT INTO trajet (id_user, departure_time, distance, prix, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12)',
+    return db.query('INSERT INTO trajet (id_user, departure_time, distance, prix, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
       [trajet.idUser, trajet.departuretime, trajet.distanceinmeters, prix, trajet.departureAddress, trajet.arrivalAddress, trajet.departure[0], trajet.departure[1], trajet.arrival[0], trajet.arrival[1],0, trajet.places], callback);
   },
 
@@ -17,19 +17,30 @@ let Trajet = {
   },
 
   getAllTrajet: function(callback){
-    return db.query('SELECT * FROM trajet', callback);
+    return db.query('SELECT * FROM trajet WHERE id_colis IS NULL', callback);
   },
 
-  getTrajetById: function(callback)
+  getAllTrajEffec: function(callback){
+    console.log("Get All Trajet effectué");
+    return db.query('SELECT * FROM trajet WHERE statut >= $1 AND id_colis IS NULL', [3], callback);
+  },
+
+  getAllColisLivr: function(callback)
   {
-    console.log("getTrajetById : " + 1);
-    return db.query('SELECT * FROM trajet', callback);
+    console.log("Get All Colis livrés");
+    return db.query('SELECT * FROM trajet WHERE statut >= $1 AND id_colis IS NOT NULL', [3], callback);
+  },
+
+  getTrajetById: function(iduser,callback)
+  {
+    console.log("getTrajetById : " + iduser);
+    return db.query('SELECT * FROM trajet WHERE id_user = $1', [iduser], callback);
   },
 
   getPrice: function(trajet, callback)
   {
     console.log("getPrice requete sql : ");
-    return db.query('SELECT prix FROM trajet WHERE id_user = $1 AND id_tournee = $2 AND statut = $3', [trajet.idUser, trajet.idTournee, 1],callback);
+    return db.query('SELECT prix FROM trajet WHERE id_user = $1 AND id_tournee = $2 AND statut >= $3', [trajet.idUser, trajet.idTournee, 1],callback);
   },
 
   changeStatusTraj: function(statut, trajet, callback)
