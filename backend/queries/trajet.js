@@ -31,10 +31,10 @@ let Trajet = {
     return db.query('SELECT * FROM trajet WHERE statut >= $1 AND id_colis IS NOT NULL', [3], callback);
   },
 
-  getTrajetById: function(callback)
+  getTrajetById: function(iduser,callback)
   {
-    console.log("getTrajetById : " + 1);
-    return db.query('SELECT * FROM trajet', callback);
+    console.log("getTrajetById : " + iduser);
+    return db.query('SELECT * FROM trajet WHERE id_user = $1', [iduser], callback);
   },
 
   getPrice: function(trajet, callback)
