@@ -8,6 +8,7 @@ let FindController = require('./controllers/findTrajetController');
 let PaypalController = require('./controllers/paypalController');
 let TourneeController = require('./controllers/tourneeController');
 let AdminController = require('./controllers/adminController');
+let AdminDashBoardController = require('./controllers/adminDashBoardController');
 let ProfileController = require('./controllers/profileController');
 let VoitureController = require('./controllers/voitureController');
 let ValidationController = require ('./controllers/nodeMailerController')
@@ -107,6 +108,7 @@ app.use('/admin', AdminController);
 
 
 
+app.use('/adminDashBoard', AdminDashBoardController);
 
 
 /*
@@ -158,4 +160,3 @@ const PORT = process.env.PORT || 8081;
 const server = app.listen(PORT, () => {
 console.log('Connected to port ' + PORT)
 })
-

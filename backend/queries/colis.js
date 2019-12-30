@@ -9,6 +9,7 @@ let Colis = {
       [colis.idUser, colis.nom, colis.volume], callback);
   },
 
+
   getIdColisByIdUser: function(colis, callback) {
     console.log("Get IdColis By IdUser and NomColis");
     console.log(colis.idUser,colis.nom);
@@ -16,17 +17,20 @@ let Colis = {
       [colis.idUser, colis.nom, colis.volume] , callback);
   },
 
+
   generateTrajet: function(colis, prix, idColis, callback) {
     console.log("Generate Trajet en cours...");
-    return db.query('INSERT INTO trajet (id_user, id_colis, departure_time, distance, prix, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',
-      [colis.idUser,idColis,colis.departuretime,colis.distanceinmeters, prix, colis.departureAddress,colis.arrivalAddress,colis.departure[0],colis.departure[1],colis.arrival[0],colis.arrival[1],0,0],
+    return db.query('INSERT INTO trajet (id_colis, departure_time, distance, prix, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',
+      [idColis,colis.departuretime,colis.distanceinmeters, prix, colis.departureAddress,colis.arrivalAddress,colis.departure[0],colis.departure[1],colis.arrival[0],colis.arrival[1],0,0],
       callback);
   },
+
 
   getVolumeByIdColis: function(idColis,callback) {
     console.log("Get Volume By : " + idColis);
     return db.query('SELECT volume from colis WHERE id = $1', [idColis], callback);
   },
+
 
   getAllColis: function(callback) {
     return db.query('SELECT * from colis', callback);
