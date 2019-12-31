@@ -16,7 +16,8 @@ export class MesTrajComponent implements OnInit {
     lieuArrivee: '',
     prix: null,
     idUser: null,
-    status: null
+    status: null,
+    idTraj: ''
   };
   constructor(private mesTrajService: MesTrajService) {
     this.mesTrajInterface.idUser = JSON.parse(localStorage.getItem('idUser')).id;
@@ -27,10 +28,17 @@ export class MesTrajComponent implements OnInit {
     this.mesTrajService.getMyTraj(this.mesTrajInterface)
       .then((mesTrajInterface: MesTrajInterface) => {
         this.mesTrajInterface = mesTrajInterface;
+        console.log(this.mesTrajInterface);
       })
       .catch(() => {
         console.log('Error in mes-trajComponent');
       });
   }
 
+  updateStatus(data: MesTrajInterface){
+    data.status = 0;
+    /*this.mesTrajService.updateStatus(data);*/
+    this.mesTrajService.updateStatus(data);
+    console.log(data);
+  }
 }

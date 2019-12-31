@@ -184,7 +184,8 @@ router.post('/mes-traj', function(req,res) {
           lieuArrivee: result.rows[i].depart_address,
           lieuDepart: result.rows[i].arrivee_address,
           prix : result.rows[i].prix,
-          status : result.rows[i].statut
+          status : result.rows[i].statut,
+          idTraj : result.rows[i].id
         });
       }
       res.json(arrayUser);
@@ -192,29 +193,42 @@ router.post('/mes-traj', function(req,res) {
   });
 });
 
+router.post('/mes-trajupd', function(req,res) {
+  Trajet.updateTraj(req, function(err, result) {
+        if (err) {
+          res.status(400).json(err);
+          console.error(err);
+        } else {
+          res.json(result);
+          Console.log("test");
+          Console.log(res);
+        }
+    });
+
+});
 
 router.post('/mes-tourn', function(req,res) {
   Tournee.getDataTournByIdUser(req.body.idUser, function(err, result) {
     if(err) {
-      res.status(400).json(err);
-      console.error(err);
+    res.status(400).json(err);
+    console.error(err);
+  }
+  else {
+    let arrayUser = [];
+    for (let i = 0; i < result.rows.length ; i++ )
+    {
+      arrayUser.push({
+        idUser: result.rows[i].id_user,
+        heureDepart: result.rows[i].heure_depart,
+        lieuArrivee: result.rows[i].depart_adresse,
+        lieuDepart: result.rows[i].arrivee_adresse,
+        status : result.rows[i].statut
+      });
     }
-    else {
-      let arrayUser = [];
-      for (let i = 0; i < result.rows.length ; i++ )
-      {
-        arrayUser.push({
-          idUser: result.rows[i].id_user,
-          heureDepart: result.rows[i].heure_depart,
-          lieuArrivee: result.rows[i].depart_adresse,
-          lieuDepart: result.rows[i].arrivee_adresse,
-          status : result.rows[i].statut
-        });
-      }
-      console.log(arrayUser);
-      res.json(arrayUser);
-    }
-  });
+    console.log(arrayUser);
+    res.json(arrayUser);
+  }
+});
 });
 
 

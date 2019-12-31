@@ -34,6 +34,12 @@ let Trajet = {
 
   },
 
+  updateTraj: function(data, callback)
+  {
+    Console.log("updateStatus : " + data.idTraj);
+    return db.query('UPDATE trajet SET statut = $1 WHERE id = $2', [0,data.idTraj] ,callback);
+  },
+
   calcPrixTraj: function(callback)
   {
     return db.query('SELECT book_places, distance FROM trajet', callback);

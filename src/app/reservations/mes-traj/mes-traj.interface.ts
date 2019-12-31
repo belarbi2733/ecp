@@ -5,4 +5,5 @@ export interface  MesTrajInterface {
   prix: number;
   idUser: number;
   status: number;
+  idTraj: string;
 }
