@@ -53,7 +53,7 @@ export class AuthComponent implements OnInit {
         break;
       }
       case false: {
-        this.authFailed = 'Identifiants de connexion érronés ou Adresse mail non validée';
+        this.authFailed = 'Identifiants de connexion érronés ou Adresse mail non activée (vérifiez votre boite mail)';
         break;
       }
       default: {

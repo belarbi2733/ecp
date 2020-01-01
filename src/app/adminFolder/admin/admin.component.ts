@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { AdminInterface } from './admin.interface';
-import { UserStatService } from '../../services/adminServices/userstat.service';
+import { AdminService } from '../../services/adminServices/admin.service';
 
 @Component({
   selector: 'app-admin',
@@ -23,10 +23,10 @@ adminInterface: AdminInterface = {
 };
 
 
-  constructor(private userStatService: UserStatService) { }
+  constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
-    this.userStatService.getNbreUsers(this.adminInterface)
+    this.adminService.getNbreUsers(this.adminInterface)
       .then((adminInterface: AdminInterface) => {
         this.adminInterface.nbreUsersStat = adminInterface.nbreUsersStat;
       })
@@ -34,7 +34,7 @@ adminInterface: AdminInterface = {
         console.log('Error');
       });
 
-    this.userStatService.getNbreColis(this.adminInterface)
+    this.adminService.getNbreColis(this.adminInterface)
       .then((adminInterface: AdminInterface) => {
         this.adminInterface.nbreColisStat = adminInterface.nbreColisStat;
       })
@@ -42,7 +42,7 @@ adminInterface: AdminInterface = {
         console.log('Error');
       });
 
-    this.userStatService.getNbreTraj(this.adminInterface)
+    this.adminService.getNbreTraj(this.adminInterface)
       .then((adminInterface: AdminInterface) => {
         this.adminInterface.nbreTrajStat = adminInterface.nbreTrajStat;
       })
@@ -50,7 +50,7 @@ adminInterface: AdminInterface = {
         console.log('Error');
       });
 
-    this.userStatService.getNbreTourn(this.adminInterface)
+    this.adminService.getNbreTourn(this.adminInterface)
       .then((adminInterface: AdminInterface) => {
         this.adminInterface.nbreTournStat = adminInterface.nbreTournStat;
       })
@@ -58,7 +58,7 @@ adminInterface: AdminInterface = {
         console.log('Error');
       });
 
-    this.userStatService.getNbreCond(this.adminInterface)
+    this.adminService.getNbreCond(this.adminInterface)
       .then((adminInterface: AdminInterface) => {
         this.adminInterface.nbreCondStat = adminInterface.nbreCondStat;
       })
@@ -66,7 +66,7 @@ adminInterface: AdminInterface = {
         console.log('Error');
       });
 
-    this.userStatService.getNbreColisLivr(this.adminInterface)
+    this.adminService.getNbreColisLivr(this.adminInterface)
       .then((adminInterface: AdminInterface) => {
         this.adminInterface.nbreColisLivrStat = adminInterface.nbreColisLivrStat;
       })
@@ -74,7 +74,7 @@ adminInterface: AdminInterface = {
         console.log('Error');
       });
 
-    this.userStatService.getNbreTrajEffec(this.adminInterface)
+    this.adminService.getNbreTrajEffec(this.adminInterface)
       .then((adminInterface: AdminInterface) => {
         this.adminInterface.nbreTrajEffecStat = adminInterface.nbreTrajEffecStat;
       })
@@ -82,7 +82,7 @@ adminInterface: AdminInterface = {
         console.log('Error');
       });
 
-    this.userStatService.getNbreTournEffec(this.adminInterface)
+    this.adminService.getNbreTournEffec(this.adminInterface)
       .then((adminInterface: AdminInterface) => {
         this.adminInterface.nbreTournEffecStat = adminInterface.nbreTournEffecStat;
       })
