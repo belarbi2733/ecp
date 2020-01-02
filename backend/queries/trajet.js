@@ -16,6 +16,12 @@ let Trajet = {
     return db.query('UPDATE trajet SET id_tournee = $1, statut = $2 WHERE id = $3',[idTournee,1,idTrajet], callback);
   },
 
+  updateTraj: function(data, callback)
+  {
+    Console.log("updateStatus : " + data.idTraj);
+    return db.query('UPDATE trajet SET statut = $1 WHERE id = $2', [0,data.idTraj] ,callback);
+  },
+
   getAllTrajet: function(callback){
     return db.query('SELECT * FROM trajet WHERE id_colis IS NULL', callback);
   },
@@ -28,8 +34,8 @@ let Trajet = {
     return db.query('SELECT trajet.id, trajet.depart_address, trajet.departure_time, trajet.book_places, trajet.prix, trajet.statut, utilisateur.paypal  FROM trajet INNER JOIN utilisateur ON utilisateur.id=trajet.id_user ORDER BY trajet.departure_time DESC', callback);
   },
 // WHERE trajet.statut >= 1 ORDER BY trajet.id DESC
-//   SELECT employee.LastName, employee.DepartmentID, department.DepartmentName 
-// FROM employee 
+//   SELECT employee.LastName, employee.DepartmentID, department.DepartmentName
+// FROM employee
 // INNER JOIN department ON
 // employee.DepartmentID = department.DepartmentID;
 
