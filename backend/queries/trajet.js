@@ -20,6 +20,29 @@ let Trajet = {
     return db.query('SELECT * FROM trajet WHERE id_colis IS NULL', callback);
   },
 
+  // getAllTrajets: function(callback){
+  //   return db.query('SELECT * FROM trajet WHERE statut >= 1 ORDER BY id DESC', callback);
+  // },
+
+  getAllTrajets: function(callback){
+    return db.query('SELECT trajet.id, trajet.depart_address, trajet.departure_time, trajet.book_places, trajet.prix, trajet.statut, utilisateur.paypal  FROM trajet INNER JOIN utilisateur ON utilisateur.id=trajet.id_user WHERE trajet.statut >= 1 ORDER BY trajet.departure_time DESC', callback);
+  },
+// WHERE trajet.statut >= 1 ORDER BY trajet.id DESC
+//   SELECT employee.LastName, employee.DepartmentID, department.DepartmentName 
+// FROM employee 
+// INNER JOIN department ON
+// employee.DepartmentID = department.DepartmentID;
+
+
+// id: result.rows[i].id,
+//           depart : result.rows[i].depart_address,
+//           arrivee : result.rows[i].arrivee_address,
+//           nbrePlaces : places,
+//           prix : result.rows[i].prix,
+//           colis : colisName,
+//           paypal : paypalAccount,
+//           statut : result.rows[i].statut
+
   getAllTrajEffec: function(callback){
     console.log("Get All Trajet effectué");
     return db.query('SELECT * FROM trajet WHERE statut >= $1 AND id_colis IS NULL', [3], callback);
