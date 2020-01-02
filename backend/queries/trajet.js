@@ -25,7 +25,7 @@ let Trajet = {
   // },
 
   getAllTrajets: function(callback){
-    return db.query('SELECT trajet.id, trajet.depart_address, trajet.departure_time, trajet.book_places, trajet.prix, trajet.statut, utilisateur.paypal  FROM trajet INNER JOIN utilisateur ON utilisateur.id=trajet.id_user WHERE trajet.statut >= 1 ORDER BY trajet.departure_time DESC', callback);
+    return db.query('SELECT trajet.id, trajet.depart_address, trajet.departure_time, trajet.book_places, trajet.prix, trajet.statut, utilisateur.paypal  FROM trajet INNER JOIN utilisateur ON utilisateur.id=trajet.id_user ORDER BY trajet.departure_time DESC', callback);
   },
 // WHERE trajet.statut >= 1 ORDER BY trajet.id DESC
 //   SELECT employee.LastName, employee.DepartmentID, department.DepartmentName 
