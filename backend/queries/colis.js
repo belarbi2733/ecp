@@ -40,7 +40,7 @@ let Colis = {
   getDataColisByIdUser: function(id, callback)
   {
     console.log("getDataColisByIdUser: " + id);
-    return db.query('SELECT * FROM colis WHERE id_user = $1', [id], callback);
+    return db.query('SELECT * FROM colis INNER JOIN trajet ON colis.id=trajet.id_colis WHERE colis.id_user = $1', [id], callback);
   },
 
 };
