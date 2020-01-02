@@ -69,7 +69,7 @@ router.post('/display',function (req,res) {
       else {
         res.json(null);
       }
-     
+
     }
   });
 });
