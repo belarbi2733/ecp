@@ -33,4 +33,11 @@ export class MesTrajComponent implements OnInit {
       });
   }
 
+  updateStatus(data: MesTrajInterface){
+    data.status = 0;
+    /*this.mesTrajService.updateStatus(data);*/
+    this.mesTrajService.updateStatus(data);
+    console.log(data);
+  }
+
 }
