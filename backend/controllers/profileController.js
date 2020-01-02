@@ -233,6 +233,19 @@ router.post('/mes-traj', function(req,res) {
   });
 });
 
+router.post('/mes-trajupd', function(req,res) {
+  Trajet.updateTraj(req, function(err, result) {
+    if (err) {
+      res.status(400).json(err);
+      console.error(err);
+    } else {
+      res.json(result);
+      Console.log("test");
+      Console.log(res);
+    }
+  });
+
+});
 
 router.post('/mes-tourn', function(req,res) {
   Tournee.getDataTournByIdUser(req.body.idUser, function(err, result) {
