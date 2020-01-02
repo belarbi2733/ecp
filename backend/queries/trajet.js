@@ -60,6 +60,14 @@ let Trajet = {
     return db.query('SELECT * FROM trajet WHERE id_user = $1', [iduser], callback);
   },
 
+  getTrajetPassagerOnlyById: function(iduser,callback)
+  {
+    console.log("getTrajetById : " + iduser);
+    return db.query('SELECT * FROM trajet WHERE id_user = $1 AND id_colis is null', [iduser], callback);
+  },
+
+  
+
   getPrice: function(trajet, callback)
   {
     console.log("getPrice requete sql : ");

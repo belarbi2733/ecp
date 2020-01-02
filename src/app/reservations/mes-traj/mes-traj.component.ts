@@ -16,11 +16,12 @@ export class MesTrajComponent implements OnInit {
     lieuArrivee: '',
     prix: null,
     idUser: null,
-    status: null
+    status: ''
   };
+
+  
   constructor(private mesTrajService: MesTrajService) {
     this.mesTrajInterface.idUser = JSON.parse(localStorage.getItem('idUser')).id;
-
   }
 
   ngOnInit() {
@@ -31,6 +32,8 @@ export class MesTrajComponent implements OnInit {
       .catch(() => {
         console.log('Error in mes-trajComponent');
       });
+
+      
   }
 
 }
