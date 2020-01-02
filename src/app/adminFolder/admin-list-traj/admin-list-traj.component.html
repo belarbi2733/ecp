@@ -22,6 +22,12 @@
       <td>
         <!-- <a routerLink="/profile" routerLinkActive="active"><button class="btn">Plus d'info </button></a> -->
         <a routerLink="/messagerie" routerLinkActive="active"><button class="btn">Messagerie </button></a>
+         <!-- <a routerLink="/info-cond" routerLinkActive="active"><button class="btn" >Plus d'info</button></a> -->
+         <a href="https://www.paypal.com" target="_blank"> <button class="btn"> Payer le conducteur</button></a>
+         <button class="btn" (click)="PayementEffect()">
+           Le conducteur a été payé
+         </button>
+         
         <ng-template #popContent>
             <button class="btn" onclick="">
               Confirmer
