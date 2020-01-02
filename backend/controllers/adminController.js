@@ -4,30 +4,46 @@ let bodyParser = require('body-parser');
 router.use(bodyParser.json());
 let User = require('../queries/user');
 let Trajet = require('../queries/trajet');
+let Colis = require('../queries/colis');
 
 
 router.get('/list-traj', function(req,res){
-  Trajet.getTrajetById(function(err,result){
+  Trajet.getAllTrajets(function(err,result){
     if(err) {
-      // console.log("Erreur dans getTrajetById");
-      console.error(err);
+      console.log("Erreur dans getAllTrajets query");
     }
 
     else {
-      let arrayUser = [];
-      const tmpResultTrajUser = result.rows[0];
+      console.log(" getAllTrajets query effectuée");
+      let arrayTraj = [];
+      let colisName = "";
+      let places= "";
+      let timeDate="";
+      // let paypalAccount="";
       for (let i = 0; i < result.rows.length ; i++ )
       {
+        if(result.rows[i].book_places){
+          places = result.rows[i].book_places;
+        }
+        else {
+          places = "Livraison de colis" ;
+        }
 
-        arrayUser.push({
+        timeDate = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ; 
+       
+       
+        arrayTraj.push({
           id: result.rows[i].id,
           depart : result.rows[i].depart_address,
-          arrivee : result.rows[i].arrivee_address,
-          nbrePlaces : result.rows[i].book_places
+          time : timeDate,
+          nbrePlaces : places,
+          prix : result.rows[i].prix,
+          paypal : result.rows[i].paypal,
+          statut : result.rows[i].statut
         });
       }
-      console.log(arrayUser);
-      res.json(arrayUser);
+      console.log(arrayTraj);
+      res.json(arrayTraj);
 
     }
   });
