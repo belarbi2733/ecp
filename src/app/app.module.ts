@@ -13,11 +13,12 @@ import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './services/map.service';
 import { ValidationService} from './searchFolder/sidebar/validation.service';
-//import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
-//import {MesColisService} from './services/profileServices/mes-colis.service';
+// import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
+// import {MesColisService} from './services/profileServices/mes-colis.service';
 import { ValidationTrajetService} from './validationtrajet/validationtrajet.service';
+import {MesTournService} from './services/profileServices/mes-tourn.service';
 
-//import { TrajetService} from './searchFolder/sidebar/trajet';
+// import { TrajetService} from './searchFolder/sidebar/trajet';
 import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service';
 import {MesColisService} from './services/profileServices/mes-colis.service';
 import {MesTrajService} from './services/profileServices/mes-traj.service';
@@ -63,9 +64,6 @@ import { MessagerieComponent } from './messagerieFolder/messagerie/messagerie.co
 import { InfoTrajComponent } from './adminFolder/info-traj/info-traj.component';
 import { AdminRemboursComponent } from './adminFolder/admin-rembours/admin-rembours.component';
 import { AdminComponent } from './adminFolder/admin/admin.component';
-import { LoginstatComponent } from './adminFolder/loginstat/loginstat.component';
-import { ParcelstatComponent } from './adminFolder/parcelstat/parcelstat.component';
-import { TripstatComponent } from './adminFolder/tripstat/tripstat.component';
 import { UserstatComponent } from './adminFolder/userstat/userstat.component';
 import { NavbarAdminComponent } from './adminFolder/navbar-admin/navbar-admin.component';
 import { NavbarReservationComponent } from './reservations/navbar-reservation/navbar-reservation.component';
@@ -83,7 +81,6 @@ import {PreferencesService} from './services/profileServices/preferences.service
 import {RatingService} from './services/profileServices/rating.service';
 import {VehicleService} from './services/profileServices/vehicle.service';
 import {DataTrajService} from './services/admin-list-traj.service';
-import {MesTournService} from './services/mestourn.service';
 import {AdminListUtService} from './services/admin-list-user.service';
 import {InscrService} from './services/singleComponentServices/inscr.service';
 import { LienInscrService } from './services/singleComponentServices/lien-inscr.service';
@@ -93,10 +90,26 @@ import { ServerconfigService } from './serverconfig.service';
 import { PaypalService } from './services/paypal.service';
 import { AdminpayComponent } from './adminFolder/adminpay/adminpay.component';
 import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
+import { AdminService } from './services/adminServices/admin.service';
 import { UserStatService } from './services/adminServices/userstat.service';
+import { ColisStatService } from './services/adminServices/colisstat.service';
+import { TrajStatService } from './services/adminServices/trajstat.service';
+import { TournStatService } from './services/adminServices/tournstat.service';
+import { CondStatService } from './services/adminServices/condstat.service';
+import { ColisLivrStatService } from './services/adminServices/colislivrstat.service';
+import { TrajEffecStatService } from './services/adminServices/trajeffecstat.service';
+import { TournEffecStatService } from './services/adminServices/tourneffecstat.service';
 import { LienInscrComponent } from './singleComponentFolder/lien-inscr/lien-inscr.component';
-import {  ConfirmationDialogComponent } from './searchFolder/validation/confirmation-dialog.component';
-import {ValidationTrajetComponent} from './validationtrajet/validationtrajet.component'
+import { ConfirmationDialogComponent } from './searchFolder/validation/confirmation-dialog.component';
+import {ValidationTrajetComponent} from './validationtrajet/validationtrajet.component';
+import { PhotoService } from './services/profileServices/photo.service';
+import { CondstatComponent } from './adminFolder/condstat/condstat.component';
+import { ColisstatComponent } from './adminFolder/colisstat/colisstat.component';
+import { TrajstatComponent } from './adminFolder/trajstat/trajstat.component';
+import { TournstatComponent } from './adminFolder/tournstat/tournstat.component';
+import { ColislivrstatComponent } from './adminFolder/colislivrstat/colislivrstat.component';
+import { TrajeffecstatComponent } from './adminFolder/trajeffecstat/trajeffecstat.component';
+import { TourneffecstatComponent } from './adminFolder/tourneffecstat/tourneffecstat.component';
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -171,10 +184,9 @@ const appRoutes: Routes = [
     InfoTrajComponent,
     AdminRemboursComponent,
     AdminComponent,
-    LoginstatComponent,
-    ParcelstatComponent,
-    TripstatComponent,
     UserstatComponent,
+    CondstatComponent,
+    ColisstatComponent,
     NavbarAdminComponent,
     NavbarReservationComponent,
     MesTrajComponent,
@@ -187,7 +199,12 @@ const appRoutes: Routes = [
     LienInscrComponent,
     ConfirmationDialogComponent,
     FileSelectDirective,
-    ValidationTrajetComponent
+    ValidationTrajetComponent,
+    TrajstatComponent,
+    TournstatComponent,
+    ColislivrstatComponent,
+    TrajeffecstatComponent,
+    TourneffecstatComponent
   ],
   imports: [
     BrowserModule,
@@ -223,13 +240,22 @@ const appRoutes: Routes = [
     AddtrajetService,
     ServerconfigService,
     PaypalService,
+    AdminService,
     UserStatService,
+    ColisStatService,
+    TrajStatService,
+    TournStatService,
+    CondStatService,
+    ColisLivrStatService,
+    TrajEffecStatService,
+    TournEffecStatService,
     ValidationService,
     ConfirmationDialogService,
     MesColisService,
     ValidationTrajetService,
-    MesTrajService
-
+    MesTrajService,
+    MesTournService,
+    PhotoService
   ],
   bootstrap: [AppComponent]
 })

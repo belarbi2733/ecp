@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ServerconfigService} from '../../serverconfig.service';
+import { ServerconfigService } from '../../serverconfig.service';
 
 @Injectable()
 export class UserStatService {
@@ -9,9 +9,9 @@ export class UserStatService {
 
   url = this.servUrl.nodeUrl;
 
-  getNbreUsers(data) {
+  getNbreUsersTab(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/admin/dashBoard/getNbreUsers`, data)
+      this.http.get(`${this.url}/adminUserStat/getNbreUsersTab`, data)
         .subscribe(
           res => {
             console.log(res);
@@ -24,4 +24,5 @@ export class UserStatService {
         );
     });
   }
+
 }

@@ -1,6 +1,5 @@
 import { Component, Input , OnInit } from '@angular/core';
 import {DataTrajService} from '../../services/admin-list-traj.service';
-import {Trajet} from '../../singleComponentFolder/add-trajet/add-trajet.interface';
 import {AdminListTrajInterface} from './admin-list-traj.interface';
 
 
@@ -16,11 +15,13 @@ export class AdminListTrajComponent implements OnInit {
   adminListTrajInterface: AdminListTrajInterface = {
     id: null,
     depart: '',
-    arrivee: '',
-    nbrePlaces: null
+    time: '',
+    nbrePlaces: null,
+    prix: null,
+    colis: '',
+    paypal: '',
+    statut: null
   };
-
-
 
   error: string;
 
@@ -34,7 +35,11 @@ export class AdminListTrajComponent implements OnInit {
         this.adminListTrajInterface = adminListTrajInterface;
       })
       .catch(() => {
-        console.log('Error in getUserDataById');
+        console.log('Error in getTrajData dans le ngOnInit');
       });
+  }
+
+  PayementEffect(){
+
   }
 }

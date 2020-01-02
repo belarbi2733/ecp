@@ -1,5 +1,6 @@
 let express = require('express');
 let app = express();
+let path = require('path');
 let LoginController = require('./controllers/loginController');
 let ColisController = require('./controllers/colisController');
 let TrajetController = require('./controllers/trajetController');
@@ -7,9 +8,22 @@ let FindController = require('./controllers/findTrajetController');
 let PaypalController = require('./controllers/paypalController');
 let TourneeController = require('./controllers/tourneeController');
 let AdminController = require('./controllers/adminController');
+let AdminDashBoardController = require('./controllers/adminDashBoardController');
+let AdminUserStatController = require('./controllers/adminUserStatController');
+let AdminColisStatController = require('./controllers/adminColisStatController');
+let AdminTrajStatController = require('./controllers/adminTrajStatController');
+let AdminTournStatController = require('./controllers/adminTournStatController');
+let AdminCondStatController = require('./controllers/adminCondStatController');
+let AdminColisLivrStatController = require('./controllers/adminColisLivrStatController');
+let AdminTrajEffecStatController = require('./controllers/adminTrajEffecStatController');
+let AdminTournEffecStatController = require('./controllers/adminTournEffecStatController');
 let ProfileController = require('./controllers/profileController');
 let VoitureController = require('./controllers/voitureController');
 let ValidationController = require ('./controllers/nodeMailerController')
+
+app.use(express.static(path.join(__dirname,'/public')));
+
+
 // !!!!!!!!!! Il faut mettre votre mdp de votre database dans db.js sinon ca fonctionne pas
 
 app.use(function(req, res, next) {
@@ -102,7 +116,39 @@ app.use('/admin', AdminController);
 
 
 
+app.use('/adminDashBoard', AdminDashBoardController);
 
+
+
+app.use('/adminUserStat', AdminUserStatController);
+
+
+
+app.use('/adminColisStat', AdminColisStatController);
+
+
+
+app.use('/adminTrajStat', AdminTrajStatController);
+
+
+
+app.use('/adminTournStat', AdminTournStatController);
+
+
+
+app.use('/adminCondStat', AdminCondStatController);
+
+
+
+app.use('/adminColisLivrStat', AdminColisLivrStatController);
+
+
+
+app.use('/adminTrajEffecStat', AdminTrajEffecStatController);
+
+
+
+app.use('/adminTournEffecStat', AdminTournEffecStatController);
 
 /*
 Profile Controller    url : /profile
@@ -135,7 +181,7 @@ app.use('/validation', ValidationController);
 /*
 Paypal Controller    url : /paypal
 
-  - get /calculPrix
+  - get /getPrix
   - post /changeStatus
  */
 app.use('/paypal', PaypalController);
@@ -153,4 +199,3 @@ const PORT = process.env.PORT || 8081;
 const server = app.listen(PORT, () => {
 console.log('Connected to port ' + PORT)
 })
-

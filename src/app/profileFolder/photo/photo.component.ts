@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup } from "@angular/forms";
+import {Photo} from "./photo.interface"
+import {PhotoService} from "../../services/profileServices/photo.service"
 
 const URL = 'http://localhost:8081/profile/upload';
 
@@ -16,7 +18,8 @@ export class PhotoComponent implements OnInit {
 
   imageURL: string;
   uploadForm: FormGroup;
-  idUser: number;
+  displayPhotoURL : string;
+  // idUser: number;
   
   public uploader: FileUploader = new FileUploader({
     url: URL,
@@ -24,12 +27,17 @@ export class PhotoComponent implements OnInit {
     
   });
 
+  photoInterface: Photo = {
+    idUser : null,
+    photo : ''
+  };
+
   
 
-  constructor(public fb: FormBuilder, private toastr: ToastrService ) {
-    this.idUser = JSON.parse(localStorage.getItem('idUser')).id;
+  constructor(public fb: FormBuilder, private toastr: ToastrService, private photoService: PhotoService) {
+    this.photoInterface.idUser = JSON.parse(localStorage.getItem('idUser')).id;
     this.uploader.onBuildItemForm = (item, form) => {
-      form.append("id", this.idUser);
+      form.append("id", this.photoInterface.idUser);
     };
     
     // Reactive Form
@@ -42,6 +50,17 @@ export class PhotoComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+    this.photoService.displayPhoto(this.photoInterface)
+    .then((dataPhoto: string) => {
+      this.photoInterface.photo = dataPhoto;
+      this.displayPhotoURL= "http://localhost:8081/uploads/"+this.photoInterface.photo;
+      console.log(dataPhoto);
+  })
+    .catch( () => {
+    console.log('Error in getPhotoByID');
+  });
+
     this.uploader.onAfterAddingFile = (file) => {
       file.withCredentials = false;
     };

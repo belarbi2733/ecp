@@ -35,17 +35,25 @@ export class AuthComponent implements OnInit {
     console.log('Validation : ' + validationStatus);
     switch (validationStatus) {
       case true: {
-        this.authService.signIn().then(
+        this.authService.signIn(this.auth).then(
           () => {
             this.authStatus = this.authService.isAuth;
-            this.adminStatus = this.authService.isAdmin;
-            this.router.navigate(['accueil']);
+            this.authService.setAdmin(this.auth).then(
+              () => {
+                this.adminStatus = this.authService.isAdmin;
+                if(this.adminStatus == false) {
+                  this.router.navigate(['accueil']);
+                } else if(this.adminStatus == true) {
+                  this.router.navigate(['admin']);
+                }
+              }
+            );
           }
         );
         break;
       }
       case false: {
-        this.authFailed = 'Identifiants de connexion érronés ou Adresse mail non validée';
+        this.authFailed = 'Identifiants de connexion érronés ou Adresse mail non activée (vérifiez votre boite mail)';
         break;
       }
       default: {
@@ -73,16 +81,6 @@ export class AuthComponent implements OnInit {
       .catch(() => {
         this.authFailed = 'Erreur avec la database';
       });
-  }
-
-  onSignInAdmin() {
-    this.authService.signInAdmin().then(
-      () => {
-        this.authStatus = this.authService.isAuth;
-        this.adminStatus = this.authService.isAdmin;
-        this.router.navigate(['admin']);
-      }
-    );
   }
 
   onSignOut() {
