@@ -3,11 +3,11 @@ let Math = require('mathjs');
 
 let Trajet = {
 
-  addTrajet: function(trajet, callback)
+  addTrajet: function(trajet, prix, callback)
   {
     console.log("Insert trajet en cours...");
-    return db.query('INSERT INTO trajet (id_user, departure_time, distance, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
-      [trajet.idUser, trajet.departuretime, trajet.distanceinmeters, trajet.departureAddress, trajet.arrivalAddress, trajet.departure[0], trajet.departure[1], trajet.arrival[0], trajet.arrival[1],0, trajet.places], callback);
+    return db.query('INSERT INTO trajet (id_user, departure_time, distance, prix, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
+      [trajet.idUser, trajet.departuretime, trajet.distanceinmeters, prix, trajet.departureAddress, trajet.arrivalAddress, trajet.departure[0], trajet.departure[1], trajet.arrival[0], trajet.arrival[1],0, trajet.places], callback);
   },
 
   addTrajetInTournee: function(idTournee, idTrajet, callback)
@@ -17,38 +17,59 @@ let Trajet = {
   },
 
   getAllTrajet: function(callback){
-    return db.query('SELECT * FROM trajet', callback);
+    return db.query('SELECT * FROM trajet WHERE id_colis IS NULL', callback);
   },
 
-  getTrajetById: function(callback)
+  // getAllTrajets: function(callback){
+  //   return db.query('SELECT * FROM trajet WHERE statut >= 1 ORDER BY id DESC', callback);
+  // },
+
+  getAllTrajets: function(callback){
+    return db.query('SELECT trajet.id, trajet.depart_address, trajet.departure_time, trajet.book_places, trajet.prix, trajet.statut, utilisateur.paypal  FROM trajet INNER JOIN utilisateur ON utilisateur.id=trajet.id_user ORDER BY trajet.departure_time DESC', callback);
+  },
+// WHERE trajet.statut >= 1 ORDER BY trajet.id DESC
+//   SELECT employee.LastName, employee.DepartmentID, department.DepartmentName 
+// FROM employee 
+// INNER JOIN department ON
+// employee.DepartmentID = department.DepartmentID;
+
+
+// id: result.rows[i].id,
+//           depart : result.rows[i].depart_address,
+//           arrivee : result.rows[i].arrivee_address,
+//           nbrePlaces : places,
+//           prix : result.rows[i].prix,
+//           colis : colisName,
+//           paypal : paypalAccount,
+//           statut : result.rows[i].statut
+
+  getAllTrajEffec: function(callback){
+    console.log("Get All Trajet effectué");
+    return db.query('SELECT * FROM trajet WHERE statut >= $1 AND id_colis IS NULL', [3], callback);
+  },
+
+  getAllColisLivr: function(callback)
   {
-    console.log("getTrajetById : " + 1);
-    return db.query('SELECT * FROM trajet', callback);
+    console.log("Get All Colis livrés");
+    return db.query('SELECT * FROM trajet WHERE statut >= $1 AND id_colis IS NOT NULL', [3], callback);
   },
 
-  getPrice: function(callback)
+  getTrajetById: function(iduser,callback)
   {
-    console.log("getPrice : ");
-    console.log("test");
-    return db.query('SELECT prix FROM trajet ');
-
+    console.log("getTrajetById : " + iduser);
+    return db.query('SELECT * FROM trajet WHERE id_user = $1', [iduser], callback);
   },
 
-  calcPrixTraj: function(callback)
+  getPrice: function(trajet, callback)
   {
-    return db.query('SELECT book_places, distance FROM trajet', callback);
+    console.log("getPrice requete sql : ");
+    return db.query('SELECT prix FROM trajet WHERE id_user = $1 AND id_tournee = $2 AND statut >= $3', [trajet.idUser, trajet.idTournee, 1],callback);
   },
 
-  getDataTrajByIdUser: function(id, callback)
-  {
-    console.log('getDataTrajByIdUSer : ' + id );
-    return db.query('SELECT * FROM trajet WHERE id_user = $1', [id], callback);
-  },
-
-  changeStatusTraj: function(trajet, callback)
+  changeStatusTraj: function(statut, trajet, callback)
   {
     console.log("Changement du statut du trajet");
-    return db.query('UPDATE trajet SET statut = $1 WHERE id_user = $2 AND id_tournee = $3', [true, trajet.idUser, trajet.idTournee], callback);
+    return db.query('UPDATE trajet SET statut = $1 WHERE id_user = $2 AND id_tournee = $3', [statut, trajet.idUser, trajet.idTournee], callback);
   },
 
   findTrajetAroundRayon: function(search, trajet,rayonPerimetreKms, callback) {

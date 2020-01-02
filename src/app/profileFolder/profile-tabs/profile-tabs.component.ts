@@ -10,6 +10,7 @@ export class ProfileTabsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    
   }
 
 }

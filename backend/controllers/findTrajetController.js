@@ -17,7 +17,7 @@ let Python = require('../algoRun/processes');
 //On ajoute un colis, puis on va recup son id qui a été incrémenter pour pouvoir générer le trajet découlant de ce colis
 
 router.post('/matchDriverTrajet', function(req,res) {
-  console.log(req.body);
+  console.log('GUILY : ' + JSON.stringify(req.body));
   Voiture.getDataVoitureById(req.body.idUser, function (err, result) {
     if(err) {
       res.status(400).json(err);
@@ -154,7 +154,7 @@ router.post('/matchDriverTrajet', function(req,res) {
                       //Quand le dernier trajet a été traité on enregistre la tournée, on ajoute l'id_tournée dans les trajets et on crée l'itinéraire
                       if(iter === result2.rows.length) {
                         console.log('END forLoop : Trajet iter : ' + iter + ' id : ' + one.id);
-                        setTournee(result.rows[0].id, trajetJson, search, function(data){
+                        setTournee(search.idUser, result.rows[0].id, trajetJson, search, function(data){
                           console.log('Res JSON : ' + JSON.stringify(data));
                           res.json(data);
                         });
@@ -318,7 +318,7 @@ function distance(lat1, lon1, lat2, lon2) {
 
 
 //function setTournee(idVoiture, colisJson, infosSearch, listTrajet, callback) {  // Si colis au lieu de trajet
-function setTournee(idVoiture, trajetJson, infosSearch, callback) {
+function setTournee(idUser, idVoiture, trajetJson, infosSearch, callback) {
   //console.log('Colis' + JSON.stringify(colisJson));
   console.log('Trajet' + JSON.stringify(trajetJson));
   Python.runPy(trajetJson)
@@ -330,7 +330,7 @@ function setTournee(idVoiture, trajetJson, infosSearch, callback) {
       console.log('Output Python JSON in node : ' + JSON.stringify(data));
 
 
-      Tournee.createTournee(idVoiture, infosSearch, outputJson['parcours'][0], function (err,result) {  // outputJson['tournee'][0] => distance de la tournée
+      Tournee.createTournee(idUser, idVoiture, infosSearch, outputJson['parcours'][1], function (err,result) {  // outputJson['tournee'][0] => distance de la tournée
         if(err) {
           res.status(400).json(err);
           console.error(err);

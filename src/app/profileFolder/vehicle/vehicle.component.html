@@ -6,8 +6,8 @@
   <!-- <label for="carModele">Modèle</label> -->
   <input type="text" class="form-control" id="model" aria-describedby="model" placeholder="Modèle du véhicule" [(ngModel)]="vehicule.modele">
 
-  
-  <label>Volume du coffre: </label> 
+
+  <label>Volume du coffre: </label>
   <br>
    <small>Veillez à sélectionner un volume légèrement inférieur à la réalité!</small>
    <br>
@@ -29,6 +29,8 @@
   <button class="btn" (click)="updateVehicule(vehicule)">
     Modifier vos informations
   </button>
-
+  <br>
+  <br>
+  <label>{{msg}}</label>
 </div>
 

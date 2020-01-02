@@ -6,6 +6,7 @@ let bodyParser = require('body-parser');
 router.use(bodyParser.json());
 let User = require('../queries/user');
 let Trajet = require('../queries/trajet');
+let Tournee = require('../queries/tournee');
 
 router.post('/personalData/getDataUser', function(req,res) {
   User.getDataById(req.body.idUser, function(err, result) {
@@ -49,6 +50,26 @@ router.post('/personalData/update',function (req,res) {
     else {
       console.log(result);
       res.json(result);
+    }
+  });
+});
+
+router.post('/display',function (req,res) {
+  // console.log(req.body);
+  User.selectPhoto(req.body.idUser,function (err,result) {
+    if(err) {
+      res.status(400).json(err);
+      console.error(err);
+    }
+    else {
+      if (result.rows.length) {
+        console.log(result.rows[0]);
+        res.json(result.rows[0].photo);
+      }
+      else {
+        res.json(null);
+      }
+
     }
   });
 });
@@ -143,7 +164,6 @@ router.post('/mes-colis', function(req,res) {
   Colis.getDataColisByIdUser(req.body.idUser, function(err, result) {
     if(err) {
       res.status(400).json(err);
-      console.error(err);
     }
     else {
       let arrayUser = [];
@@ -168,7 +188,7 @@ router.post('/mes-colis', function(req,res) {
 });
 
 router.post('/mes-traj', function(req,res) {
-  Trajet.getDataTrajByIdUser(req.body.idUser, function(err, result) {
+  Trajet.getTrajetById(req.body.idUser, function(err, result) {
     if(err) {
       res.status(400).json(err);
       console.error(err);
@@ -179,11 +199,35 @@ router.post('/mes-traj', function(req,res) {
       {
 
         arrayUser.push({
-          idUser: result.rows[i].id_User,
+          /*idUser: result.rows[i].id_User,*/
           heureDepart: result.rows[i].departure_time,
           lieuArrivee: result.rows[i].depart_address,
           lieuDepart: result.rows[i].arrivee_address,
           prix : result.rows[i].prix,
+          status : result.rows[i].statut
+        });
+      }
+      res.json(arrayUser);
+    }
+  });
+});
+
+
+router.post('/mes-tourn', function(req,res) {
+  Tournee.getDataTournByIdUser(req.body.idUser, function(err, result) {
+    if(err) {
+      res.status(400).json(err);
+      console.error(err);
+    }
+    else {
+      let arrayUser = [];
+      for (let i = 0; i < result.rows.length ; i++ )
+      {
+        arrayUser.push({
+          idUser: result.rows[i].id_user,
+          heureDepart: result.rows[i].heure_depart,
+          lieuArrivee: result.rows[i].depart_adresse,
+          lieuDepart: result.rows[i].arrivee_adresse,
           status : result.rows[i].statut
         });
       }
@@ -195,6 +239,8 @@ router.post('/mes-traj', function(req,res) {
 
 
 
+
+
 //////////////////////////////////////////     13 file upload profile pic   /////////////////////////////////////////////////////
 // const express = require('express'), // deja déclaré plus haut
 path = require('path'),
@@ -203,7 +249,7 @@ multer = require('multer'),
 bodyParser = require('body-parser');
 
 // File upload settings
-const PATH = './uploads';
+const PATH = './public/uploads';
 var path = require('path')
 let storage = multer.diskStorage({
 destination: (req, file, cb) => {
