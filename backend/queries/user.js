@@ -69,12 +69,6 @@ let Utilisateur = {
       return db.query('SELECT * FROM utilisateur', callback);
     },
 
-    getAllCond: function(callback)
-    {
-      console.log("Get All Conducteur");
-      return db.query('SELECT * FROM utilisateur WHERE statut = $1', [2], callback);
-    },
-
     updateRating: function(updateRating, callback){
     console.log("add new rating");
    /* return db.query('INSERT INTO utilisateur  WHERE id = $2 VALUES avr_rating = ($1)' , [utilisateur.body.avr_rating, utilisateur.body.id], callback);*/

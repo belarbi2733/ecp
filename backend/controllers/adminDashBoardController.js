@@ -6,6 +6,7 @@ let User = require('../queries/user');
 let Trajet = require('../queries/trajet');
 let Colis = require('../queries/colis');
 let Tournee = require('../queries/tournee');
+let Voiture = require('../queries/voiture');
 
 
 router.get('/getNbreUsers', function(req,res) {
@@ -78,7 +79,7 @@ router.get('/getNbreTourn', function(req,res) {
 
 router.get('/getNbreCond', function(req,res) {
   console.log('Request');
-  User.getAllCond(function (err, result) {
+  Voiture.getAllCond(function (err, result) {
     console.log(result);
     if (err) {
       res.status(400).json(err);
