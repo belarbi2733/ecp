@@ -57,14 +57,16 @@ router.get('/list-ut', function(req,res) {
     }
     else {
       let arrayUser = [];
-      const tmpResultUser = result.rows[0];
       for (let i = 0; i < result.rows.length ; i++ )
       {
 
         arrayUser.push({
           id: result.rows[i].id,
           nom : result.rows[i].nom,
-          prenom : result.rows[i].prenom
+          prenom : result.rows[i].prenom,
+          statut : result.rows[i].statut,
+          mail: result.rows[i].mail
+
         });
       }
       // console.log(arrayUser);
