@@ -9,7 +9,7 @@ declare let L;
 declare let tomtom: any;
 var products = [];
 let dist;
-let idtrajet = 33;
+let idtrajet :number;
 
 
 
@@ -47,10 +47,16 @@ export class ValidationTrajetComponent implements OnInit {
 
   
   ngOnInit() {
-    console.log (window.location);
-    recordValidationTrajet(donnee);
-    console.log (donnee);
-    this.validationservice.validationtrajet(donnee);
+    console.log (new URL(window.location.href).searchParams.get('idtrajet'));
+    
+    idtrajet = parseInt( (new URL(window.location.href).searchParams.get('idtrajet')));
+    if (typeof idtrajet !== 'undefined') {
+      //idtrajet = null;
+      recordValidationTrajet(donnee);
+      console.log (donnee);
+      this.validationservice.validationtrajet(donnee);
+    }
+    
     //tour = this.trajetserver.getConfig();
     
     //console.log(JSON.stringify(tour));
