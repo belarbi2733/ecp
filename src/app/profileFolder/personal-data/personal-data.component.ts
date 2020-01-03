@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {DataPersonal} from './personal-data.interface';
 import {PersonalDataService} from '../../services/profileServices/personal-data.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-personal-data',
@@ -33,7 +34,7 @@ export class PersonalDataComponent implements OnInit {
         this.personalInfos.sexe = dataUser.sexe;
         this.personalInfos.mail = dataUser.mail;
         this.personalInfos.tel = dataUser.tel;
-        this.personalInfos.date_naiss = dataUser.date_naiss;
+        this.personalInfos.date_naiss = moment(dataUser.date_naiss).format('YYYY-MM-DD');
         this.personalInfos.description = dataUser.description;
         console.log(this.personalInfos);
     })
