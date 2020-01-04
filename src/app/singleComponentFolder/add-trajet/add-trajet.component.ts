@@ -3,6 +3,7 @@ import { Trajet } from './add-trajet.interface';
 import {AddtrajetService} from '../../services/singleComponentServices/addtrajet.service';
 import {Injectable} from '@angular/core';
 import { ServerconfigService} from '../../serverconfig.service';
+import {Key} from '../../searchFolder/map/TomTomKeys';
 
 declare let L;
 declare let tomtom: any;
@@ -67,14 +68,15 @@ export class AddTrajetComponent implements OnInit {
   }
 
   ngOnInit() {
+
     const service = this.addtrajetservice; // Pour pouvoir utiliser le service dans les functions;
 
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
     // Set TomTom keys
-    tomtom.key('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
-    tomtom.routingKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
-    tomtom.searchKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
+    tomtom.key(Key);
+    tomtom.routingKey(Key);
+    tomtom.searchKey(Key);
 
 
     const formOptions = {
@@ -86,7 +88,7 @@ export class AddTrajetComponent implements OnInit {
     let listScrollHandler = null;
 
     const map = tomtom.L.map('map', {
-    key: '2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7',
+    key: Key,
     basePath: '/assets/sdktool/sdk',
     center: [ 50.8504500, 4.3487800 ],
     zoom: 10,
