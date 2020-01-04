@@ -19,7 +19,7 @@ let Trajet = {
 
   updateTraj: function(data, callback)
   {
-    Console.log("updateStatus : " + data.idTraj);
+    console.log("updateStatus : " + data.idTraj);
     return db.query('UPDATE trajet SET statut = $1 WHERE id = $2', [0,data.idTraj] ,callback);
   },
 

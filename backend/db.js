@@ -2,8 +2,8 @@ let pg = require("pg");
 
 let config = {
   user: 'postgres',
-  database: 'ECP2',
-  password: 'Bonus', // !!!!!!!!!! Il faut mettre votre mdp de votre database sinon ca fonctionne pas
+  database: 'ECP',
+  password: '1397', // !!!!!!!!!! Il faut mettre votre mdp de votre database sinon ca fonctionne pas
   port: 5432
 };
 

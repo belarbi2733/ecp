@@ -178,7 +178,7 @@ router.post('/mes-colis', function(req,res) {
         if (result.rows[i].statut==4){statusString="payé"}
         if (result.rows[i].statut==5){statusString="remboursé"}
 
-        dateTime = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ; 
+        dateTime = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ;
 
         arrayUser.push({
           heureDepart: dateTime,
@@ -218,14 +218,16 @@ router.post('/mes-traj', function(req,res) {
         if (result.rows[i].statut==3){statusString="demande de remboursment"}
         if (result.rows[i].statut==4){statusString="payé"}
         if (result.rows[i].statut==5){statusString="remboursé"}
-        dateTime = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ; 
+        dateTime = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ;
         arrayUser.push({
           /*idUser: result.rows[i].id_User,*/
           heureDepart: dateTime,
           lieuArrivee: result.rows[i].depart_address,
           lieuDepart: result.rows[i].arrivee_address,
           prix : result.rows[i].prix,
-          status : statusString
+          status : statusString,
+          etatStatus : result.rows[i].statut,
+          idTraj : result.rows[i].id
         });
       }
       res.json(arrayUser);
@@ -234,14 +236,13 @@ router.post('/mes-traj', function(req,res) {
 });
 
 router.post('/mes-trajupd', function(req,res) {
-  Trajet.updateTraj(req, function(err, result) {
+  Trajet.updateTraj(req.body, function(err, result) {
     if (err) {
       res.status(400).json(err);
       console.error(err);
     } else {
       res.json(result);
-      Console.log("test");
-      Console.log(res);
+      console.log(res);
     }
   });
 
