@@ -6,6 +6,7 @@ import { ChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPayPalModule } from 'ngx-paypal';
+
 // services
 import { AuthGuard } from './services/singleComponentServices/auth-guard.service';
 import { AdminGuard } from './services/singleComponentServices/admin-guard.service';
@@ -20,6 +21,7 @@ import {MesTournService} from './services/profileServices/mes-tourn.service';
 
 // import { TrajetService} from './searchFolder/sidebar/trajet';
 import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service';
+
 import {MesColisService} from './services/profileServices/mes-colis.service';
 import {MesTrajService} from './services/profileServices/mes-traj.service';
 // modules for file upload ( profile pic )
