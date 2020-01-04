@@ -167,10 +167,24 @@ router.post('/mes-colis', function(req,res) {
     }
     else {
       let arrayUser = [];
+      let statusString="";
       for (let i = 0; i < result.rows.length ; i++ )
       {
 
+        if (result.rows[i].statut==0){statusString="pas encore pris en charge"}
+        if (result.rows[i].statut==1){statusString="dans une tournée"}
+        if (result.rows[i].statut==2){statusString="effectué"}
+        if (result.rows[i].statut==3){statusString="demande de remboursment"}
+        if (result.rows[i].statut==4){statusString="payé"}
+        if (result.rows[i].statut==5){statusString="remboursé"}
+
+        dateTime = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ;
+
         arrayUser.push({
+          heureDepart: dateTime,
+          lieuArrivee: result.rows[i].depart_address,
+          lieuDepart: result.rows[i].arrivee_address,
+          status : statusString,
           id: result.rows[i].id,
           nomColis : result.rows[i].nom_colis,
           poids : result.rows[i].poids,
@@ -188,23 +202,32 @@ router.post('/mes-colis', function(req,res) {
 });
 
 router.post('/mes-traj', function(req,res) {
-  Trajet.getTrajetById(req.body.idUser, function(err, result) {
+  Trajet.getTrajetPassagerOnlyById(req.body.idUser, function(err, result) {
     if(err) {
       res.status(400).json(err);
       console.error(err);
     }
     else {
       let arrayUser = [];
+      let statusString="";
       for (let i = 0; i < result.rows.length ; i++ )
       {
-
+        if (result.rows[i].statut==0){statusString="pas encore pris en charge"}
+        if (result.rows[i].statut==1){statusString="dans une tournée"}
+        if (result.rows[i].statut==2){statusString="effectué"}
+        if (result.rows[i].statut==3){statusString="demande de remboursment"}
+        if (result.rows[i].statut==4){statusString="payé"}
+        if (result.rows[i].statut==5){statusString="remboursé"}
+        dateTime = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ;
         arrayUser.push({
           /*idUser: result.rows[i].id_User,*/
-          heureDepart: result.rows[i].departure_time,
+          heureDepart: dateTime,
           lieuArrivee: result.rows[i].depart_address,
           lieuDepart: result.rows[i].arrivee_address,
           prix : result.rows[i].prix,
-          status : result.rows[i].statut
+          status : statusString,
+          etatStatus : result.rows[i].statut,
+          idTraj : result.rows[i].id
         });
       }
       res.json(arrayUser);
@@ -212,6 +235,18 @@ router.post('/mes-traj', function(req,res) {
   });
 });
 
+router.post('/mes-trajupd', function(req,res) {
+  Trajet.updateTraj(req.body, function(err, result) {
+    if (err) {
+      res.status(400).json(err);
+      console.error(err);
+    } else {
+      res.json(result);
+      console.log(res);
+    }
+  });
+
+});
 
 router.post('/mes-tourn', function(req,res) {
   Tournee.getDataTournByIdUser(req.body.idUser, function(err, result) {

@@ -5,8 +5,6 @@ router.use(bodyParser.json());
 let Trajet = require('../queries/trajet');
 
 
-//On ajoute un colis, puis on va recup son id qui a été incrémenter pour pouvoir générer le trajet découlant de ce colis
-
 router.post('/add' , function (req, res) {
 
   console.log(req.body);
@@ -43,12 +41,13 @@ module.exports = router;
 function discount(prix, bookPlaces) {
 
   if(bookPlaces >= 0 && bookPlaces <= 7) {
-    return prix - ((prix/100)*5*(bookPlaces-1));
+    return prix - ((prix/100)*5*(bookPlaces));
 
     // bookPlaces = 0 => 0% de réduction
     // bookPlaces = 1 => 5% de réduction
     // bookPlaces = 2 => 10% de réduction
     // bookPlaces = 3 => 15% de réduction
+    //...
   } else {
     console.log("Erreur trop ou pas assez de clients dans le véhicule");
   }

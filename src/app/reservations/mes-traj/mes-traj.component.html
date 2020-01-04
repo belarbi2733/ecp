@@ -28,10 +28,10 @@
         <ng-template #popContent>
 
         </ng-template>
-        <button class="btn"
-                [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="false">
+        <button class="btn btn-sucess" (click)="updateStatus(item)">
           Suspendre
         </button>
+
       </td>
 
     </tr>
