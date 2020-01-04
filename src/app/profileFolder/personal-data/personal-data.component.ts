@@ -29,14 +29,16 @@ export class PersonalDataComponent implements OnInit {
   ngOnInit() {
     this.personalDataService.getUserDataById(this.personalInfos)
       .then((dataUser: DataPersonal) => {
-        this.personalInfos.nom = dataUser.nom;
-        this.personalInfos.prenom = dataUser.prenom;
-        this.personalInfos.sexe = dataUser.sexe;
-        this.personalInfos.mail = dataUser.mail;
-        this.personalInfos.tel = dataUser.tel;
-        this.personalInfos.date_naiss = moment(dataUser.date_naiss).format('YYYY-MM-DD');
-        this.personalInfos.description = dataUser.description;
-        console.log(this.personalInfos);
+        if (dataUser !== null) {
+          this.personalInfos.nom = dataUser.nom;
+          this.personalInfos.prenom = dataUser.prenom;
+          this.personalInfos.sexe = dataUser.sexe;
+          this.personalInfos.mail = dataUser.mail;
+          this.personalInfos.tel = dataUser.tel;
+          this.personalInfos.date_naiss = moment(dataUser.date_naiss).format('YYYY-MM-DD');
+          this.personalInfos.description = dataUser.description;
+          console.log(this.personalInfos);
+        }
     })
       .catch( () => {
       console.log('Error in getUserDataById');

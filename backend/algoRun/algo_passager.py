@@ -18,6 +18,7 @@ somme = 0
 
 donneejson = json.loads(sys.argv[1])
 
+
 # le nombre de passagers
 nbrPasssagers = len(donneejson) - 1
 #print donneejson['passager1'][8]

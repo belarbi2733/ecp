@@ -32,7 +32,7 @@ router.post('/personalData/getDataUser', function(req,res) {
         //console.log(JSON.stringify(objJson));
         res.json(objJson);  // on peut renvoyer result.rows[0] aussi mais il y a un conflit de variables du coup on les change avec un nouvel objet
       } else {
-        res.json(false);
+        res.json(null);
       }
     }
   });
@@ -178,7 +178,7 @@ router.post('/mes-colis', function(req,res) {
         if (result.rows[i].statut==4){statusString="payé"}
         if (result.rows[i].statut==5){statusString="remboursé"}
 
-        dateTime = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ; 
+        dateTime = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ;
 
         arrayUser.push({
           heureDepart: dateTime,
@@ -218,7 +218,7 @@ router.post('/mes-traj', function(req,res) {
         if (result.rows[i].statut==3){statusString="demande de remboursment"}
         if (result.rows[i].statut==4){statusString="payé"}
         if (result.rows[i].statut==5){statusString="remboursé"}
-        dateTime = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ; 
+        dateTime = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ;
         arrayUser.push({
           /*idUser: result.rows[i].id_User,*/
           heureDepart: dateTime,
