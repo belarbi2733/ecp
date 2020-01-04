@@ -39,7 +39,15 @@ export class AdminListTrajComponent implements OnInit {
       });
   }
 
-  PayementEffect(){
+  paie(){
+ // changer statut trajet à 4
+  }
 
+  rembourse(){
+ // changer statut trajet à 5
+  }
+
+  supprime(){
+// supprimer le trajet
   }
 }

@@ -64,7 +64,6 @@ import { AdminListUtComponent } from './adminFolder/admin-list-ut/admin-list-ut.
 import { AdminListTrajComponent } from './adminFolder/admin-list-traj/admin-list-traj.component';
 import { MessagerieComponent } from './messagerieFolder/messagerie/messagerie.component';
 import { InfoTrajComponent } from './adminFolder/info-traj/info-traj.component';
-import { AdminRemboursComponent } from './adminFolder/admin-rembours/admin-rembours.component';
 import { AdminComponent } from './adminFolder/admin/admin.component';
 import { UserstatComponent } from './adminFolder/userstat/userstat.component';
 import { NavbarAdminComponent } from './adminFolder/navbar-admin/navbar-admin.component';
@@ -90,7 +89,6 @@ import {AddColisService} from './services/singleComponentServices/add-colis.serv
 import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
 import { ServerconfigService } from './serverconfig.service';
 import { PaypalService } from './services/paypal.service';
-import { AdminpayComponent } from './adminFolder/adminpay/adminpay.component';
 import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
 import { AdminService } from './services/adminServices/admin.service';
 import { UserStatService } from './services/adminServices/userstat.service';
@@ -135,8 +133,6 @@ const appRoutes: Routes = [
   { path: 'admin-list-traj', canActivate: [AdminGuard], component: AdminListTrajComponent },
   { path: 'info-traj', canActivate: [AuthGuard], component: InfoTrajComponent },
   { path: 'info-cond', canActivate: [AuthGuard], component: InfoCondComponent },
-  { path: 'admin-rembours', canActivate: [AdminGuard], component: AdminRemboursComponent },
-  { path: 'adminpay', canActivate: [AdminGuard], component: AdminpayComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
   { path: 'lien-inscrire', component: LienInscrComponent },
@@ -184,7 +180,6 @@ const appRoutes: Routes = [
     AdminListTrajComponent,
     MessagerieComponent,
     InfoTrajComponent,
-    AdminRemboursComponent,
     AdminComponent,
     UserstatComponent,
     CondstatComponent,
@@ -196,7 +191,6 @@ const appRoutes: Routes = [
     MesTournComponent,
     Navbar2Component,
     AdmintableComponent,
-    AdminpayComponent,
     InfoCondComponent,
     LienInscrComponent,
     ConfirmationDialogComponent,

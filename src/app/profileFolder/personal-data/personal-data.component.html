@@ -29,8 +29,17 @@
 
 
   <!-- <label for="userDate">Date de naissance : {{ userDate }}</label> -->
-  <input type="date" class="form-control" id="date" aria-describedby="date" placeholder="Date de naissance (exemple : 2001-01-31)" [(ngModel)]="personalInfos.date_naiss">
-
+  <div class="row">
+    <div class="col-3" style="padding-top: 6px;">
+      <label>Date de naissance</label>
+    </div>
+    <div class="col-1">
+      <input type="date" class="form-control" id="date" aria-describedby="date" placeholder="Date de naissance (exemple : 2001-01-31)" [(ngModel)]="personalInfos.date_naiss">
+    </div>
+    <div class="col-6" style="padding-top: 6px;">
+      <label>{{personalInfos.date_naiss}}</label>
+    </div>
+  </div>
   <textarea id = "colisDescription" placeholder="Une description de vous-même (facultatif)" rows=2 [(ngModel)]="personalInfos.description" class ="form-control"></textarea>
 
   <br>
