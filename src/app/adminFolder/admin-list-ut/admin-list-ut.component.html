@@ -34,11 +34,11 @@
             Confirmer
           </button>
         </ng-template>
-        <button class="btn btn-sucess"
+        <button class="btn btn-sucess" *ngIf="!item.statut"
                 [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="true">
           Activer
         </button>
-        <button class="btn btn-sucess"
+        <button class="btn btn-sucess" *ngIf="item.statut"
                 [ngbPopover]="popContent2" popoverTitle="Attention, êtes-vous sûr?"[autoClose]="true" >
           Suspendre
         </button>
