@@ -16,11 +16,11 @@ export class MesTrajComponent implements OnInit {
     lieuArrivee: '',
     prix: null,
     idUser: null,
-    status: null
+    status: '',
+    etatStatus : null
   };
   constructor(private mesTrajService: MesTrajService) {
     this.mesTrajInterface.idUser = JSON.parse(localStorage.getItem('idUser')).id;
-
   }
 
   ngOnInit() {
@@ -33,4 +33,15 @@ export class MesTrajComponent implements OnInit {
       });
   }
 
+   /*updateStatus(data: MesTrajInterface){
+     data.etatStatus = 0;
+     this.mesTrajService.updateStatus(data);
+     console.log(data);
+   }*/
+
+  updateStatus(data: MesTrajInterface) {
+    data.status = 'pas encore pris en charge';
+    this.mesTrajService.updateStatus(data);
+    console.log(data);
+  }
 }

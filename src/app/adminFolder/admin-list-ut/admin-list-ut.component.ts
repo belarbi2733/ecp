@@ -12,7 +12,9 @@ export class AdminListUtComponent implements OnInit {
   adminListUtInterface: AdminListUtInterface = {
     nom: '',
     prenom: '',
-    id: null
+    id: null,
+    statut: null,
+    mail: '',
   };
 
 
