@@ -11,7 +11,7 @@ export class UserStatService {
 
   getNbreUsersTab(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/adminUserStat/getNbreUsersTab`, data)
+      this.http.get(`${this.url}/adminDashBoard/getNbreUsersTab`, data)
         .subscribe(
           res => {
             console.log(res);

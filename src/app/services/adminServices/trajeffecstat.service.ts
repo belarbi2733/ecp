@@ -11,7 +11,7 @@ export class TrajEffecStatService {
 
   getNbreTrajEffecTab(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/adminTrajEffecStat/getNbreTrajEffecTab`, data)
+      this.http.get(`${this.url}/adminDashBoard/getNbreTrajEffecTab`, data)
         .subscribe(
           res => {
             console.log(res);

@@ -11,7 +11,7 @@ export class TournStatService {
 
   getNbreTournTab(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/adminTournStat/getNbreTournTab`, data)
+      this.http.get(`${this.url}/adminDashBoard/getNbreTournTab`, data)
         .subscribe(
           res => {
             console.log(res);
