@@ -41,5 +41,8 @@ export class AdminListUtComponent implements OnInit {
     this.adminListUtService.updateStatut(data);
     console.log(data);
   }
+  edit() {
+    return false;
+  }
 
 }

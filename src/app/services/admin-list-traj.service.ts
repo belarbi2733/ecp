@@ -35,4 +35,15 @@ export class AdminListTrajService {
         }
       );
   }
+  deleteTraj(data: AdminListTrajInterface) {
+    this.http.post(`${this.url}/adminDashboard/delete-traj`, data)
+      .subscribe(
+        res => {
+          console.log(res);
+        },
+        err => {
+          console.log('Error', err);
+        }
+      );
+  }
 }
