@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {MesTrajInterface} from '../../reservations/mes-traj/mes-traj.interface';
+
 
 @Injectable()
 export class MesTrajService {
@@ -20,5 +22,17 @@ export class MesTrajService {
             }
         );
     });
+  }
+
+  updateStatus(data: MesTrajInterface) {
+    this.http.post(`${this.url}/profile/mes-trajupd`, data)
+      .subscribe(
+        res => {
+          console.log(res);
+        },
+        err => {
+          console.log('Error', err);
+        }
+      );
   }
 }

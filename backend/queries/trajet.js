@@ -5,9 +5,10 @@ let Trajet = {
 
   addTrajet: function(trajet, prix, callback)
   {
+    let code = randomString(10);
     console.log("Insert trajet en cours...");
-    return db.query('INSERT INTO trajet (id_user, departure_time, distance, prix, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, book_places) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
-      [trajet.idUser, trajet.departuretime, trajet.distanceinmeters, prix, trajet.departureAddress, trajet.arrivalAddress, trajet.departure[0], trajet.departure[1], trajet.arrival[0], trajet.arrival[1],0, trajet.places], callback);
+    return db.query('INSERT INTO trajet (id_user, departure_time, distance, prix, depart_address, arrivee_address, depart_x, depart_y, arrivee_x, arrivee_y, statut, code, book_places) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12,$13)',
+      [trajet.idUser, trajet.departuretime, trajet.distanceinmeters, prix, trajet.departureAddress, trajet.arrivalAddress, trajet.departure[0], trajet.departure[1], trajet.arrival[0], trajet.arrival[1],0, code, trajet.places], callback);
   },
 
   addTrajetInTournee: function(idTournee, idTrajet, callback)
@@ -16,8 +17,22 @@ let Trajet = {
     return db.query('UPDATE trajet SET id_tournee = $1, statut = $2 WHERE id = $3',[idTournee,1,idTrajet], callback);
   },
 
+  updateTraj: function(data, callback)
+  {
+    console.log("updateStatus : " + data.idTraj);
+    return db.query('UPDATE trajet SET statut = $1 WHERE id = $2', [0,data.idTraj] ,callback);
+  },
+
   getAllTrajet: function(callback){
     return db.query('SELECT * FROM trajet WHERE id_colis IS NULL', callback);
+  },
+
+  // getAllTrajets: function(callback){
+  //   return db.query('SELECT * FROM trajet WHERE statut >= 1 ORDER BY id DESC', callback);
+  // },
+
+  getAllTrajets: function(callback){
+    return db.query('SELECT trajet.id, trajet.depart_address, trajet.departure_time, trajet.book_places, trajet.prix, trajet.statut, utilisateur.paypal  FROM trajet INNER JOIN utilisateur ON utilisateur.id=trajet.id_user ORDER BY trajet.departure_time DESC', callback);
   },
 
   getAllTrajEffec: function(callback){
@@ -36,6 +51,14 @@ let Trajet = {
     console.log("getTrajetById : " + iduser);
     return db.query('SELECT * FROM trajet WHERE id_user = $1', [iduser], callback);
   },
+
+  getTrajetPassagerOnlyById: function(iduser,callback)
+  {
+    console.log("getTrajetById : " + iduser);
+    return db.query('SELECT * FROM trajet WHERE id_user = $1 AND id_colis is null', [iduser], callback);
+  },
+
+
 
   getPrice: function(trajet, callback)
   {
@@ -155,3 +178,14 @@ let Trajet = {
 
 
 module.exports = Trajet;
+
+
+function randomString( len ) {
+  let str = "";                                         // String result
+  for(let i=0; i<len; i++){                             // Loop len times
+    let rand = Math.floor( Math.random() * 62 );        // random: 0..61
+    let charCode = rand+= rand>9? (rand<36?55:61) : 48; // Get correct charCode
+    str += String.fromCharCode( charCode );             // add Character to str
+  }
+  return str;       // After all loops are done, return the concatenated string
+}

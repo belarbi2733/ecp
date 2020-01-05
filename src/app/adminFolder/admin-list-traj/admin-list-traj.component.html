@@ -7,8 +7,12 @@
      <!-- <th scope="col">Heure et date de départ</th> -->
       <th scope="col">Point de départ</th>
    <!--   <th scope="col">Heure et date d'arrivée</th> -->
-      <th scope="col">Point d'arrivée</th>
-      <th scope="col">Nombre de places</th>
+      <th scope="col">Date et heure de départ</th>
+      <th scope="col">Nombre de passagers</th>
+      <th scope="col">Prix</th>
+      <th scope="col">Compte paypal</th>
+      <th scope="col">statut</th>
+      <th scope="col">0: existe 1: dans une tournée 2: effectué 3:demande remboursement 4: payé 5: remboursé </th>
     </tr>
   </thead>
   <tbody>
@@ -17,21 +21,24 @@
 
       <td>{{item.id}}</td>
       <td>{{item.depart}}</td>
-      <td>{{item.arrivee}}</td>
+      <td>{{item.time}}</td>
       <td>{{item.nbrePlaces}}</td>
+      <td>{{item.prix}} €</td>
+      <td>{{item.paypal}}</td>
+      <td>{{item.statut}}</td>
       <td>
-        <!-- <a routerLink="/profile" routerLinkActive="active"><button class="btn">Plus d'info </button></a> -->
-        <a routerLink="/messagerie" routerLinkActive="active"><button class="btn">Messagerie </button></a>
+        
+        
+        <a href="https://www.paypal.com" target="_blank"> <button class="btn"> Payer/rembourser</button></a>
+        <button class="btn" (click)="paie()"> Marquer payé </button>
+        <button class="btn" (click)="rembourse()"> Marquer remboursé  </button>
+
         <ng-template #popContent>
-            <button class="btn" onclick="">
-              Confirmer
-            </button>
+        <button class="btn" onclick=""> Confirmer </button>
         </ng-template>
-        <button class="btn"
-                [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="false">
-          supprimer
-        </button>
-      </td>
+        <a routerLink="/messagerie" routerLinkActive="active"><button class="btn">Messagerie </button></a>
+        <button class="btn"[ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="true" (click)="supprime()"> supprimer </button>
+       </td>
 
     </tr>
   </tbody>

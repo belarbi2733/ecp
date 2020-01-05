@@ -4,5 +4,6 @@ export interface  MesTrajInterface {
   lieuArrivee: string;
   prix: number;
   idUser: number;
-  status: number;
+  status: string;
+  etatStatus: number;
 }

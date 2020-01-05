@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {DriverService} from '../../services/map.service';
 import {parcour} from './tourne.json';
+import {Key} from './TomTomKeys';
 
 
 declare let L;
@@ -67,7 +68,7 @@ export class MapComponent implements OnInit {
   detour = null;
   statutVoiture = false;
 
-  constructor(private driverService: DriverService, private httpclient: HttpClient) {
+  constructor(private driverService: DriverService) {
     driver.idUser = JSON.parse(localStorage.getItem('idUser')).id;
   }
 
@@ -78,17 +79,18 @@ export class MapComponent implements OnInit {
     driverinfo.push({nbrePlaces : this.nbrePlaces, detourMax: this.detour});
     
   }
-
+  
   ngOnInit() {
+
+    
+
     var what = this.messageToEmit;
     const service = this.driverService;
     // Define your product name and version
-    tomtom.setProductInfo('EasyCarPool', '1.0.0');
-    // Set TomTom keys
-    tomtom.key('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
-    tomtom.routingKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
-    tomtom.searchKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
-
+    
+    tomtom.key(Key);
+    tomtom.routingKey(Key);
+    tomtom.searchKey(Key);
 
     const formOptions = {
       closeOnMapClick: false,
@@ -98,7 +100,7 @@ export class MapComponent implements OnInit {
     let listScrollHandler = null;
 
     const map = tomtom.L.map('map', {
-      key: '2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7',
+      key: Key,
       basePath: '/assets/sdktool/sdk',
       center: [ 52.360306, 4.876935 ],
       zoom: 15,

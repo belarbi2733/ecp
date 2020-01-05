@@ -21,7 +21,18 @@ Validation.changeStatus(requ.body,function(error,resultat) {
     //console.log (result)
     //res.json(result);
     //console.log (result.rows[0].mail)
-    console.log (resultat);
+    //console.log (resultat);
+    Validation.checkTournee (requ.body, function(err1,result1) {
+      if(err1) {
+        resu.status(400).json(err1);
+        console.error(err1);
+      }
+      else
+      {
+        console.log (result1);
+        
+
+    }})
 }} );
 }),
 
@@ -62,7 +73,7 @@ router.post('/sendmail' , function (req, res) {
               <ul>
                 <li>Trajet: Validation de votre trajet de ${result.rows[0].depart_address} à ${result.rows[0].arrivee_address}</li>
                 <li>Tournée: Vous faites partie de la tournée partant de ${result.rows[0].depart_adresse} et arrivant à ${result.rows[0].arrivee_adresse}</li>
-                <li>Vous souhaitez valider votre trajet: cliquer sur <a href="http://localhost:4200/validationtrajet=${result.rows[0].id}">Validation</a></li>
+                <li>Vous souhaitez valider votre trajet: cliquer sur <a href="http://localhost:4200/validationtrajet?idtrajet=${result.rows[0].id}">Validation</a></li>
               </ul>
               <h3>Message :</h3>
               <p>Voilà</p>

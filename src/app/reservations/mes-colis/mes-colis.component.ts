@@ -12,10 +12,13 @@ import {MesColisService} from '../../services/profileServices/mes-colis.service'
 export class MesColisComponent implements OnInit {
 
  mesColisInterface: MesColisInterface = {
-   id: null,
-   idUser: null,
+  heureDepart: '',
+  lieuDepart: '',
+  lieuArrivee: '',
+  status: '',
+  id: null,
+  idUser: null,
   nomColis: '',
-  poids: null,
   volume: null,
   descr: '',
    prix: ''

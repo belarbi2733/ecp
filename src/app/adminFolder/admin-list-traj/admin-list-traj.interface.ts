@@ -1,6 +1,11 @@
 export interface AdminListTrajInterface {
   id: number;
   depart: string;
-  arrivee: string;
+  time: string;
   nbrePlaces: number;
+  prix: number;
+  colis: string;
+  paypal: string;
+  statut: number;
+
 }

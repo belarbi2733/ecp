@@ -1,8 +1,11 @@
 export interface MesColisInterface {
+  heureDepart: string;
+  lieuDepart: string;
+  lieuArrivee: string;
+  status: string;
   id: number;
   idUser: number;
   nomColis: string;
-  poids: number;
   volume: number;
   descr: string;
   prix: string;
