@@ -20,11 +20,11 @@ export class PhotoComponent implements OnInit {
   uploadForm: FormGroup;
   displayPhotoURL : string;
   // idUser: number;
-  
+
   public uploader: FileUploader = new FileUploader({
     url: URL,
     itemAlias: 'image'
-    
+
   });
 
   photoInterface: Photo = {
@@ -32,14 +32,14 @@ export class PhotoComponent implements OnInit {
     photo : ''
   };
 
-  
+
 
   constructor(public fb: FormBuilder, private toastr: ToastrService, private photoService: PhotoService) {
     this.photoInterface.idUser = JSON.parse(localStorage.getItem('idUser')).id;
     this.uploader.onBuildItemForm = (item, form) => {
       form.append("id", this.photoInterface.idUser);
     };
-    
+
     // Reactive Form
     this.uploadForm = this.fb.group({
       avatar: [null],
@@ -50,11 +50,15 @@ export class PhotoComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
     this.photoService.displayPhoto(this.photoInterface)
     .then((dataPhoto: string) => {
       this.photoInterface.photo = dataPhoto;
-      this.displayPhotoURL= "http://localhost:8081/uploads/"+this.photoInterface.photo;
+      if(this.photoInterface.photo){
+        this.displayPhotoURL= "http://localhost:8081/uploads/"+this.photoInterface.photo;
+      } else {
+        this.displayPhotoURL="http://localhost:8081/uploads/avatar.PNG";
+      }
       console.log(dataPhoto);
   })
     .catch( () => {
@@ -69,7 +73,7 @@ export class PhotoComponent implements OnInit {
       this.toastr.success('File successfully uploaded!');
     };
 
-    
+
 
   }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
 import { PaypalInterface } from './paypal.interface';
 import { PaypalService } from '../services/paypal.service';
+import {MesTrajInterface} from '../reservations/mes-traj/mes-traj.interface';
 
 
 @Component({
@@ -19,17 +20,36 @@ import { PaypalService } from '../services/paypal.service';
     prix: ''
   };
 
+  mesTrajInterface: MesTrajInterface = {
+    heureDepart: '',
+    lieuDepart: '',
+    lieuArrivee: '',
+    prix: null,
+    idUser: null,
+    status: '',
+    etatStatus : null
+  };
+
   constructor(private paypalService: PaypalService) {
+    this.mesTrajInterface.idUser = JSON.parse(localStorage.getItem('idUser')).id;
   }
 
-   ngOnInit() {
-    this.paypalService.getPricePaypal(this.paypalInterface)
+  ngOnInit() {
+    this.paypalService.getMyTraj(this.mesTrajInterface)
+      .then((mesTrajInterface: MesTrajInterface) => {
+        this.mesTrajInterface = mesTrajInterface;
+      })
+      .catch(() => {
+        console.log('Error in mes-trajComponent');
+      });
+
+    /*this.paypalService.getPricePaypal(this.paypalInterface)
        .then((prix: number) => {
          this.paypalInterface.prix = prix.toString();
        })
        .catch(() => {
          console.log('Error');
-       });
+       });*/
 
     this.initConfig();
    }

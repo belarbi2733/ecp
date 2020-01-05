@@ -24,6 +24,7 @@ export class AdminListTrajService {
         );
     });
   }
+
   updateStatut(data: AdminListTrajInterface) {
     this.http.post(`${this.url}/adminDashboard/admin-list-traj`, data)
       .subscribe(

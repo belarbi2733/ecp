@@ -17,6 +17,37 @@ router.post('/getPrix', function(req,res){
   });
 });
 
+router.post('/mon-traj', function(req,res){
+  Trajet.getMonTraj(req.body, function(err,result){
+    // console.log(req.body);
+    if(err) {
+      console.log("Erreur dans la recherche de trajet");
+      console.error(err);
+    }
+    else {
+      if(result.rows.length) {
+        if (result.rows[0].statut==0){statusString="pas encore pris en charge"}
+        if (result.rows[0].statut==1){statusString="dans une tournée"}
+        if (result.rows[0].statut==2){statusString="effectué"}
+        if (result.rows[0].statut==3){statusString="demande de remboursment"}
+        if (result.rows[0].statut==4){statusString="payé"}
+        if (result.rows[0].statut==5){statusString="remboursé"}
+        dateTime = result.rows[0].departure_time.substring(0, 10) + " " + result.rows[0].departure_time.substring(11, 16) ;
+        let objJson = {
+          heureDepart: dateTime,
+          lieuArrivee: result.rows[0].depart_address,
+          lieuDepart: result.rows[0].arrivee_address,
+          prix : result.rows[0].prix,
+          status : statusString,
+          etatStatus : result.rows[0].statut
+        }
+        console.log(objJson);
+        res.json(objJson);
+      }
+    }
+  });
+});
+
 router.post('/changeStatus', function(req,res){
   Trajet.changeStatusTraj(4,req.body, function(err,result){
     // console.log(req.body);

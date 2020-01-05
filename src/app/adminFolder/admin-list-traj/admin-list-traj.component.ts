@@ -20,6 +20,7 @@ export class AdminListTrajComponent implements OnInit {
     prix: null,
     colis: '',
     paypal: '',
+    paypalcond: '',
     statut: null
   };
 
@@ -33,6 +34,7 @@ export class AdminListTrajComponent implements OnInit {
     this.adminListTrajService.getAllTraj(this.adminListTrajInterface)
       .then((adminListTrajInterface: AdminListTrajInterface) => {
         this.adminListTrajInterface = adminListTrajInterface;
+
       })
       .catch(() => {
         console.log('Error in getTrajData dans le ngOnInit');
