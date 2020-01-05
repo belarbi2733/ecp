@@ -40,6 +40,7 @@ router.get('/list-traj', function(req,res){
           nbrePlaces : places,
           prix : result.rows[i].prix,
           paypal : result.rows[i].paypal,
+          paypalcond : result.rows[i].paypalcond,
           statut : result.rows[i].statut
         });
       }
@@ -49,6 +50,7 @@ router.get('/list-traj', function(req,res){
     }
   });
 });
+
 
 router.get('/list-ut', function(req,res) {
   User.getAllUser(function(err, result) {

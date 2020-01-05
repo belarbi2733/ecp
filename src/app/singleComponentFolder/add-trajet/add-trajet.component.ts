@@ -4,6 +4,7 @@ import {AddtrajetService} from '../../services/singleComponentServices/addtrajet
 import {Injectable} from '@angular/core';
 import { ServerconfigService} from '../../serverconfig.service';
 import {Key} from '../../searchFolder/map/TomTomKeys';
+import { Router } from '@angular/router';
 
 declare let L;
 declare let tomtom: any;
@@ -57,7 +58,7 @@ export class AddTrajetComponent implements OnInit {
 
   bookPlaces = null;
 
-  constructor(private addtrajetservice: AddtrajetService) {
+  constructor(private addtrajetservice: AddtrajetService, private router: Router) {
     inscription.idUser = JSON.parse(localStorage.getItem('idUser')).id;
   }
 
@@ -65,6 +66,7 @@ export class AddTrajetComponent implements OnInit {
     // console.log(this.nom);
     // console.log(this.volume);
     routetrajet.push({places : this.bookPlaces});
+    this.router.navigate(['paypal']);
   }
 
   ngOnInit() {
