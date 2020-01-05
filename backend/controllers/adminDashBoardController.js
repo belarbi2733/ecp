@@ -138,7 +138,7 @@ router.get('/getNbreTournEffec', function(req,res) {
       let objJson = {
         "nbreTournEffecStat": result.rows.length
       };
-      console.log(objJson)
+      console.log(objJson);
       res.json(objJson);
     }
   });
