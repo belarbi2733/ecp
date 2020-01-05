@@ -15,9 +15,6 @@
 <button class="btn" *ngIf="!authStatus" (click)="onClickSignIn()">
   Se connecter
 </button>
-<button class="btn" *ngIf="!authStatus" (click)="onSignInAdmin()">
-  Se connecter en tant qu'administrateur
-</button>
 <button class="btn" *ngIf="authStatus" (click)="onSignOut()">
   Se déconnecter
 </button>

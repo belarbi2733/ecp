@@ -15,6 +15,11 @@ let Voiture = {
       callback)
   },
 
+  getAllCond: function(callback) {
+    console.log("Get All Conducteur");
+    return db.query('SELECT * FROM voiture', callback);
+  },
+
   getDataVoitureById: function(id,callback) {
     console.log('getDataVoitureById : idUser = ', id);
     db.query('SELECT * FROM voiture WHERE id_user = $1',[id],callback);
