@@ -16,19 +16,19 @@ let Utilisateur = {
       return db.query('INSERT INTO utilisateur (mail,password,statut) VALUES ($1, $2, $3)', [utilisateur.body.adresse_mail, hash,0], callback);
     },
 
-    changeStatusUser: function(utilisateur, callback)
+    updateStatutUser: function(utilisateur, callback)
     {
-      console.log("Changement du statut de l'utilisateur");
-      return db.query('UPDATE utilisateur SET statut = $1 WHERE mail = $2', [1, utilisateur.adresse_mail], callback);
+      console.log("Changement du statut de l'utilisateur Id : " + utilisateur.id);
+      return db.query('UPDATE utilisateur SET statut = $1 WHERE id = $2', [utilisateur.statut, utilisateur.id ], callback);
     },
+
+
 
     updateUtilisateur: function(utilisateur, callback)
     {
-      console.log("Update user en cours...");
-      //console.log(utilisateur.avr_rating);
-      //console.log(utilisateur.nbr_ratings);
-      return db.query('UPDATE utilisateur SET nom = $1,prenom = $2,telephone = $3, mail = $4, sexe = $5, date_naiss = $6, descr = $7 WHERE id = $8',
-        [utilisateur.nom,utilisateur.prenom,utilisateur.tel,utilisateur.mail,utilisateur.sexe,utilisateur.date_naiss,utilisateur.description, utilisateur.idUser],
+      console.log("Id user à update : " + utilisateur.idUser);
+      return db.query('UPDATE utilisateur SET nom = $1,prenom = $2,telephone = $3, mail = $4, sexe = $5, date_naiss = $6, descr = $7 , statut = $8 WHERE id = $9',
+        [utilisateur.nom,utilisateur.prenom,utilisateur.tel,utilisateur.mail,utilisateur.sexe,utilisateur.date_naiss,utilisateur.description,utilisateur.statut, utilisateur.idUser],
         callback);
     },
 

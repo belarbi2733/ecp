@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AdminListUtInterface } from '../adminFolder/admin-list-ut/admin-list-ut.interface';
+import {MesTrajInterface} from '../reservations/mes-traj/mes-traj.interface';
 
 @Injectable()
 export class AdminListUtService {
@@ -22,4 +23,17 @@ export class AdminListUtService {
         );
     });
   }
+
+  updateStatut(data: AdminListUtInterface) {
+    this.http.post(`${this.url}/adminDashboard/admin-list-ut`, data)
+      .subscribe(
+        res => {
+          console.log(res);
+        },
+        err => {
+          console.log('Error', err);
+        }
+      );
+  }
+
 }

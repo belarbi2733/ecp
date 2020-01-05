@@ -256,8 +256,15 @@ router.post('/mes-tourn', function(req,res) {
     }
     else {
       let arrayUser = [];
+      let statusString="";
       for (let i = 0; i < result.rows.length ; i++ )
       {
+        if (result.rows[i].statut==0){statusString="pas encore pris en charge"}
+        if (result.rows[i].statut==1){statusString="dans une tournée"}
+        if (result.rows[i].statut==2){statusString="effectué"}
+        if (result.rows[i].statut==3){statusString="demande de remboursment"}
+        if (result.rows[i].statut==4){statusString="payé"}
+        if (result.rows[i].statut==5){statusString="remboursé"}
         arrayUser.push({
           idUser: result.rows[i].id_user,
           heureDepart: result.rows[i].heure_depart,
@@ -271,7 +278,18 @@ router.post('/mes-tourn', function(req,res) {
     }
   });
 });
+router.post('/mes-tournupd', function(req,res) {
+  Trajet.updateTraj(req.body, function(err, result) {
+    if (err) {
+      res.status(400).json(err);
+      console.error(err);
+    } else {
+      res.json(result);
+      console.log(res);
+    }
+  });
 
+});
 
 
 
