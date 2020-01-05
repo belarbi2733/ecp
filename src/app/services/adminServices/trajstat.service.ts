@@ -11,7 +11,7 @@ export class TrajStatService {
 
   getNbreTrajTab(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/adminTrajStat/getNbreTrajTab`, data)
+      this.http.get(`${this.url}/adminDashBoard/getNbreTrajTab`, data)
         .subscribe(
           res => {
             console.log(res);

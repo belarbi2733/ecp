@@ -7,6 +7,7 @@ let Trajet = require('../queries/trajet');
 let Colis = require('../queries/colis');
 let Tournee = require('../queries/tournee');
 let Voiture = require('../queries/voiture');
+let Statistiques = require('../queries/statistiques');
 
 
 router.get('/getNbreUsers', function(req,res) {
@@ -140,6 +141,262 @@ router.get('/getNbreTournEffec', function(req,res) {
       };
       console.log(objJson)
       res.json(objJson);
+    }
+  });
+});
+
+
+router.get('/getNbreUsersTab', function(req,res) {
+  console.log('Request');
+  Statistiques.getAllStat(function (err, result) {
+    console.log(result);
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      if(result.rows.length) {
+        var nbreU = [];
+        var chartL = [];
+        for (let i = 0; i < result.rows.length; i++) {
+          var tmpResult = result.rows[i];
+          console.log(tmpResult);
+          nbreU.unshift(tmpResult.nbre_users);
+          chartL.unshift(tmpResult.date.toDateString());
+          console.log(nbreU);
+          console.log(chartL);
+        }
+        let objJson = {
+          "dataUser": nbreU,
+          "chartLabels": chartL
+        };
+      console.log(objJson)
+      res.json(objJson);
+      } else {
+        res.json(false);
+      }
+    }
+  });
+});
+
+
+router.get('/getNbreColisTab', function(req,res) {
+  console.log('Request');
+  Statistiques.getAllStat(function (err, result) {
+    console.log(result);
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      if(result.rows.length) {
+        var nbreC = [];
+        var chartL = [];
+        for (let i = 0; i < result.rows.length; i++) {
+          var tmpResult = result.rows[i];
+          console.log(tmpResult);
+          nbreC.unshift(tmpResult.nbre_colis);
+          chartL.unshift(tmpResult.date.toDateString());
+          console.log(nbreC);
+          console.log(chartL);
+        }
+        let objJson = {
+          "dataColis": nbreC,
+          "chartLabels": chartL
+        };
+      console.log(objJson)
+      res.json(objJson);
+      } else {
+        res.json(false);
+      }
+    }
+  });
+});
+
+
+router.get('/getNbreTrajTab', function(req,res) {
+  console.log('Request');
+  Statistiques.getAllStat(function (err, result) {
+    console.log(result);
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      if(result.rows.length) {
+        var nbreT = [];
+        var chartL = [];
+        for (let i = 0; i < result.rows.length; i++) {
+          var tmpResult = result.rows[i];
+          console.log(tmpResult);
+          nbreT.unshift(tmpResult.nbre_trajet);
+          chartL.unshift(tmpResult.date.toDateString());
+          console.log(nbreT);
+          console.log(chartL);
+        }
+        let objJson = {
+          "dataTraj": nbreT,
+          "chartLabels": chartL
+        };
+      console.log(objJson)
+      res.json(objJson);
+      } else {
+        res.json(false);
+      }
+    }
+  });
+});
+
+
+router.get('/getNbreTournTab', function(req,res) {
+  console.log('Request');
+  Statistiques.getAllStat(function (err, result) {
+    console.log(result);
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      if(result.rows.length) {
+        var nbreTo = [];
+        var chartL = [];
+        for (let i = 0; i < result.rows.length; i++) {
+          var tmpResult = result.rows[i];
+          console.log(tmpResult);
+          nbreTo.unshift(tmpResult.nbre_tournee);
+          chartL.unshift(tmpResult.date.toDateString());
+          console.log(nbreTo);
+          console.log(chartL);
+        }
+        let objJson = {
+          "dataTourn": nbreTo,
+          "chartLabels": chartL
+        };
+      console.log(objJson)
+      res.json(objJson);
+      } else {
+        res.json(false);
+      }
+    }
+  });
+});
+
+
+router.get('/getNbreCondTab', function(req,res) {
+  console.log('Request');
+  Statistiques.getAllStat(function (err, result) {
+    console.log(result);
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      if(result.rows.length) {
+        var nbreC = [];
+        var chartL = [];
+        for (let i = 0; i < result.rows.length; i++) {
+          var tmpResult = result.rows[i];
+          console.log(tmpResult);
+          nbreC.unshift(tmpResult.nbre_cond);
+          chartL.unshift(tmpResult.date.toDateString());
+          console.log(nbreC);
+          console.log(chartL);
+        }
+        let objJson = {
+          "dataCond": nbreC,
+          "chartLabels": chartL
+        };
+      console.log(objJson)
+      res.json(objJson);
+      } else {
+        res.json(false);
+      }
+    }
+  });
+});
+
+
+router.get('/getNbreColisLivrTab', function(req,res) {
+  console.log('Request');
+  Statistiques.getAllStat(function (err, result) {
+    console.log(result);
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      if(result.rows.length) {
+        var nbreCL = [];
+        var chartL = [];
+        for (let i = 0; i < result.rows.length; i++) {
+          var tmpResult = result.rows[i];
+          console.log(tmpResult);
+          nbreCL.unshift(tmpResult.nbre_colis_livr);
+          chartL.unshift(tmpResult.date.toDateString());
+          console.log(nbreCL);
+          console.log(chartL);
+        }
+        let objJson = {
+          "dataColisLivr": nbreCL,
+          "chartLabels": chartL
+        };
+      console.log(objJson)
+      res.json(objJson);
+      } else {
+        res.json(false);
+      }
+    }
+  });
+});
+
+
+router.get('/getNbreTrajEffecTab', function(req,res) {
+  console.log('Request');
+  Statistiques.getAllStat(function (err, result) {
+    console.log(result);
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      if(result.rows.length) {
+        var nbreTE = [];
+        var chartL = [];
+        for (let i = 0; i < result.rows.length; i++) {
+          var tmpResult = result.rows[i];
+          console.log(tmpResult);
+          nbreTE.unshift(tmpResult.nbre_traj_effec);
+          chartL.unshift(tmpResult.date.toDateString());
+          console.log(nbreTE);
+          console.log(chartL);
+        }
+        let objJson = {
+          "dataTrajEffec": nbreTE,
+          "chartLabels": chartL
+        };
+      console.log(objJson)
+      res.json(objJson);
+      } else {
+        res.json(false);
+      }
+    }
+  });
+});
+
+
+router.get('/getNbreTournEffecTab', function(req,res) {
+  console.log('Request');
+  Statistiques.getAllStat(function (err, result) {
+    console.log(result);
+    if (err) {
+      res.status(400).json(err);
+    } else {
+      if(result.rows.length) {
+        var nbreToE = [];
+        var chartL = [];
+        for (let i = 0; i < result.rows.length; i++) {
+          var tmpResult = result.rows[i];
+          console.log(tmpResult);
+          nbreToE.unshift(tmpResult.nbre_tourn_effec);
+          chartL.unshift(tmpResult.date.toDateString());
+          console.log(nbreToE);
+          console.log(chartL);
+        }
+        let objJson = {
+          "dataTournEffec": nbreToE,
+          "chartLabels": chartL
+        };
+      console.log(objJson)
+      res.json(objJson);
+      } else {
+        res.json(false);
+      }
     }
   });
 });
