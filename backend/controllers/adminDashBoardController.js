@@ -115,14 +115,12 @@ router.get('/getNbreColisLivr', function(req,res) {
 router.get('/getNbreTrajEffec', function(req,res) {
   console.log('Request');
   Trajet.getAllTrajEffec(function (err, result) {
-    console.log(result);
     if (err) {
       res.status(400).json(err);
     } else {
       let objJson = {
         "nbreTrajEffecStat": result.rows.length
       };
-      console.log(objJson)
       res.json(objJson);
     }
   });
@@ -373,7 +371,6 @@ router.get('/getNbreTrajEffecTab', function(req,res) {
 router.get('/getNbreTournEffecTab', function(req,res) {
   console.log('Request');
   Statistiques.getAllStat(function (err, result) {
-    console.log(result);
     if (err) {
       res.status(400).json(err);
     } else {
@@ -382,17 +379,13 @@ router.get('/getNbreTournEffecTab', function(req,res) {
         var chartL = [];
         for (let i = 0; i < result.rows.length; i++) {
           var tmpResult = result.rows[i];
-          console.log(tmpResult);
           nbreToE.unshift(tmpResult.nbre_tourn_effec);
           chartL.unshift(tmpResult.date.toDateString());
-          console.log(nbreToE);
-          console.log(chartL);
         }
         let objJson = {
           "dataTournEffec": nbreToE,
           "chartLabels": chartL
         };
-      console.log(objJson)
       res.json(objJson);
       } else {
         res.json(false);
@@ -408,7 +401,6 @@ router.post('/admin-list-ut', function(req,res) {
       console.error(err);
     } else {
       res.json(result);
-      console.log(res);
     }
   });
 
@@ -421,11 +413,21 @@ router.post('/admin-list-traj', function(req,res) {
       console.error(err);
     } else {
       res.json(result);
+    }
+  });
+
+});
+router.post('/delete', function(req,res) {
+  Trajet.deleteTraj(req.body, function(err, result) {
+    if (err) {
+      res.status(400).json(err);
+      console.error(err);
+    } else {
+      res.json(result);
       console.log(res);
     }
   });
 
 });
-
 
 module.exports = router;

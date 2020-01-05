@@ -39,17 +39,18 @@ export class AdminListTrajComponent implements OnInit {
       });
   }
 
-  paid(data: AdminListTrajInterface){
+  paid(data: AdminListTrajInterface) {
     data.statut = 4;
     this.adminListTrajService.updateStatut(data);
   }
 
-  refunded(data: AdminListTrajInterface){
+  refunded(data: AdminListTrajInterface) {
     data.statut = 5;
     this.adminListTrajService.updateStatut(data);
   }
 
-  delete(){
-// supprimer le trajet
+  delete(data: AdminListTrajInterface) {
+    this.adminListTrajService.deleteTraj(data);
+    window.location.reload();
   }
 }
