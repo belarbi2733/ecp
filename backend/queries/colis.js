@@ -9,12 +9,14 @@ let Colis = {
       [colis.idUser, colis.nom, colis.volume], callback);
   },
 
+
   getIdColisByIdUser: function(colis, callback) {
     console.log("Get IdColis By IdUser and NomColis");
     console.log(colis.idUser,colis.nom);
     return db.query('SELECT id FROM colis WHERE id_user = $1 AND nom_colis = $2 AND volume = $3',
       [colis.idUser, colis.nom, colis.volume] , callback);
   },
+
 
   generateTrajet: function(colis, prix, idColis, callback) {
     console.log("Generate Trajet en cours...");
@@ -23,10 +25,12 @@ let Colis = {
       callback);
   },
 
+
   getVolumeByIdColis: function(idColis,callback) {
     console.log("Get Volume By : " + idColis);
     return db.query('SELECT volume from colis WHERE id = $1', [idColis], callback);
   },
+
 
   getAllColis: function(callback) {
     return db.query('SELECT * from colis', callback);

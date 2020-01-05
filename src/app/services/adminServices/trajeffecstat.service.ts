@@ -3,15 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { ServerconfigService } from '../../serverconfig.service';
 
 @Injectable()
-export class UserStatService {
+export class TrajEffecStatService {
 
   constructor(private http: HttpClient, private servUrl: ServerconfigService) { }
 
   url = this.servUrl.nodeUrl;
 
-  getNbreUsersTab(data) {
+  getNbreTrajEffecTab(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/adminDashBoard/getNbreUsersTab`, data)
+      this.http.get(`${this.url}/adminDashBoard/getNbreTrajEffecTab`, data)
         .subscribe(
           res => {
             console.log(res);

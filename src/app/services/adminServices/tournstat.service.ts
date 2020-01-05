@@ -3,15 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { ServerconfigService } from '../../serverconfig.service';
 
 @Injectable()
-export class UserStatService {
+export class TournStatService {
 
   constructor(private http: HttpClient, private servUrl: ServerconfigService) { }
 
   url = this.servUrl.nodeUrl;
 
-  getNbreUsersTab(data) {
+  getNbreTournTab(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/adminDashBoard/getNbreUsersTab`, data)
+      this.http.get(`${this.url}/adminDashBoard/getNbreTournTab`, data)
         .subscribe(
           res => {
             console.log(res);

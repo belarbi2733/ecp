@@ -2,7 +2,7 @@ let db = require("../db.js");
 
 let Utilisateur = {
 
-  
+
     selectPhoto: function(idUser, callback)
     {
       console.log("select Photo de l'user : ");
