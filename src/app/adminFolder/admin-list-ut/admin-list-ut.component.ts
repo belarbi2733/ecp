@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {AdminListUtService} from '../../services/admin-list-user.service';
 import {AdminListUtInterface} from './admin-list-ut.interface';
+import {MesTrajInterface} from '../../reservations/mes-traj/mes-traj.interface';
 
 @Component({
   selector: 'app-admin-list-ut',
   templateUrl: './admin-list-ut.component.html',
-  styleUrls: ['./admin-list-ut.component.css','../../app.component.css']
+  styleUrls: ['./admin-list-ut.component.css', '../../app.component.css']
 })
 
 export class AdminListUtComponent implements OnInit {
@@ -30,4 +31,15 @@ export class AdminListUtComponent implements OnInit {
         console.log('Error in getUserDataById');
       });
   }
+  enable(data: AdminListUtInterface) {
+    data.statut = 1;
+    this.adminListUtService.updateStatus(data);
+    console.log(data);
+  }
+  disable(data: AdminListUtInterface) {
+    data.statut = 0;
+    this.adminListUtService.updateStatus(data);
+    console.log(data);
+  }
+
 }
