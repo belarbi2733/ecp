@@ -6,6 +6,7 @@ export interface AdminListTrajInterface {
   prix: number;
   colis: string;
   paypal: string;
+  paypalcond: string;
   statut: number;
 
 }

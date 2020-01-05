@@ -10,7 +10,8 @@
       <th scope="col">Date et heure de départ</th>
       <th scope="col">Nombre de passagers</th>
       <th scope="col">Prix</th>
-      <th scope="col">Compte paypal</th>
+      <th scope="col">Compte paypal du passager</th>
+      <th scope="col">Compte paypal du conducteur</th>
       <th scope="col">statut</th>
       <th scope="col">0: existe 1: dans une tournée 2: effectué 3:demande remboursement 4: payé 5: remboursé </th>
     </tr>
@@ -25,6 +26,7 @@
       <td>{{item.nbrePlaces}}</td>
       <td>{{item.prix}} €</td>
       <td>{{item.paypal}}</td>
+      <td>{{item.paypalcond}}</td>
       <td>{{item.statut}}</td>
       <td>
 
@@ -47,11 +49,11 @@
         </ng-template>
 
         <a href="https://www.paypal.com" target="_blank"> <button class="btn"> Payer/rembourser</button></a>
-        <button class="btn btn-sucess"
+        <button class="btn btn-sucess" *ngIf="item.statut != 4"
                 [ngbPopover]="popContent2">
           Marquer payé
         </button>
-        <button class="btn btn-sucess"
+        <button class="btn btn-sucess" *ngIf="item.statut != 5"
                 [ngbPopover]="popContent3">
           Marquer remboursé
         </button>
@@ -61,7 +63,7 @@
         <a routerLink="/messagerie" routerLinkActive="active"><button class="btn">Messagerie </button></a>
         <button class="btn"
                 [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="true" >
-          supprimer
+          Supprimer
         </button>
        </td>
 
