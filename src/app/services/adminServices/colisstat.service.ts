@@ -11,7 +11,7 @@ export class ColisStatService {
 
   getNbreColisTab(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/adminColisStat/getNbreColisTab`, data)
+      this.http.get(`${this.url}/adminDashBoard/getNbreColisTab`, data)
         .subscribe(
           res => {
             console.log(res);

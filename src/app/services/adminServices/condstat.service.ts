@@ -11,7 +11,7 @@ export class CondStatService {
 
   getNbreCondTab(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/adminCondStat/getNbreCondTab`, data)
+      this.http.get(`${this.url}/adminDashBoard/getNbreCondTab`, data)
         .subscribe(
           res => {
             console.log(res);
