@@ -11,6 +11,7 @@ router.get('/list-traj', function(req,res){
   Trajet.getAllTrajets(function(err,result){
     if(err) {
       console.log("Erreur dans getAllTrajets query");
+      console.error(err);
     }
 
     else {
@@ -29,9 +30,9 @@ router.get('/list-traj', function(req,res){
           places = "Livraison de colis" ;
         }
 
-        timeDate = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ; 
-       
-       
+        timeDate = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ;
+
+
         arrayTraj.push({
           id: result.rows[i].id,
           depart : result.rows[i].depart_address,

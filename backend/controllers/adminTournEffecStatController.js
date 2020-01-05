@@ -13,8 +13,8 @@ router.get('/getNbreTournEffecTab', function(req,res) {
       res.status(400).json(err);
     } else {
       if(result.rows.length) {
-        var nbreToE = [];
-        var chartL = [];
+        let nbreToE = [];
+        let chartL = [];
         for (let i = 0; i < result.rows.length; i++) {
           var tmpResult = result.rows[i];
           console.log(tmpResult);
