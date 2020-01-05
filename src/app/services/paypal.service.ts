@@ -23,6 +23,21 @@ export class PaypalService {
     });
   }
 
+  getMyTraj(data) {
+    return new Promise((resolve, reject) => {
+      this.http.post(`${this.url}/paypal/mon-traj`, data)
+        .subscribe(
+          res => {
+            resolve(res);
+          },
+          err => {
+            console.log('Error', err);
+            reject();
+            }
+        );
+    });
+  }
+
   statusPayPass(data: PaypalInterface) {
     this.http.post(`${this.url}/paypal/changeStatus`, data)
       .subscribe(

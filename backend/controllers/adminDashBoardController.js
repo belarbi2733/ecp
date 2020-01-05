@@ -417,7 +417,7 @@ router.post('/admin-list-traj', function(req,res) {
   });
 
 });
-router.post('/delete', function(req,res) {
+router.post('/delete-traj', function(req,res) {
   Trajet.deleteTraj(req.body, function(err, result) {
     if (err) {
       res.status(400).json(err);
