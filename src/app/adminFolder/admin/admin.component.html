@@ -2,7 +2,7 @@
 
 <div class="container content">
   <div class="row">
-    <div class="col-sm-3">
+    <div class="col-sm-6">
       <div class="card text-white bg-secondary mb-3">
         <div class="card-header">Utilisateurs enregistrés : <span style="font-weight: bold;">{{adminInterface.nbreUsersStat}}</span></div>
         <div class="card-body">
@@ -11,39 +11,7 @@
       </div>
     </div>
 
-    <div class="col-sm-3">
-      <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Colis enregistrés : <span style="font-weight: bold;">{{adminInterface.nbreColisStat}}</span></div>
-        <div class="card-body">
-          <!-- <h4 class="card-title">Statistiques sur le nombre de colis</h4> -->
-          <app-colisstat></app-colisstat>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-3">
-      <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Trajets enregistrés : <span style="font-weight: bold;">{{adminInterface.nbreTrajStat}}</span></div>
-        <div class="card-body">
-          <!-- <h4 class="card-title">Statistiques sur le nombre de trajet</h4> -->
-          <app-trajstat></app-trajstat>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-sm-3">
-      <div class="card text-white bg-secondary mb-3">
-        <div class="card-header">Tournées enregistrées : <span style="font-weight: bold;">{{adminInterface.nbreTournStat}}</span></div>
-        <div class="card-body">
-          <!-- <h4 class="card-title">Statistiques sur le nombre d'inscrit</h4> -->
-          <app-tournstat></app-tournstat>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-sm-3">
+    <div class="col-sm-6">
       <div class="card text-white bg-secondary mb-3">
         <div class="card-header">Conducteurs enregistrés : <span style="font-weight: bold;">{{adminInterface.nbreCondStat}}</span></div>
         <div class="card-body">
@@ -53,7 +21,17 @@
       </div>
     </div>
 
-    <div class="col-sm-3">
+    <div class="col-sm-6">
+      <div class="card text-white bg-secondary mb-3">
+        <div class="card-header">Colis enregistrés : <span style="font-weight: bold;">{{adminInterface.nbreColisStat}}</span></div>
+        <div class="card-body">
+          <!-- <h4 class="card-title">Statistiques sur le nombre de colis</h4> -->
+          <app-colisstat></app-colisstat>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
       <div class="card text-white bg-secondary mb-3">
         <div class="card-header">Colis livrés : <span style="font-weight: bold;">{{adminInterface.nbreColisLivrStat}}</span></div>
         <div class="card-body">
@@ -62,8 +40,20 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="col-sm-3">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card text-white bg-secondary mb-3">
+        <div class="card-header">Trajets enregistrés : <span style="font-weight: bold;">{{adminInterface.nbreTrajStat}}</span></div>
+        <div class="card-body">
+          <!-- <h4 class="card-title">Statistiques sur le nombre de trajet</h4> -->
+          <app-trajstat></app-trajstat>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6">
       <div class="card text-white bg-secondary mb-3">
         <div class="card-header">Trajets effectués : <span style="font-weight: bold;">{{adminInterface.nbreTrajEffecStat}}</span></div>
         <div class="card-body">
@@ -73,7 +63,18 @@
       </div>
     </div>
 
-    <div class="col-sm-3">
+    <div class="col-sm-6">
+      <div class="card text-white bg-secondary mb-3">
+        <div class="card-header">Tournées enregistrées : <span style="font-weight: bold;">{{adminInterface.nbreTournStat}}</span></div>
+        <div class="card-body">
+          <!-- <h4 class="card-title">Statistiques sur le nombre d'inscrit</h4> -->
+          <app-tournstat></app-tournstat>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-sm-6">
       <div class="card text-white bg-secondary mb-3">
         <div class="card-header">Tournées effectuées : <span style="font-weight: bold;">{{adminInterface.nbreTournEffecStat}}</span></div>
         <div class="card-body">
@@ -83,5 +84,5 @@
       </div>
     </div>
   </div>
-  <app-admintable></app-admintable>
+
 </div>
