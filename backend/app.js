@@ -9,6 +9,7 @@ let PaypalController = require('./controllers/paypalController');
 let TourneeController = require('./controllers/tourneeController');
 let AdminController = require('./controllers/adminController');
 let AdminDashBoardController = require('./controllers/adminDashBoardController');
+let SendMailController = require('./controllers/sendMailController');
 let ProfileController = require('./controllers/profileController');
 let VoitureController = require('./controllers/voitureController');
 let ValidationController = require ('./controllers/nodeMailerController')
@@ -109,6 +110,10 @@ app.use('/admin', AdminController);
 
 
 app.use('/adminDashBoard', AdminDashBoardController);
+
+
+
+app.use('/sendmail', SendMailController);
 
 
 
