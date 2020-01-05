@@ -11,7 +11,7 @@ export class TournEffecStatService {
 
   getNbreTournEffecTab(data) {
     return new Promise((resolve, reject) => {
-      this.http.get(`${this.url}/adminTournEffecStat/getNbreTournEffecTab`, data)
+      this.http.get(`${this.url}/adminDashBoard/getNbreTournEffecTab`, data)
         .subscribe(
           res => {
             console.log(res);
