@@ -81,7 +81,7 @@ import {AccountService} from './services/profileServices/account.service';
 import {PreferencesService} from './services/profileServices/preferences.service';
 import {RatingService} from './services/profileServices/rating.service';
 import {VehicleService} from './services/profileServices/vehicle.service';
-import {DataTrajService} from './services/admin-list-traj.service';
+import {AdminListTrajService} from './services/admin-list-traj.service';
 import {AdminListUtService} from './services/admin-list-user.service';
 import {InscrService} from './services/singleComponentServices/inscr.service';
 import { LienInscrService } from './services/singleComponentServices/lien-inscr.service';
@@ -230,7 +230,7 @@ const appRoutes: Routes = [
     PreferencesService,
     RatingService,
     VehicleService,
-    DataTrajService,
+    AdminListTrajService,
     MesTournService,
     AdminListUtService,
     AddtrajetService,

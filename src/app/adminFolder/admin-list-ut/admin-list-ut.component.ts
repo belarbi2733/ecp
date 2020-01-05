@@ -33,12 +33,12 @@ export class AdminListUtComponent implements OnInit {
   }
   enable(data: AdminListUtInterface) {
     data.statut = 1;
-    this.adminListUtService.updateStatus(data);
+    this.adminListUtService.updateStatut(data);
     console.log(data);
   }
   disable(data: AdminListUtInterface) {
     data.statut = 0;
-    this.adminListUtService.updateStatus(data);
+    this.adminListUtService.updateStatut(data);
     console.log(data);
   }
 

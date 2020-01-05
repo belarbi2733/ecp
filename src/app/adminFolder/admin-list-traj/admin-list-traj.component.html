@@ -27,11 +27,11 @@
       <td>{{item.paypal}}</td>
       <td>{{item.statut}}</td>
       <td>
-        
-        
+
+
         <a href="https://www.paypal.com" target="_blank"> <button class="btn"> Payer/rembourser</button></a>
-        <button class="btn" (click)="paie()"> Marquer payé </button>
-        <button class="btn" (click)="rembourse()"> Marquer remboursé  </button>
+        <button class="btn btn-sucess" (click)="paid(item)"> Marquer payé </button>
+        <button class="btn btn-sucess" (click)="refunded(item)"> Marquer remboursé  </button>
 
         <ng-template #popContent>
         <button class="btn" onclick=""> Confirmer </button>
