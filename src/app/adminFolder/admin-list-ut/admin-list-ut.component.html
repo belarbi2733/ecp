@@ -24,14 +24,26 @@
         <!-- <a routerLink="/profile" routerLinkActive="active"><button class="btn">Profil </button></a>
         <a routerLink="['/profile', {{item.id}} ]" routerLinkActive="active"><button class="btn">Profil </button></a> -->
         <ng-template #popContent>
-            <button class="btn" onclick="">
-              Confirmer
-            </button>
+        <button class="btn" (click)="enable(item)" >
+          Confirmer
+        </button>
+      </ng-template>
+
+        <ng-template #popContent2>
+          <button class="btn" (click)="disable(item)">
+            Confirmer
+          </button>
         </ng-template>
-        <button class="btn"
+        <button class="btn btn-sucess"
                 [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="true">
+          Activer
+        </button>
+        <button class="btn btn-sucess"
+                [ngbPopover]="popContent2" popoverTitle="Attention, êtes-vous sûr?"[autoClose]="true" >
           Suspendre
         </button>
+
+
       </td>
 
     </tr>

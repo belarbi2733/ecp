@@ -1,5 +1,5 @@
 import { Component, Input , OnInit } from '@angular/core';
-import {DataTrajService} from '../../services/admin-list-traj.service';
+import {AdminListTrajService} from '../../services/admin-list-traj.service';
 import {AdminListTrajInterface} from './admin-list-traj.interface';
 
 
@@ -25,12 +25,12 @@ export class AdminListTrajComponent implements OnInit {
 
   error: string;
 
-  constructor(private  dataTrajService: DataTrajService) {
+  constructor(private  adminListTrajService: AdminListTrajService) {
 
   }
 
   ngOnInit() {
-    this.dataTrajService.getAllTraj(this.adminListTrajInterface)
+    this.adminListTrajService.getAllTraj(this.adminListTrajInterface)
       .then((adminListTrajInterface: AdminListTrajInterface) => {
         this.adminListTrajInterface = adminListTrajInterface;
       })
@@ -39,15 +39,18 @@ export class AdminListTrajComponent implements OnInit {
       });
   }
 
-  paie(){
- // changer statut trajet à 4
+  paid(data: AdminListTrajInterface) {
+    data.statut = 4;
+    this.adminListTrajService.updateStatut(data);
   }
 
-  rembourse(){
- // changer statut trajet à 5
+  refunded(data: AdminListTrajInterface) {
+    data.statut = 5;
+    this.adminListTrajService.updateStatut(data);
   }
 
-  supprime(){
-// supprimer le trajet
+  delete(data: AdminListTrajInterface) {
+    this.adminListTrajService.deleteTraj(data);
+    window.location.reload();
   }
 }

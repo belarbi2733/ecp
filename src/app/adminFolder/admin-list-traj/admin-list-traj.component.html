@@ -27,17 +27,42 @@
       <td>{{item.paypal}}</td>
       <td>{{item.statut}}</td>
       <td>
-        
-        
-        <a href="https://www.paypal.com" target="_blank"> <button class="btn"> Payer/rembourser</button></a>
-        <button class="btn" (click)="paie()"> Marquer payé </button>
-        <button class="btn" (click)="rembourse()"> Marquer remboursé  </button>
 
         <ng-template #popContent>
-        <button class="btn" onclick=""> Confirmer </button>
+          <button class="btn" (click)="delete(item)">
+            Confirmer
+          </button>
         </ng-template>
+
+        <ng-template #popContent2>
+          <button class="btn" (click)="paid(item)">
+            Confirmer
+          </button>
+        </ng-template>
+
+        <ng-template #popContent3>
+          <button class="btn" (click)="refunded(item)">
+            Confirmer
+          </button>
+        </ng-template>
+
+        <a href="https://www.paypal.com" target="_blank"> <button class="btn"> Payer/rembourser</button></a>
+        <button class="btn btn-sucess"
+                [ngbPopover]="popContent2">
+          Marquer payé
+        </button>
+        <button class="btn btn-sucess"
+                [ngbPopover]="popContent3">
+          Marquer remboursé
+        </button>
+
+
+
         <a routerLink="/messagerie" routerLinkActive="active"><button class="btn">Messagerie </button></a>
-        <button class="btn"[ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="true" (click)="supprime()"> supprimer </button>
+        <button class="btn"
+                [ngbPopover]="popContent" popoverTitle="Attention, êtes-vous sûr?" [autoClose]="true" >
+          supprimer
+        </button>
        </td>
 
     </tr>

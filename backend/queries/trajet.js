@@ -19,8 +19,14 @@ let Trajet = {
 
   updateTraj: function(data, callback)
   {
-    console.log("updateStatus : " + data.idTraj);
-    return db.query('UPDATE trajet SET statut = $1 WHERE id = $2', [0,data.idTraj] ,callback);
+    console.log("updateStatus : " + data.id);
+    return db.query('DELETE FROM trajet WHERE id = $1', [data.id] ,callback);
+  },
+
+  deleteTraj: function(data, callback)
+  {
+    console.log("Suppression du trajet avec l'id : " + data.id);
+    return db.query('UPDATE trajet SET statut = $1 WHERE id = $2', [data.statut,data.id] ,callback);
   },
 
   getAllTrajet: function(callback){
