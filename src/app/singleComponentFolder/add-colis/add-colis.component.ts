@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { DataColis } from './add-colis.interface';
 import {AddColisService} from '../../services/singleComponentServices/add-colis.service';
 import {Injectable} from '@angular/core';
+import {Key} from '../../searchFolder/map/TomTomKeys';
 declare let L;
 declare let tomtom: any;
 declare let document: any;
@@ -68,15 +69,16 @@ export class AddColisComponent implements OnInit {
 
 
   ngOnInit() {
-
+    
+    
     const service = this.addColisService;
 
 // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
 // Set TomTom keys
-    tomtom.key('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
-    tomtom.routingKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
-    tomtom.searchKey('2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7');
+    tomtom.key(Key);
+    tomtom.routingKey(Key);
+    tomtom.searchKey(Key);
 
 
     const formOptions = {
@@ -87,7 +89,7 @@ export class AddColisComponent implements OnInit {
     let listScrollHandler = null;
 
     const map = tomtom.L.map('map', {
-      key: '2N6AP2HDuUATetYHIoA8Igp3KPyVh7Z7',
+      key: Key,
       basePath: '/assets/sdktool/sdk',
       center: [ 50.8504500, 4.3487800 ],
       zoom: 10,
