@@ -414,4 +414,18 @@ router.post('/admin-list-ut', function(req,res) {
 
 });
 
+router.post('/admin-list-traj', function(req,res) {
+  Trajet.updateTraj(req.body, function(err, result) {
+    if (err) {
+      res.status(400).json(err);
+      console.error(err);
+    } else {
+      res.json(result);
+      console.log(res);
+    }
+  });
+
+});
+
+
 module.exports = router;

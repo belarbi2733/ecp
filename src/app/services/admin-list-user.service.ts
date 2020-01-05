@@ -24,7 +24,7 @@ export class AdminListUtService {
     });
   }
 
-  updateStatus(data: AdminListUtInterface) {
+  updateStatut(data: AdminListUtInterface) {
     this.http.post(`${this.url}/adminDashboard/admin-list-ut`, data)
       .subscribe(
         res => {
