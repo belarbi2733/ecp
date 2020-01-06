@@ -3,6 +3,8 @@ import { DataColis } from './add-colis.interface';
 import {AddColisService} from '../../services/singleComponentServices/add-colis.service';
 import {Injectable} from '@angular/core';
 import {Key} from '../../searchFolder/map/TomTomKeys';
+import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 declare let L;
 declare let tomtom: any;
 declare let document: any;
@@ -56,12 +58,12 @@ export class AddColisComponent implements OnInit {
   nom = '';
   volume = '';
 
-  constructor(private addColisService: AddColisService) {
+  constructor(private addColisService: AddColisService, private router: Router, private spinner: NgxSpinnerService) {
     dataColis.idUser = JSON.parse(localStorage.getItem('idUser')).id;
   }
 
   save() {
-
+    this.spinner.show();
     // console.log(this.nom);
     // console.log(this.volume);
     routecolis.push({nom : this.nom, volume : this.volume});
@@ -70,7 +72,8 @@ export class AddColisComponent implements OnInit {
 
   ngOnInit() {
     
-    
+    const router =this.router;
+    const spinner=this.spinner;
     const service = this.addColisService;
 
 // Define your product name and version
@@ -563,7 +566,12 @@ export class AddColisComponent implements OnInit {
           // AddColis(colis);
           // console.log(JSON.stringify(routecolis));
           recordcolis(dataColis);
-          service.addColis(dataColis);
+          service.addColis(dataColis).then(()=>{
+            //spinner.hide();
+            router.navigate(['paypal']);
+          }).catch((err)=>{
+            console.error(err);
+          });
 
 
           iter = iter + 1; // comme ça ne stocke que pour le temps demander

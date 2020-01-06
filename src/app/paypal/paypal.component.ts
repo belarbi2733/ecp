@@ -50,7 +50,6 @@ import {MesTrajInterface} from '../reservations/mes-traj/mes-traj.interface';
        .catch(() => {
          console.log('Error');
        });*/
-
     this.initConfig();
    }
 

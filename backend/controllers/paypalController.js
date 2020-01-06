@@ -35,8 +35,8 @@ router.post('/mon-traj', function(req,res){
         dateTime = result.rows[0].departure_time.substring(0, 10) + " " + result.rows[0].departure_time.substring(11, 16) ;
         let objJson = {
           heureDepart: dateTime,
-          lieuArrivee: result.rows[0].depart_address,
-          lieuDepart: result.rows[0].arrivee_address,
+          lieuDepart: result.rows[0].depart_address,
+          lieuArrivee: result.rows[0].arrivee_address,
           prix : result.rows[0].prix,
           status : statusString,
           etatStatus : result.rows[0].statut
