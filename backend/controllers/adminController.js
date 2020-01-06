@@ -15,6 +15,7 @@ router.get('/list-traj', function(req,res){
     }
 
     else {
+      
       console.log(" getAllTrajets query effectuée");
       let arrayTraj = [];
       let colisName = "";
