@@ -37,6 +37,7 @@
     "ng2-charts": "^2.3.0",
     "ng2-file-upload": "^1.4.0",
     "ngx-paypal": "^5.0.0",
+    "ngx-spinner": "^8.1.0",
     "ngx-toastr": "^11.2.1",
     "nodemailer": "^6.3.1",
     "popper.js": "^1.12.3",

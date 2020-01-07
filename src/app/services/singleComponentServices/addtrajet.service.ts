@@ -12,16 +12,19 @@ export class AddtrajetService {
 
 
   addtrajet(data: Trajet) {
-    this.http.post(`${this.url}/trajet/add`, data)
+    return new Promise((resolve,reject) => {
+      this.http.post(`${this.url}/trajet/add`, data)
       .subscribe(
         res => {
-          // this.router.navigate(['accueil']);
           console.log(res);
+          resolve();
         },
         err => {
-          console.log('Error occured:' , err);
+          //console.log('Error occured:' , err);
+          reject(err);
         }
       );
+    });
 
   }
 }

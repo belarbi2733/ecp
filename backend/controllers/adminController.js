@@ -15,38 +15,65 @@ router.get('/list-traj', function(req,res){
     }
 
     else {
-      console.log(" getAllTrajets query effectuée");
-      let arrayTraj = [];
-      let colisName = "";
-      let places= "";
-      let timeDate="";
-      // let paypalAccount="";
-      for (let i = 0; i < result.rows.length ; i++ )
-      {
-        if(result.rows[i].book_places){
-          places = result.rows[i].book_places;
-        }
-        else {
-          places = "Livraison de colis" ;
-        }
+      if(result.rows.length) {
+      
+        Trajet.getpaypalCond(function(err2,result2){
+          if(err2) {
+            console.log("Erreur dans getPaypalCond query");
+            console.error(err2);
+          }
+      
+          else {
 
-        timeDate = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ;
+            console.log(" get PaypalCond query effectuée");
+ 
+            let arrayTraj = [];
+            let colisName = "";
+            let places= "";
+            let timeDate="";
+            let paypalConducteur="";
+            // let paypalAccount="";
+            for (let i = 0; i < result.rows.length ; i++ )
+            {
+              for (let j = 0; j < result2.rows.length ; j++ )
+              { 
+                if(result.rows[i].id==result2.rows[j].id){
+                  paypalConducteur = result2.rows[j].paypalcond ;
+                }
+              }
+
+              if(paypalConducteur==""){
+                paypalConducteur = "N\A";
+              }
+              
+              if(result.rows[i].book_places){
+                places = result.rows[i].book_places;
+              }
+              else {
+                places = "Livraison de colis" ;
+              }
+
+              timeDate = result.rows[i].departure_time.substring(0, 10) + " " + result.rows[i].departure_time.substring(11, 16) ;
 
 
-        arrayTraj.push({
-          id: result.rows[i].id,
-          depart : result.rows[i].depart_address,
-          time : timeDate,
-          nbrePlaces : places,
-          prix : result.rows[i].prix,
-          paypal : result.rows[i].paypal,
-          paypalcond : result.rows[i].paypalcond,
-          statut : result.rows[i].statut
+              arrayTraj.push({
+                id: result.rows[i].id,
+                depart : result.rows[i].depart_address,
+                time : timeDate,
+                nbrePlaces : places,
+                prix : result.rows[i].prix,
+                paypal : result.rows[i].paypal,
+                paypalcond : paypalConducteur,
+                statut : result.rows[i].statut
+              });
+            }
+            console.log(arrayTraj);
+            res.json(arrayTraj);
+
+          }
         });
       }
-      console.log(arrayTraj);
-      res.json(arrayTraj);
-
+      else{res.json(null);}
     }
   });
 });

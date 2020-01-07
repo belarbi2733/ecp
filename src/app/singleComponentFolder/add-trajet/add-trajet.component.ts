@@ -5,6 +5,7 @@ import {Injectable} from '@angular/core';
 import { ServerconfigService} from '../../serverconfig.service';
 import {Key} from '../../searchFolder/map/TomTomKeys';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 declare let L;
 declare let tomtom: any;
@@ -57,21 +58,23 @@ function recordtrajet(data: Trajet) {
 export class AddTrajetComponent implements OnInit {
 
   bookPlaces = null;
+ 
 
-  constructor(private addtrajetservice: AddtrajetService, private router: Router) {
+  constructor(private addtrajetservice: AddtrajetService, private router: Router, private spinner: NgxSpinnerService) {
     inscription.idUser = JSON.parse(localStorage.getItem('idUser')).id;
   }
 
   save() {
-    // console.log(this.nom);
-    // console.log(this.volume);
+    this.spinner.show();
     routetrajet.push({places : this.bookPlaces});
-    this.router.navigate(['paypal']);
+   
   }
 
   ngOnInit() {
 
     const service = this.addtrajetservice; // Pour pouvoir utiliser le service dans les functions;
+    const router = this.router;
+    const spinner = this.spinner;
 
     // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
@@ -614,7 +617,12 @@ export class AddTrajetComponent implements OnInit {
 
         //console.log(JSON.stringify(routetrajet));
         recordtrajet(inscription);
-        service.addtrajet(inscription);
+        service.addtrajet(inscription).then(()=>{
+          //spinner.hide();
+          router.navigate(['paypal']);
+        }).catch((err)=>{
+          console.error(err);
+        });
 
 
         iter = iter + 1; // comme ça ne stocke que pour le temps demander
