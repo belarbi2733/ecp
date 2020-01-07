@@ -112,6 +112,7 @@ import { TournstatComponent } from './adminFolder/tournstat/tournstat.component'
 import { ColislivrstatComponent } from './adminFolder/colislivrstat/colislivrstat.component';
 import { TrajeffecstatComponent } from './adminFolder/trajeffecstat/trajeffecstat.component';
 import { TourneffecstatComponent } from './adminFolder/tourneffecstat/tourneffecstat.component';
+import {NgxSpinnerModule} from "ngx-spinner";
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -207,14 +208,15 @@ const appRoutes: Routes = [
     BrowserModule,
     NgbModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes, { enableTracing: true }),
+    RouterModule.forRoot(appRoutes, {enableTracing: true}),
     ChartsModule,
     HttpClientModule,
     NgxPayPalModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     ReactiveFormsModule,
-    IgxListModule
+    IgxListModule,
+    NgxSpinnerModule
   ],
   providers: [
     AccueilService,
