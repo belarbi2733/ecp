@@ -618,7 +618,7 @@ export class AddTrajetComponent implements OnInit {
         //console.log(JSON.stringify(routetrajet));
         recordtrajet(inscription);
         service.addtrajet(inscription).then(()=>{
-          //spinner.hide();
+          spinner.hide();
           router.navigate(['paypal']);
         }).catch((err)=>{
           console.error(err);
