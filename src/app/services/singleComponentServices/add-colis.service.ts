@@ -10,15 +10,20 @@ export class AddColisService {
   url = this.servUrl.nodeUrl;
 
   addColis(data: DataColis) {
-    this.http.post(`${this.url}/colis/add`, data)
-      .subscribe(
-        res => {
-          console.log(res);
-          // this.router.navigate(['accueil']);
-        },
-        err => {
-          console.log('Erreur avec ajout colis:' , err);
-        }
-      );
-  }
+    return new Promise((resolve,reject) => {
+      this.http.post(`${this.url}/colis/add`, data)
+        .subscribe(
+          res => {
+            console.log(res);
+            resolve();
+            // this.router.navigate(['accueil']);
+          },
+          err => {
+            console.log('Erreur avec ajout colis:' , err);
+            reject(err);
+          }
+        );
+      });
+    }
+  
 }
