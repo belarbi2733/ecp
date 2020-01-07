@@ -6,7 +6,8 @@ import { ChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPayPalModule } from 'ngx-paypal';
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { IgxListModule } from 'igniteui-angular';
+import { ChatService } from './messagerieFolder/messagerie/chat.service';
 
 // services
 import { AuthGuard } from './services/singleComponentServices/auth-guard.service';
@@ -14,17 +15,17 @@ import { AdminGuard } from './services/singleComponentServices/admin-guard.servi
 import { AccueilService } from './services/accueil.service';
 import { AuthService } from './services/singleComponentServices/auth.service';
 import { DriverService } from './services/map.service';
-import { ValidationService} from './searchFolder/sidebar/validation.service';
+import { ValidationService } from './searchFolder/sidebar/validation.service';
 // import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service'
 // import {MesColisService} from './services/profileServices/mes-colis.service';
-import { ValidationTrajetService} from './validationtrajet/validationtrajet.service';
-import {MesTournService} from './services/profileServices/mes-tourn.service';
+import { ValidationTrajetService } from './validationtrajet/validationtrajet.service';
+import { MesTournService } from './services/profileServices/mes-tourn.service';
 
 // import { TrajetService} from './searchFolder/sidebar/trajet';
 import { ConfirmationDialogService } from './searchFolder/validation/confirmation-dialog.service';
 
-import {MesColisService} from './services/profileServices/mes-colis.service';
-import {MesTrajService} from './services/profileServices/mes-traj.service';
+import { MesColisService } from './services/profileServices/mes-colis.service';
+import { MesTrajService } from './services/profileServices/mes-traj.service';
 // modules for file upload ( profile pic )
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -77,17 +78,17 @@ import { Navbar2Component } from './navbar2/navbar2.component';
 import { AdmintableComponent } from './adminFolder/admintable/admintable.component';
 import { MailingService } from './services/mailing.service';
 import { PaypalComponent } from './paypal/paypal.component';
-import {PersonalDataService} from './services/profileServices/personal-data.service';
-import {AccountService} from './services/profileServices/account.service';
-import {PreferencesService} from './services/profileServices/preferences.service';
-import {RatingService} from './services/profileServices/rating.service';
-import {VehicleService} from './services/profileServices/vehicle.service';
-import {AdminListTrajService} from './services/admin-list-traj.service';
-import {AdminListUtService} from './services/admin-list-user.service';
-import {InscrService} from './services/singleComponentServices/inscr.service';
+import { PersonalDataService } from './services/profileServices/personal-data.service';
+import { AccountService } from './services/profileServices/account.service';
+import { PreferencesService } from './services/profileServices/preferences.service';
+import { RatingService } from './services/profileServices/rating.service';
+import { VehicleService } from './services/profileServices/vehicle.service';
+import { AdminListTrajService } from './services/admin-list-traj.service';
+import { AdminListUtService } from './services/admin-list-user.service';
+import { InscrService } from './services/singleComponentServices/inscr.service';
 import { LienInscrService } from './services/singleComponentServices/lien-inscr.service';
-import {AddColisService} from './services/singleComponentServices/add-colis.service';
-import {AddtrajetService} from './services/singleComponentServices/addtrajet.service';
+import { AddColisService } from './services/singleComponentServices/add-colis.service';
+import { AddtrajetService } from './services/singleComponentServices/addtrajet.service';
 import { ServerconfigService } from './serverconfig.service';
 import { PaypalService } from './services/paypal.service';
 import { InfoCondComponent } from './adminFolder/info-cond/info-cond.component';
@@ -102,7 +103,7 @@ import { TrajEffecStatService } from './services/adminServices/trajeffecstat.ser
 import { TournEffecStatService } from './services/adminServices/tourneffecstat.service';
 import { LienInscrComponent } from './singleComponentFolder/lien-inscr/lien-inscr.component';
 import { ConfirmationDialogComponent } from './searchFolder/validation/confirmation-dialog.component';
-import {ValidationTrajetComponent} from './validationtrajet/validationtrajet.component';
+import { ValidationTrajetComponent } from './validationtrajet/validationtrajet.component';
 import { PhotoService } from './services/profileServices/photo.service';
 import { CondstatComponent } from './adminFolder/condstat/condstat.component';
 import { ColisstatComponent } from './adminFolder/colisstat/colisstat.component';
@@ -114,12 +115,12 @@ import { TourneffecstatComponent } from './adminFolder/tourneffecstat/tourneffec
 
 const appRoutes: Routes = [
   // tslint:disable-next-line:max-line-length
-  { path: 'profile', canActivate: [AuthGuard], component: ProfileTabsComponent }, // :id is a route parameter and data is to parse static data
+  { path: 'profile', canActivate: [AuthGuard], component: ProfileTabsComponent },
   { path: 'accueil', component: AccueilComponent },
   { path: 'add-trajet', canActivate: [AuthGuard], component: AddTrajetComponent },
   { path: 'add-colis', canActivate: [AuthGuard], component: AddColisComponent },
   { path: 'validationtrajet', canActivate: [AuthGuard], component: ValidationTrajetComponent },
-  { path: 'searchTrajConduct', canActivate: [AuthGuard], component: SearchTrajConductComponent},
+  { path: 'searchTrajConduct', canActivate: [AuthGuard], component: SearchTrajConductComponent },
   { path: 'aide', component: AideComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'description', component: DescriptionComponent },
@@ -140,12 +141,11 @@ const appRoutes: Routes = [
   { path: '', component: AccueilComponent },
   { path: '**', component: FourOhFourComponent },
   { path: 'map', canActivate: [DriverService], component: MapComponent },
-  {path: 'validation', canActivate : [ConfirmationDialogService], component: ConfirmationDialogComponent}
+  { path: 'validation', canActivate: [ConfirmationDialogService], component: ConfirmationDialogComponent }
 
-
-   //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
+  //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
   // tslint:disable-next-line:max-line-length
-   //                                      configuration. This is useful for displaying a "404 - Not Found" page or redirecting to another route. It MUST BE THE LAST ROUTE
+  //                                      configuration. This is useful for displaying a "404 - Not Found" page or redirecting to another route. It MUST BE THE LAST ROUTE
 ];
 
 @NgModule({
@@ -211,10 +211,10 @@ const appRoutes: Routes = [
     ChartsModule,
     HttpClientModule,
     NgxPayPalModule,
-    BrowserAnimationsModule, // required animations module
-    ToastrModule.forRoot(), // ToastrModule added
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     ReactiveFormsModule,
-    NgxSpinnerModule
+    IgxListModule
   ],
   providers: [
     AccueilService,
@@ -253,8 +253,10 @@ const appRoutes: Routes = [
     ValidationTrajetService,
     MesTrajService,
     MesTournService,
-    PhotoService
+    PhotoService,
+    ChatService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
