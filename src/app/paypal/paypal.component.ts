@@ -38,10 +38,14 @@ import {MesTrajInterface} from '../reservations/mes-traj/mes-traj.interface';
     this.paypalService.getMyTraj(this.mesTrajInterface)
       .then((mesTrajInterface: MesTrajInterface) => {
         this.mesTrajInterface = mesTrajInterface;
+        this.paypalInterface.prix = this.mesTrajInterface.prix.toString();
       })
       .catch(() => {
-        console.log('Error in mes-trajComponent');
+        console.log('Error in paypalComponent');
       });
+
+
+
 
     /*this.paypalService.getPricePaypal(this.paypalInterface)
        .then((prix: number) => {
