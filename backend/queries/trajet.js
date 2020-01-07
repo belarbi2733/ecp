@@ -38,7 +38,7 @@ let Trajet = {
   // },
 
   getAllTrajets: function(callback){
-    return db.query('SELECT trajet.id, trajet.depart_address, trajet.departure_time, trajet.book_places, trajet.prix, trajet.statut, u1.paypal as paypal, u2.paypal as paypalcond FROM trajet, utilisateur u1, utilisateur u2, tournee WHERE u1.id=trajet.id_user and trajet.id_tournee=tournee.id and tournee.id_user=u2.id ORDER BY trajet.departure_time DESC', callback);
+    return db.query('SELECT trajet.id, trajet.depart_address, trajet.departure_time, trajet.book_places, trajet.prix, trajet.statut, u1.paypal as paypal, u2.paypal as paypalcond FROM trajet, utilisateur u1, utilisateur u2, tournee WHERE u1.id=trajet.gid_user and trajet.id_tournee=tournee.id and tournee.id_user=u2.id ORDER BY trajet.departure_time DESC', callback);
   },
 
   getMonTraj: function(data, callback){
