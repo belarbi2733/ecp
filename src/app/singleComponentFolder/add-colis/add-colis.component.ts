@@ -567,7 +567,7 @@ export class AddColisComponent implements OnInit {
           // console.log(JSON.stringify(routecolis));
           recordcolis(dataColis);
           service.addColis(dataColis).then(()=>{
-            //spinner.hide();
+            spinner.hide();
             router.navigate(['paypal']);
           }).catch((err)=>{
             console.error(err);
