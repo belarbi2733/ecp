@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {PaypalInterface} from '../../paypal/paypal.interface';
-import {PaypalService} from '../../services/paypal.service';
 
 @Component({
   selector: 'app-payments',
@@ -9,21 +7,9 @@ import {PaypalService} from '../../services/paypal.service';
 })
 export class PaymentsComponent implements OnInit {
 
-  paypalInterface: PaypalInterface = {
-    idUser: 1,
-    idTournee: 1,
-    prix: ''
-  };
-  constructor(private paypalService: PaypalService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.paypalService.getPricePaypal(this.paypalInterface)
-      .then((paypalInterface: PaypalInterface) => {
-        this.paypalInterface.prix = paypalInterface.prix;
-      })
-      .catch(() => {
-        console.log('Error');
-      });
   }
 
 }

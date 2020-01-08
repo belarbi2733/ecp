@@ -29,6 +29,7 @@ app.use(function(req, res, next) {
 
 
 
+
 /*
 Login Controller    url : /login
 
@@ -109,6 +110,29 @@ app.use('/admin', AdminController);
 
 
 
+/*
+AdminDashBoard Controller    url : /adminDashBoard
+
+  - get /getNbreUsers
+  - get /getNbreColis
+  - get /getNbreTraj
+  - get /getNbreTourn
+  - get /getNbreCond
+  - get /getNbreColisLivr
+  - get /getNbreTrajEffec
+  - get /getNbreTournEffec
+  - get /getNbreUsersTab
+  - get /getNbreColisTab
+  - get /getNbreTrajTab
+  - get /getNbreTournTab
+  - get /getNbreCondTab
+  - get /getNbreColisLivrTab
+  - get /getNbreTrajEffecTab
+  - get /getNbreTournEffecTab
+  - post /admin-list-ut
+  - post /admin-list-traj
+  - post /delete-traj
+ */
 app.use('/adminDashBoard', AdminDashBoardController);
 
 
@@ -166,3 +190,9 @@ const PORT = process.env.PORT || 8081;
 const server = app.listen(PORT, () => {
 console.log('Connected to port ' + PORT)
 })
+
+
+
+//Enregitrement des statistiques dans la base de données
+
+//app.use(setInterval(function(){ console.log("Hello"); }, 3000));
