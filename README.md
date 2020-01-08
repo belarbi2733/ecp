@@ -47,21 +47,22 @@ npm install --save @ng-bootstrap/ng-bootstrap   => add import {NgbModule} from '
 
 ### statut trajet
 
-0 juste créé 
+0 juste créé
 1 fait partie d'une tournée
 2 effectué/validé par le passager et donc en attente de paiement au conducteur
-3 pas validé / demande de remboursement 
-4 payé
-5 remboursé 
+3 pas validé / demande de remboursement
+4 payé (par l'utilisateur)
+5 remboursé
+6 payé (par l'administrateur)
 
 
 ### statut tournée
 
-0 
+0
 1
-2 
-3 
-4 
+2
+3
+4
 5  
 
 ### statut user
@@ -69,4 +70,3 @@ npm install --save @ng-bootstrap/ng-bootstrap   => add import {NgbModule} from '
 0 suspendu
 1 activé
 2 admin
-

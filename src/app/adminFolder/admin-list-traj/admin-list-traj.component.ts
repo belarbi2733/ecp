@@ -42,7 +42,7 @@ export class AdminListTrajComponent implements OnInit {
   }
 
   paid(data: AdminListTrajInterface) {
-    data.statut = 4;
+    data.statut = 6;
     this.adminListTrajService.updateStatut(data);
   }
 
