@@ -11,6 +11,7 @@ import {MesTrajInterface} from './mes-traj.interface';
 })
 export class MesTrajComponent implements OnInit {
   mesTrajInterface: MesTrajInterface = {
+    id: null,
     heureDepart: '',
     lieuDepart: '',
     lieuArrivee: '',
