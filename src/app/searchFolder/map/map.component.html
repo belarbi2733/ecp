@@ -7,11 +7,31 @@
                 <option selected="selected">depart at</option>
             </select>
             <input id="date" type="datetime-local" pattern="\d{4}-\d{2}-\d{2} [0-1]?\d:[0-6]\d" />
+            <small class="warning">insert a date in format yyyy-MM-dd hh:mm</small>
             <input id="places" type="number" name="places" placeholder="Nombres de places dispo" [(ngModel)]="nbrePlaces" />
             <input id="detour" type="number" name="detour" placeholder="Détour max toléré" [(ngModel)]="detour" />
-            <small class="warning">insert a date in format yyyy-MM-dd hh:mm</small>
+            <label>Que souhaitez-vous transporter ?</label>
+            <div class="form-check">
+
+              <input class="form-check-input" type="radio" name="choix" id="colis" [(ngModel)]="choix" value="1">
+              <label class="form-check-label" for="colis">
+                Colis
+              </label>
+              <br>
+              <input class="form-check-input" type="radio" name="choix" id="trajet" [(ngModel)]="choix" value="2">
+              <label class="form-check-label" for="trajet">
+                Trajet
+              </label>
+              <!--
+              <br>
+              <input class="form-check-input" type="radio" name="choix" id="anything" [(ngModel)]="choix" value="3">
+              <label class="form-check-label" for="anything">
+                N'importe
+              </label>
+              -->
+          </div>
             <input type="submit" value="Submit" disabled="disabled" (click)="save()"/>
-            <!--<label *ngIf=!seeSubmit()>Vous n'avez pas de voiture enregistrée ! Impossible de réaliser une recherche</label>-->
+            <label *ngIf=!seeSubmit()> Vous n'avez pas de voiture enregistrée ! Impossible de réaliser une recherche</label>
         </form>
         <div id="map" class="use-all-space"></div>
     </div>
