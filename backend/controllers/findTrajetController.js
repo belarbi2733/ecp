@@ -17,7 +17,7 @@ let Python = require('../algoRun/processes');
 //On ajoute un colis, puis on va recup son id qui a été incrémenter pour pouvoir générer le trajet découlant de ce colis
 
 router.post('/matchDriverTrajet', function(req,res) {
-  console.log('GUILY : ' + JSON.stringify(req.body));
+  console.log('Input from Angular : ' + JSON.stringify(req.body));
   Voiture.getDataVoitureById(req.body.idUser, function (err, result) {
     if(err) {
       res.status(400).json(err);
@@ -40,10 +40,20 @@ router.post('/matchDriverTrajet', function(req,res) {
 
               let colisJson = {};
               let trajetJson = {};
-              let i = 0;
-              let j = 0;
+              let miniColisJson = {};
+              let miniTrajetJson = {};
+              let i = 0; // indice colisJson
+              let j = 0; // indice trajetJson
+              let k = 1; // indice miniColisJson
+              let l = 1; // indice miniTrajetJson
               let jsonKeyColis = 'chauffeur';
               let jsonKeyTrajet = 'chauffeur';
+              let jsonKeyMiniColis = '';
+              let jsonKeyMiniTrajet = '';
+
+              //tableau de booleans qui permet de ne pas mettre un trajet gardé dans les mini trajets
+              let catchColis = [];
+              let catchTrajet = [];
 
               colisJson[jsonKeyColis] = [
                 search.idUser,
@@ -77,11 +87,13 @@ router.post('/matchDriverTrajet', function(req,res) {
                 } else {
 
                   let iter = 0;
-                  _.each(result2.rows, function (one) { // bibliothèque underscore _     //Pour chaque trajet, check
+                  let iter2 = 0;
+                  _.each(result2.rows, function (one) { // bibliothèque underscore _  => Pour chaque trajet, check
 
+                    //Première sélection assez restreinte sur un rayon de 10kms selon les points de départ et d'arrivée
                     Trajet.findTrajetAroundRayon(req.body, one, 10, function (err4, result4) {  //req.body => search
                       iter++;
-                      console.log(one);
+                      // console.log(one);
                       if (err4) {
                         res.status(400).json(err4);
                         //console.log('Error 4');
@@ -105,7 +117,7 @@ router.post('/matchDriverTrajet', function(req,res) {
                               one.arrivee_x
                             ];
                             i++;
-
+                            catchColis[iter] = true;
                           } else {
                             //Séquence si c'est un trajet
 
@@ -123,6 +135,7 @@ router.post('/matchDriverTrajet', function(req,res) {
                               0
                             ];
                             j++;
+                            catchTrajet[iter] = true;
                           }
                         }
                       }
@@ -130,14 +143,83 @@ router.post('/matchDriverTrajet', function(req,res) {
                       //console.log('Trajet' + JSON.stringify(trajetJson));
 
                       //Quand le dernier trajet a été traité on enregistre la tournée, on ajoute l'id_tournée dans les trajets et on crée l'itinéraire
-                      if(iter === result2.rows.length) {
+                      if(iter === result2.rows.length && iter2 === result2.rows.length) {
                         console.log('END forLoop : Trajet iter : ' + iter + ' id : ' + one.id);
-                        setTournee(search.idUser, result.rows[0].id, colisJson, trajetJson, search, function(data){
-                          console.log('Res JSON : ' + JSON.stringify(data));
-                          res.json(data);
+                        iter = 0;
+                        iter2 = 0; // Cela évite passer dans la deuxième fin
+                        setTournee(search.idUser, result.rows[0].id, colisJson, trajetJson, search, function(dataForAngular){
+                          console.log('Res JSON : ' + JSON.stringify(dataForAngular));
+                          res.json(dataForAngular);
                         });
                       } else {
                         console.log('Trajet iter : ' + iter + ' id : ' + one.id);
+                      }
+                    });
+
+                    // Selection plus large avec les mini-trajets
+                    Trajet.findMiniTrajet(req.body,one,100, function (err4, result4) {  //req.body => search
+                      iter2++;
+                      // console.log(one);
+                      if (err4) {
+                        res.status(400).json(err4);
+                        //console.log('Error 4');
+                        console.error(err4);
+                        return -1;
+                      } else {
+                        if (result4.rows.length) {
+
+                          let dist = distance(req.body.departure[1],req.body.departure[0],one.depart_y,one.depart_x);
+                          if(one.id_colis && catchColis[iter2] === false) {
+                            //Séquence si c'est un colis
+                            jsonKeyMiniColis = 'colis' + k;
+                            miniColisJson[jsonKeyMiniColis] = [
+                              one.id,
+                              dist,
+                              result3.rows[one.id_colis-1].volume,  // On va chercher le volume de l'id_colis correspondant
+                              one.prix,
+                              one.depart_y,
+                              one.depart_x,
+                              one.arrivee_y,
+                              one.arrivee_x
+                            ];
+                            k++;
+
+                          } else {
+                            if(catchTrajet[iter2] === false) {
+                              //Séquence si c'est un trajet
+
+                              jsonKeyMiniTrajet = 'passager' + l;
+
+                              miniTrajetJson[jsonKeyMiniTrajet] = [
+                                one.id,
+                                dist,
+                                1,
+                                one.prix,
+                                one.depart_y,
+                                one.depart_x,
+                                one.arrivee_y,
+                                one.arrivee_x,
+                                0
+                              ];
+                              l++;
+                            }
+                          }
+                        }
+                      }
+                      //console.log('Colis' + JSON.stringify(colisJson));
+                      //console.log('Trajet' + JSON.stringify(trajetJson));
+
+                      //Quand le dernier trajet a été traité on enregistre la tournée, on ajoute l'id_tournée dans les trajets et on crée l'itinéraire
+                      if(iter === result2.rows.length && iter2 === result2.rows.length) {
+                        console.log('END forLoop in miniTrajet : Trajet iter : ' + iter2 + ' id : ' + one.id);
+                        iter = 0;
+                        iter2 = 0; // Cela évite passer dans la deuxième fin
+                        setTournee(search.idUser, result.rows[0].id, colisJson, trajetJson, search, function(dataForAngular){
+                          console.log('Res JSON : ' + JSON.stringify(dataForAngular));
+                          res.json(dataForAngular);
+                        });
+                      } else {
+                        console.log('MiniTrajet iter2 : ' + iter2 + ' id : ' + one.id);
                       }
                     });
                   });
@@ -152,120 +234,6 @@ router.post('/matchDriverTrajet', function(req,res) {
       } else {
         res.json(false);
         console.log('pas de voiture');
-      }
-    }
-  });
-});
-
-router.post('/miniTrajet', function(req,res) {
-
-  console.log(req.body);
-  Voiture.getDataVoitureById(req.body.idUser, function (err, result) {
-    if(err) {
-      res.status(400).json(err);
-      console.log('Error 1 on Mini Trajet');
-    } else {
-      if(result.rows.length) {
-        Trajet.getAllTrajet(function (err2,result2) {
-          if(err2) {
-            res.status(400).json(err2);
-            console.log('Error 2 on Mini Trajet');
-          }
-          else
-          {
-            if(result2.rows.length) {
-              const search = req.body;
-
-              let arrayMiniColis = [{
-                idChauffeur: req.body.idUser,
-                places: result.rows[0].coffre,
-                latDepart: search.departure[1],
-                longDepart: search.departure[0],
-                latArrivee: search.arrival[1],
-                longArrivee: search.arrival[0]
-              }];
-
-              let arrayMiniTrajet = [{
-                idChauffeur: req.body.idUser,
-                places: search.nbrePlaces,
-                latDepart: search.departure[1],
-                longDepart: search.departure[0],
-                latArrivee: search.arrival[1],
-                longArrivee: search.arrival[0]
-              }];
-
-
-              Colis.getAllColis(function (err3, result3) {
-                if (err3) {
-                  res.status(400).json(err3);
-                  console.log('Error 3 on Mini Trajet');
-                  console.log(err3);
-                  return -1;
-                } else {
-                  _.each(result2.rows, function(one) { // bibliothèque underscore _     //Pour chaque trajet, check
-
-                    Trajet.findMiniTrajet(req.body,one,100, function (err4, result4) {  //req.body => search
-                      if(err4) {
-                        res.status(400).json(err4);
-                        console.log('Error 4 on Mini Trajet');
-                        console.log(err4);
-                        return -1;
-                      }
-                      else {
-                        if (result4.rows.length) {
-
-                          let dist = distance(req.body.departure[1],req.body.departure[0],one.depart_y,one.depart_x);
-                          // console.log(dist);
-
-                          if(one.id_colis) {
-                            //Séquence si c'est un colis
-                            arrayMiniColis.push({
-                              idColis: one.id_colis,
-                              distance: dist,
-                              volume: result3.rows[one.id_colis-1].volume,  // On va chercher le volume de l'id_colis correspondant
-                              prix: one.prix,
-                              latDepart: one.depart_y,
-                              longDepart: one.depart_x,
-                              latArrivee: one.arrivee_y,
-                              longArrivee: one.arrivee_x
-                            });
-                            //console.log(JSON.stringify(arrayMiniColis));
-                            //console.log('Mini Colis : ' + one.id_colis + ' id : ' + one.id);
-
-                          } else {
-                            //Séquence si c'est un trajet
-                            arrayMiniTrajet.push({
-                              idTrajet: one.id,
-                              distance: dist,
-                              volume: 1,
-                              prix: one.prix,
-                              latDepart: one.depart_y,
-                              longDepart: one.depart_x,
-                              latArrivee: one.arrivee_y,
-                              longArrivee: one.arrivee_x
-                            });
-                            // console.log(JSON.stringify(arrayMiniTrajet));
-                            //console.log('Mini Trajet : ' + one.id);
-                          }
-                        }
-                      }
-
-                      //console.log('Mini Colis' + JSON.stringify(arrayMiniColis));
-                      //console.log('Mini Trajet' + JSON.stringify(arrayMiniTrajet));
-                      const objJsonMini = arrayMiniColis + arrayMiniTrajet;
-
-                    });
-                  });
-                }
-              });
-            }
-            else {
-              res.json(null);
-            }
-          }
-        });
-      } else {
-        res.json(false);
       }
     }
   });
@@ -296,11 +264,13 @@ function distance(lat1, lon1, lat2, lon2) {
 
 
 
-function setTournee(idUser, idVoiture, colisJson, trajetJson, infosSearch, callback) {
+function setTournee(idUser, idVoiture, colisJson, trajetJson, miniColisJson, miniTrajetJson,  infosSearch, callback) {
   console.log('Type de colis/trajet : ' + infosSearch.choix);
   console.log('Trajet' + JSON.stringify(trajetJson));
   console.log('Colis' + JSON.stringify(colisJson));
-  Python.runPy(colisJson, trajetJson, colisJson, trajetJson, infosSearch.choix)
+  console.log('MiniTrajet' + JSON.stringify(miniTrajetJson));
+  console.log('MiniColis' + JSON.stringify(miniColisJson));
+  Python.runPy(colisJson, trajetJson, miniColisJson, miniTrajetJson, infosSearch.choix)
     .then((data)=> {
 
       // console.log('Output Python in node : ' + data);
