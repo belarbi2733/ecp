@@ -43,10 +43,15 @@ export class DriverService {
 
   setupVoiture(data: Driver) {
     return new Promise((resolve, reject) => {
-      this.http.post(`${this.url}/setupVoiture`, data)
+      this.http.post(`${this.url}/vehicule/getDataByIdUser`, data)
         .subscribe(
           res => {
-            resolve(res);
+            console.log(res);
+            if (res !== null) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
           },
           err => {
             reject(err);

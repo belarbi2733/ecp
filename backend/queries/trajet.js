@@ -29,6 +29,10 @@ let Trajet = {
     return db.query('DELETE FROM trajet WHERE id = $1', [data.id] ,callback);
   },
 
+  getAllTrajetForTournee: function(callback) {
+    return db.query('SELECT * FROM trajet', callback);
+  },
+
   getAllTrajet: function(callback){
     return db.query('SELECT * FROM trajet WHERE id_colis IS NULL', callback);
   },

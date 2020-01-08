@@ -17,11 +17,11 @@ let driverinfo = [];
 
 let iter;
 
-var messageToEmit : any;
 let driver: Driver = {
   idUser: null,
   nbrePlaces: null,
   detourMax: null,
+  choix: null,
   departuretime: '',
   time: '',
   distance: '',
@@ -34,6 +34,7 @@ let driver: Driver = {
 function recordDriver(data: Driver) {
   data.nbrePlaces = driverinfo[0].nbrePlaces;
   data.detourMax = driverinfo[0].detourMax;
+  data.choix = driverinfo[0].choix;
   data.departuretime = driverinfo[1].departuretime;
   data.time = driverinfo[1].traveltimeinseconds;
   data.distance = driverinfo[1].distance;
@@ -67,6 +68,7 @@ export class MapComponent implements OnInit {
   nbrePlaces = null;
   detour = null;
   statutVoiture = false;
+  choix = null;
 
   constructor(private driverService: DriverService) {
     driver.idUser = JSON.parse(localStorage.getItem('idUser')).id;
@@ -76,18 +78,25 @@ export class MapComponent implements OnInit {
 
     // console.log(this.nom);
     // console.log(this.volume);
-    driverinfo.push({nbrePlaces : this.nbrePlaces, detourMax: this.detour});
-    
+    driverinfo.push({nbrePlaces : this.nbrePlaces, detourMax: this.detour, choix: this.choix});
+
   }
-  
+
   ngOnInit() {
 
-    
+    this.driverService.setupVoiture(driver)
+      .then((statut: boolean) => {
+      this.statutVoiture = statut;
+      console.log(statut);
+    })
+      .catch((err) => {
+        console.error(err);
+    });
 
-    var what = this.messageToEmit;
+    let what = this.messageToEmit;
     const service = this.driverService;
     // Define your product name and version
-    
+
     tomtom.key(Key);
     tomtom.routingKey(Key);
     tomtom.searchKey(Key);
@@ -155,7 +164,7 @@ export class MapComponent implements OnInit {
       if (!event.points[0] || !event.points[1]) {
         routePoints = null;
       } else {
-        
+
         iter = 0;
         driverinfo = [];
         routePoints = event.points;
@@ -258,7 +267,7 @@ export class MapComponent implements OnInit {
         return;
       }
       batchRequestsLock = 'page';
-      
+
         try {
 
           batch(timeSeries(date))
@@ -585,7 +594,7 @@ export class MapComponent implements OnInit {
           geometry: feature.geometry
         };
       }).map(function(record) {
-        
+
         console.log(iter)
         if (iter < 1) {
           console.log(iter)
@@ -612,7 +621,7 @@ export class MapComponent implements OnInit {
               //console.log(idDriver);
               what.emit(outputJson);
               var cle = 0;
-              
+
                 for (var it = 1; it < 20; it++){
                   if (typeof window['Route'+it] !== 'undefined') {
                     window['Route'+it].clear();
@@ -621,18 +630,18 @@ export class MapComponent implements OnInit {
                   }
                 }
               for (var i = 1; i < Object.keys(outputJson).length - 1; i++){
-              
-              
+
+
                 window['Route' + i] = new tomtom.routeOnMap({
                   serviceOptions: {
                     traffic: false
                 }})
-                
+
                 window["Route"+i].addTo(map).draw([{lat: outputJson['passager' + i][1], lng: outputJson['passager' + i][2]}, {lat: outputJson['passager' + (i+1)][1], lng: outputJson['passager' + (i+1)][2]}]);
-                
+
                 console.log (window["Route"+i]);
               }
-            
+
               //let idTrajet = outputJson['passager' + i][0];
               //const point = [outputJson['passager' + i][2], outputJson['passager' + i][1]];  // indice 2 => longitude indice 1 => latitude
             })
