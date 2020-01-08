@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { PaypalInterface } from '../paypal/paypal.interface';
+import { MesTrajInterface } from '../reservations/mes-traj/mes-traj.interface';
 
 @Injectable()
 export class PaypalService {
@@ -38,12 +39,11 @@ export class PaypalService {
     });
   }
 
-  statusPayPass(data: PaypalInterface) {
+  statusPayPass(data: MesTrajInterface) {
     this.http.post(`${this.url}/paypal/changeStatus`, data)
       .subscribe(
         res => {
           console.log(res);
-          this.router.navigate(['accueil']);
         },
         err => {
           console.log('Error occured:' , err);

@@ -86,7 +86,7 @@ let Trajet = {
   changeStatusTraj: function(statut, trajet, callback)
   {
     console.log("Changement du statut du trajet");
-    return db.query('UPDATE trajet SET statut = $1 WHERE id_user = $2 AND id_tournee = $3', [statut, trajet.idUser, trajet.idTournee], callback);
+    return db.query('UPDATE trajet SET statut = $1 WHERE id = $2', [statut, trajet.id], callback);
   },
 
   findTrajetAroundRayon: function(search, trajet,rayonPerimetreKms, callback) {
