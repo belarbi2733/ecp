@@ -25,7 +25,7 @@ router.post('/matchDriverTrajet', function(req,res) {
       console.error(err);
     } else {
       if(result.rows.length) {
-        Trajet.getAllTrajet(function (err2,result2) {
+        Trajet.getAllTrajetForTournee(function (err2,result2) {
           if(err2) {
             res.status(400).json(err2);
             console.error(err2);
@@ -68,27 +68,6 @@ router.post('/matchDriverTrajet', function(req,res) {
               ];
               j++;
 
-              /*let arrayColis = [{
-                idChauffeur: search.idUser,
-                volume: result.rows[0].coffre,
-                detourMax: req.body.detourMax,
-                latDepart: search.departure[1],
-                longDepart: search.departure[0],
-                latArrivee: search.arrival[1],
-                longArrivee: search.arrival[0]
-              }];
-
-              let arrayTrajet = [{
-                idChauffeur: search.idUser,
-                places: search.nbrePlaces,
-                detourMax: search.detourMax,
-                latDepart: search.departure[1],
-                longDepart: search.departure[0],
-                latArrivee: search.arrival[1],
-                longArrivee: search.arrival[0],
-                coffre: result.rows[0].coffre
-              }];*/
-
               Colis.getAllColis(function (err3, result3) {
                 if (err3) {
                   res.status(400).json(err3);
@@ -102,6 +81,7 @@ router.post('/matchDriverTrajet', function(req,res) {
 
                     Trajet.findTrajetAroundRayon(req.body, one, 10, function (err4, result4) {  //req.body => search
                       iter++;
+                      console.log(one);
                       if (err4) {
                         res.status(400).json(err4);
                         //console.log('Error 4');
@@ -111,11 +91,9 @@ router.post('/matchDriverTrajet', function(req,res) {
                         if (result4.rows.length) {
 
                           let dist = distance(req.body.departure[1],req.body.departure[0],one.depart_y,one.depart_x);
-
                           if(one.id_colis) {
                             //Séquence si c'est un colis
                             jsonKeyColis = 'colis' + i;
-
                             colisJson[jsonKeyColis] = [
                               one.id,
                               dist,
@@ -154,7 +132,7 @@ router.post('/matchDriverTrajet', function(req,res) {
                       //Quand le dernier trajet a été traité on enregistre la tournée, on ajoute l'id_tournée dans les trajets et on crée l'itinéraire
                       if(iter === result2.rows.length) {
                         console.log('END forLoop : Trajet iter : ' + iter + ' id : ' + one.id);
-                        setTournee(search.idUser, result.rows[0].id, trajetJson, search, function(data){
+                        setTournee(search.idUser, result.rows[0].id, colisJson, trajetJson, search, function(data){
                           console.log('Res JSON : ' + JSON.stringify(data));
                           res.json(data);
                         });
@@ -294,6 +272,7 @@ router.post('/miniTrajet', function(req,res) {
 });
 
 // Source : https://www.1formatik.com/2417/comment-calculer-distance-latitude-longitude-javascript
+// Permet de calculer la distance en kilomètres en 2 points exprimés en coordonées géographiques
 function distance(lat1, lon1, lat2, lon2) {
   if ((lat1 == lat2) && (lon1 == lon2)) {
     return 0;
@@ -317,11 +296,11 @@ function distance(lat1, lon1, lat2, lon2) {
 
 
 
-//function setTournee(idVoiture, colisJson, infosSearch, listTrajet, callback) {  // Si colis au lieu de trajet
-function setTournee(idUser, idVoiture, trajetJson, infosSearch, callback) {
-  //console.log('Colis' + JSON.stringify(colisJson));
+function setTournee(idUser, idVoiture, colisJson, trajetJson, infosSearch, callback) {
+  console.log('Type de colis/trajet : ' + infosSearch.choix);
   console.log('Trajet' + JSON.stringify(trajetJson));
-  Python.runPy(trajetJson)
+  console.log('Colis' + JSON.stringify(colisJson));
+  Python.runPy(colisJson, trajetJson, colisJson, trajetJson, infosSearch.choix)
     .then((data)=> {
 
       // console.log('Output Python in node : ' + data);
@@ -350,8 +329,8 @@ function setTournee(idUser, idVoiture, trajetJson, infosSearch, callback) {
 
                 // const idDriver = outputJson['parcours'][0];
                 // console.log(idDriver);
-                let idTrajet = outputJson['passager' + i][0];
-                const point = [outputJson['passager' + i][2], outputJson['passager' + i][1]];  // indice 2 => longitude indice 1 => latitude
+                let idTrajet = outputJson['adresse' + i][0];
+                const point = [outputJson['adresse' + i][2], outputJson['adresse' + i][1]];  // indice 2 => longitude indice 1 => latitude
 
                 Itineraire.addTrajetItineraire(idTournee, idTrajet, i, point, function (err3, result3) {
                   if (err3) {
@@ -393,8 +372,8 @@ function setTournee(idUser, idVoiture, trajetJson, infosSearch, callback) {
 
     })
     .catch((err) => {
-      console.error(err);
-    })
+      console.error('Erreur dans le code Python : \n' + err);
+    });
 }
 
 module.exports = router;

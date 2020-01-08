@@ -1,10 +1,18 @@
 const {spawn}= require('child_process');
 let Python = {
-  runPy : function(data)
+  runPy : function(colisJson, trajetJson, miniColisJson, miniTrajetJson, choix)
   {
     return new Promise((resolve, reject) => {
-      const directory = './algoRun/algo_passager.py';
-      const child = spawn('python', [directory, `${JSON.stringify(data)}`]);
+      const directory = './algoRun/algo_complet.py';
+      const child = spawn('python',
+        [
+          directory,   //args 0   Permet d'appeler le code python
+          `${JSON.stringify(colisJson)}`,    //args 1
+          `${JSON.stringify(trajetJson)}`,    //args 2
+          `${JSON.stringify(miniColisJson)}`,    //args 3
+          `${JSON.stringify(miniTrajetJson)}`,    //args 4
+          choix,   //args 5
+        ]);
       child.on('exit', (code) => {
         console.log('child process exited with' +
           `code ${code}`);
@@ -32,22 +40,3 @@ let Python = {
 };
 
 module.exports = Python;
-
-
-
-
-
-
-/*const jsonObj={
-    "chauffeur":[50,"7000 Mons","75007 paris"],
-    "colis1":[70, 31, 50.4537,3.9608,48.8583,2.2945],
-    "colis2":[20,10,25,130,1,1],
-    "colis3":[39,20,45,145,1,1],
-    "colis4":[37, 19, 50.4613,3.9325,48.8738,2.29504],
-    "colis5":[7,4,50,102,1,2],
-    "colis6":[5,3,33,111,1,2],
-    "colis7":[10,6,37,138,1,2]
-    };
-
-console.log(typeof(jsonObj));
-runPy(jsonObj, 'algoRun.py');*/
