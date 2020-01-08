@@ -13,7 +13,7 @@
       <th scope="col">Compte paypal du passager</th>
       <th scope="col">Compte paypal du conducteur</th>
       <th scope="col">statut</th>
-      <th scope="col">0: existe 1: dans une tournée 2: effectué 3:demande remboursement 4: payé 5: remboursé </th>
+      <th scope="col">0: existe 1: dans une tournée 2: effectué 3:demande remboursement 4: payé (par l'utilisateur) 5: remboursé 6: payé (par l'admin) </th>
     </tr>
   </thead>
   <tbody>
@@ -49,7 +49,7 @@
         </ng-template>
 
         <a href="https://www.paypal.com" target="_blank"> <button class="btn"> Payer/rembourser</button></a>
-        <button class="btn btn-sucess" *ngIf="item.statut != 4"
+        <button class="btn btn-sucess" *ngIf="item.statut != 6"
                 [ngbPopover]="popContent2">
           Marquer payé
         </button>
