@@ -1,1 +1,68 @@
-<p>messagerie works!</p>
+<div class="parent-cont  row">
+  <div class="conversation-list  col-4">
+    <igx-list style="background: #ffffff; overflow-y: scroll; height: 100%;">
+      <igx-list-item (click)="viewMessage(room.id_tournee)" class="room-item" *ngFor="let room of tournees">
+        <img class="avatar" src="https://freeiconshop.com/wp-content/uploads/edd/many-people-solid.png"/>
+        <h4 igxListLineTitle >Tournée pour: <b>{{ room.arrivee_address }}</b></h4>
+        <p igxListLineSubTitle>identifiant de la tournée: {{ room.id_tournee}}</p>
+        <!--          <!--<p igxListLineSubTitle>{{ msg.today}} à {{ msg.time}}</p>-->
+      </igx-list-item>
+    </igx-list>
+  </div>
+  <div class="col-7">
+    <div id="message" class="messages row">
+      <!--  <div class="message-form">
+          <input placeholder="Enter your message here..." type="text" class="message-input" [(ngModel)]="messageText">
+          <button (click)="sendMessage()" *ngIf="messageText.trim() !==''" class="btn-msg-send" type="button">Send</button>
+        </div>-->
+
+      <div class="bubble-list">
+
+        <div *ngFor="let msg of messageArray" class="chatbubble">
+          <div class="msg-details"><span class="name">{{msg.nom}} {{msg.prenom}} </span> {{msg.today}} {{msg.time}}</div>
+          {{msg.message}}
+        </div>
+        <div id="anchor"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="msg-form">
+        <input placeholder="Enter your message here..." type="text" class="message-input" [(ngModel)]="messageText">
+        <button (click)="sendMessage()"*ngIf="messageText.trim() !==''" class="btn" type="button">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--<div class="container-fluid">-->
+<!--<div id="colonne1" row>-->
+<!--  <div  class="col-sm-5" >-->
+<!--    <igx-list>-->
+<!--      <igx-list-item isHeader="true">-->
+<!--        Contacts-->
+<!--      </igx-list-item>-->
+<!--      <igx-list-item *ngFor="let tournee of messageArray">-->
+<!--        <h4 igxListLineTitle (click)="viewMessage()">{{ tournee.today }}</h4>-->
+<!--        <p igxListLineSubTitle>{{ tournee.idUser}}</p>-->
+<!--      </igx-list-item>-->
+<!--    </igx-list>-->
+<!--  </div>-->
+<!--</div>-->
+<!--  <div  id="centre" class="row">-->
+<!--    <div class="well" style="height:200px; padding:15px;">-->
+<!--      <div *ngFor="let item of messageArray">-->
+<!--        <span>{{item.today}}/{{item.time}}</span> <br/>-->
+<!--        <span (click)="viewMessage()"><strong>{{item.user}} : </strong> {{item.message}}</span>-->
+<!--      </div>-->
+<!--  </div>-->
+<!--      <input type="text" class="form-control" [(ngModel)]="messageText">-->
+<!--      <button type="button" class="btn btn-success pull-right" (click)="sendMessage()">Send</button>-->
+<!--  </div>-->
+
+<!--</div>-->
+
+
+
+
