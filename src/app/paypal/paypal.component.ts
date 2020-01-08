@@ -15,12 +15,11 @@ import {MesTrajInterface} from '../reservations/mes-traj/mes-traj.interface';
   public payPalConfig?: IPayPalConfig;
 
   paypalInterface: PaypalInterface = {
-    idUser: 1,
-    idTournee: 1,
     prix: ''
   };
 
   mesTrajInterface: MesTrajInterface = {
+    id: null,
     heureDepart: '',
     lieuDepart: '',
     lieuArrivee: '',
@@ -105,7 +104,7 @@ import {MesTrajInterface} from '../reservations/mes-traj/mes-traj.interface';
      onClientAuthorization: (data) => {
        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
        // Ajouter le status "Payé par le passager"
-       this.paypalService.statusPayPass(this.paypalInterface);
+       this.paypalService.statusPayPass(this.mesTrajInterface);
      },
      onCancel: (data, actions) => {
        console.log('OnCancel', data, actions);
