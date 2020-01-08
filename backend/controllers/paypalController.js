@@ -34,6 +34,7 @@ router.post('/mon-traj', function(req,res){
         if (result.rows[0].statut==5){statusString="remboursé"}
         dateTime = result.rows[0].departure_time.substring(0, 10) + " " + result.rows[0].departure_time.substring(11, 16) ;
         let objJson = {
+          id: result.rows[0].id,
           heureDepart: dateTime,
           lieuDepart: result.rows[0].depart_address,
           lieuArrivee: result.rows[0].arrivee_address,
@@ -49,7 +50,7 @@ router.post('/mon-traj', function(req,res){
 });
 
 router.post('/changeStatus', function(req,res){
-  Trajet.changeStatusTraj(4,req.body, function(err,result){
+  Trajet.changeStatusTraj(4, req.body, function(err,result){
     // console.log(req.body);
     if(err) {
       console.log("Erreur dans le changement de statut");

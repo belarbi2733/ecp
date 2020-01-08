@@ -139,10 +139,11 @@ const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
   { path: 'inscrire', component: InscrComponent },
   { path: 'lien-inscrire', component: LienInscrComponent },
-  { path: '', component: AccueilComponent },
-  { path: '**', component: FourOhFourComponent },
   { path: 'map', canActivate: [DriverService], component: MapComponent },
-  { path: 'validation', canActivate: [ConfirmationDialogService], component: ConfirmationDialogComponent }
+  { path: 'validation', canActivate : [ConfirmationDialogService], component: ConfirmationDialogComponent },
+  { path: '', component: AccueilComponent },
+  { path: '**', component: FourOhFourComponent }
+
 
   //  The router will select this route if the requested URL doesn't match any paths for routes defined earlier in the
   // tslint:disable-next-line:max-line-length
