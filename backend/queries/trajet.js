@@ -29,6 +29,10 @@ let Trajet = {
     return db.query('DELETE FROM trajet WHERE id = $1', [data.id] ,callback);
   },
 
+  getAllTrajetForTournee: function(callback) {
+    return db.query('SELECT * FROM trajet', callback);
+  },
+
   getAllTrajet: function(callback){
     return db.query('SELECT * FROM trajet WHERE id_colis IS NULL', callback);
   },
@@ -86,7 +90,7 @@ let Trajet = {
   changeStatusTraj: function(statut, trajet, callback)
   {
     console.log("Changement du statut du trajet");
-    return db.query('UPDATE trajet SET statut = $1 WHERE id_user = $2 AND id_tournee = $3', [statut, trajet.idUser, trajet.idTournee], callback);
+    return db.query('UPDATE trajet SET statut = $1 WHERE id = $2', [statut, trajet.id], callback);
   },
 
   findTrajetAroundRayon: function(search, trajet,rayonPerimetreKms, callback) {
