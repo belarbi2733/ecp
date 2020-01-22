@@ -417,8 +417,22 @@ router.post('/admin-list-traj', function(req,res) {
   });
 
 });
+
 router.post('/delete-traj', function(req,res) {
   Trajet.deleteTraj(req.body, function(err, result) {
+    if (err) {
+      res.status(400).json(err);
+      console.error(err);
+    } else {
+      res.json(result);
+      console.log(res);
+    }
+  });
+
+});
+
+router.post('/enregStat', function(req,res) {
+  Statistiques.enregStat(req.body, function(err, result) {
     if (err) {
       res.status(400).json(err);
       console.error(err);

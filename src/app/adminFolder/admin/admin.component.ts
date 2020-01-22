@@ -19,7 +19,8 @@ adminInterface: AdminInterface = {
   nbreCondStat: 0,
   nbreColisLivrStat: 0,
   nbreTrajEffecStat: 0,
-  nbreTournEffecStat: 0
+  nbreTournEffecStat: 0,
+  date: new Date(Date.now())
 };
 
 
@@ -89,6 +90,10 @@ adminInterface: AdminInterface = {
       .catch(() => {
         console.log('Error');
       });
+  }
+
+  enregistrer(){
+    this.adminService.enregStat(this.adminInterface);
   }
 
 }
