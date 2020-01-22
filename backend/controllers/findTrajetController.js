@@ -35,6 +35,8 @@ router.post('/matchDriverTrajet', function(req,res) {
           {
             if(result2.rows.length) {
               const search = req.body;
+              console.log("TESTEST : " + search.choix);
+
               //let arrayTrajet = {"chauffeur":[result.rows[0].nbre_places-1,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
               //let arrayColis = {"chauffeur":[result.rows[0].coffre,search.departure[1],search.departure[0],search.arrival[1],search.arrival[0]]};
 
@@ -214,7 +216,7 @@ router.post('/matchDriverTrajet', function(req,res) {
                         console.log('END forLoop in miniTrajet : Trajet iter : ' + iter2 + ' id : ' + one.id);
                         iter = 0;
                         iter2 = 0; // Cela évite passer dans la deuxième fin
-                        setTournee(search.idUser, result.rows[0].id, colisJson, trajetJson, search, function(dataForAngular){
+                        setTournee(search.idUser, result.rows[0].id, colisJson, trajetJson, miniColisJson, miniTrajetJson, search,function(dataForAngular){
                           console.log('Res JSON : ' + JSON.stringify(dataForAngular));
                           res.json(dataForAngular);
                         });
@@ -265,7 +267,7 @@ function distance(lat1, lon1, lat2, lon2) {
 
 
 function setTournee(idUser, idVoiture, colisJson, trajetJson, miniColisJson, miniTrajetJson,  infosSearch, callback) {
-  console.log('Type de colis/trajet : ' + infosSearch.choix);
+  console.log('Type de colis/trajet : ' + JSON.stringify(infosSearch));
   console.log('Trajet' + JSON.stringify(trajetJson));
   console.log('Colis' + JSON.stringify(colisJson));
   console.log('MiniTrajet' + JSON.stringify(miniTrajetJson));
