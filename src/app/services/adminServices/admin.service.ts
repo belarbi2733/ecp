@@ -136,4 +136,17 @@ export class AdminService {
         );
     });
   }
+
+  enregStat(data){
+    console.log(data);
+    this.http.post(`${this.url}/adminDashBoard/enregStat`, data)
+      .subscribe(
+        res => {
+          console.log(res);
+        },
+        err => {
+          console.log('Error occured:' , err);
+        }
+      );
+  }
 }

@@ -7,4 +7,5 @@ export interface  AdminInterface {
   nbreColisLivrStat: number;
   nbreTrajEffecStat: number;
   nbreTournEffecStat: number;
+  date: Date;
 }
