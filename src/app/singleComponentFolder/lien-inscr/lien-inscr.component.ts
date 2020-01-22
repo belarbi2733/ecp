@@ -26,7 +26,7 @@ export class LienInscrComponent implements OnInit {
   }
 
   valider(data: DataLienInscription){
-    if (data.adresse_mail === '') {
+    if (data.adresse_mail === '' || data.valid_adresse_mail === '') {
       this.error = 'Certains champs ne sont pas complétés !';
       this.constructor();
     } else {

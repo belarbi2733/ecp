@@ -22,7 +22,11 @@ let Utilisateur = {
       return db.query('UPDATE utilisateur SET statut = $1 WHERE id = $2', [utilisateur.statut, utilisateur.id ], callback);
     },
 
-
+    changeStatusUser: function(utilisateur, callback)
+    {
+      console.log("Changement du statut de l'utilisateur mail : " + utilisateur.adresse_mail);
+      return db.query('UPDATE utilisateur SET statut = $1 WHERE mail = $2', [1, utilisateur.adresse_mail ], callback);
+    },
 
     updateUtilisateur: function(utilisateur, callback)
     {

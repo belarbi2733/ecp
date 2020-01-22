@@ -67,7 +67,7 @@ router.get('/inscription', (req, res) => {
       <h3>Email avec lequel vous vous être inscrit : </h3>
       <p>Email: ${mail}</p>
       <h3>Lien pour valider votre inscription : </h3>
-      <a href="https://www.facebook.com/">Lien vers la page de validation</a>
+      <a href="http://localhost:4200/lien-inscrire">Lien vers la page de validation</a>
     `;
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
