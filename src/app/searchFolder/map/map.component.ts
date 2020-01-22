@@ -1,21 +1,22 @@
+// #Imports
+
 import { Component, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import {Driver} from './map.interface';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {DriverService} from '../../services/map.service';
-import {parcour} from './tourne.json';
-import {Key} from './TomTomKeys';
+import {Key} from './TomTomKeys'; //clé TomTom
 
+// #Déclaration des variables globales
 
 declare let L;
 declare let tomtom: any;
 declare let document: any;
 let dep: string;
 let arr: string;
-let driverinfo = [];
-
+let driverinfo = []; // stocke les informations sur le trajet conducteur
 let iter;
+
+// #Création d'une instance de l'interface Driver, celle-ci sera donnée au backend via le service, elle contient les informations relatives au trajet du conducteur
 
 let driver: Driver = {
   idUser: null,
@@ -31,6 +32,8 @@ let driver: Driver = {
   departureAddress: '',
   arrivalAddress: ''};
 
+  // #Fonction qui viendra modifier l'instance
+
 function recordDriver(data: Driver) {
   data.nbrePlaces = driverinfo[0].nbrePlaces;
   data.detourMax = driverinfo[0].detourMax;
@@ -45,12 +48,10 @@ function recordDriver(data: Driver) {
   data.departureAddress = driverinfo[1].departureAddress;
   data.arrivalAddress = driverinfo[1].arrivalAddress;
   console.log(JSON.stringify(data));
-
-
-  // console.log(JSON.stringify(data));
-
 }
-// var iteration = 0;
+
+// #Déclaration du component
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -58,15 +59,21 @@ function recordDriver(data: Driver) {
   encapsulation : ViewEncapsulation.None
 })
 
+// #Création de la classe
 
 @Injectable()
 export class MapComponent implements OnInit {
 
+  // # Nouvelle instance d'un emiteur (utilisé pour remplir la sidebar)
   @Output() messageToEmit = new EventEmitter<Object>();
 
+  // #initialisation de certaines variables
 
+  //## nbrePlaces vient contenir le nombre de places dispo
   nbrePlaces = null;
+  //## detour vient contenir le detour maximum acceptable
   detour = null;
+  //## Vient contenir le statut de la voiture (à une voiture ou pas)
   statutVoiture = false;
   choix = null;
 
@@ -74,14 +81,11 @@ export class MapComponent implements OnInit {
     driver.idUser = JSON.parse(localStorage.getItem('idUser')).id;
   }
 
+  // # Lorsque le bouton est actionné, cette fonction vient enregistrer les champs textes (detour et nbre de places)
   save() {
-
-    // console.log(this.nom);
-    // console.log(this.volume);
     driverinfo.push({nbrePlaces : this.nbrePlaces, detourMax: this.detour, choix: this.choix});
-
   }
-
+  // # ngOnInit
   ngOnInit() {
 
     this.driverService.setupVoiture(driver)
@@ -97,6 +101,7 @@ export class MapComponent implements OnInit {
     const service = this.driverService;
     // Define your product name and version
 
+    // ## Appel de la clé pour les différents services de l'api
     tomtom.key(Key);
     tomtom.routingKey(Key);
     tomtom.searchKey(Key);
@@ -108,14 +113,17 @@ export class MapComponent implements OnInit {
     };
     let listScrollHandler = null;
 
+    // ## Déclaration de la map
     const map = tomtom.L.map('map', {
       key: Key,
+      // ### Chemin du SDK
       basePath: '/assets/sdktool/sdk',
       center: [ 52.360306, 4.876935 ],
       zoom: 15,
       source : 'vector'
     });
 
+    //## Création des Champs textes dynamique pour le point de départ et destination
     const routeInputs = tomtom.routeInputs().addTo(map);
     const form = document.getElementById('form');
     const batchRoutingControl = tomtom.foldable(formOptions).addTo(map).addContent(form);
@@ -143,23 +151,25 @@ export class MapComponent implements OnInit {
       });
     }
 
-// let's move this to the bottom of topright
+
     map.zoomControl.setPosition('topright');
-// fill datepicker with current time...
+
     const timepicker = document.querySelector('#date');
-// (<HTMLElement>document.querySelector('#date')).style.display = 'none';
+
     timepicker.setAttribute('min', new Date().toISOString());
     const offset = new Date().getTimezoneOffset();
     const fallback = timepicker.type === 'text';
     if (fallback) {
-      // no support for datetime-locale, let's show a warning message
+
       form.classList.add('fallback');
     }
-// let's add 15 minutes from now to give user some time to fill the form
+    // ## Récupération de l'heure et date + 15 Minutes
     setDate(new Date(new Date().getTime() + 15 * 60 * 1000));
     const arrivalOrDeparture = document.querySelector('select#type');
     const submitButton = document.querySelector('input[type=submit]');
     let routePoints;
+
+    // ## Lorsque les adresses ont été validée dans les deux champs, cette méthode est activée
     routeInputs.on(routeInputs.Events.LocationsFound, function(event) {
       if (!event.points[0] || !event.points[1]) {
         routePoints = null;
@@ -168,24 +178,26 @@ export class MapComponent implements OnInit {
         iter = 0;
         driverinfo = [];
         routePoints = event.points;
+
+        // ###Récupéartion des adresses de départ et arrivées (en toute lettre)
+
         tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
           .go(function(response) {
             if (response && response.address && response.address.freeformAddress) {
-              // console.log(JSON.stringify(response.address.freeformAddress));
               dep = response.address.freeformAddress;
             }
           });
         tomtom.reverseGeocode({position: [routePoints[1].lat, routePoints[1].lon]})
           .go(function(resp) {
             if (resp && resp.address && resp.address.freeformAddress) {
-              // console.log(JSON.stringify(resp.address.freeformAddress));
               arr = resp.address.freeformAddress;
             }
           });
       }
       submitButton.disabled = !routePoints;
     });
-// add submit handler to form
+
+    //## Différentes fonction venant gérer l'asyncronisme dynamique (srcoll, batchrequest, catching error, ...)
     submitButton.addEventListener('click', function() {
       this.setAttribute('disabled', 'disabled');
       request(getDate());
@@ -209,6 +221,8 @@ export class MapComponent implements OnInit {
       showError(getOrCreateList());
       unlockBatchRequests();
     }
+
+    //## Fonction venant afficher la route lorsqu'on appuie sur le champ en dessous du form
     let persistentRoute;
     function clickFirstListItem() {
       const firstListItem = batchRoutingControl.container.querySelector('.item');
@@ -232,6 +246,8 @@ export class MapComponent implements OnInit {
       });
 
     };
+
+    // ##Update lors de scroll
     function updateScrollEvent(data) {
 
       const results = data.results;
@@ -249,8 +265,6 @@ export class MapComponent implements OnInit {
         const limit = results.length / 2;
         if (lastVisible >= limit && results.length) {
           const lastResult = results[results.length - 1];
-          // const time = arrivalOrDeparture.value === 'depart at' ? lastResult.from : lastResult.to;
-          // requestNextPage(time, data);
         }
         expandVisibleRows(items, firstVisible, lastVisible);
       };
@@ -260,8 +274,9 @@ export class MapComponent implements OnInit {
       return data;
 
     }
-    function requestNextPage(date, previousData) {
 
+    //## Fonction qui vient gérer le form en général après qu'une première proposition aie été faite
+    function requestNextPage(date, previousData) {
 
       if (batchRequestsLock) {
         return;
@@ -272,9 +287,7 @@ export class MapComponent implements OnInit {
 
           batch(timeSeries(date))
             .then(function(data) {
-              // batchRequestsLock can be changed in the meantime
               if (batchRequestsLock === 'submit') {
-                // let's jump straight to the end of this chain
                 throw new PagingError();
               }
               return data;
@@ -284,33 +297,23 @@ export class MapComponent implements OnInit {
             .then(createItems)
             .then(updateScrollEvent)
             .then(updateListElements);
-          // .then(unlockBatchRequests, handleBatchRequestError);
-
         } catch (err) {
           handleBatchRequestError(err);
         }
       }
 
-// Create a new request
+    
+     //## Fonction qui vient gérer le form en général lors de la première entrée idem que la fonction précédente sans devoir merge les anciennes données
     function request(date) {
       console.log (iter);
-
-      // L.clear();
-      //////////////////////////////
       if (batchRequestsLock === 'submit') {
-        // we don't care if there's another page downloaded
         return;
       }
       batchRequestsLock = 'submit';
-      //if (iter < 2) {
         try {
-          ///////////////////////////////////////////////
           clearList();
           batch(timeSeries (date))
             .then(function(data) {
-              // handle the data here
-              // we have this fake handler just for the docs purpose
-              // this is more like a no-op
               return data;
             })
             .then(prepareData)
@@ -322,7 +325,9 @@ export class MapComponent implements OnInit {
         } catch (err) {
           handleBatchRequestError(err);
         }
-      }//}
+      }
+
+    //## crée une route par élément de la Serie temporelle
     function mapTimeToRoutingElement(time) {
       const format = 'yyyy-mm-dd hh:mm';
       const result = {
@@ -334,7 +339,8 @@ export class MapComponent implements OnInit {
       result[param] = formatDate(time).slice(0, format.length).replace('T', ' ');
       return result;
     }
-// generate time series for batch query
+
+    //### La fonction time series ne renvoie qu'une date 
     function timeSeries(start) {
       const milisInMinute = 60 * 1000;
       const minutes = 15;
@@ -350,6 +356,8 @@ export class MapComponent implements OnInit {
         }, [new Date(start)])
         .map(mapTimeToRoutingElement);
     }
+
+    //## Vient afficher les données dans les champs html créé via createItems
     function showDetails(result) {
       const from = batchRoutingControl.container.querySelector('.details .from-value');
       const to = batchRoutingControl.container.querySelector('.details .to-value');
@@ -371,6 +379,7 @@ export class MapComponent implements OnInit {
 
     }
     let route;
+    //##Fonction venant afficher une route par rapport aux résultats de MapTimeToRoutingElement
     function drawRoute(result) {
       if (route) {
         map.removeLayer(route);
@@ -378,10 +387,10 @@ export class MapComponent implements OnInit {
       if (!result || !result.route) {
         return;
       }
-      // console.log (JSON.stringify(result.route));
-      // console.log (typeof(result.route));
       route = tomtom.L.geoJson(result.route, {color: result.color}).addTo(map);
     }
+
+    //##Fonction activée lorsqu'on appuie sur une ligne du carrousel
     function onRowClick(result) {
       const previous = batchRoutingControl.container.querySelector('.item.active');
       if (previous) {
@@ -446,6 +455,8 @@ export class MapComponent implements OnInit {
       arrive.innerHTML = 'Arrive';
       return header;
     }
+
+    // ## Initialise les champs html
     function createDetails() {
       const details = tomtom.L.DomUtil.create('div', 'details');
       const left = L.DomUtil.create('span', 'left column', details);
@@ -484,7 +495,7 @@ export class MapComponent implements OnInit {
 
 
 
-
+    //## Error handlers
     function showError(list) {
       list.classList.add('empty', 'error');
     }
@@ -583,8 +594,9 @@ export class MapComponent implements OnInit {
     }
 
 
-
+    // ## Cette fonction prépare les données des routes avant de les afficher
     function prepareData(data) {
+      //### On récupère les données
       const results = data.filter(function(record) {
         return typeof record.error === 'undefined';
       }).map(function(record) {
@@ -609,19 +621,20 @@ export class MapComponent implements OnInit {
 
 
 
-
-          console.log(driverinfo);
-          // console.log(JSON.stringify(record.geometry));
-
+          // ### On uptdate l'instance driver de l'interface avec les nouvelles données
           recordDriver(driver);
+          // ### On envoie au backend via le service puis on attend la réponse de l'algo
           service.matchDriverTrajetforTournee(driver)
             .then((outputJson) => {
+              // #### La réponse de l'algo est reprise ici, outputJson contient chaque mini-trajet en détail
               console.log(JSON.stringify(Object.keys(outputJson).length));
+
               let idDriver = outputJson['parcours'][0];
-              //console.log(idDriver);
+              // #### On emit what avec l'outputJson pour remplir la sidebar des nouvelles informations
               what.emit(outputJson);
               var cle = 0;
 
+              //#### On supprime les anciennes instances et on crée les nouvelles instances de mini-trajet et puis on les affiches
                 for (var it = 1; it < 20; it++){
                   if (typeof window['Route'+it] !== 'undefined') {
                     window['Route'+it].clear();
@@ -638,20 +651,12 @@ export class MapComponent implements OnInit {
                 }})
 
                 window["Route"+i].addTo(map).draw([{lat: outputJson['passager' + i][1], lng: outputJson['passager' + i][2]}, {lat: outputJson['passager' + (i+1)][1], lng: outputJson['passager' + (i+1)][2]}]);
-
-                console.log (window["Route"+i]);
               }
-
-              //let idTrajet = outputJson['passager' + i][0];
-              //const point = [outputJson['passager' + i][2], outputJson['passager' + i][1]];  // indice 2 => longitude indice 1 => latitude
             })
             .catch((err) => {
               console.error(err);
             });
-
-          // service.findMiniTrajet(driver);
           iter ++;
-          // comme ça ne stocke que pour le temps demander
         }
 
         return {
@@ -711,6 +716,8 @@ export class MapComponent implements OnInit {
       }
       return new Date(timepicker.valueAsNumber + offset * 60 * 1000);
     }
+
+    //## gestion de date et d'heure
     function setDate(date) {
       const now = formatDate(date || new Date());
       timepicker.setAttribute('value', fallback ? now.replace('T', ' ') : now);
@@ -756,6 +763,7 @@ export class MapComponent implements OnInit {
 
   }
 
+  //## On prend le statut voiture (booléen)
   seeSubmit() {
     return this.statutVoiture;
   }

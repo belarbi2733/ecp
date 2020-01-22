@@ -1,22 +1,23 @@
+// #Imports
 import { Component, OnInit} from '@angular/core';
 import { Trajet } from './add-trajet.interface';
 import {AddtrajetService} from '../../services/singleComponentServices/addtrajet.service';
 import {Injectable} from '@angular/core';
-import { ServerconfigService} from '../../serverconfig.service';
 import {Key} from '../../searchFolder/map/TomTomKeys';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 
+// #Déclaration des variables globales
 declare let L;
 declare let tomtom: any;
-
 declare let document: any;
 let dep: string;
 let arr: string;
-// var addtrajetservice : AddtrajetService;
+let iter;
+let routetrajet = []  ; // stocke les informations sur le trajet conducteur
 
 
-
+// #Création d'une instance de l'interface Trajet
 let inscription: Trajet = {
   idUser: null,
   departuretime : '',
@@ -30,10 +31,7 @@ let inscription: Trajet = {
   places: null
 };
 
-let iter;
-// var iteration = 0;
-let routetrajet = []  ; // stocke les informations sur le trajet conducteur
-
+// #Fonction qui viendra modifier l'instance
 function recordtrajet(data: Trajet) {
 
   data.places = routetrajet[0].places;
@@ -48,15 +46,18 @@ function recordtrajet(data: Trajet) {
   console.log(JSON.stringify(data));
 }
 
+// #Déclaration du component
 @Component({
   selector: 'app-add-trajet',
   templateUrl: './add-trajet.component.html',
   styleUrls: ['./add-trajet.component.css', '../../app.component.css']
 })
 
+// # Création de la classe
 @Injectable()
 export class AddTrajetComponent implements OnInit {
 
+  // # Initialisation de la variable contenant le nombre de passager
   bookPlaces = null;
  
 
@@ -64,21 +65,22 @@ export class AddTrajetComponent implements OnInit {
     inscription.idUser = JSON.parse(localStorage.getItem('idUser')).id;
   }
 
+  // # Fonction qui vient enregistrer le champ texte 
   save() {
     this.spinner.show();
     routetrajet.push({places : this.bookPlaces});
    
   }
 
+  // #ngOnInit
   ngOnInit() {
 
     const service = this.addtrajetservice; // Pour pouvoir utiliser le service dans les functions;
     const router = this.router;
     const spinner = this.spinner;
 
-    // Define your product name and version
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
-    // Set TomTom keys
+    // ## Appel de la clé pour les différents services de l'api
     tomtom.key(Key);
     tomtom.routingKey(Key);
     tomtom.searchKey(Key);
@@ -92,6 +94,7 @@ export class AddTrajetComponent implements OnInit {
     };
     let listScrollHandler = null;
 
+    // ## Déclaration de la map
     const map = tomtom.L.map('map', {
     key: Key,
     basePath: '/assets/sdktool/sdk',
@@ -101,38 +104,33 @@ export class AddTrajetComponent implements OnInit {
 
     });
 
+    //## Création des Champs textes dynamique pour le point de départ et destination
     const routeInputs = tomtom.routeInputs().addTo(map);
-    //
-
     const form = document.getElementById('form');
     const batchRoutingControl = tomtom.foldable(formOptions).addTo(map).addContent(form);
 
     window.addEventListener('resize', function() {
       batchRoutingControl.unfold();
       if (listScrollHandler) {
-        // run after css animation
         setTimeout(listScrollHandler, 250);
       }
     });
-    // let's move this to the bottom of topright
     map.zoomControl.setPosition('topright');
-    // fill datepicker with current time...
     const timepicker = document.querySelector('#date');
-    // (<HTMLElement>document.querySelector('#date')).style.display = 'none';
     timepicker.setAttribute('min', new Date().toISOString());
     const offset = new Date().getTimezoneOffset();
     const fallback = timepicker.type === 'text';
     if (fallback) {
-      // no support for datetime-locale, let's show a warning message
       form.classList.add('fallback');
     }
-    // let's add 15 minutes from now to give user some time to fill the form
+
     setDate(new Date(new Date().getTime() + 10 * 60 * 1000));
 
     const arrivalOrDeparture = document.querySelector('select#type');
     const submitButton = document.querySelector('input[type=submit]');
     let routePoints;
 
+    // ## Lorsque l'adresse a été choisies cette méthode est activée
     routeInputs.on(routeInputs.Events.LocationsFound, function(event) {
 
     if (!event.points[0] || !event.points[1]) {
@@ -141,10 +139,10 @@ export class AddTrajetComponent implements OnInit {
       routePoints = event.points;
       iter = 0 ;
       routetrajet = [] ;
+      // ### Récupération des adresses de départ et arrivées (en toute lettre)
       tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
             .go(function(response) {
                 if (response && response.address && response.address.freeformAddress) {
-                  // console.log(JSON.stringify(response.address.freeformAddress));
                   dep = response.address.freeformAddress;
                 } else {
 
@@ -154,7 +152,6 @@ export class AddTrajetComponent implements OnInit {
       tomtom.reverseGeocode({position: [routePoints[1].lat, routePoints[1].lon]})
             .go(function(resp) {
                 if (resp && resp.address && resp.address.freeformAddress) {
-                  // console.log(JSON.stringify(resp.address.freeformAddress));
                   arr = resp.address.freeformAddress;
                 } else {
 
@@ -168,7 +165,8 @@ export class AddTrajetComponent implements OnInit {
 
     });
 
-    // add submit handler to form
+
+    //## Différentes fonction venant gérer l'asyncronisme dynamique (srcoll, batchrequest, catching error, ...)
     submitButton.addEventListener('click', function() {
       this.setAttribute('disabled', 'disabled');
       request(getDate());
@@ -200,6 +198,7 @@ export class AddTrajetComponent implements OnInit {
 
     let persistentRoute;
 
+    //## Fonction venant afficher la route lorsqu'on appuie sur le champ en dessous du form
     function clickFirstListItem() {
       const firstListItem = batchRoutingControl.container.querySelector('.item');
       clearRoutes();
@@ -224,6 +223,7 @@ export class AddTrajetComponent implements OnInit {
 
     };
 
+    // ##Update lors de scroll
     function updateScrollEvent(data) {
 
       const results = data.results;
@@ -253,6 +253,7 @@ export class AddTrajetComponent implements OnInit {
 
     }
 
+    //## Fonction qui vient gérer le form en général après qu'une première proposition aie été faite
     function requestNextPage(date, previousData) {
       if (batchRequestsLock) {
         return;
@@ -281,10 +282,9 @@ export class AddTrajetComponent implements OnInit {
       }
     }
 
-    // Create a new request
+    //## Fonction qui vient gérer le form en général lors de la première entrée
     function request(date) {
       if (batchRequestsLock === 'submit') {
-        // we don't care if there's another page downloaded
         return;
       }
       batchRequestsLock = 'submit';
@@ -292,9 +292,6 @@ export class AddTrajetComponent implements OnInit {
         clearList();
         batch(timeSeries(date))
           .then(function(data) {
-            // handle the data here
-            // we have this fake handler just for the docs purpose
-            // this is more like a no-op
             return data;
           })
           .then(prepareData)
@@ -309,6 +306,7 @@ export class AddTrajetComponent implements OnInit {
       }
     }
 
+    //## crée une route par élément de la Serie temporelle
     function mapTimeToRoutingElement(time) {
       const format = 'yyyy-mm-dd hh:mm';
       const result = {
@@ -321,7 +319,7 @@ export class AddTrajetComponent implements OnInit {
       return result;
     }
 
-    // generate time series for batch query
+    // ## Génère une serie temporelle pour créer un carrousel
     function timeSeries(start) {
       const milisInMinute = 60 * 1000;
       const minutes = 15;
@@ -338,6 +336,7 @@ export class AddTrajetComponent implements OnInit {
         .map(mapTimeToRoutingElement);
     }
 
+    //## Vient afficher les données dans les champs html créé via createItems
     function showDetails(result) {
       const from = batchRoutingControl.container.querySelector('.details .from-value');
       const to = batchRoutingControl.container.querySelector('.details .to-value');
@@ -357,6 +356,7 @@ export class AddTrajetComponent implements OnInit {
 
     let route;
 
+    //##Fonction venant afficher une route par rapport aux résultats de MapTimeToRoutingElement
     function drawRoute(result) {
       if (route) {
         map.removeLayer(route);
@@ -367,6 +367,7 @@ export class AddTrajetComponent implements OnInit {
       route = tomtom.L.geoJson(result.route, {color: result.color}).addTo(map);
     }
 
+    //##Fonction activée lorsqu'on appuie sur une ligne de route on affiche alors les info correspondant à la route
     function onRowClick(result) {
       const previous = batchRoutingControl.container.querySelector('.item.active');
       if (previous) {
@@ -415,6 +416,7 @@ export class AddTrajetComponent implements OnInit {
       return list;
     }
 
+    //## Crée une ligne et le header de celle-ci
     function createRow(list) {
       const element = tomtom.L.DomUtil.create('li', 'item', list);
       tomtom.L.DomUtil.create('span', 'from', element);
@@ -437,6 +439,7 @@ export class AddTrajetComponent implements OnInit {
       return header;
     }
 
+    // ## Initialise les champs html
     function createDetails() {
       const details = tomtom.L.DomUtil.create('div', 'details');
       const left = L.DomUtil.create('span', 'left column', details);
@@ -473,7 +476,7 @@ export class AddTrajetComponent implements OnInit {
       return details;
     }
 
-
+    //## Error handlers
     function showError(list) {
       list.classList.add('empty', 'error');
     }
@@ -583,8 +586,10 @@ export class AddTrajetComponent implements OnInit {
     }
 
 
+    // ## Cette fonction prépare les données des routes avant de les afficher
     function prepareData(data) {
 
+      //### On récupère les données et on les organisent
       const results = data.filter(function(record) {
         return typeof record.error === 'undefined';
       }).map(function(record) {
@@ -610,23 +615,18 @@ export class AddTrajetComponent implements OnInit {
         },
           ); // premier élément de route geometry = coordonnées de départ, dernier = arrivée;
 
-
-          // AddColis(colis);
-          // console.log(JSON.stringify(routecolis));
-          // console.log(JSON.stringify(routecolis[0].nom));
-
-        //console.log(JSON.stringify(routetrajet));
+        // ### On uptdate l'instance incription de l'interface avec les nouvelles données
         recordtrajet(inscription);
+
+        // ### On envoie au backend via le service pour ecrire dans la db
         service.addtrajet(inscription).then(()=>{
           spinner.hide();
           router.navigate(['paypal']);
         }).catch((err)=>{
           console.error(err);
         });
-
-
+        
         iter = iter + 1; // comme ça ne stocke que pour le temps demander
-
 
         }
 
@@ -656,6 +656,7 @@ export class AddTrajetComponent implements OnInit {
       };
     }
 
+    // ## Merge les anciennes data
     function mergeData(previous) {
       return function(current) {
         let results = current.results;
@@ -686,6 +687,7 @@ export class AddTrajetComponent implements OnInit {
       return (num >= 10 ? '' : '0') + String(num);
     }
 
+    //## gestion de date et d'heure
     function getDate() {
       if (fallback) {
         return new Date(timepicker.value.replace(/-/g, '/'));

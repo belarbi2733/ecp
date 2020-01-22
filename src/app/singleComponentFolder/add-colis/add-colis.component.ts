@@ -1,3 +1,4 @@
+// #Imports
 import { Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { DataColis } from './add-colis.interface';
 import {AddColisService} from '../../services/singleComponentServices/add-colis.service';
@@ -5,13 +6,20 @@ import {Injectable} from '@angular/core';
 import {Key} from '../../searchFolder/map/TomTomKeys';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+
+// #Déclaration des variables globales
 declare let L;
 declare let tomtom: any;
 declare let document: any;
 let dep: string;
 let arr: string;
 
+let iter;
+let routecolis = []  ; // stocke les informations sur le trajet conducteur
 
+
+
+// #Création d'une instance de l'interface DataColis
 let dataColis: DataColis = {
   idUser: null,
   nom: '',
@@ -26,9 +34,8 @@ let dataColis: DataColis = {
   arrivalAddress: ''
 };
 
-let iter;
-// var iteration = 0;
-let routecolis = []  ; // stocke les informations sur le trajet conducteur
+
+// #Fonction qui viendra modifier l'instance
 function recordcolis(data: DataColis) {
 
   data.nom = routecolis[0].nom;
@@ -43,18 +50,22 @@ function recordcolis(data: DataColis) {
   data.arrivalAddress = routecolis[1].arrivalAddress;
 
   console.log(JSON.stringify(data));
-  // addColis(data);
 }
 
 
+// #Déclaration du component
 @Component({
   selector: 'app-add-colis',
   templateUrl: './add-colis.component.html',
   styleUrls: ['./add-colis.component.css', '../../app.component.css'],
   encapsulation : ViewEncapsulation.None
 })
+
+// #Création de la classe
 @Injectable()
 export class AddColisComponent implements OnInit {
+
+  // #initialisation des variables nom et volume
   nom = '';
   volume = '';
 
@@ -62,23 +73,23 @@ export class AddColisComponent implements OnInit {
     dataColis.idUser = JSON.parse(localStorage.getItem('idUser')).id;
   }
 
+  // # Lorsque le bouton est actionné, cette fonction vient enregistrer les champs textes (nom et volume)
   save() {
     this.spinner.show();
-    // console.log(this.nom);
-    // console.log(this.volume);
     routecolis.push({nom : this.nom, volume : this.volume});
   }
 
 
+   // # ngOnInit
   ngOnInit() {
     
     const router =this.router;
     const spinner=this.spinner;
     const service = this.addColisService;
 
-// Define your product name and version
+
+    // ## Appel de la clé pour les différents services de l'api
     tomtom.setProductInfo('EasyCarPool', '1.0.0');
-// Set TomTom keys
     tomtom.key(Key);
     tomtom.routingKey(Key);
     tomtom.searchKey(Key);
@@ -91,6 +102,7 @@ export class AddColisComponent implements OnInit {
     };
     let listScrollHandler = null;
 
+    // ## Déclaration de la map
     const map = tomtom.L.map('map', {
       key: Key,
       basePath: '/assets/sdktool/sdk',
@@ -101,6 +113,7 @@ export class AddColisComponent implements OnInit {
 
 
 
+    //## Création des Champs textes dynamique pour le point de départ et destination
     const routeInputs = tomtom.routeInputs().addTo(map);
     const form = document.getElementById('form');
     const batchRoutingControl = tomtom.foldable(formOptions).addTo(map).addContent(form);
@@ -111,23 +124,24 @@ export class AddColisComponent implements OnInit {
         setTimeout(listScrollHandler, 250);
       }
     });
-// let's move this to the bottom of topright
     map.zoomControl.setPosition('topright');
-// fill datepicker with current time...
+
     const timepicker = document.querySelector('#date');
-// (<HTMLElement>document.querySelector('#date')).style.display = 'none';
+
     timepicker.setAttribute('min', new Date().toISOString());
     const offset = new Date().getTimezoneOffset();
     const fallback = timepicker.type === 'text';
     if (fallback) {
-// no support for datetime-locale, let's show a warning message
       form.classList.add('fallback');
     }
-// let's add 15 minutes from now to give user some time to fill the form
+
+    // ## Récupération de l'heure et date + 15 Minutes
     setDate(new Date(new Date().getTime() + 10 * 60 * 1000));
     const arrivalOrDeparture = document.querySelector('select#type');
     const submitButton = document.querySelector('input[type=submit]');
     let routePoints;
+
+    // ## Lorsque les adresses a été choisies cette méthode est activée
     routeInputs.on(routeInputs.Events.LocationsFound, function(event) {
       if (!event.points[0] || !event.points[1]) {
         routePoints = null;
@@ -135,10 +149,11 @@ export class AddColisComponent implements OnInit {
         iter = 0;
         routecolis = []  ;
         routePoints = event.points;
+
+        // ###Récupéartion des adresses de départ et arrivées (en toute lettre)
         tomtom.reverseGeocode({position: [routePoints[0].lat, routePoints[0].lon]})
             .go(function(response) {
                 if (response && response.address && response.address.freeformAddress) {
-                  //console.log(JSON.stringify(response.address.freeformAddress));
                   dep = response.address.freeformAddress;
                 } else {
 
@@ -148,7 +163,6 @@ export class AddColisComponent implements OnInit {
         tomtom.reverseGeocode({position: [routePoints[1].lat, routePoints[1].lon]})
             .go(function(resp) {
                 if (resp && resp.address && resp.address.freeformAddress) {
-                  //console.log(JSON.stringify(resp.address.freeformAddress));
                   arr = resp.address.freeformAddress;
                 } else {
 
@@ -158,7 +172,8 @@ export class AddColisComponent implements OnInit {
       }
       submitButton.disabled = !routePoints;
     });
-// add submit handler to form
+
+    //## Différentes fonction venant gérer l'asyncronisme dynamique (srcoll, batchrequest, catching error, ...)
     submitButton.addEventListener('click', function() {
       this.setAttribute('disabled', 'disabled');
       request(getDate());
@@ -183,6 +198,8 @@ export class AddColisComponent implements OnInit {
       unlockBatchRequests();
     }
     let persistentRoute;
+
+    //## Fonction venant afficher la route lorsqu'on appuie sur un élément du caroussel en dessous du form
     function clickFirstListItem() {
       const firstListItem = batchRoutingControl.container.querySelector('.item');
       clearRoutes();
@@ -205,6 +222,8 @@ export class AddColisComponent implements OnInit {
       });
 
     };
+
+    // ##Update lors de scroll
     function updateScrollEvent(data) {
 
       const results = data.results;
@@ -233,6 +252,8 @@ export class AddColisComponent implements OnInit {
       return data;
 
     }
+
+    //## Fonction qui vient gérer le form en général après qu'une première proposition aie été faite
     function requestNextPage(date, previousData) {
       if (batchRequestsLock) {
         return;
@@ -244,7 +265,6 @@ export class AddColisComponent implements OnInit {
           .then(function(data) {
             // batchRequestsLock can be changed in the meantime
             if (batchRequestsLock === 'submit') {
-              // let's jump straight to the end of this chain
               throw new PagingError();
             }
             return data;
@@ -260,10 +280,10 @@ export class AddColisComponent implements OnInit {
         handleBatchRequestError(err);
       }
     }
-// Create a new request
+
+    //## Fonction qui vient gérer le form en général lors de la première entrée idem que la fonction précédente
     function request(date) {
       if (batchRequestsLock === 'submit') {
-        // we don't care if there's another page downloaded
         return;
       }
       batchRequestsLock = 'submit';
@@ -271,9 +291,6 @@ export class AddColisComponent implements OnInit {
         clearList();
         batch(timeSeries(date))
           .then(function(data) {
-            // handle the data here
-            // we have this fake handler just for the docs purpose
-            // this is more like a no-op
             return data;
           })
           .then(prepareData)
@@ -286,6 +303,7 @@ export class AddColisComponent implements OnInit {
         handleBatchRequestError(err);
       }
     }
+    //## crée une route par élément de la Serie temporelle
     function mapTimeToRoutingElement(time) {
       const format = 'yyyy-mm-dd hh:mm';
       const result = {
@@ -297,7 +315,8 @@ export class AddColisComponent implements OnInit {
       result[param] = formatDate(time).slice(0, format.length).replace('T', ' ');
       return result;
     }
-// generate time series for batch query
+
+     // ## Génère une serie temporelle pour créer un carrousel (ici limité à un élément)
     function timeSeries(start) {
       const milisInMinute = 60 * 1000;
       const minutes = 15;
@@ -313,6 +332,8 @@ export class AddColisComponent implements OnInit {
         }, [new Date(start)])
         .map(mapTimeToRoutingElement);
     }
+
+    //## Vient afficher les données dans les champs html créé via createItems
     function showDetails(result) {
       const from = batchRoutingControl.container.querySelector('.details .from-value');
       const to = batchRoutingControl.container.querySelector('.details .to-value');
@@ -329,6 +350,8 @@ export class AddColisComponent implements OnInit {
       live.innerHTML = result.liveTraffic ? formatDiff(result.liveTraffic) : '--';
       noTraffic.innerHTML = result.noTraffic ? formatDiff(result.noTraffic) : '--';
     }
+
+    //##Fonction venant afficher une route par rapport aux résultats de MapTimeToRoutingElement
     let route;
     function drawRoute(result) {
       if (route) {
@@ -339,6 +362,8 @@ export class AddColisComponent implements OnInit {
       }
       route = tomtom.L.geoJson(result.route, {color: result.color}).addTo(map);
     }
+
+    //## Fonction activée lorsqu'on appuie sur une ligne de route
     function onRowClick(result) {
       const previous = batchRoutingControl.container.querySelector('.item.active');
       if (previous) {
@@ -383,6 +408,8 @@ export class AddColisComponent implements OnInit {
       batchRoutingControl.addContent(createDetails());
       return list;
     }
+
+    //## Crée une ligne et le header de celle-ci
     function createRow(list) {
       const element = tomtom.L.DomUtil.create('li', 'item', list);
       tomtom.L.DomUtil.create('span', 'from', element);
@@ -403,6 +430,8 @@ export class AddColisComponent implements OnInit {
       arrive.innerHTML = 'Arrive';
       return header;
     }
+
+    // ## Initialise les champs html
     function createDetails() {
       const details = tomtom.L.DomUtil.create('div', 'details');
       const left = L.DomUtil.create('span', 'left column', details);
@@ -440,8 +469,7 @@ export class AddColisComponent implements OnInit {
     }
 
 
-
-
+    //## Error handlers
     function showError(list) {
       list.classList.add('empty', 'error');
     }
@@ -538,7 +566,9 @@ export class AddColisComponent implements OnInit {
       };
     }
 
+    // ## Cette fonction prépare les données des routes avant de les afficher
     function prepareData(data) {
+      //### On récupère les données
       const results = data.filter(function(record) {
         return typeof record.error === 'undefined';
       }).map(function(record) {
@@ -562,10 +592,10 @@ export class AddColisComponent implements OnInit {
             departureAddress : dep,
             arrivalAddress : arr}); // premier élément de route geometry = coordonnées de départ, dernier = arrivée;
 
-
-          // AddColis(colis);
-          // console.log(JSON.stringify(routecolis));
+          // ### On uptdate l'instance dataColis de l'interface avec les nouvelles données
           recordcolis(dataColis);
+
+          // ### On envoie au backend via le service pour ecriture dans db
           service.addColis(dataColis).then(()=>{
             spinner.hide();
             router.navigate(['paypal']);
@@ -609,6 +639,7 @@ export class AddColisComponent implements OnInit {
       service.addColis(dataColis);
     }
 
+     // ## Merge les anciennes data
     function mergeData(previous) {
       return function(current) {
         let results = current.results;
@@ -637,6 +668,8 @@ export class AddColisComponent implements OnInit {
     function pad(num) {
       return (num >= 10 ? '' : '0') + String(num);
     }
+
+    //## gestion de date et d'heure
     function getDate() {
       if (fallback) {
         return new Date(timepicker.value.replace(/-/g, '/'));
