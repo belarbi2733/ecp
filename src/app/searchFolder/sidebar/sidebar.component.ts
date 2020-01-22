@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Validation } from './validation.interface';
-//import {alternative} from './alternative'
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Router } from '@angular/router';
 import { ConfirmationDialogService } from '../validation/confirmation-dialog.service';
-//var tour ;
+
+
 declare let L;
 declare let tomtom: any;
 var products = [];
@@ -13,11 +12,12 @@ let dist;
 let idtournee = [];
 
 
-
+// # Conversion en radians
 function toRadians(input){
   return (Math.PI * input)/180;
 }
 
+// # Fonction calculant la distance entre les points
 function distance (lat1, lat2,lon1,lon2){
   var R =6371e3;
   var φ1= toRadians(lat1);
@@ -29,40 +29,40 @@ function distance (lat1, lat2,lon1,lon2){
   return R * c;
 }
 
+// # Initialisation de idtournee qui sera utiliser afin d'envoyer les mails aux différents passagers, colis
 let donnee: Validation = {
   idTournee: null
 };
 
+// # Fonction qui ajoute l'idtournee à l'instance de l'interface Validation
 function recordValidation(data: Validation) {
   data.idTournee = idtournee;
-  
-  //console.log(JSON.stringify(data));
-
-
-  // console.log(JSON.stringify(data));
-
 }
 
+// # Détail du component
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css','../../app.component.css']
 })
+
+// # Création de la classe
 export class SidebarComponent implements OnInit {
-
-  
-  
-
-
   constructor(private router : Router, private confirmationDialogService :ConfirmationDialogService) {  }
+
+  // ## Initialisation de certaines variables
   receivedChildMessage: string;
   alternative = null ;
+  // ## Méthode activée si le message est "emit"
   getMessage(message: string) {
     
+    // ### On reçoit le message
     this.receivedChildMessage = message;
     console.log(message['parcours'][0]);
     products = [];
     idtournee = [];
+
+    // ### Construction de la sidebar
     for (var it = 1; it < Object.keys(message).length - 1 ; it ++) {
     dist = Math.round (distance (message['passager' + it][1], message['passager' + (it+1)][1], message['passager' + it][2], message['passager' + (it+1)][2]))/1000;
     if (it < Object.keys(message).length/2){
@@ -77,25 +77,20 @@ export class SidebarComponent implements OnInit {
       distance : dist
     }) ;
   }
-  //console.log(products)
     recordValidation(donnee);
     console.log (donnee);
     this.alternative = products;
   }
 
-
+  // ## Boite de dialogue de confirmation pour le bouton
   public openConfirmationDialog() {
+    // ### Appel du service avec passage de l'instance donnee contenant les idtrajets constitutifs
     this.confirmationDialogService.confirm('Confirmation', 'Voulez vous valider cette tournée ?', donnee)
     .then((confirmed) => console.log('User confirmed:', confirmed))
     .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
   }
 
   ngOnInit() {
-    //tour = this.trajetserver.getConfig();
-    
-    //console.log(JSON.stringify(tour));
-    
-    //console.log(JSON.parse(tour.getItem('parcour')));
   }
 
 }

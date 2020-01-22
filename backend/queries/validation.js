@@ -1,76 +1,65 @@
 let db = require("../db.js");
 var maillist = [];
-//var tmp ;
 let express = require('express');
 let router = express.Router();
 let bodyParser = require('body-parser');
 router.use(bodyParser.json());
 const nodemailer = require('nodemailer');
 const cors = require('cors');
-//let Validation = require('../queries/validation');
 
+
+// # Information pour se connecter au serveur mailtrap
 let transporter = nodemailer.createTransport({
     //SMTP SERVER INFO
     host: "smtp.mailtrap.io",
     port: 2525,
     auth: {
-      user: "427793c694a343",
-      pass: "5f5e7d95203c10"
+      user: "84637efea69817",
+      pass: "98bbdbc29c064d"
     }
   });
 
+// # Variable validation accessible à partir du controller
 let Validation = {
     
+  // ## Récupération du mail et d'autres informations à partir d'idtrajet par requête à la base de donnée
     sendMailValidation: async function(idTournee,callback) {
-        //maillist = [];
-        
             console.log (idTournee);
             const tmp = await db.query('SELECT utilisateur.mail, trajet.id_user, trajet.depart_address, trajet.arrivee_address, trajet.id, tournee.arrivee_adresse, tournee.depart_adresse FROM utilisateur INNER JOIN trajet ON trajet.id_user = utilisateur.id inner join tournee on trajet.id_tournee=tournee.id WHERE trajet.id = $1', [idTournee], callback);
             return tmp;
-            //console.log (tmp.rows[0].mail)
-            
-            //console.log (tmp); 
-        
-        
-        
     },
+
+    // ## Update du statut du trajet
     changeStatus : async function(idTrajet,callback) {
-        //maillist = [];
-        
             console.log (idTrajet.idTrajet);
             return db.query('UPDATE trajet SET statut = $1 WHERE id = $2',[2,idTrajet.idTrajet], callback);
-            //console.log (tmp.rows[0].mail)
-            
-            //console.log (tmp); 
-        
-        
-        
     },
+
+    // ## Update du statut du trajet 
     checkTournee : async function(idTrajet,callback) {
-        //maillist = [];
-        
-            //console.log (idTrajet.idTrajet);
+
             tmp = await db.query('SELECT id_tournee FROM trajet WHERE id = $1',[idTrajet.idTrajet]);
             
-            //console.log (tmp.rows[0].id_tournee);
             tmp1 = await db.query('SELECT trajet.statut FROM trajet WHERE id_tournee = $1',[ tmp.rows[0].id_tournee ]);
             var go = 0;
+
+            // ### Vérification que chaque statuts vaut bien 2 et que la tournée peut donc être confirmée
                 for (i = 0; i < tmp1.rows.length; i++) {
-                    //console.log (tmp1.rows[i].statut)
                     go += tmp1.rows[i].statut;
                 }
-                //console.log (go);
                 if (go/tmp1.rows.length === 2) {
                     console.log (parseInt(tmp.rows[0].id_tournee));
+                    // ### Envoi mail au conducteur comme quoi c'est ok
                     this.sendMailconfirmation (tmp.rows[0].id_tournee);
+                    // ### Update du statut de la tournée
                     return db.query('UPDATE tournee SET statut = $1 WHERE id = $2',[1, parseInt (tmp.rows[0].id_tournee) ] ,callback);
                 }
+                // ### Si ce n'est pas le cas on n'update pas
                 else {return null;}
-            //console.log (tmp); 
-        
-                
         
     },
+
+    // ## Mail au conducteur
     sendMailconfirmation : async function (idtournee){
 
         tmp = await db.query('SELECT utilisateur.mail, tournee.arrivee_adresse, tournee.depart_adresse FROM utilisateur INNER JOIN voiture ON utilisateur.id = voiture.id_user INNER JOIN tournee ON voiture.id = tournee.id_voiture  WHERE tournee.id =$1', [idtournee])
@@ -86,7 +75,7 @@ let Validation = {
               <p>Veuillez récupérer les passagers</p>
             `;
         let mailOptions = {
-            from: 'ecp@administrator', // sender address
+            from: 'easycarpool@outlook.com', // sender address
             to: tmp.rows[0].mail, // list of receivers
             subject: 'Validation de la tournee effectuée' , // Subject line
                 text: 'Aller chercher les passagers !', // plain text body
@@ -102,16 +91,11 @@ let Validation = {
                 else{
                   console.log('Message sent: %s', info.messageId);
                   console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                  //res1.send(output);
                   return null ; 
                 }
-  
               
             });
     }
-    
-    
-    
-}
 
+}
 module.exports = Validation;
