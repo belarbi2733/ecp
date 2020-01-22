@@ -332,7 +332,7 @@ function setTournee(idUser, idVoiture, trajetJson, infosSearch, callback) {
 
       Tournee.createTournee(idUser, idVoiture, infosSearch, outputJson['parcours'][1], function (err,result) {  // outputJson['tournee'][0] => distance de la tournée
         if(err) {
-          res.status(400).json(err);
+          //res.status(400).json(err);
           console.error(err);
         }
         else {
