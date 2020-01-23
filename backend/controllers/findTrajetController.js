@@ -267,85 +267,90 @@ function distance(lat1, lon1, lat2, lon2) {
 
 
 function setTournee(idUser, idVoiture, colisJson, trajetJson, miniColisJson, miniTrajetJson,  infosSearch, callback) {
-  console.log('Type de colis/trajet : ' + JSON.stringify(infosSearch));
+  console.log('Type de colis/trajet : ' + infosSearch.choix);
   console.log('Trajet' + JSON.stringify(trajetJson));
   console.log('Colis' + JSON.stringify(colisJson));
   console.log('MiniTrajet' + JSON.stringify(miniTrajetJson));
   console.log('MiniColis' + JSON.stringify(miniColisJson));
-  Python.runPy(colisJson, trajetJson, miniColisJson, miniTrajetJson, infosSearch.choix)
-    .then((data)=> {
+  if((colisJson.length !==0 && infosSearch.choix === 1) || (trajetJson.length !==0 && infosSearch.choix === 2)){
+    Python.runPy(colisJson, trajetJson, miniColisJson, miniTrajetJson, infosSearch.choix)
+      .then((data)=> {
 
-      // console.log('Output Python in node : ' + data);
-      const outputStr = data.replace(/'/g,'"');
-      const outputJson = JSON.parse(outputStr);
-      console.log('Output Python JSON in node : ' + JSON.stringify(data));
+        // console.log('Output Python in node : ' + data);
+        const outputStr = data.replace(/'/g,'"');
+        const outputJson = JSON.parse(outputStr);
+        console.log('Output Python JSON in node : ' + JSON.stringify(data));
 
 
-      Tournee.createTournee(idUser, idVoiture, infosSearch, outputJson['parcours'][1], function (err,result) {  // outputJson['tournee'][0] => distance de la tournée
-        if(err) {
-          res.status(400).json(err);
-          console.error(err);
-        }
-        else {
-          const idTournee = result.rows[0].id;
-          const nbrePassager = Object.keys(outputJson).length-1;  //Taille du json -1
+        Tournee.createTournee(idUser, idVoiture, infosSearch, outputJson['parcours'][1], function (err,result) {  // outputJson['tournee'][0] => distance de la tournée
+          if(err) {
+            res.status(400).json(err);
+            console.error(err);
+          }
+          else {
+            const idTournee = result.rows[0].id;
+            const nbrePassager = Object.keys(outputJson).length-1;  //Taille du json -1
 
-          Itineraire.addTrajetItineraire(idTournee, null, 1, infosSearch.departure, function (err2, result2) {
-            if (err2) {
-              res.status(400).json(err2);
-              console.error(err2);
-            } else {
-              //console.log(result2);
-              for (let i = 2; i < nbrePassager; i++) {
-                console.log('iter : '+ i);
+            Itineraire.addTrajetItineraire(idTournee, null, 1, infosSearch.departure, function (err2, result2) {
+              if (err2) {
+                res.status(400).json(err2);
+                console.error(err2);
+              } else {
+                //console.log(result2);
+                for (let i = 2; i < nbrePassager; i++) {
+                  console.log('iter : '+ i);
 
-                // const idDriver = outputJson['parcours'][0];
-                // console.log(idDriver);
-                let idTrajet = outputJson['adresse' + i][0];
-                const point = [outputJson['adresse' + i][2], outputJson['adresse' + i][1]];  // indice 2 => longitude indice 1 => latitude
+                  // const idDriver = outputJson['parcours'][0];
+                  // console.log(idDriver);
+                  let idTrajet = outputJson['adresse' + i][0];
+                  const point = [outputJson['adresse' + i][2], outputJson['adresse' + i][1]];  // indice 2 => longitude indice 1 => latitude
 
-                Itineraire.addTrajetItineraire(idTournee, idTrajet, i, point, function (err3, result3) {
-                  if (err3) {
-                    res.status(400).json(err3);
-                    console.error(err3);
-                    return -1;
-                  } else {
-                    //console.log(result3);
-                    Trajet.addTrajetInTournee(idTournee, idTrajet, function (err4, result4) {
-                      if (err4) {
-                        res.status(400).json(err4);
-                        console.error(err4);
+                  Itineraire.addTrajetItineraire(idTournee, idTrajet, i, point, function (err3, result3) {
+                    if (err3) {
+                      res.status(400).json(err3);
+                      console.error(err3);
+                      return -1;
+                    } else {
+                      //console.log(result3);
+                      Trajet.addTrajetInTournee(idTournee, idTrajet, function (err4, result4) {
+                        if (err4) {
+                          res.status(400).json(err4);
+                          console.error(err4);
+                          return -1;
+                        } else {
+                          //console.log(result4);
+                        }
+                      });
+                    }
+                  });
+
+                  if(i == nbrePassager - 2) {
+                    //Ajout du point d'arrivée de la tournée/itinéraire lors du dernier passage dans la boucle
+                    Itineraire.addTrajetItineraire(idTournee, null, nbrePassager, infosSearch.arrival, function (err5, result5) {
+                      if (err5) {
+                        res.status(400).json(err5);
+                        console.error(err5);
                         return -1;
                       } else {
-                        //console.log(result4);
+                        //console.log(result5);
+                        callback(outputJson);
                       }
                     });
                   }
-                });
-
-                if(i == nbrePassager - 2) {
-                  //Ajout du point d'arrivée de la tournée/itinéraire lors du dernier passage dans la boucle
-                  Itineraire.addTrajetItineraire(idTournee, null, nbrePassager, infosSearch.arrival, function (err5, result5) {
-                    if (err5) {
-                      res.status(400).json(err5);
-                      console.error(err5);
-                      return -1;
-                    } else {
-                      //console.log(result5);
-                      callback(outputJson);
-                    }
-                  });
                 }
               }
-            }
-          });
-        }
-      });
+            });
+          }
+        });
 
-    })
-    .catch((err) => {
-      console.error('Erreur dans le code Python : \n' + err);
-    });
+      })
+      .catch((err) => {
+        console.error('Erreur dans le code Python : \n' + err);
+      });
+  }
+  else {
+    callback(null);
+  }
 }
 
 module.exports = router;
