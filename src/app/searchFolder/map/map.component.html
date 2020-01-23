@@ -1,14 +1,19 @@
-
+<!-- # Map Component Html -->
 <body class="use-all-space">
     <div class="map-container use-all-space">
+      <!--## Map Form -->
         <form id="form" action="javascript:void(0)">
+            <!-- ### Selection départ ou arrivée pour l'heure -->
             <select id="type">
                 <option>arrive at</option>
                 <option selected="selected">depart at</option>
             </select>
+            <!-- ### Champ date -->
             <input id="date" type="datetime-local" pattern="\d{4}-\d{2}-\d{2} [0-1]?\d:[0-6]\d" />
             <small class="warning">insert a date in format yyyy-MM-dd hh:mm</small>
+            <!-- ### Champ places disponibles -->
             <input id="places" type="number" name="places" placeholder="Nombres de places dispo" [(ngModel)]="nbrePlaces" />
+            <!-- ### Champ détour max -->
             <input id="detour" type="number" name="detour" placeholder="Détour max toléré" [(ngModel)]="detour" />
             <label>Que souhaitez-vous transporter ?</label>
             <div class="form-check">
@@ -22,17 +27,12 @@
               <label class="form-check-label" for="trajet">
                 Trajet
               </label>
-              <!--
-              <br>
-              <input class="form-check-input" type="radio" name="choix" id="anything" [(ngModel)]="choix" value="3">
-              <label class="form-check-label" for="anything">
-                N'importe
-              </label>
-              -->
           </div>
+          <!-- ### Bouton Submit avec methode save() -->
             <input type="submit" value="Submit" disabled="disabled" (click)="save()"/>
             <label *ngIf=!seeSubmit()> Vous n'avez pas de voiture enregistrée ! Impossible de réaliser une recherche</label>
         </form>
+        <!-- ## Affichage de la map -->
         <div id="map" class="use-all-space"></div>
     </div>
 </body>

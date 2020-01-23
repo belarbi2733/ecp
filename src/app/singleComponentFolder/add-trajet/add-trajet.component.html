@@ -1,16 +1,23 @@
+<!-- # add-trajet Component Html -->
 <div class="container content">
   <h3>Ajouter un trajet</h3>
     <div class="map-container use-all-space">
+        <!--## Map Form -->
         <form id="form" action="javascript:void(0)" >
+            <!-- ### Selection départ ou arrivée pour l'heure -->
             <select id="type">
                 <option>arrive at</option>
                 <option selected="selected">depart at</option>
             </select>
+            <!-- ### Champ date -->
             <input id="date" type="datetime-local" pattern="\d{4}-\d{2}-\d{2} [0-1]?\d:[0-6]\d" />
+            <!-- ### Champ nbre de places réservées -->
             <input id="places" type="number" name="bookPlaces" placeholder="Nombre de places réservées" [(ngModel)]="bookPlaces" />
             <small class="warning">insert a date in format yyyy-MM-dd hh:mm</small>
+            <!-- ### Bouton Submit avec methode save() -->
             <input type="submit" value="Submit" disabled="disabled" (click)="save()"/>
         </form>
+        <!-- ## Affichage de la map -->
         <div id="map" class="use-all-space"></div>
     </div>
 </div>

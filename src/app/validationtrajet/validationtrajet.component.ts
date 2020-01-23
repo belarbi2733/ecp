@@ -1,38 +1,31 @@
-import { Component, Input, OnInit, Injectable } from '@angular/core';
+// # Imports
+import { Component, OnInit} from '@angular/core';
 import {ValidationTrajetService} from './validationtrajet.service'
 import { ValidationTrajet } from './validationtrajet.interface';
-//import {alternative} from './alternative'
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Router } from '@angular/router';
-//var tour ;
-declare let L;
-declare let tomtom: any;
-var products = [];
-let dist;
+
+
+// # Déclarations
+
 let idtrajet :number;
-
-
 
 let donnee: ValidationTrajet = {
   idTrajet: null
 };
 
+// # Ecriture dans l'instance
 function recordValidationTrajet(data: ValidationTrajet) {
   data.idTrajet = idtrajet;
-  
-  //console.log(JSON.stringify(data));
-
-
-  // console.log(JSON.stringify(data));
-
 }
 
+// # Création du component
 @Component({
   selector: 'app-validationtrajet',
   templateUrl: './validationtrajet.component.html',
   styleUrls: ['./validationtrajet.component.css']
 })
 
+// # Création de la classe
 export class ValidationTrajetComponent implements OnInit {
 
   constructor(private router : Router, private validationservice :ValidationTrajetService) {  }
@@ -45,23 +38,19 @@ export class ValidationTrajetComponent implements OnInit {
   
 
 
-  
+  // #ngOnInit
   ngOnInit() {
+    // ## On récupère l'id trajet dans l'url
     console.log (new URL(window.location.href).searchParams.get('idtrajet'));
     
     idtrajet = parseInt( (new URL(window.location.href).searchParams.get('idtrajet')));
     if (typeof idtrajet !== 'undefined') {
-      //idtrajet = null;
+      // ## On record l'id du trajet dans l'insance de l'interface
       recordValidationTrajet(donnee);
       console.log (donnee);
+      // ## On renvoie au backend afin de valider le trajet
       this.validationservice.validationtrajet(donnee);
     }
-    
-    //tour = this.trajetserver.getConfig();
-    
-    //console.log(JSON.stringify(tour));
-    
-    //console.log(JSON.parse(tour.getItem('parcour')));
   }
 
 }
