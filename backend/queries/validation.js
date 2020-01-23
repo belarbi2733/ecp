@@ -32,7 +32,7 @@ let Validation = {
     // ## Update du statut du trajet
     changeStatus : async function(idTrajet,callback) {
             console.log (idTrajet.idTrajet);
-            return db.query('UPDATE trajet SET statut = $1 WHERE id = $2',[1,idTrajet.idTrajet], callback);
+            return db.query('UPDATE trajet SET statut = $1 WHERE id = $2',[2,idTrajet.idTrajet], callback);
     },
 
     // ## Update du statut du trajet 
@@ -47,6 +47,7 @@ let Validation = {
                 for (i = 0; i < tmp1.rows.length; i++) {
                     go += tmp1.rows[i].statut;
                 }
+                console.log(go/tmp1.rows.length);
                 if (go/tmp1.rows.length === 2) {
                     console.log (parseInt(tmp.rows[0].id_tournee));
                     // ### Envoi mail au conducteur comme quoi c'est ok
