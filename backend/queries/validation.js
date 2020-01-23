@@ -32,7 +32,7 @@ let Validation = {
     // ## Update du statut du trajet
     changeStatus : async function(idTrajet,callback) {
             console.log (idTrajet.idTrajet);
-            return db.query('UPDATE trajet SET statut = $1 WHERE id = $2',[2,idTrajet.idTrajet], callback);
+            return db.query('UPDATE trajet SET statut = $1 WHERE id = $2',[1,idTrajet.idTrajet], callback);
     },
 
     // ## Update du statut du trajet 

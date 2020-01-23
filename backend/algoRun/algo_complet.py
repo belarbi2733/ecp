@@ -131,7 +131,7 @@ def addColis(mesDonnees):
         #donneejson = json.load(json_data)
     donneejson3 = json.loads(sys.argv[3])
     # le nombre de colis
-    tailleMatrice = len(donneejson3)-1
+    tailleMatrice = len(donneejson3)
 
     # initialisation de la matrice pour la méthode exacte du sac à dos
     myData = np.zeros(shape=(tailleMatrice, 8))
@@ -161,7 +161,7 @@ def addPassagers(mesDonnees):
             #donneejson = json.load(json_data)
     donneejson4 = json.loads(sys.argv[4])
     # le nombre de colis
-    tailleMatrice = len(donneejson4)-1
+    tailleMatrice = len(donneejson4)
 
     # initialisation de la matrice pour la méthode exacte du sac à dos
     myData = np.zeros(shape=(tailleMatrice, 9))
@@ -945,14 +945,14 @@ def nv_graphe(TRAJET, graphe):
             mini2.append(i - 1)
             p = p + 1
             lien = lien + [mini1] + [mini2]
-    if TRAJET[len(TRAJET) - 1] == 1:
-        mini1 = []
-        mini2 = []
-        mini1.append(2 * (p + 1))
-        mini1.append(i)
-        mini2.append(2 * (p + 1) + 1)
-        mini2.append(i)
-        lien = lien + [mini1] + [mini2]
+        if TRAJET[len(TRAJET) - 1] == 1:
+            mini1 = []
+            mini2 = []
+            mini1.append(2 * (p + 1))
+            mini1.append(i)
+            mini2.append(2 * (p + 1) + 1)
+            mini2.append(i)
+            lien = lien + [mini1] + [mini2]
     # print (lien)
     # [0,1,0,1,0,0,1] -> [[0, 1], [1, 1], [2, 3], [3, 3], [4, 6], [5, 6]] #[[numéro du sommet de départ,rang du 1 ie numéro du colis],[numéro du sommet d'arrivée,rang du 1 ie numéro du colis]]
     # On va transformer graphe() pour obtenir l'ordre de passage des sommets présélectionnés avec leur numéro de colis
@@ -1257,8 +1257,8 @@ def RespectDetourMax(chosen, benefices,
     restDetour = maxDetour - minDistance  # detour restant = detour maximum - distance du trajet
 
     if restDetour >= 0:
-        print "le trajet rentre déjà dans le detour maximum imposé"
-
+    #### print "le trajet rentre déjà dans le detour maximum imposé"
+        etupeorto=0
     else:
 
         ##### je remplis le dictionnaire

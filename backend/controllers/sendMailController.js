@@ -33,15 +33,15 @@ router.get('/contact', (req, res) => {
         host: "smtp.mailtrap.io",
         port: 2525,
         auth: {
-          user: "ba66617b8bc037",
-          pass: "1f888b1d7df487"
+          user: "84637efea69817",
+          pass: "98bbdbc29c064d"
         }
     });
 
     // setup email data with unicode symbols
     let mailOptions = {
-      from: req.query['mail'], // sender address
-      to: 'ecp@gmail.be', // list of receivers
+      from: 'easycarpool@outlook.com', // sender address
+      to: req.query['mail'], // list of receivers
       subject: req.query['subject'], // Subject line
       text: 'Nouvelle demande de contacte reçue :', // plain text body
       html: output // html body
@@ -75,8 +75,8 @@ router.get('/inscription', (req, res) => {
         host: "smtp.mailtrap.io",
         port: 2525,
         auth: {
-          user: "ba66617b8bc037",
-          pass: "1f888b1d7df487"
+          user: "84637efea69817",
+          pass: "98bbdbc29c064d"
         }
     });
 

@@ -64,10 +64,10 @@ export class SidebarComponent implements OnInit {
 
     // ### Construction de la sidebar
     for (var it = 1; it < Object.keys(message).length - 1 ; it ++) {
-    dist = Math.round (distance (message['passager' + it][1], message['passager' + (it+1)][1], message['passager' + it][2], message['passager' + (it+1)][2]))/1000;
+    dist = Math.round (distance (message['adresse' + it][1], message['adresse' + (it+1)][1], message['adresse' + it][2], message['adresse' + (it+1)][2]))/1000;
     if (it < Object.keys(message).length/2){
       if (it > 1){
-        idtournee.push(message['passager' + it][0]);
+        idtournee.push(message['adresse' + it][0]);
       }
 
     }

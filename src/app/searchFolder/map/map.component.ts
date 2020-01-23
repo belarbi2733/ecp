@@ -650,7 +650,7 @@ export class MapComponent implements OnInit {
                     traffic: false
                 }})
 
-                window["Route"+i].addTo(map).draw([{lat: outputJson['passager' + i][1], lng: outputJson['passager' + i][2]}, {lat: outputJson['passager' + (i+1)][1], lng: outputJson['passager' + (i+1)][2]}]);
+                window["Route"+i].addTo(map).draw([{lat: outputJson['adresse' + i][1], lng: outputJson['adresse' + i][2]}, {lat: outputJson['adresse' + (i+1)][1], lng: outputJson['adresse' + (i+1)][2]}]);
               }
             })
             .catch((err) => {

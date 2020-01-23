@@ -57,6 +57,11 @@ router.post('/matchDriverTrajet', function(req,res) {
               let catchColis = [];
               let catchTrajet = [];
 
+              for(let z = 0; z < 100; z++) {
+                catchColis.push(false);
+                catchTrajet.push(false);
+              }
+
               colisJson[jsonKeyColis] = [
                 search.idUser,
                 result.rows[0].coffre,
@@ -89,7 +94,7 @@ router.post('/matchDriverTrajet', function(req,res) {
                 } else {
 
                   let iter = 0;
-                  let iter2 = 0;
+                  let iter2 = 1;
                   _.each(result2.rows, function (one) { // bibliothèque underscore _  => Pour chaque trajet, check
 
                     //Première sélection assez restreinte sur un rayon de 10kms selon les points de départ et d'arrivée
@@ -145,11 +150,13 @@ router.post('/matchDriverTrajet', function(req,res) {
                       //console.log('Trajet' + JSON.stringify(trajetJson));
 
                       //Quand le dernier trajet a été traité on enregistre la tournée, on ajoute l'id_tournée dans les trajets et on crée l'itinéraire
-                      if(iter === result2.rows.length && iter2 === result2.rows.length) {
+                      if(iter === result2.rows.length && iter2 === result2.rows.length+1) {
                         console.log('END forLoop : Trajet iter : ' + iter + ' id : ' + one.id);
+                        console.log(catchColis);
+                        console.log(catchTrajet);
                         iter = 0;
                         iter2 = 0; // Cela évite passer dans la deuxième fin
-                        setTournee(search.idUser, result.rows[0].id, colisJson, trajetJson, search, function(dataForAngular){
+                        setTournee(search.idUser, result.rows[0].id, colisJson, trajetJson,miniColisJson,miniTrajetJson, search, function(dataForAngular){
                           console.log('Res JSON : ' + JSON.stringify(dataForAngular));
                           res.json(dataForAngular);
                         });
@@ -159,7 +166,7 @@ router.post('/matchDriverTrajet', function(req,res) {
                     });
 
                     // Selection plus large avec les mini-trajets
-                    Trajet.findMiniTrajet(req.body,one,100, function (err4, result4) {  //req.body => search
+                    Trajet.findMiniTrajet(req.body,one, function (err4, result4) {  //req.body => search
                       iter2++;
                       // console.log(one);
                       if (err4) {
@@ -171,7 +178,8 @@ router.post('/matchDriverTrajet', function(req,res) {
                         if (result4.rows.length) {
 
                           let dist = distance(req.body.departure[1],req.body.departure[0],one.depart_y,one.depart_x);
-                          if(one.id_colis && catchColis[iter2] === false) {
+                          if(one.id_colis && catchColis[iter2] !== true) {
+                            console.log("iter2 : " + iter2);
                             //Séquence si c'est un colis
                             jsonKeyMiniColis = 'colis' + k;
                             miniColisJson[jsonKeyMiniColis] = [
@@ -185,9 +193,8 @@ router.post('/matchDriverTrajet', function(req,res) {
                               one.arrivee_x
                             ];
                             k++;
-
                           } else {
-                            if(catchTrajet[iter2] === false) {
+                            if(catchTrajet[iter2] !== true) {
                               //Séquence si c'est un trajet
 
                               jsonKeyMiniTrajet = 'passager' + l;
@@ -212,8 +219,10 @@ router.post('/matchDriverTrajet', function(req,res) {
                       //console.log('Trajet' + JSON.stringify(trajetJson));
 
                       //Quand le dernier trajet a été traité on enregistre la tournée, on ajoute l'id_tournée dans les trajets et on crée l'itinéraire
-                      if(iter === result2.rows.length && iter2 === result2.rows.length) {
+                      if(iter === result2.rows.length && iter2 === result2.rows.length+1) {
                         console.log('END forLoop in miniTrajet : Trajet iter : ' + iter2 + ' id : ' + one.id);
+                        console.log(catchColis);
+                        console.log(catchTrajet);
                         iter = 0;
                         iter2 = 0; // Cela évite passer dans la deuxième fin
                         setTournee(search.idUser, result.rows[0].id, colisJson, trajetJson, miniColisJson, miniTrajetJson, search,function(dataForAngular){
@@ -272,7 +281,7 @@ function setTournee(idUser, idVoiture, colisJson, trajetJson, miniColisJson, min
   console.log('Colis' + JSON.stringify(colisJson));
   console.log('MiniTrajet' + JSON.stringify(miniTrajetJson));
   console.log('MiniColis' + JSON.stringify(miniColisJson));
-  if((colisJson.length !==0 && infosSearch.choix === 1) || (trajetJson.length !==0 && infosSearch.choix === 2)){
+  
     Python.runPy(colisJson, trajetJson, miniColisJson, miniTrajetJson, infosSearch.choix)
       .then((data)=> {
 
@@ -298,7 +307,7 @@ function setTournee(idUser, idVoiture, colisJson, trajetJson, miniColisJson, min
               } else {
                 //console.log(result2);
                 for (let i = 2; i < nbrePassager; i++) {
-                  console.log('iter : '+ i);
+                  console.log('iter in set tournee : '+ i);
 
                   // const idDriver = outputJson['parcours'][0];
                   // console.log(idDriver);
@@ -347,10 +356,7 @@ function setTournee(idUser, idVoiture, colisJson, trajetJson, miniColisJson, min
       .catch((err) => {
         console.error('Erreur dans le code Python : \n' + err);
       });
-  }
-  else {
-    callback(null);
-  }
+
 }
 
 module.exports = router;
